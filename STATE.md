@@ -3,9 +3,10 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-Day 2 — complete. Ready for Day 3 (Classification, Editorial, Reconciliation agents).
+Day 3 — complete. Ready for Day 4 (QC panel + arbiter + HITL).
 
 ## Completed
+- [x] **Day 3 classification + editorial + reconciliation** — ClassificationResult (14 types, platform codes enforced, THESIS stages, skill_codes); EditorialOutput (editorial_description, summary, editorial_description_plain, proposed_badges max-3 enforced, difficulty_level); Reconciliation (title_similarity 0.9, assemble_draft_record with summary + skill_codes); code-reviewer found and fixed 3 bugs (Pydantic v2 list max, summary dropped in assembly, skill_codes missing); 51/51 tests green.
 - [x] **Day 2 grounding + discovery + appraisal** — 18 documents uploaded to Vertex AI Search (4 methodology cards + 14 seed resources); grounding_agent (VertexAiSearchTool isolated); discovery_agent (OpenAlex + PubMed tools, MCPToolset wired for production); appraisal_agent (deterministic APIs + Firestore write); root_agent wires all three via AgentTool; 16/16 tests green.
 - [x] **Day 1 scaffold** — ADK 2.1.0, Python 3.12 venv, skeleton pipeline agent, `adk web agents/` serving (HTTP 200), pre-commit blocking secrets, Firestore (default, us-central1), Vertex AI Search datastore (`cothesis-methodology-grounding`, global), GCP services enabled, git init + main branch.
 - [x] Data drop-in: 13 field maps → `docs/field_maps/`
@@ -36,7 +37,7 @@ Day 2 — complete. Ready for Day 3 (Classification, Editorial, Reconciliation a
 - (none open)
 
 ## Next task
-Day 3: Classification agent (Flash-Lite, platform codes, JSON-only) → Editorial agent (Pro, four fields) → Reconciliation agent (title-similarity dedup). Write failing tests first for each. Verify one sample resource flows end-to-end to a complete draft record.
+Day 4: QC evaluator panel (per-dimension + ai-pattern-scanner + voice-reviewer + claim-verifier + ref_checker) + Arbiter routing gate (composite score → auto_accept|review_needed|auto_exclude) + gold eval set (20-40 items) + HITL pause/resume. Write failing tests first.
 
 ## Modified files this session
 - `docs/field_maps/field_mapping_*.md` — 13 files added

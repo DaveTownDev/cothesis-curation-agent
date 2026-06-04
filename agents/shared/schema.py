@@ -7,6 +7,8 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Optional
 from pydantic import BaseModel, Field, field_validator, model_validator
+from typing import Annotated
+from pydantic import conlist
 
 
 # ---------------------------------------------------------------------------
@@ -125,3 +127,83 @@ class CandidateResource(BaseModel):
     @property
     def is_processable(self) -> bool:
         return self.skip_reason is None
+
+
+# ---------------------------------------------------------------------------
+# ClassificationResult (Classification agent output)
+# ---------------------------------------------------------------------------
+
+class ClassificationResult(BaseModel):
+    resource_type_code: str
+    resource_subtype_code: Optional[str] = None
+    methodology_codes: list[str] = Field(default_factory=list)
+    stage_codes: list[str] = Field(default_factory=list)
+    skill_codes: list[str] = Field(default_factory=list)  # FS-01..FS-16
+    relevance_score: float = Field(..., ge=0.0, le=1.0)
+    classification_confidence: float = Field(..., ge=0.0, le=1.0)
+    relevance_reasoning: Optional[str] = None
+    access_type: str
+    skip_reason: Optional[str] = None
+    discipline_codes: list[str] = Field(default_factory=list)
+    difficulty_level: Optional[str] = None
+
+    @field_validator("resource_type_code")
+    @classmethod
+    def validate_resource_type(cls, v: str) -> str:
+        from agents.shared.codes import RESOURCE_TYPES
+        if v not in RESOURCE_TYPES:
+            raise ValueError(f"Invalid resource_type_code {v!r}. Must be one of {sorted(RESOURCE_TYPES)}")
+        return v
+
+    @field_validator("methodology_codes")
+    @classmethod
+    def validate_methodology_codes(cls, codes: list[str]) -> list[str]:
+        from agents.shared.codes import LEGACY_METHODOLOGY_PREFIXES
+        for code in codes:
+            prefix = code[:3] + "-" if len(code) >= 3 else code
+            # Check each legacy prefix
+            for legacy in LEGACY_METHODOLOGY_PREFIXES:
+                if code.startswith(legacy):
+                    raise ValueError(
+                        f"Legacy methodology code {code!r} (prefix {legacy!r}) detected. "
+                        f"Emit platform codes (SYN-, OBS-, EVAL-…) per docs/TAXONOMY.md."
+                    )
+        return codes
+
+    @field_validator("stage_codes")
+    @classmethod
+    def validate_stage_codes(cls, codes: list[str]) -> list[str]:
+        from agents.shared.codes import STAGE_CODES
+        for code in codes:
+            if code not in STAGE_CODES:
+                raise ValueError(f"Invalid stage_code {code!r}. Must be one of {sorted(STAGE_CODES)}")
+        return codes
+
+
+# ---------------------------------------------------------------------------
+# EditorialOutput (Editorial agent output)
+# ---------------------------------------------------------------------------
+
+class EditorialOutput(BaseModel):
+    editorial_description: str
+    summary: str
+    editorial_description_plain: str
+    proposed_badges: Annotated[list[str], Field(max_length=3)] = Field(default_factory=list)
+    difficulty_level: str
+
+    @field_validator("proposed_badges")
+    @classmethod
+    def validate_badges(cls, badges: list[str]) -> list[str]:
+        from agents.shared.codes import CANONICAL_BADGES
+        for badge in badges:
+            if badge not in CANONICAL_BADGES:
+                raise ValueError(f"Invalid badge {badge!r}. Must be from canonical set: {sorted(CANONICAL_BADGES)}")
+        return badges
+
+    @field_validator("difficulty_level")
+    @classmethod
+    def validate_difficulty(cls, v: str) -> str:
+        from agents.shared.codes import DIFFICULTY_LEVELS
+        if v not in DIFFICULTY_LEVELS:
+            raise ValueError(f"Invalid difficulty_level {v!r}. Must be one of {sorted(DIFFICULTY_LEVELS)}")
+        return v

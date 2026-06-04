@@ -1,11 +1,8 @@
 """
-CoThesis Curation Pipeline — root orchestrator.
+CoThesis Curation Pipeline — root orchestrator (Day 3).
 
-Wires the sub-agents (Day 2+): Discovery → Appraisal.
-Classification, Editorial, Reconciliation, QC Panel, Arbiter added Day 3-4.
-
-Sub-agents are accessed via AgentTool to preserve tool isolation
-(VertexAiSearchTool isolation rule: grounding_agent has only that tool).
+Pipeline: Discovery → Appraisal → Classification → Editorial → Reconciliation
+QC Panel + Arbiter added Day 4.
 """
 from __future__ import annotations
 
@@ -17,6 +14,9 @@ from google.adk.tools import AgentTool
 from agents.grounding.agent import grounding_agent
 from agents.discovery.agent import discovery_agent
 from agents.appraisal.agent import appraisal_agent
+from agents.classification.agent import classification_agent
+from agents.editorial.agent import editorial_agent
+from agents.reconciliation.agent import reconciliation_agent
 
 MODEL = os.environ.get("MODEL_PRO", "gemini-2.5-pro")
 
@@ -31,17 +31,22 @@ root_agent = LlmAgent(
     instruction=(
         "You are the CoThesis Curation Pipeline orchestrator. "
         "Given a methodology code (SYN-01, SYN-02, OBS-01, or EVAL-01) "
-        "and an optional resource type, run the enrichment pipeline:\n"
-        "1. Use discovery_agent to find candidates for the methodology + type.\n"
-        "2. For each processable candidate (skip_reason is null), "
-        "   use appraisal_agent to score it and write a draft AIAssessment.\n"
-        "3. Use grounding_agent to verify methodology alignment when uncertain.\n"
-        "Report a summary: how many candidates found, how many drafted, "
-        "how many skipped, and the document IDs written."
+        "and an optional resource type, run the full pipeline:\n"
+        "1. discovery_agent: find candidates.\n"
+        "2. For each processable candidate (skip_reason is null):\n"
+        "   a. appraisal_agent: score quality, write draft AIAssessment.\n"
+        "   b. classification_agent: assign type/methodology/stage/access.\n"
+        "   c. editorial_agent: write descriptions + propose badges.\n"
+        "   d. reconciliation_agent: dedup + assemble final draft record.\n"
+        "3. grounding_agent: verify methodology alignment when uncertain.\n"
+        "Report: candidates found, drafted, skipped, Firestore doc IDs written."
     ),
     tools=[
         AgentTool(agent=grounding_agent),
         AgentTool(agent=discovery_agent),
         AgentTool(agent=appraisal_agent),
+        AgentTool(agent=classification_agent),
+        AgentTool(agent=editorial_agent),
+        AgentTool(agent=reconciliation_agent),
     ],
 )
