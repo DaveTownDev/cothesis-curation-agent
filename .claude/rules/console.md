@@ -1,0 +1,12 @@
+---
+description: Rules when working under console/ (Next.js + shadcn/ui review console)
+---
+- Secrets are server-side only; never NEXT_PUBLIC_* for anything sensitive (baked at build time).
+- The console calls the private agent API via the runtime SA; never expose agent/Firestore internals to the browser.
+- Render four description slots per resource (see docs/SCHEMA.md → Console display contract):
+  - **Short** (`editorial_description`) — always visible.
+  - **Long** (`AIAssessment.summary`) — always visible; 3-5 AI-generated sentences.
+  - **Plain card** (`editorial_description_plain`) — always visible as a labelled breakout card beneath the long slot; jargon-free.
+  - **Editor's note** (`editorial_note`) — show only when populated; clearly labelled as the human editor's voice; featured/curated resources only.
+- Use the CoThesis design tokens (docs/DECISIONS.md → Design); confirm against the design system file before finalising.
+- Console is public with a login gate; the demo passcode is CONSOLE_LOGIN_SECRET from Secret Manager.

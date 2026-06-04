@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uvx *)", "Bash(adk *)", "Bash(agents-cli *)",
+      "Bash(gcloud services enable*)", "Bash(gcloud run deploy*)", "Bash(gcloud secrets *)",
+      "Bash(gcloud iam service-accounts create*)", "Bash(gcloud config *)",
+      "Bash(git add*)", "Bash(git commit*)", "Bash(git status*)", "Bash(git diff*)",
+      "Bash(pytest*)", "Bash(pnpm *)", "Bash(npm *)", "Bash(gitleaks *)"
+    ],
+    "deny": [
+      "Bash(git push*)", "Bash(git push --force*)",
+      "Bash(gcloud billing*)", "Bash(gcloud projects delete*)",
+      "Bash(gcloud * delete*)", "Bash(gcloud projects add-iam-policy-binding*)",
+      "Bash(rm -rf*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Bash", "hooks": [{ "type": "command", "command": ".claude/hooks/guard.sh" }] },
+      { "matcher": "Write|Edit", "hooks": [{ "type": "command", "command": ".claude/hooks/secret-scan.sh" }] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Write|Edit", "hooks": [{ "type": "command", "command": ".claude/hooks/post-edit-check.sh" }] }
+    ]
+  }
+}

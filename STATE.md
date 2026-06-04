@@ -1,0 +1,70 @@
+# STATE — live build state (update after every task)
+
+> On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
+
+## Current phase
+Day 1 — scaffold complete. Ready for Day 2 (Grounding + Discovery + Appraisal agents).
+
+## Completed
+- [x] **Day 1 scaffold** — ADK 2.1.0, Python 3.12 venv, skeleton pipeline agent, `adk web agents/` serving (HTTP 200), pre-commit blocking secrets, Firestore (default, us-central1), Vertex AI Search datastore (`cothesis-methodology-grounding`, global), GCP services enabled, git init + main branch.
+- [x] Data drop-in: 13 field maps → `docs/field_maps/`
+- [x] Data drop-in: 65 canonical entity files → `docs/reference/entities/` (May 17 — authoritative field shape)
+- [x] Data drop-in: `database_schema_v4.md`, `compendium_enrichment_qc_spec.md`, `ENRICHMENT_SPEC_2026-05-29.md`, `gateway.md`, `cothesis_compendium_category_cross_reference.md` → `docs/reference/`
+- [x] Data drop-in: `cothesis_complete_methodology_taxonomy.json`, `cothesis_thesis_stages.json` → `data/methodologies/_source/`
+- [x] Data drop-in: 4 MRP full corpus JSONs (SYN-01/02, OBS-01, EVAL-01) → `data/methodologies/_mrp_full/` (staged optional, NOT indexed for MVP)
+- [x] Data drop-in: `compendium_demo_content.json` → `data/resources_seed/` (14 records, all 14 resource types)
+- [x] Methodology cards: `data/methodologies/syn-01.md`, `syn-02.md`, `obs-01.md`, `eval-01.md`
+- [x] Schema reconciliation: `docs/reference/SCHEMA_RECONCILIATION.md`
+- [x] `docs/SCHEMA.md` — fully updated to canonical entities (8 edits applied; `editorial_description_plain` preserved; `ebm_level` articles-only)
+- [x] `docs/AGENTS_SPEC.md` — all field names updated to canonical
+- [x] `agents/prompts/appraisal.md` — canonical field names: `ai_confidence` 0-100, `thesis_stage_signals`, `relevance_to_discipline_codes`, `proposed_badges`, `ai_subtype_signal`, `trainee_suitability_score`, `pipeline_run_id`; `ebm_level` articles-only
+- [x] `agents/prompts/editorial.md` — `summary` (not `editorial_description_long`), `proposed_badges` (not `editorial_badges`); `editorial_note` flagged as human-only
+- [x] `agents/prompts/classification.md` — `resource_type_code`, `resource_subtype_code`, `stage_codes`, `discipline_codes`
+- [x] `agents/prompts/reconciliation.md` — canonical-name crosswalk added
+- [x] `.claude/rules/console.md` — four-slot display contract: short/long/plain/Editor's note
+- [x] `.env` — created; `VERTEX_DATASTORE_ID` empty (Day 1); `GOOGLE_CLOUD_LOCATION=global`
+- [x] `research_database` resolved: subtype of `dataset` (v2.2) — 14-type enum unchanged
+
+## In progress
+- (none)
+
+## Blockers / waiting on human
+- (none — Day 1 complete)
+
+## Decisions needing the human
+- (none open)
+
+## Next task
+Day 2: Load methodology definitions + seed resources into Vertex AI Search → confirm indexing → build Discovery agent (Flash-Lite, MCP tools) → build Appraisal agent (deterministic-API-first → Flash). Tests first, then implement.
+
+## Modified files this session
+- `docs/field_maps/field_mapping_*.md` — 13 files added
+- `docs/reference/` — 5 reference specs + SCHEMA_RECONCILIATION.md added
+- `docs/reference/entities/` — 65 canonical entity files added
+- `data/methodologies/_source/` — 2 JSON files added
+- `data/methodologies/_mrp_full/` — 4 MRP JSON files added
+- `data/methodologies/syn-01.md`, `syn-02.md`, `obs-01.md`, `eval-01.md` — new
+- `data/resources_seed/compendium_demo_content.json` — added
+- `docs/SCHEMA.md` — rewritten to canonical schema
+- `docs/AGENTS_SPEC.md` — field names updated
+- `agents/prompts/appraisal.md` — canonical field names + ebm_level
+- `agents/prompts/editorial.md` — summary, proposed_badges, editorial_note note
+- `agents/prompts/classification.md` — canonical field names
+- `agents/prompts/reconciliation.md` — crosswalk added
+- `agents/prompts/arbiter.md` — explicit `classification_confidence`/`relevance_score` names; do-not-route-on-ai_confidence note
+- `.claude/rules/console.md` — four-slot display contract
+- `.env` — created; `GOOGLE_CLOUD_PROJECT=cothesis-curation-agent`
+- `.env.example` — project ID updated to match
+- `docs/SCHEMA.md` — two-layer score model section added (0-1 routing vs 0-100 quality/display)
+- `pyproject.toml` — new; google-adk>=2.1.0,<2.2.0; Python 3.12; setuptools build
+- `.python-version` — 3.12
+- `.venv/` — Python 3.12 virtualenv (gitignored)
+- `agents/pipeline/__init__.py`, `agents/pipeline/agent.py` — skeleton root agent
+- `.env` — `VERTEX_DATASTORE_ID` set; `GOOGLE_CLOUD_PROJECT=cothesis-curation-agent`
+
+## Key commands
+- Scaffold: `uvx google-agents-cli setup`
+- Local dev UI: `adk web agents/`
+- Run evals: `adk eval` (see docs/EVAL.md) or the /run-evals skill
+- Deploy agent: `adk deploy cloud_run ...` (see docs/OPERATIONS.md)
+- Secret scan: `gitleaks git -v`

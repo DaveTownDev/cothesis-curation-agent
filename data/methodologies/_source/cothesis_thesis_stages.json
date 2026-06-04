@@ -1,0 +1,1052 @@
+{
+  "_schema": {
+    "name": "CoThesis THESIS Framework - Phases & Core Stages",
+    "version": "1.0.0",
+    "description": "6 THESIS phases with 25 universal core stages, designed for methodology-specific overrides and inserts",
+    "entities": {
+      "phase": {
+        "phase_id": "string - Unique identifier (e.g., 'PHASE-T')",
+        "code": "string - Single letter code (T, H, E, S, I, S2)",
+        "name": "string - Short name",
+        "full_name": "string - Full descriptive name",
+        "description": "string - Phase purpose",
+        "sequence": "number - Order (1-6)",
+        "typical_duration_percent": "number - Percentage of total project time"
+      },
+      "core_stage": {
+        "stage_id": "string - Unique identifier (e.g., 'STG-T-01')",
+        "phase_id": "string - Parent phase reference",
+        "code": "string - Stage code (e.g., 'T-01')",
+        "sequence_in_phase": "number - Order within phase (1-5)",
+        "global_sequence": "number - Order across all phases (1-25)",
+        "name": "string - Generic stage name",
+        "description": "string - Generic stage description",
+        "purpose": "string - Why this stage exists",
+        "stage_type": "'CORE' - Always CORE for base stages",
+        "is_universal": "boolean - true = required for ALL methodologies",
+        "typical_duration": "object - { min, typical, max, unit }",
+        "primary_deliverables": "string[] - Main outputs",
+        "secondary_deliverables": "string[] | null - Optional outputs",
+        "success_criteria": "string[] - How to know stage is complete",
+        "common_blockers": "string[] - What typically delays this stage"
+      }
+    },
+    "progression_actions": [
+      "NEXT - Move to next stage in sequence",
+      "SKIP_TO - Jump forward to specific stage",
+      "REPEAT - Start current stage over",
+      "GO_BACK_ONE - Return to previous stage",
+      "GO_BACK_TO - Return to specific earlier stage (loop)",
+      "BRANCH - Start parallel track",
+      "COMPLETE_PHASE - Mark phase complete",
+      "COMPLETE_PROJECT - Project finished"
+    ],
+    "progression_triggers": [
+      "DECISION_POINT - Based on decision point outcome",
+      "STAGE_OUTCOME - Based on how stage completed",
+      "PROJECT_STATE - Based on project status",
+      "DELIVERABLE_STATUS - Based on deliverable completion",
+      "TIME_ELAPSED - Based on duration",
+      "EXTERNAL_EVENT - Ethics rejection, etc.",
+      "USER_CHOICE - Manual selection"
+    ],
+    "counts": {
+      "phases": 6,
+      "core_stages": 25,
+      "stages_per_phase": {
+        "T": 4,
+        "H": 4,
+        "E": 5,
+        "S": 4,
+        "I": 4,
+        "S2": 4
+      }
+    }
+  },
+
+  "phases": [
+    {
+      "phase_id": "PHASE-T",
+      "code": "T",
+      "name": "Theory",
+      "full_name": "Theory: Research Question Development",
+      "description": "Developing and refining the research question, identifying gaps in knowledge, and establishing theoretical foundations",
+      "sequence": 1,
+      "typical_duration_percent": 10
+    },
+    {
+      "phase_id": "PHASE-H",
+      "code": "H",
+      "name": "History",
+      "full_name": "History: Literature Review & Context",
+      "description": "Comprehensive evidence gathering, critical appraisal, and establishing context for the study",
+      "sequence": 2,
+      "typical_duration_percent": 15
+    },
+    {
+      "phase_id": "PHASE-E",
+      "code": "E",
+      "name": "Evaluate",
+      "full_name": "Evaluate: Study Design & Ethics",
+      "description": "Methodology selection, protocol development, and obtaining necessary approvals",
+      "sequence": 3,
+      "typical_duration_percent": 20
+    },
+    {
+      "phase_id": "PHASE-S",
+      "code": "S",
+      "name": "Study",
+      "full_name": "Study: Data Collection & Management",
+      "description": "Data acquisition, quality control, and data management",
+      "sequence": 4,
+      "typical_duration_percent": 25
+    },
+    {
+      "phase_id": "PHASE-I",
+      "code": "I",
+      "name": "Interpret",
+      "full_name": "Interpret: Analysis & Results",
+      "description": "Data analysis, results interpretation, and robustness testing",
+      "sequence": 5,
+      "typical_duration_percent": 15
+    },
+    {
+      "phase_id": "PHASE-S2",
+      "code": "S2",
+      "name": "Share",
+      "full_name": "Share: Writing & Dissemination",
+      "description": "Manuscript preparation, revision, submission, and dissemination",
+      "sequence": 6,
+      "typical_duration_percent": 15
+    }
+  ],
+
+  "core_stages": [
+    {
+      "stage_id": "STG-T-01",
+      "phase_id": "PHASE-T",
+      "code": "T-01",
+      "sequence_in_phase": 1,
+      "global_sequence": 1,
+      "name": "Topic Identification & Scoping",
+      "description": "Identify research area of interest, assess scope, and explore initial feasibility based on available resources and context",
+      "purpose": "Establishes the broad direction of the research project before narrowing to specific questions",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Research topic statement",
+        "Initial scope definition",
+        "Preliminary feasibility notes"
+      ],
+      "secondary_deliverables": [
+        "Supervisor discussion notes",
+        "Initial reading list"
+      ],
+      "success_criteria": [
+        "Topic area clearly articulated",
+        "Scope appropriately bounded for available resources",
+        "Supervisor agreement on direction"
+      ],
+      "common_blockers": [
+        "Topic too broad or too narrow",
+        "Lack of supervisor alignment",
+        "Unclear personal interest or motivation"
+      ]
+    },
+    {
+      "stage_id": "STG-T-02",
+      "phase_id": "PHASE-T",
+      "code": "T-02",
+      "sequence_in_phase": 2,
+      "global_sequence": 2,
+      "name": "Question/Aim Formulation",
+      "description": "Develop focused research question(s) or study aims using appropriate frameworks (PICO, SPIDER, PEO, etc.)",
+      "purpose": "Creates a clear, answerable research question that guides the entire study design",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 3,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Primary research question/aim",
+        "Secondary questions/aims (if applicable)",
+        "Framework application (PICO/SPIDER/etc.)"
+      ],
+      "secondary_deliverables": [
+        "Question evolution documentation",
+        "Alternative questions considered"
+      ],
+      "success_criteria": [
+        "Question is specific and answerable",
+        "Framework elements clearly defined",
+        "Question aligned with feasibility constraints"
+      ],
+      "common_blockers": [
+        "Question too vague or complex",
+        "Misalignment between question and available data/methods",
+        "Scope creep from original topic"
+      ]
+    },
+    {
+      "stage_id": "STG-T-03",
+      "phase_id": "PHASE-T",
+      "code": "T-03",
+      "sequence_in_phase": 3,
+      "global_sequence": 3,
+      "name": "Theoretical Framing",
+      "description": "Establish theoretical basis for the study: hypotheses for quantitative work, conceptual frameworks, guiding theories, or methodological positioning for qualitative work",
+      "purpose": "Provides the intellectual foundation and expected relationships that guide study design and interpretation",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Hypotheses OR conceptual framework OR theoretical positioning",
+        "Expected relationships/outcomes",
+        "Justification for theoretical approach"
+      ],
+      "secondary_deliverables": [
+        "Conceptual diagram",
+        "Theory sources and references"
+      ],
+      "success_criteria": [
+        "Clear theoretical basis articulated",
+        "Alignment between theory and research question",
+        "Testable predictions or clear interpretive lens"
+      ],
+      "common_blockers": [
+        "Difficulty selecting appropriate theory",
+        "Mismatch between theory and methodology",
+        "Over-complex theoretical frameworks"
+      ]
+    },
+    {
+      "stage_id": "STG-T-04",
+      "phase_id": "PHASE-T",
+      "code": "T-04",
+      "sequence_in_phase": 4,
+      "global_sequence": 4,
+      "name": "Feasibility Assessment",
+      "description": "Systematic assessment of resources, timeline, data access, expertise, and overall project viability",
+      "purpose": "Ensures the project can realistically be completed within constraints before major investment",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 0.5,
+        "typical": 1,
+        "max": 2,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Feasibility assessment document",
+        "Resource requirements list",
+        "Preliminary timeline"
+      ],
+      "secondary_deliverables": [
+        "Risk register",
+        "Contingency plans"
+      ],
+      "success_criteria": [
+        "All major feasibility dimensions assessed",
+        "Go/no-go decision made",
+        "Supervisor sign-off on feasibility"
+      ],
+      "common_blockers": [
+        "Unrealistic timeline expectations",
+        "Data access not confirmed",
+        "Resource gaps identified but not addressed"
+      ]
+    },
+    {
+      "stage_id": "STG-H-01",
+      "phase_id": "PHASE-H",
+      "code": "H-01",
+      "sequence_in_phase": 1,
+      "global_sequence": 5,
+      "name": "Search Strategy Development",
+      "description": "Define search approach including databases, search terms, inclusion/exclusion criteria, and documentation method",
+      "purpose": "Creates a systematic, reproducible approach to identifying relevant evidence",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 0.5,
+        "typical": 1,
+        "max": 2,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Search strategy document",
+        "Database selection with justification",
+        "Search terms and syntax"
+      ],
+      "secondary_deliverables": [
+        "Librarian consultation notes",
+        "Pilot search results"
+      ],
+      "success_criteria": [
+        "Strategy is systematic and reproducible",
+        "Appropriate databases selected for topic",
+        "Search tested and refined"
+      ],
+      "common_blockers": [
+        "Too narrow or too broad search",
+        "Database access issues",
+        "Inadequate indexing/MeSH terms"
+      ]
+    },
+    {
+      "stage_id": "STG-H-02",
+      "phase_id": "PHASE-H",
+      "code": "H-02",
+      "sequence_in_phase": 2,
+      "global_sequence": 6,
+      "name": "Evidence Gathering",
+      "description": "Execute search strategy, screen results, and select relevant evidence or literature for inclusion",
+      "purpose": "Identifies and retrieves the body of evidence that will inform or constitute the study",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 3,
+        "max": 8,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Search results (documented)",
+        "Screening decisions",
+        "Included studies/sources list"
+      ],
+      "secondary_deliverables": [
+        "PRISMA flow diagram (if applicable)",
+        "Exclusion log with reasons"
+      ],
+      "success_criteria": [
+        "All planned databases searched",
+        "Screening completed systematically",
+        "Included sources retrieved and organised"
+      ],
+      "common_blockers": [
+        "High volume of results",
+        "Full-text access issues",
+        "Inconsistent screening decisions"
+      ]
+    },
+    {
+      "stage_id": "STG-H-03",
+      "phase_id": "PHASE-H",
+      "code": "H-03",
+      "sequence_in_phase": 3,
+      "global_sequence": 7,
+      "name": "Quality Assessment",
+      "description": "Appraise quality of evidence, assess risk of bias, and evaluate strength of included sources",
+      "purpose": "Determines the reliability and validity of evidence that will inform conclusions",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Quality/risk of bias assessments",
+        "Evidence quality summary",
+        "Assessment tool selection and justification"
+      ],
+      "secondary_deliverables": [
+        "Quality assessment training records",
+        "Inter-rater agreement (if dual assessment)"
+      ],
+      "success_criteria": [
+        "Appropriate assessment tool selected",
+        "All included sources assessed",
+        "Quality limitations documented"
+      ],
+      "common_blockers": [
+        "Selecting inappropriate appraisal tool",
+        "Inconsistency between assessors",
+        "Studies with missing information"
+      ]
+    },
+    {
+      "stage_id": "STG-H-04",
+      "phase_id": "PHASE-H",
+      "code": "H-04",
+      "sequence_in_phase": 4,
+      "global_sequence": 8,
+      "name": "Synthesis & Positioning",
+      "description": "Synthesise findings from gathered evidence, identify gaps, and position current study within existing knowledge",
+      "purpose": "Establishes what is known, what is unknown, and why the current study is needed",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Literature synthesis/narrative",
+        "Gap identification",
+        "Study justification"
+      ],
+      "secondary_deliverables": [
+        "Evidence tables",
+        "Conceptual map of literature"
+      ],
+      "success_criteria": [
+        "Clear synthesis of current evidence",
+        "Gap clearly articulated",
+        "Study rationale well-supported"
+      ],
+      "common_blockers": [
+        "Difficulty synthesising heterogeneous evidence",
+        "Gap already addressed by recent publication",
+        "Weak link between gap and proposed study"
+      ]
+    },
+    {
+      "stage_id": "STG-E-01",
+      "phase_id": "PHASE-E",
+      "code": "E-01",
+      "sequence_in_phase": 1,
+      "global_sequence": 9,
+      "name": "Study Design Specification",
+      "description": "Define methodology, design type, and core study parameters",
+      "purpose": "Establishes the methodological approach that will answer the research question",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Study design document",
+        "Methodology justification",
+        "Design parameters specification"
+      ],
+      "secondary_deliverables": [
+        "Alternative designs considered",
+        "Design limitations acknowledged"
+      ],
+      "success_criteria": [
+        "Design matches research question",
+        "Design is feasible within constraints",
+        "Methodology clearly specified"
+      ],
+      "common_blockers": [
+        "Mismatch between question and design",
+        "Design too ambitious for resources",
+        "Unfamiliarity with chosen methodology"
+      ]
+    },
+    {
+      "stage_id": "STG-E-02",
+      "phase_id": "PHASE-E",
+      "code": "E-02",
+      "sequence_in_phase": 2,
+      "global_sequence": 10,
+      "name": "Construct Operationalization",
+      "description": "Define and operationalize variables, outcome measures, exposures, or constructs to be studied",
+      "purpose": "Translates abstract concepts into measurable, concrete specifications",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Variable definitions",
+        "Measurement specifications",
+        "Data dictionary"
+      ],
+      "secondary_deliverables": [
+        "Coding manual",
+        "Measurement validation evidence"
+      ],
+      "success_criteria": [
+        "All key constructs operationalized",
+        "Measurement validity addressed",
+        "Definitions are unambiguous"
+      ],
+      "common_blockers": [
+        "Vague definitions",
+        "No validated measure available",
+        "Mismatch between concept and available data"
+      ]
+    },
+    {
+      "stage_id": "STG-E-03",
+      "phase_id": "PHASE-E",
+      "code": "E-03",
+      "sequence_in_phase": 3,
+      "global_sequence": 11,
+      "name": "Sample/Selection Strategy",
+      "description": "Determine sampling approach, sample size, selection criteria, and recruitment or selection procedures",
+      "purpose": "Defines who/what will be studied and how they will be identified and included",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Inclusion/exclusion criteria",
+        "Sample size justification",
+        "Sampling/selection procedure"
+      ],
+      "secondary_deliverables": [
+        "Power calculation (if applicable)",
+        "Recruitment materials"
+      ],
+      "success_criteria": [
+        "Criteria are clear and justified",
+        "Sample size adequate for aims",
+        "Selection procedure is systematic"
+      ],
+      "common_blockers": [
+        "Insufficient sample available",
+        "Overly restrictive criteria",
+        "Power calculation errors"
+      ]
+    },
+    {
+      "stage_id": "STG-E-04",
+      "phase_id": "PHASE-E",
+      "code": "E-04",
+      "sequence_in_phase": 4,
+      "global_sequence": 12,
+      "name": "Data Acquisition Planning",
+      "description": "Plan data collection, extraction, or acquisition procedures including instruments, protocols, and quality measures",
+      "purpose": "Creates detailed procedures for obtaining the data needed for the study",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Data collection/extraction protocol",
+        "Instruments/forms",
+        "Quality assurance procedures"
+      ],
+      "secondary_deliverables": [
+        "Training materials",
+        "Standard operating procedures"
+      ],
+      "success_criteria": [
+        "Procedures are detailed and reproducible",
+        "Instruments are appropriate and available",
+        "Quality measures are specified"
+      ],
+      "common_blockers": [
+        "Instrument validation issues",
+        "Complex data access requirements",
+        "Inadequate quality control planning"
+      ]
+    },
+    {
+      "stage_id": "STG-E-05",
+      "phase_id": "PHASE-E",
+      "code": "E-05",
+      "sequence_in_phase": 5,
+      "global_sequence": 13,
+      "name": "Governance & Registration",
+      "description": "Ethics application, protocol registration, and obtaining necessary institutional approvals",
+      "purpose": "Ensures study meets ethical requirements and is appropriately registered before commencement",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 2,
+        "typical": 8,
+        "max": 16,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Ethics approval (or exemption documentation)",
+        "Protocol registration (if required)",
+        "Governance approvals"
+      ],
+      "secondary_deliverables": [
+        "Participant information sheet",
+        "Consent form",
+        "Data management plan"
+      ],
+      "success_criteria": [
+        "All required approvals obtained",
+        "Protocol registered (if applicable)",
+        "Ready to commence data acquisition"
+      ],
+      "common_blockers": [
+        "Ethics committee delays",
+        "Revisions required",
+        "Governance complexity (multi-site)"
+      ]
+    },
+    {
+      "stage_id": "STG-S-01",
+      "phase_id": "PHASE-S",
+      "code": "S-01",
+      "sequence_in_phase": 1,
+      "global_sequence": 14,
+      "name": "Pilot & Calibration",
+      "description": "Test procedures, calibrate instruments, train team members, and refine protocols before full execution",
+      "purpose": "Identifies and resolves procedural issues before committing to full data acquisition",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 0.5,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Pilot results summary",
+        "Protocol refinements",
+        "Training completion records"
+      ],
+      "secondary_deliverables": [
+        "Inter-rater reliability (if applicable)",
+        "Calibration data"
+      ],
+      "success_criteria": [
+        "Procedures tested and refined",
+        "Team trained and calibrated",
+        "Major issues identified and resolved"
+      ],
+      "common_blockers": [
+        "Significant protocol changes required",
+        "Training inadequate",
+        "Pilot reveals fundamental problems"
+      ]
+    },
+    {
+      "stage_id": "STG-S-02",
+      "phase_id": "PHASE-S",
+      "code": "S-02",
+      "sequence_in_phase": 2,
+      "global_sequence": 15,
+      "name": "Data Acquisition Execution",
+      "description": "Execute data collection, extraction, or acquisition according to protocol",
+      "purpose": "Obtains the data that will be analysed to answer the research question",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 2,
+        "typical": 8,
+        "max": 26,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Raw data",
+        "Collection/extraction logs",
+        "Progress documentation"
+      ],
+      "secondary_deliverables": [
+        "Protocol deviation log",
+        "Participant tracking (if applicable)"
+      ],
+      "success_criteria": [
+        "Target sample achieved (or justified)",
+        "Data acquired per protocol",
+        "Quality standards maintained"
+      ],
+      "common_blockers": [
+        "Recruitment difficulties",
+        "Data access problems",
+        "Higher than expected missing data"
+      ]
+    },
+    {
+      "stage_id": "STG-S-03",
+      "phase_id": "PHASE-S",
+      "code": "S-03",
+      "sequence_in_phase": 3,
+      "global_sequence": 16,
+      "name": "Quality Assurance",
+      "description": "Monitor data quality, verify accuracy, resolve discrepancies, and ensure protocol adherence",
+      "purpose": "Ensures data integrity and identifies issues before analysis",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 0.5,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Quality assurance report",
+        "Discrepancy resolution log",
+        "Data verification records"
+      ],
+      "secondary_deliverables": [
+        "Audit trail",
+        "Error rate documentation"
+      ],
+      "success_criteria": [
+        "Quality checks completed",
+        "Discrepancies resolved",
+        "Data meets quality thresholds"
+      ],
+      "common_blockers": [
+        "High error rates",
+        "Systematic data problems",
+        "Unresolvable discrepancies"
+      ]
+    },
+    {
+      "stage_id": "STG-S-04",
+      "phase_id": "PHASE-S",
+      "code": "S-04",
+      "sequence_in_phase": 4,
+      "global_sequence": 17,
+      "name": "Data Management",
+      "description": "Clean, organise, secure, and prepare data for analysis",
+      "purpose": "Transforms raw data into an analysis-ready dataset",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Cleaned dataset",
+        "Data cleaning log",
+        "Final data dictionary"
+      ],
+      "secondary_deliverables": [
+        "Codebook",
+        "Missing data documentation"
+      ],
+      "success_criteria": [
+        "Data cleaned and documented",
+        "Securely stored",
+        "Ready for analysis"
+      ],
+      "common_blockers": [
+        "Extensive cleaning required",
+        "Data structure problems",
+        "Missing data decisions"
+      ]
+    },
+    {
+      "stage_id": "STG-I-01",
+      "phase_id": "PHASE-I",
+      "code": "I-01",
+      "sequence_in_phase": 1,
+      "global_sequence": 18,
+      "name": "Analysis Preparation",
+      "description": "Prepare data for analysis, check assumptions, and finalise analysis plan",
+      "purpose": "Ensures data and analysis approach are ready for primary analysis",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 0.5,
+        "typical": 1,
+        "max": 2,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Analysis-ready dataset",
+        "Final analysis plan",
+        "Assumption checks"
+      ],
+      "secondary_deliverables": [
+        "Variable transformations documented",
+        "Descriptive statistics"
+      ],
+      "success_criteria": [
+        "Assumptions checked and addressed",
+        "Analysis plan confirmed",
+        "Data ready for analysis"
+      ],
+      "common_blockers": [
+        "Assumption violations",
+        "Unexpected data distributions",
+        "Analysis plan changes needed"
+      ]
+    },
+    {
+      "stage_id": "STG-I-02",
+      "phase_id": "PHASE-I",
+      "code": "I-02",
+      "sequence_in_phase": 2,
+      "global_sequence": 19,
+      "name": "Primary Analysis",
+      "description": "Execute main analysis, synthesis, or interpretation according to plan",
+      "purpose": "Generates the primary findings that answer the research question",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 4,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Primary analysis outputs",
+        "Results tables",
+        "Analysis code/documentation"
+      ],
+      "secondary_deliverables": [
+        "Figures",
+        "Model diagnostics"
+      ],
+      "success_criteria": [
+        "Planned analyses completed",
+        "Results documented",
+        "Outputs verified"
+      ],
+      "common_blockers": [
+        "Unexpected results requiring investigation",
+        "Technical analysis problems",
+        "Results don't answer question clearly"
+      ]
+    },
+    {
+      "stage_id": "STG-I-03",
+      "phase_id": "PHASE-I",
+      "code": "I-03",
+      "sequence_in_phase": 3,
+      "global_sequence": 20,
+      "name": "Results Interpretation",
+      "description": "Interpret findings in context, assess clinical/practical significance, and relate to existing evidence",
+      "purpose": "Translates analytical outputs into meaningful conclusions",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 1,
+        "typical": 2,
+        "max": 3,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Interpretation narrative",
+        "Contextualised findings",
+        "Comparison to existing evidence"
+      ],
+      "secondary_deliverables": [
+        "Clinical significance assessment",
+        "Unexpected findings explanation"
+      ],
+      "success_criteria": [
+        "Results clearly interpreted",
+        "Findings contextualised",
+        "Limitations acknowledged"
+      ],
+      "common_blockers": [
+        "Difficulty interpreting unexpected results",
+        "Overinterpretation of findings",
+        "Disconnect between results and conclusions"
+      ]
+    },
+    {
+      "stage_id": "STG-I-04",
+      "phase_id": "PHASE-I",
+      "code": "I-04",
+      "sequence_in_phase": 4,
+      "global_sequence": 21,
+      "name": "Supplementary Analyses",
+      "description": "Conduct sensitivity analyses, subgroup analyses, and robustness checks",
+      "purpose": "Tests the reliability and generalisability of primary findings",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 0.5,
+        "typical": 1,
+        "max": 3,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Sensitivity analysis results",
+        "Subgroup analyses (if applicable)",
+        "Robustness documentation"
+      ],
+      "secondary_deliverables": [
+        "Publication bias assessment (if applicable)",
+        "Alternative model results"
+      ],
+      "success_criteria": [
+        "Planned supplementary analyses completed",
+        "Robustness of findings assessed",
+        "Limitations from supplementary analyses documented"
+      ],
+      "common_blockers": [
+        "Results sensitive to assumptions",
+        "Subgroups too small for analysis",
+        "Time/resource constraints"
+      ]
+    },
+    {
+      "stage_id": "STG-S2-01",
+      "phase_id": "PHASE-S2",
+      "code": "S2-01",
+      "sequence_in_phase": 1,
+      "global_sequence": 22,
+      "name": "Output Drafting",
+      "description": "Draft manuscript, report, or recommendations based on study findings",
+      "purpose": "Creates the primary written output for dissemination",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 2,
+        "typical": 4,
+        "max": 8,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Complete first draft",
+        "Tables and figures",
+        "Supplementary materials"
+      ],
+      "secondary_deliverables": [
+        "Reference list",
+        "Author contributions"
+      ],
+      "success_criteria": [
+        "All sections drafted",
+        "Tables and figures complete",
+        "Ready for internal review"
+      ],
+      "common_blockers": [
+        "Writer's block",
+        "Unclear structure",
+        "Time management"
+      ]
+    },
+    {
+      "stage_id": "STG-S2-02",
+      "phase_id": "PHASE-S2",
+      "code": "S2-02",
+      "sequence_in_phase": 2,
+      "global_sequence": 23,
+      "name": "Refinement & Review",
+      "description": "Revise draft based on self-review, co-author feedback, and supervisor input",
+      "purpose": "Improves quality and clarity through iterative revision",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 2,
+        "typical": 4,
+        "max": 8,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Revised manuscript",
+        "Response to feedback",
+        "Final co-author approval"
+      ],
+      "secondary_deliverables": [
+        "Track changes version",
+        "Revision history"
+      ],
+      "success_criteria": [
+        "All feedback addressed",
+        "Co-authors have approved",
+        "Supervisor has signed off"
+      ],
+      "common_blockers": [
+        "Slow co-author feedback",
+        "Conflicting feedback",
+        "Multiple revision cycles"
+      ]
+    },
+    {
+      "stage_id": "STG-S2-03",
+      "phase_id": "PHASE-S2",
+      "code": "S2-03",
+      "sequence_in_phase": 3,
+      "global_sequence": 24,
+      "name": "Dissemination Planning",
+      "description": "Select dissemination venue, plan implementation of findings, and prepare submission",
+      "purpose": "Determines how findings will reach the intended audience",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 0.5,
+        "typical": 1,
+        "max": 2,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Target venue selected",
+        "Submission-ready package",
+        "Dissemination plan"
+      ],
+      "secondary_deliverables": [
+        "Cover letter",
+        "Suggested reviewers"
+      ],
+      "success_criteria": [
+        "Appropriate venue identified",
+        "Manuscript formatted to requirements",
+        "Ready for submission"
+      ],
+      "common_blockers": [
+        "Difficulty selecting journal",
+        "Formatting requirements",
+        "Authorship issues"
+      ]
+    },
+    {
+      "stage_id": "STG-S2-04",
+      "phase_id": "PHASE-S2",
+      "code": "S2-04",
+      "sequence_in_phase": 4,
+      "global_sequence": 25,
+      "name": "Completion & Follow-up",
+      "description": "Submit output, respond to reviewers, conduct re-audit if applicable, and ensure sustainment",
+      "purpose": "Completes the research cycle and manages post-submission activities",
+      "stage_type": "CORE",
+      "is_universal": true,
+      "typical_duration": {
+        "min": 4,
+        "typical": 12,
+        "max": 52,
+        "unit": "weeks"
+      },
+      "primary_deliverables": [
+        "Submission confirmation",
+        "Reviewer responses (if applicable)",
+        "Final published/accepted output"
+      ],
+      "secondary_deliverables": [
+        "Re-audit results (if applicable)",
+        "Implementation documentation"
+      ],
+      "success_criteria": [
+        "Output submitted/accepted",
+        "Reviewer feedback addressed",
+        "Project documentation complete"
+      ],
+      "common_blockers": [
+        "Rejection requiring resubmission",
+        "Extensive revisions requested",
+        "Long review timelines"
+      ]
+    }
+  ]
+}

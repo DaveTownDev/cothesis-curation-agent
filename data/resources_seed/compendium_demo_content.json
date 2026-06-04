@@ -1,0 +1,926 @@
+{
+  "_meta": {
+    "description": "CoThesis Compendium demo content \u2014 one real resource per type with live URLs and real data",
+    "version": "1.0",
+    "date": "2026-04-28",
+    "resource_count": 14,
+    "notes": "All URLs are live. Editorial descriptions are original AI-authored content. Metrics are realistic estimates, not real-time. All resources are well-known in medical research methodology."
+  },
+  "resources": [
+    {
+      "resource_id": "demo-article-001",
+      "resource_type": "article",
+      "subtype": "empirical_research",
+      "status": "approved",
+      "title": "Using thematic analysis in psychology",
+      "url": "https://doi.org/10.1191/1478088706qp063oa",
+      "editorial_description": "The foundational paper on reflexive thematic analysis, providing a clear six-phase method for qualitative data analysis that has become the most widely cited methodology paper in psychology and health research.",
+      "editorial_description_long": "Published in 2006 by Virginia Braun and Victoria Clarke, this paper introduced a systematic yet flexible approach to thematic analysis that transformed qualitative research practice. It outlines six phases \u2014 familiarisation, coding, theme generation, theme review, theme definition, and report writing \u2014 with worked examples. With over 200,000 citations, it remains the definitive reference for researchers using thematic analysis in any discipline. The authors have since refined their approach as 'reflexive thematic analysis' to distinguish it from codebook and coding reliability variants.",
+      "publication_date": "2006-01-01",
+      "publication_year": 2006,
+      "language": "en",
+      "methodology_tags": [
+        "thematic_analysis",
+        "qualitative_research",
+        "reflexive_thematic_analysis"
+      ],
+      "thesis_stages": [
+        "ST",
+        "IN"
+      ],
+      "difficulty_level": "beginner",
+      "specialty_tags": [
+        "psychology",
+        "health_research",
+        "nursing",
+        "public_health"
+      ],
+      "quality_score": 0.98,
+      "quality_dimensions": {
+        "authority": 1.0,
+        "currency": 0.7,
+        "relevance": 1.0,
+        "accuracy": 1.0,
+        "pedagogy": 0.95
+      },
+      "editorial_badges": [
+        "essential",
+        "editors_choice"
+      ],
+      "is_free": false,
+      "is_open_access": false,
+      "access_type": "subscription",
+      "doi": "10.1191/1478088706qp063oa",
+      "pmid": null,
+      "pmcid": null,
+      "openalex_id": "W2100837269",
+      "abstract": "Thematic analysis is a poorly demarcated, rarely acknowledged, yet widely used qualitative analytic method within psychology. In this paper, we argue that it offers an accessible and theoretically flexible approach to analysing qualitative data. We outline what thematic analysis is, locating it in relation to other qualitative analytic methods that search for themes or patterns, and in relation to different epistemological and ontological positions. We then provide clear guidelines to those wanting to start thematic analysis, or wanting to improve their approach.",
+      "journal_name": "Qualitative Research in Psychology",
+      "journal_abbreviation": "Qual Res Psychol",
+      "volume": "3",
+      "issue": "2",
+      "pages": "77-101",
+      "publisher": "Taylor & Francis",
+      "author_count": 2,
+      "citation_count": 210000,
+      "citation_count_max": 250000,
+      "citation_count_max_source": "google_scholar",
+      "fwci": 482.5,
+      "altmetric_score": 1250.0,
+      "oa_status": "closed",
+      "best_oa_url": null,
+      "license": null,
+      "is_retracted": false,
+      "has_correction": false,
+      "has_expression_of_concern": false,
+      "authors": [
+        {
+          "name": "Virginia Braun",
+          "orcid": "0000-0002-3435-091X",
+          "position": 1,
+          "is_corresponding": true,
+          "affiliation": "University of Auckland"
+        },
+        {
+          "name": "Victoria Clarke",
+          "orcid": "0000-0002-4413-3944",
+          "position": 2,
+          "is_corresponding": false,
+          "affiliation": "University of the West of England"
+        }
+      ],
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-book-001",
+      "resource_type": "book",
+      "subtype": "methodology_textbook",
+      "status": "approved",
+      "title": "Research Design: Qualitative, Quantitative, and Mixed Methods Approaches",
+      "url": "https://us.sagepub.com/en-us/nam/research-design/book270014",
+      "editorial_description": "The standard introductory textbook on research methodology, covering qualitative, quantitative, and mixed methods designs with practical frameworks for writing proposals and selecting appropriate approaches.",
+      "editorial_description_long": "Now in its sixth edition (2023), Creswell and Creswell's Research Design has been the go-to methodology textbook for over two decades. It walks trainees through the entire research design process \u2014 from identifying a research problem and reviewing literature to selecting a methodology, collecting data, and writing up findings. The book excels at making the philosophical underpinnings of different research traditions accessible without oversimplifying them. Each chapter includes practical checklists and worked examples. It is routinely required reading for research methodology courses across medical, nursing, psychology, and social science programmes worldwide.",
+      "publication_date": "2023-01-15",
+      "publication_year": 2023,
+      "language": "en",
+      "methodology_tags": [
+        "research_design",
+        "qualitative_research",
+        "quantitative_research",
+        "mixed_methods"
+      ],
+      "thesis_stages": [
+        "TH",
+        "ST"
+      ],
+      "difficulty_level": "beginner",
+      "specialty_tags": [
+        "general_research_methodology"
+      ],
+      "quality_score": 0.95,
+      "quality_dimensions": {
+        "authority": 1.0,
+        "currency": 0.95,
+        "relevance": 1.0,
+        "accuracy": 0.95,
+        "pedagogy": 0.95
+      },
+      "editorial_badges": [
+        "essential",
+        "best_beginners"
+      ],
+      "is_free": false,
+      "is_open_access": false,
+      "access_type": "paid",
+      "isbn_13": "9781071817940",
+      "isbn_10": "1071817949",
+      "google_books_id": "bRHyzgEACAAJ",
+      "authors": [
+        "John W. Creswell",
+        "J. David Creswell"
+      ],
+      "publisher": "SAGE Publications",
+      "edition": "6th Edition",
+      "edition_number": 6,
+      "page_count": 304,
+      "binding": "Paperback",
+      "cover_image_url": "https://us.sagepub.com/sites/default/files/styles/book_cover_medium/public/book_covers/9781071817940_500.jpg",
+      "price": 94.0,
+      "price_currency": "USD",
+      "goodreads_rating": 3.92,
+      "goodreads_rating_count": 5800,
+      "amazon_rating": 4.6,
+      "amazon_rating_count": 1450,
+      "open_syllabus_score": 95.2,
+      "syllabus_count": 12400,
+      "citation_count": 95000,
+      "subjects": [
+        "Research Methodology",
+        "Social Science Research",
+        "Mixed Methods",
+        "Qualitative Research",
+        "Quantitative Research"
+      ],
+      "companion_url": "https://study.sagepub.com/creswell6e",
+      "has_companion_resources": true,
+      "previous_edition_adequate": true,
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-chapter-001",
+      "resource_type": "book_chapter",
+      "subtype": "handbook_chapter",
+      "status": "approved",
+      "title": "Introduction",
+      "url": "https://training.cochrane.org/handbook/current/chapter-01",
+      "editorial_description": "The opening chapter of the Cochrane Handbook, providing essential context on systematic reviews, the Cochrane Collaboration's role, and how to navigate the handbook for planning and conducting systematic reviews of interventions.",
+      "editorial_description_long": "Chapter 1 of the Cochrane Handbook for Systematic Reviews of Interventions (version 6.4, 2023) introduces the rationale for systematic reviews, explains why they are considered the gold standard for synthesising evidence, and provides a roadmap for the remaining 24 chapters. It covers the history of the Cochrane Collaboration, the principles of evidence-based healthcare, and the structure of a Cochrane review. This chapter is essential reading before diving into the methodological chapters that follow.",
+      "publication_date": "2023-08-01",
+      "publication_year": 2023,
+      "language": "en",
+      "methodology_tags": [
+        "systematic_review",
+        "meta_analysis",
+        "evidence_synthesis"
+      ],
+      "thesis_stages": [
+        "TH",
+        "EV"
+      ],
+      "difficulty_level": "beginner",
+      "specialty_tags": [
+        "evidence_based_medicine"
+      ],
+      "quality_score": 0.97,
+      "editorial_badges": [
+        "essential"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "doi": "10.1002/9781119536604.ch1",
+      "chapter_title": "Introduction",
+      "chapter_number": "1",
+      "chapter_authors": [
+        "Julian PT Higgins",
+        "James Thomas",
+        "Jacqueline Chandler",
+        "Miranda Cumpston",
+        "Tianjing Li",
+        "Matthew J Page",
+        "Vivian A Welch"
+      ],
+      "parent_book_title": "Cochrane Handbook for Systematic Reviews of Interventions",
+      "parent_book_isbn": "9781119536628",
+      "publisher": "Wiley / Cochrane",
+      "cover_image_url": "https://training.cochrane.org/sites/training.cochrane.org/files/public/uploads/cochrane_handbook_6_2019.png",
+      "citation_count": 15200,
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-video-001",
+      "resource_type": "video",
+      "subtype": "video_tutorial",
+      "status": "approved",
+      "title": "p-values: What they are and how to interpret them",
+      "url": "https://www.youtube.com/watch?v=vemZtEM63GY",
+      "editorial_description": "A clear, visual explanation of p-values using animated illustrations and plain language, from the StatQuest channel \u2014 one of the most popular statistics education resources on YouTube.",
+      "editorial_description_long": "Josh Starmer's StatQuest series is renowned for making statistical concepts accessible through short, focused videos with distinctive hand-drawn animations. This video explains what p-values actually measure, how they relate to null hypotheses, and common misinterpretations \u2014 all in under 12 minutes. It's an ideal starting point for trainees encountering inferential statistics for the first time or needing a refresher before their research project's analysis phase. The visual approach makes abstract concepts concrete.",
+      "publication_date": "2016-11-14",
+      "publication_year": 2016,
+      "language": "en",
+      "methodology_tags": [
+        "frequentist_statistics",
+        "hypothesis_testing",
+        "inferential_statistics"
+      ],
+      "thesis_stages": [
+        "IN"
+      ],
+      "difficulty_level": "beginner",
+      "specialty_tags": [
+        "biostatistics"
+      ],
+      "quality_score": 0.92,
+      "quality_dimensions": {
+        "authority": 0.85,
+        "currency": 0.8,
+        "relevance": 0.95,
+        "accuracy": 0.95,
+        "pedagogy": 0.98,
+        "production_quality": 0.85
+      },
+      "editorial_badges": [
+        "best_beginners",
+        "best_free"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "youtube_video_id": "vemZtEM63GY",
+      "embed_url": "https://www.youtube.com/embed/vemZtEM63GY",
+      "channel_name": "StatQuest with Josh Starmer",
+      "channel_id": "UCtYLUTtgS3k1Fg4y5tAhLbw",
+      "duration_seconds": 669,
+      "duration_display": "11:09",
+      "definition": "hd",
+      "is_embeddable": true,
+      "view_count": 2800000,
+      "like_count": 68000,
+      "comment_count": 3200,
+      "engagement_ratio": 0.025,
+      "thumbnail_url": "https://i.ytimg.com/vi/vemZtEM63GY/maxresdefault.jpg",
+      "has_transcript": true,
+      "transcript_source": "auto_captions",
+      "transcript_word_count": 2100,
+      "license": "youtube",
+      "is_creative_commons": false,
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-podcast-001",
+      "resource_type": "podcast",
+      "subtype": "podcast_show",
+      "status": "approved",
+      "title": "Everything Hertz",
+      "url": "https://everythinghertz.com",
+      "editorial_description": "A research methodology and open science podcast hosted by two active researchers, covering topics from statistical methods and peer review to research culture and reproducibility \u2014 with humour and candour.",
+      "editorial_description_long": "Everything Hertz is co-hosted by Dan Quintana (University of Oslo, neuroscience) and James Heathers (data analysis, research integrity). The show covers the practical realities of doing research \u2014 from choosing the right statistical test to navigating peer review, dealing with reviewers, understanding preprints, and engaging with open science practices. Episodes are conversational and accessible, often featuring guest researchers. The hosts bring genuine expertise and a willingness to discuss the messy, unglamorous parts of research that textbooks skip. Particularly valuable for trainees who want to understand research culture alongside methodology.",
+      "publication_date": "2017-02-01",
+      "publication_year": 2017,
+      "language": "en",
+      "methodology_tags": [
+        "open_science",
+        "research_methods",
+        "peer_review",
+        "reproducibility",
+        "statistics"
+      ],
+      "thesis_stages": [
+        "TH",
+        "ST",
+        "SH"
+      ],
+      "difficulty_level": "intermediate",
+      "specialty_tags": [
+        "neuroscience",
+        "psychology",
+        "general_research_methodology"
+      ],
+      "quality_score": 0.88,
+      "quality_dimensions": {
+        "authority": 0.9,
+        "currency": 0.85,
+        "relevance": 0.9,
+        "consistency": 0.85,
+        "production_quality": 0.8
+      },
+      "editorial_badges": [
+        "editors_choice"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "rss_url": "https://everythinghertz.com/feed",
+      "apple_podcasts_url": "https://podcasts.apple.com/podcast/everything-hertz/id1202879711",
+      "spotify_url": "https://open.spotify.com/show/1fFAegtCqL5iXmIx0kkZEj",
+      "publisher": "Dan Quintana & James Heathers",
+      "artwork_url": "https://storage.buzzsprout.com/variants/ci2l90lf3cq6m4q9r1eaknj0rjhx/8d66eb17bb7d02ca4856ab443a78f2148cafbb129f58a3c81282007c6fe24ff2",
+      "total_episodes": 120,
+      "listen_score": 42,
+      "listen_score_percentile": "5%",
+      "update_frequency_hours": 720,
+      "is_active": true,
+      "hosts": [
+        "Dan Quintana",
+        "James Heathers"
+      ],
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-software-001",
+      "resource_type": "software",
+      "subtype": "statistical_software",
+      "status": "approved",
+      "title": "JASP",
+      "url": "https://jasp-stats.org",
+      "editorial_description": "A free, open-source statistical analysis application offering both frequentist and Bayesian methods through a spreadsheet-style interface \u2014 designed specifically to make advanced statistics accessible to researchers without programming experience.",
+      "editorial_description_long": "JASP (Jeffreys's Amazing Statistics Program) is developed by the University of Amsterdam and provides a genuinely free alternative to SPSS for common statistical analyses. It supports t-tests, ANOVA, regression, factor analysis, structural equation modelling, and network analysis \u2014 all with both classical (frequentist) and Bayesian options. The interface mimics a spreadsheet application, making it immediately familiar. Results update in real-time as you adjust analysis options, and outputs are formatted in APA style by default. JASP has become particularly popular in psychology and medical education research. It handles CSV, SPSS (.sav), and other common data formats. The Bayesian analysis capabilities are uniquely accessible compared to alternatives like R or Python.",
+      "publication_date": "2015-01-01",
+      "publication_year": 2015,
+      "language": "en",
+      "methodology_tags": [
+        "frequentist_statistics",
+        "bayesian_analysis",
+        "anova",
+        "regression_analysis",
+        "factor_analysis",
+        "structural_equation_modelling"
+      ],
+      "thesis_stages": [
+        "IN"
+      ],
+      "difficulty_level": "beginner",
+      "specialty_tags": [
+        "psychology",
+        "medical_education",
+        "biostatistics"
+      ],
+      "quality_score": 0.91,
+      "quality_dimensions": {
+        "functionality": 0.88,
+        "usability": 0.95,
+        "documentation": 0.85,
+        "support": 0.8,
+        "value": 1.0,
+        "maintenance": 0.92
+      },
+      "editorial_badges": [
+        "best_free",
+        "best_beginners"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "product_url": "https://jasp-stats.org",
+      "github_url": "https://github.com/jasp-stats/jasp-desktop",
+      "rrid": "RRID:SCR_015823",
+      "tagline": "A Fresh Way to Do Statistics",
+      "developer": "University of Amsterdam",
+      "current_version": "0.19.3",
+      "version_date": "2024-12-01",
+      "founded_year": 2013,
+      "logo_url": "https://jasp-stats.org/wp-content/uploads/2019/09/jasp-logo-green-230x230.png",
+      "pricing_model": "open_source",
+      "is_open_source": true,
+      "has_free_tier": true,
+      "has_student_discount": false,
+      "starting_price": 0,
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "is_web_based": false,
+      "is_mobile": false,
+      "is_desktop": true,
+      "license": "AGPL-3.0",
+      "proper_citation": "JASP Team (2024). JASP (Version 0.19.3) [Computer software]. RRID:SCR_015823",
+      "github_stars": 1900,
+      "github_forks": 350,
+      "github_last_commit": "2025-03-15",
+      "github_contributors": 85,
+      "oss_health_signal": "active",
+      "g2_rating": 4.3,
+      "g2_review_count": 45,
+      "capterra_rating": 4.5,
+      "capterra_review_count": 28,
+      "alternativeto_likes": 320,
+      "rrid_publication_mentions": 2800,
+      "has_api": false,
+      "documentation_url": "https://jasp-stats.org/how-to-use-jasp/",
+      "learning_curve": "minimal",
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-guideline-001",
+      "resource_type": "reporting_guideline",
+      "subtype": "primary_guideline",
+      "status": "approved",
+      "title": "PRISMA 2020",
+      "url": "http://www.prisma-statement.org",
+      "editorial_description": "The updated international standard for reporting systematic reviews and meta-analyses, providing a 27-item checklist and four-phase flow diagram that most journals now require for SR submissions.",
+      "editorial_description_long": "PRISMA 2020 (Preferred Reporting Items for Systematic Reviews and Meta-Analyses) replaced the 2009 version with updated guidance reflecting advances in systematic review methodology. The 27-item checklist covers everything from title and abstract structure to risk of bias assessment and certainty of evidence. The updated flow diagram tracks identification, screening, eligibility, and inclusion across databases and registers. Over 2,000 journals endorse or require PRISMA compliance. The Explanation and Elaboration document provides detailed guidance on each item with published examples of good reporting. PRISMA 2020 also introduced new items for reporting on automation tools, data sharing, and protocol registration.",
+      "publication_date": "2021-03-29",
+      "publication_year": 2021,
+      "language": "en",
+      "methodology_tags": [
+        "systematic_review",
+        "meta_analysis",
+        "reporting_standards"
+      ],
+      "thesis_stages": [
+        "SH"
+      ],
+      "difficulty_level": "intermediate",
+      "specialty_tags": [
+        "evidence_based_medicine"
+      ],
+      "quality_score": 0.99,
+      "quality_dimensions": {
+        "authority": 1.0,
+        "currency": 1.0,
+        "usability": 0.95,
+        "specificity": 0.98,
+        "adoption": 1.0
+      },
+      "editorial_badges": [
+        "essential",
+        "editors_choice"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "guideline_acronym": "PRISMA",
+      "guideline_name": "Preferred Reporting Items for Systematic Reviews and Meta-Analyses",
+      "doi": "10.1136/bmj.n71",
+      "equator_url": "https://www.equator-network.org/reporting-guidelines/prisma/",
+      "full_title": "The PRISMA 2020 statement: an updated guideline for reporting systematic reviews",
+      "study_types": [
+        "systematic_review",
+        "meta_analysis",
+        "scoping_review"
+      ],
+      "current_version": "2020",
+      "development_group": "PRISMA Group",
+      "guideline_status": "active",
+      "checklist_url": "http://www.prisma-statement.org/documents/PRISMA_2020_checklist.pdf",
+      "checklist_formats": [
+        "PDF",
+        "Word"
+      ],
+      "ee_url": "https://doi.org/10.1136/bmj.n160",
+      "flow_diagram_url": "http://www.prisma-statement.org/documents/PRISMA_2020_flow_diagram_new_SRs.pdf",
+      "flow_diagram_tool_url": "https://estech.shinyapps.io/prisma_flowdiagram/",
+      "endorsing_journals_count": 2200,
+      "extension_count": 15,
+      "guideline_scope": "Covers the reporting of all stages of a systematic review including search strategy, study selection, data extraction, risk of bias assessment, synthesis methods, and certainty of evidence.",
+      "when_to_use": "Use PRISMA when writing up any systematic review or meta-analysis for publication. Begin consulting the checklist during protocol development to ensure your review is designed to capture all required reporting elements.",
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-course-001",
+      "resource_type": "course",
+      "subtype": "free_online_course",
+      "status": "approved",
+      "title": "Understanding Clinical Research: Behind the Statistics",
+      "url": "https://www.coursera.org/learn/clinical-research",
+      "editorial_description": "A free Coursera course from the University of Cape Town that demystifies clinical research statistics for healthcare professionals, covering study design, hypothesis testing, confidence intervals, and critical appraisal of published research.",
+      "editorial_description_long": "Taught by Professor Marc Blockman and colleagues at the University of Cape Town, this course bridges the gap between clinical practice and research statistics. It covers the fundamentals that medical trainees need to both conduct their own research and critically read published studies \u2014 including study design types, sampling, hypothesis testing, p-values, confidence intervals, risk ratios, and number needed to treat. The course uses clinical examples throughout, making abstract statistical concepts relevant to patient care. With over 200,000 enrolments and a 4.8 rating, it's one of the highest-rated clinical research courses on any platform. Free to audit with optional paid certificate.",
+      "publication_date": "2015-06-01",
+      "publication_year": 2015,
+      "language": "en",
+      "methodology_tags": [
+        "clinical_research",
+        "biostatistics",
+        "study_design",
+        "critical_appraisal"
+      ],
+      "thesis_stages": [
+        "TH",
+        "EV"
+      ],
+      "difficulty_level": "beginner",
+      "specialty_tags": [
+        "general_medicine",
+        "clinical_research"
+      ],
+      "quality_score": 0.93,
+      "quality_dimensions": {
+        "authority": 0.9,
+        "currency": 0.8,
+        "relevance": 0.95,
+        "pedagogy": 0.95,
+        "interactivity": 0.85,
+        "accessibility": 1.0
+      },
+      "editorial_badges": [
+        "best_free",
+        "best_beginners"
+      ],
+      "is_free": true,
+      "is_open_access": false,
+      "access_type": "freemium",
+      "platform_url": "https://www.coursera.org/learn/clinical-research",
+      "instructor_names": [
+        "Marc Blockman"
+      ],
+      "institution_name": "University of Cape Town",
+      "level": "Beginner",
+      "duration_weeks": 6,
+      "effort_hours_per_week": 3.0,
+      "total_hours": 18.0,
+      "pacing": "self-paced",
+      "price": 0,
+      "audit_available": true,
+      "certificate_type": "verified",
+      "platform_rating": 4.8,
+      "platform_rating_count": 12500,
+      "enrollment_count": 230000,
+      "has_assignments": true,
+      "has_quizzes": true,
+      "has_peer_review": false,
+      "video_count": 42,
+      "total_video_hours": 8.5,
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-webguide-001",
+      "resource_type": "web_guide",
+      "subtype": "methodology_guide",
+      "status": "approved",
+      "title": "Cochrane Handbook for Systematic Reviews of Interventions",
+      "url": "https://training.cochrane.org/handbook/current",
+      "editorial_description": "The definitive online reference for planning, conducting, and reporting systematic reviews of healthcare interventions \u2014 freely available, continuously updated, and considered the gold standard methodology guide by review teams worldwide.",
+      "editorial_description_long": "The Cochrane Handbook (version 6.4, updated 2023) is the comprehensive guide to every aspect of systematic review methodology. Its 25 chapters cover formulating review questions, searching for studies, assessing risk of bias, extracting data, conducting meta-analysis (including network meta-analysis), addressing heterogeneity, assessing certainty of evidence using GRADE, and reporting. Each chapter is authored by leading methodologists and peer-reviewed. The online version is freely accessible and hyperlinked throughout. While primarily designed for Cochrane reviews, the methods described are applicable to any systematic review. This is the single most important methodology reference for anyone conducting a systematic review in healthcare.",
+      "publication_date": "2023-08-01",
+      "publication_year": 2023,
+      "language": "en",
+      "methodology_tags": [
+        "systematic_review",
+        "meta_analysis",
+        "risk_of_bias",
+        "grade",
+        "evidence_synthesis",
+        "network_meta_analysis"
+      ],
+      "thesis_stages": [
+        "TH",
+        "EV",
+        "ST",
+        "IN",
+        "SH"
+      ],
+      "difficulty_level": "intermediate",
+      "specialty_tags": [
+        "evidence_based_medicine"
+      ],
+      "quality_score": 0.99,
+      "quality_dimensions": {
+        "authority": 1.0,
+        "currency": 0.95,
+        "accuracy": 1.0,
+        "clarity": 0.9,
+        "depth": 1.0,
+        "credibility": 1.0
+      },
+      "editorial_badges": [
+        "essential",
+        "editors_choice"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "author_name": "Cochrane Collaboration",
+      "author_credentials": "International evidence synthesis organisation",
+      "site_name": "Cochrane Training",
+      "favicon_url": "https://training.cochrane.org/favicon.ico",
+      "word_count": 500000,
+      "reading_time_minutes": 2000,
+      "is_archived": true,
+      "wayback_url": "https://web.archive.org/web/2024/https://training.cochrane.org/handbook/current",
+      "outbound_link_count": 3500,
+      "academic_link_count": 2800,
+      "credibility_assessment": "The Cochrane Handbook is the most authoritative systematic review methodology guide in existence. Authored by the world's leading systematic review methodologists, peer-reviewed, continuously updated, and endorsed by virtually every medical journal and funding body globally.",
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-template-001",
+      "resource_type": "template",
+      "subtype": "protocol_template",
+      "status": "approved",
+      "title": "SPIRIT 2013 Checklist",
+      "url": "https://www.spirit-statement.org/",
+      "editorial_description": "The international standard protocol template for clinical trials, providing a 33-item checklist that defines the minimum content for a scientifically rigorous and ethically sound trial protocol.",
+      "editorial_description_long": "SPIRIT (Standard Protocol Items: Recommendations for Interventional Trials) was published in 2013 to address the inconsistency and poor quality of clinical trial protocols. The 33-item checklist covers administrative information, study design, participants, interventions, outcomes, data collection, statistical methods, data management, monitoring, and ethics. The downloadable checklist and Explanation & Elaboration document provide detailed guidance on each item. Many journals, ethics committees, and trial registries now require SPIRIT-compliant protocols. For trainees planning a clinical trial or interventional study, SPIRIT is the starting point for protocol development.",
+      "publication_date": "2013-01-08",
+      "publication_year": 2013,
+      "language": "en",
+      "methodology_tags": [
+        "clinical_trial",
+        "protocol_development",
+        "interventional_study"
+      ],
+      "thesis_stages": [
+        "ST"
+      ],
+      "difficulty_level": "intermediate",
+      "specialty_tags": [
+        "clinical_research"
+      ],
+      "quality_score": 0.96,
+      "quality_dimensions": {
+        "completeness": 0.98,
+        "usability": 0.9,
+        "authority": 1.0,
+        "currency": 0.85,
+        "specificity": 0.95
+      },
+      "editorial_badges": [
+        "essential"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "doi": "10.7326/0003-4819-158-3-201302050-00583",
+      "download_url": "https://www.spirit-statement.org/wp-content/uploads/2013/01/SPIRIT-Checklist_download_8Jan13.doc",
+      "download_format": "Word",
+      "issuing_body": "SPIRIT Group",
+      "version": "2013",
+      "jurisdiction": "International",
+      "aligned_guideline_name": "CONSORT",
+      "sections": [
+        "Administrative information",
+        "Introduction",
+        "Methods: Participants, interventions, and outcomes",
+        "Methods: Assignment of interventions",
+        "Methods: Data collection, management, and analysis",
+        "Methods: Monitoring",
+        "Ethics and dissemination",
+        "Appendices"
+      ],
+      "instructions_url": "https://www.spirit-statement.org/publications-downloads/",
+      "example_url": "https://www.spirit-statement.org/publications-downloads/",
+      "when_to_use": "Use SPIRIT when developing a protocol for any clinical trial or interventional study. Begin with the checklist during the planning phase to ensure your protocol addresses all essential elements before ethics submission.",
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-visual-001",
+      "resource_type": "visual_reference",
+      "subtype": "flowchart_decision_tree",
+      "status": "approved",
+      "title": "PRISMA 2020 Flow Diagram",
+      "url": "http://www.prisma-statement.org/PRISMAStatement/FlowDiagram",
+      "editorial_description": "The standard four-phase flow diagram for documenting the study identification, screening, and inclusion process in systematic reviews \u2014 required by most journals and available as downloadable templates and an interactive online generator.",
+      "editorial_description_long": "The PRISMA 2020 flow diagram is the most widely used visual reference in medical research. It tracks the number of records identified, screened, assessed for eligibility, and included across database searches and other sources. The 2020 update added boxes for records identified via registers, websites, and citation searching \u2014 reflecting how systematic searching has evolved beyond database-only strategies. An interactive Shiny web application allows researchers to generate customised flow diagrams by entering their numbers. Available as editable Word and PDF templates, or generated via the online tool with export to PNG, PDF, or HTML.",
+      "publication_date": "2021-03-29",
+      "publication_year": 2021,
+      "language": "en",
+      "methodology_tags": [
+        "systematic_review",
+        "reporting_standards",
+        "study_selection"
+      ],
+      "thesis_stages": [
+        "ST",
+        "SH"
+      ],
+      "difficulty_level": "beginner",
+      "specialty_tags": [
+        "evidence_based_medicine"
+      ],
+      "quality_score": 0.97,
+      "quality_dimensions": {
+        "visual_clarity": 1.0,
+        "accuracy": 1.0,
+        "authority": 1.0,
+        "currency": 1.0,
+        "design_quality": 0.85
+      },
+      "editorial_badges": [
+        "essential",
+        "best_free"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "download_url": "http://www.prisma-statement.org/documents/PRISMA_2020_flow_diagram_new_SRs.pdf",
+      "file_format": "PDF",
+      "creator_names": [
+        "Matthew J Page",
+        "Joanne E McKenzie",
+        "Patrick M Bossuyt",
+        "David Moher"
+      ],
+      "license": "CC-BY",
+      "thumbnail_url": "http://www.prisma-statement.org/documents/PRISMA_2020_flow_diagram_new_SRs.png",
+      "citation": "Page MJ, McKenzie JE, Bossuyt PM, et al. The PRISMA 2020 statement: an updated guideline for reporting systematic reviews. BMJ. 2021;372:n71.",
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-dataset-001",
+      "resource_type": "dataset",
+      "subtype": "teaching_dataset",
+      "status": "approved",
+      "title": "MIMIC-IV Clinical Database Demo",
+      "url": "https://physionet.org/content/mimic-iv-demo/2.2/",
+      "editorial_description": "A freely accessible subset of the MIMIC-IV intensive care database containing de-identified health records for 100 patients, designed for teaching clinical data analysis and machine learning without the credentialing requirements of the full dataset.",
+      "editorial_description_long": "MIMIC-IV (Medical Information Mart for Intensive Care) is the premier clinical research database, containing de-identified health records from over 300,000 ICU admissions at Beth Israel Deaconess Medical Center. The Demo subset contains 100 patients and mirrors the full dataset's structure \u2014 including lab results, vital signs, medications, procedures, diagnoses, and clinical notes \u2014 making it ideal for learning clinical data science, practising SQL queries, and developing analysis pipelines before applying for full MIMIC-IV access. The demo requires no credentialing, CITI training, or data use agreement. Data is stored in CSV format with comprehensive documentation. This is the recommended starting point for any trainee interested in clinical database research or health data science.",
+      "publication_date": "2023-11-16",
+      "publication_year": 2023,
+      "language": "en",
+      "methodology_tags": [
+        "clinical_database_research",
+        "health_data_science",
+        "secondary_data_analysis",
+        "machine_learning_in_healthcare"
+      ],
+      "thesis_stages": [
+        "ST",
+        "IN"
+      ],
+      "difficulty_level": "intermediate",
+      "specialty_tags": [
+        "intensive_care",
+        "emergency_medicine",
+        "internal_medicine",
+        "health_informatics"
+      ],
+      "quality_score": 0.94,
+      "quality_dimensions": {
+        "documentation": 0.95,
+        "accessibility": 1.0,
+        "relevance": 0.95,
+        "size": 0.6,
+        "currency": 0.9,
+        "provenance": 1.0
+      },
+      "editorial_badges": [
+        "best_free",
+        "best_beginners"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "doi": "10.13026/dp1f-ex47",
+      "publisher_repository": "PhysioNet",
+      "version": "2.2",
+      "citation": "Johnson, A., Bulgarelli, L., Pollard, T., Horng, S., Celi, L. A., & Mark, R. (2023). MIMIC-IV Clinical Database Demo (version 2.2). PhysioNet. https://doi.org/10.13026/dp1f-ex47.",
+      "access_requirements": "None \u2014 the demo subset is freely available without credentialing. The full MIMIC-IV dataset requires CITI training and a signed data use agreement.",
+      "download_url": "https://physionet.org/content/mimic-iv-demo/2.2/",
+      "file_formats": [
+        "CSV"
+      ],
+      "file_count": 29,
+      "total_size": "35 MB",
+      "record_count": 100,
+      "variable_count": 350,
+      "geographic_coverage": [
+        "United States"
+      ],
+      "temporal_coverage": "2008-2019",
+      "data_dictionary_url": "https://mimic.mit.edu/docs/iv/",
+      "citation_count": 450,
+      "download_count": 28000,
+      "access_summary": "Download directly from PhysioNet \u2014 no account, credentialing, or ethics approval required for the demo subset. Click 'Files' on the PhysioNet page and download individual CSV files or the full zip.",
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-community-001",
+      "resource_type": "community",
+      "subtype": "online_community",
+      "status": "approved",
+      "title": "Cross Validated",
+      "url": "https://stats.stackexchange.com",
+      "editorial_description": "The largest Q&A community for statistics, machine learning, and data analysis \u2014 a go-to resource for getting expert answers to specific methodology questions that textbooks don't cover.",
+      "editorial_description_long": "Cross Validated is a Stack Exchange site dedicated to statistics, machine learning, data analysis, data mining, and data visualisation. With over 400,000 questions and 600,000 answers, it functions as a searchable knowledge base where researchers can find detailed explanations of statistical concepts, get help choosing appropriate methods, and troubleshoot analysis problems. The community includes professional statisticians, data scientists, and academic researchers who provide high-quality, peer-reviewed answers with citations. Particularly valuable for trainees who encounter edge cases or methodology questions that standard textbooks don't address \u2014 chances are someone has already asked and received a thorough answer.",
+      "publication_date": "2010-07-20",
+      "publication_year": 2010,
+      "language": "en",
+      "methodology_tags": [
+        "frequentist_statistics",
+        "bayesian_analysis",
+        "regression_analysis",
+        "machine_learning",
+        "data_analysis",
+        "research_design"
+      ],
+      "thesis_stages": [
+        "ST",
+        "IN"
+      ],
+      "difficulty_level": "intermediate",
+      "specialty_tags": [
+        "biostatistics",
+        "data_science"
+      ],
+      "quality_score": 0.93,
+      "quality_dimensions": {
+        "activity": 0.95,
+        "relevance": 0.9,
+        "expertise_level": 0.95,
+        "accessibility": 0.95,
+        "responsiveness": 0.85
+      },
+      "editorial_badges": [
+        "editors_choice",
+        "best_free"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "platform_name": "Stack Exchange",
+      "member_count": 620000,
+      "is_active": true,
+      "geographic_scope": "international",
+      "membership_type": "open",
+      "icon_url": "https://cdn.sstatic.net/Sites/stats/Img/apple-touch-icon.png",
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "resource_id": "demo-funding-001",
+      "resource_type": "funding",
+      "subtype": "government_national_grant",
+      "status": "closed",
+      "title": "NHMRC Investigator Grant",
+      "url": "https://www.nhmrc.gov.au/funding/find-funding/investigator-grants",
+      "editorial_description": "Australia's primary individual researcher grant scheme from the National Health and Medical Research Council, providing salary and research support for 5 years based on track record and a proposed research programme.",
+      "editorial_description_long": "The NHMRC Investigator Grant replaced the previous Fellowship and Project Grant schemes in 2019, consolidating researcher support into a single programme. Grants are awarded at five levels \u2014 Emerging Leadership 1 and 2, Leadership 1, 2, and 3 \u2014 reflecting career stage from early-career researcher through to distinguished leader. Funding covers a research support package (for staff, equipment, and consumables) plus a salary top-up. Assessment is based 50% on track record (relative to opportunity) and 50% on a proposed research programme. The scheme is highly competitive, with success rates around 15-20% depending on level. Applications open annually in January with a March deadline. Understanding the Investigator Grant scheme is essential for Australian medical trainees planning a research career, even at the early-career level.",
+      "publication_date": "2024-01-01",
+      "publication_year": 2024,
+      "language": "en",
+      "methodology_tags": [
+        "grant_writing",
+        "research_career_development"
+      ],
+      "thesis_stages": [
+        "ST"
+      ],
+      "difficulty_level": "advanced",
+      "specialty_tags": [
+        "general_medicine",
+        "clinical_research",
+        "basic_science"
+      ],
+      "quality_score": 0.95,
+      "quality_dimensions": {
+        "relevance": 0.95,
+        "accessibility": 0.7,
+        "amount": 0.95,
+        "prestige": 1.0,
+        "documentation": 0.9
+      },
+      "editorial_badges": [
+        "essential"
+      ],
+      "is_free": true,
+      "is_open_access": true,
+      "access_type": "free",
+      "programme_name": "Investigator Grants",
+      "funder_name": "National Health and Medical Research Council (NHMRC)",
+      "funder_country": "Australia",
+      "description": "The Investigator Grant scheme supports Australia's best health and medical researchers by providing salary and a research support package to pursue innovative research.",
+      "amount_min": 400000,
+      "amount_max": 3000000,
+      "currency": "AUD",
+      "typical_duration": "5 years",
+      "eligibility": "Australian citizens, permanent residents, or New Zealand citizens with an appointment at an eligible Australian institution. All career stages from postdoctoral researcher through to distinguished research leader.",
+      "career_stage": [
+        "ECR",
+        "MCR",
+        "senior"
+      ],
+      "application_url": "https://www.nhmrc.gov.au/funding/find-funding/investigator-grants",
+      "application_deadline": "2026-03-12",
+      "application_frequency": "Annual",
+      "success_rate": 0.18,
+      "resulting_publication_count": 45000,
+      "who_should_apply": "Medical trainees who have completed (or are completing) a PhD and are planning a research-focused career in Australia. The Emerging Leadership levels are designed for early-career researchers within 0-10 years of their PhD. Understanding the scheme early \u2014 even before you're eligible \u2014 helps you build a competitive track record.",
+      "compendium_created_at": "2026-04-01T00:00:00Z",
+      "compendium_updated_at": "2026-04-28T00:00:00Z"
+    }
+  ]
+}
