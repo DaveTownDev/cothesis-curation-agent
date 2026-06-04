@@ -119,10 +119,10 @@ class TestReconciliationAgent:
 
 
 class TestPipelineAgent:
-    def test_has_six_agent_tools(self):
+    def test_has_eight_agent_tools(self):
         from pipeline.agent import root_agent
         from google.adk.tools import AgentTool
-        assert len(root_agent.tools) == 6
+        assert len(root_agent.tools) == 8
         for tool in root_agent.tools:
             assert isinstance(tool, AgentTool)
 
@@ -141,12 +141,13 @@ class TestPipelineAgent:
         agent_names = [t.agent.name for t in root_agent.tools if isinstance(t, AgentTool)]
         assert "grounding_agent" in agent_names
 
-    def test_all_six_sub_agents_wired(self):
+    def test_all_eight_sub_agents_wired(self):
         from pipeline.agent import root_agent
         from google.adk.tools import AgentTool
         expected = {
             "grounding_agent", "discovery_agent", "appraisal_agent",
             "classification_agent", "editorial_agent", "reconciliation_agent",
+            "qc_panel_agent", "arbiter_agent",
         }
         wired = {t.agent.name for t in root_agent.tools if isinstance(t, AgentTool)}
         assert wired == expected

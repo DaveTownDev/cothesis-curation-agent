@@ -3,9 +3,10 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-Day 3 — complete. Ready for Day 4 (QC panel + arbiter + HITL).
+Day 4 — complete. Ready for Day 5 (console + dashboard).
 
 ## Completed
+- [x] **Day 4 QC panel + arbiter + HITL + gold eval set** — arbiter: deterministic routing on 0-1 signals (relevance_score, classification_confidence) + 0-100 signals (quality_score, ai_confidence) + panel_agreement; 9 routing tests green; qc_panel: ai_pattern_scanner + voice_reviewer + plain_jargon_check + badge_check + 6 dimension scoring; HITL: write_review_queue_item / get_review_status Firestore tools; gold eval set: 20 cases (4 methods × 5 types), tool trajectory + rubric criteria; eval_config.json: tool_trajectory_avg_score ≥ 0.7, rubric_quality ≥ 0.7; full pipeline wires 8 agents via AgentTool; 158/158 tests green.
 - [x] **Comprehensive test pass** — 142 tests, 87% coverage; added test_agents_config, test_discovery_tools (mocked HTTP), test_code_mapping (RS→SYN EVAL.md requirement), test_publish_checklist (EVAL.md requirement), test_appraisal_http, test_pipeline_integration, test_editorial_parse; added agents/shared/checklist.py (publish gate); zero LLM calls in test suite.
 - [x] **Day 3 classification + editorial + reconciliation** — ClassificationResult (14 types, platform codes enforced, THESIS stages, skill_codes); EditorialOutput (editorial_description, summary, editorial_description_plain, proposed_badges max-3 enforced, difficulty_level); Reconciliation (title_similarity 0.9, assemble_draft_record with summary + skill_codes); code-reviewer found and fixed 3 bugs (Pydantic v2 list max, summary dropped in assembly, skill_codes missing); 51/51 tests green.
 - [x] **Day 2 grounding + discovery + appraisal** — 18 documents uploaded to Vertex AI Search (4 methodology cards + 14 seed resources); grounding_agent (VertexAiSearchTool isolated); discovery_agent (OpenAlex + PubMed tools, MCPToolset wired for production); appraisal_agent (deterministic APIs + Firestore write); root_agent wires all three via AgentTool; 16/16 tests green.
@@ -38,7 +39,7 @@ Day 3 — complete. Ready for Day 4 (QC panel + arbiter + HITL).
 - (none open)
 
 ## Next task
-Day 4: QC evaluator panel (per-dimension + ai-pattern-scanner + voice-reviewer + claim-verifier + ref_checker) + Arbiter routing gate (composite score → auto_accept|review_needed|auto_exclude) + gold eval set (20-40 items) + HITL pause/resume. Write failing tests first.
+Day 5: Next.js + shadcn/ui review console (approve/reject → writes human-ratified Resource fields + provenance) + progress dashboard. plain description renders as labelled breakout card. editorial_note optional Editor's block on featured resources.
 
 ## Modified files this session
 - `docs/field_maps/field_mapping_*.md` — 13 files added

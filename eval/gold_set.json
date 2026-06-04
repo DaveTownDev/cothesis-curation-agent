@@ -1,0 +1,2808 @@
+{
+  "eval_set_id": "cothesis_pipeline_gold",
+  "name": "CoThesis Pipeline Gold Set v1",
+  "description": "20 cases: 4 methodologies \u00d7 5 resource types. Tool trajectory + rubric quality checks.",
+  "eval_cases": [
+    {
+      "eval_id": "syn01_article_001",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one article for SYN-01. Focus on: PRISMA reporting standard.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=article, methodology_codes=[SYN-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "syn01_reporting_guideline_002",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one reporting_guideline for SYN-01. Focus on: systematic review reporting.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=reporting_guideline, methodology_codes=[SYN-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "syn01_software_003",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one software for SYN-01. Focus on: systematic review screening tool.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=software, methodology_codes=[SYN-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "syn01_web_guide_004",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one web_guide for SYN-01. Focus on: Cochrane or JBI guidance.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=web_guide, methodology_codes=[SYN-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "syn01_course_005",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one course for SYN-01. Focus on: free systematic review course.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=course, methodology_codes=[SYN-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "syn02_article_006",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one article for SYN-02. Focus on: scoping review methodology PRISMA-ScR.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=article, methodology_codes=[SYN-02], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "syn02_reporting_guideline_007",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one reporting_guideline for SYN-02. Focus on: PRISMA-ScR guideline.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=reporting_guideline, methodology_codes=[SYN-02], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "syn02_book_008",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one book for SYN-02. Focus on: scoping review handbook.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=book, methodology_codes=[SYN-02], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "syn02_template_009",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one template for SYN-02. Focus on: scoping review protocol template.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=template, methodology_codes=[SYN-02], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "syn02_web_guide_010",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one web_guide for SYN-02. Focus on: JBI scoping review guidance.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=web_guide, methodology_codes=[SYN-02], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "obs01_article_011",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one article for OBS-01. Focus on: STROBE RECORD chart review methodology.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=article, methodology_codes=[OBS-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "obs01_reporting_guideline_012",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one reporting_guideline for OBS-01. Focus on: STROBE or RECORD checklist.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=reporting_guideline, methodology_codes=[OBS-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "obs01_template_013",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one template for OBS-01. Focus on: chart review data extraction form.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=template, methodology_codes=[OBS-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "obs01_web_guide_014",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one web_guide for OBS-01. Focus on: institutional chart review guidance.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=web_guide, methodology_codes=[OBS-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "obs01_video_015",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one video for OBS-01. Focus on: retrospective chart review tutorial.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=video, methodology_codes=[OBS-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "eval01_article_016",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one article for EVAL-01. Focus on: SQUIRE 2.0 clinical audit methodology.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=article, methodology_codes=[EVAL-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "eval01_reporting_guideline_017",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one reporting_guideline for EVAL-01. Focus on: SQUIRE 2.0 guideline.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=reporting_guideline, methodology_codes=[EVAL-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "eval01_web_guide_018",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one web_guide for EVAL-01. Focus on: NICE or HQIP clinical audit guidance.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=web_guide, methodology_codes=[EVAL-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "eval01_template_019",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one template for EVAL-01. Focus on: clinical audit data collection template.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=template, methodology_codes=[EVAL-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "eval01_course_020",
+      "conversation": [
+        {
+          "invocation_id": "",
+          "user_content": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Curate one course for EVAL-01. Focus on: clinical audit training module.",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "final_response": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Draft record created: resource_type_code=course, methodology_codes=[EVAL-01], editorial_status=proposed, quality_score present (0-100)",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              },
+              {
+                "id": null,
+                "args": null,
+                "name": null,
+                "partial_args": null,
+                "will_continue": null
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0,
+          "rubrics": null,
+          "app_details": null
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "a7e3b99e",
+          "rubric_content": {
+            "text_property": "Response includes a resource_code in kebab-case format"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "d48f47d9",
+          "rubric_content": {
+            "text_property": "Response states a quality_score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "93834524",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66a80406",
+          "rubric_content": {
+            "text_property": "Response states editorial_status as proposed"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "37d901dc",
+          "rubric_content": {
+            "text_property": "editorial_description_plain contains no research jargon terms"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "final_session_state": {}
+    }
+  ],
+  "creation_timestamp": 0.0
+}
