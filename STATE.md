@@ -3,9 +3,10 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-Day 1 — scaffold complete. Ready for Day 2 (Grounding + Discovery + Appraisal agents).
+Day 2 — complete. Ready for Day 3 (Classification, Editorial, Reconciliation agents).
 
 ## Completed
+- [x] **Day 2 grounding + discovery + appraisal** — 18 documents uploaded to Vertex AI Search (4 methodology cards + 14 seed resources); grounding_agent (VertexAiSearchTool isolated); discovery_agent (OpenAlex + PubMed tools, MCPToolset wired for production); appraisal_agent (deterministic APIs + Firestore write); root_agent wires all three via AgentTool; 16/16 tests green.
 - [x] **Day 1 scaffold** — ADK 2.1.0, Python 3.12 venv, skeleton pipeline agent, `adk web agents/` serving (HTTP 200), pre-commit blocking secrets, Firestore (default, us-central1), Vertex AI Search datastore (`cothesis-methodology-grounding`, global), GCP services enabled, git init + main branch.
 - [x] Data drop-in: 13 field maps → `docs/field_maps/`
 - [x] Data drop-in: 65 canonical entity files → `docs/reference/entities/` (May 17 — authoritative field shape)
@@ -35,7 +36,7 @@ Day 1 — scaffold complete. Ready for Day 2 (Grounding + Discovery + Appraisal 
 - (none open)
 
 ## Next task
-Day 2: Load methodology definitions + seed resources into Vertex AI Search → confirm indexing → build Discovery agent (Flash-Lite, MCP tools) → build Appraisal agent (deterministic-API-first → Flash). Tests first, then implement.
+Day 3: Classification agent (Flash-Lite, platform codes, JSON-only) → Editorial agent (Pro, four fields) → Reconciliation agent (title-similarity dedup). Write failing tests first for each. Verify one sample resource flows end-to-end to a complete draft record.
 
 ## Modified files this session
 - `docs/field_maps/field_mapping_*.md` — 13 files added
