@@ -39,7 +39,7 @@ except FileNotFoundError:
     _prompt_text = "QC evaluator panel — see agents/prompts/qc_panel.md"
 
 
-def _run_deterministic_checks(draft_record_json: str) -> dict:
+def run_deterministic_checks(draft_record_json: str) -> dict:
     """
     Run the deterministic QC checks on a draft record.
     draft_record_json: the assembled draft record dict as a JSON string.
@@ -65,13 +65,13 @@ def _run_deterministic_checks(draft_record_json: str) -> dict:
     return aggregate_panel_results(results)
 
 
-def _score_dimension(dimension: str, score: float, reasoning: str) -> dict:
+def score_dimension(dimension: str, score: float, reasoning: str) -> dict:
     """Score a single quality dimension (called by LLM for each of the 6 dimensions)."""
     from agents.qc_panel.tools import evaluate_dimension
     return evaluate_dimension(dimension, score, reasoning)
 
 
-def _aggregate(panel_scores_json: str) -> dict:
+def aggregate(panel_scores_json: str) -> dict:
     """Aggregate a list of panel evaluator results."""
     scores = json.loads(panel_scores_json)
     return aggregate_panel_results(scores)
@@ -88,8 +88,8 @@ qc_panel_agent = LlmAgent(
     ),
     instruction=_prompt_text,
     tools=[
-        FunctionTool(func=_run_deterministic_checks),
-        FunctionTool(func=_score_dimension),
-        FunctionTool(func=_aggregate),
+        FunctionTool(func=run_deterministic_checks),
+        FunctionTool(func=score_dimension),
+        FunctionTool(func=aggregate),
     ],
 )

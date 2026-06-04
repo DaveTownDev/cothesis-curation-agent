@@ -1,7 +1,7 @@
 {
   "eval_set_id": "cothesis_pipeline_gold",
-  "name": "CoThesis Pipeline Gold Set v1",
-  "description": "20 cases: 4 methodologies \u00d7 5 resource types. Tool trajectory + rubric quality checks.",
+  "name": "CoThesis Pipeline Gold Set v2",
+  "description": "20 cases: 4 methodologies \u00d7 5 types. rubric_based_final_response_quality_v1 + response_match_score. Rubrics at invocation level.",
   "eval_cases": [
     {
       "eval_id": "syn01_article_001",
@@ -39,7 +39,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=article, methodology_codes=[SYN-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one article resource for SYN-01. Found a relevant resource related to PRISMA reporting standard. Quality score assessed, methodology codes include SYN-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -50,97 +50,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -179,7 +139,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=reporting_guideline, methodology_codes=[SYN-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one reporting_guideline resource for SYN-01. Found a relevant resource related to systematic review reporting. Quality score assessed, methodology codes include SYN-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -190,97 +150,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -319,7 +239,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=software, methodology_codes=[SYN-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one software resource for SYN-01. Found a relevant resource related to systematic review screening tool. Quality score assessed, methodology codes include SYN-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -330,97 +250,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -459,7 +339,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=web_guide, methodology_codes=[SYN-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one web_guide resource for SYN-01. Found a relevant resource related to Cochrane or JBI guidance. Quality score assessed, methodology codes include SYN-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -470,97 +350,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -599,7 +439,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=course, methodology_codes=[SYN-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one course resource for SYN-01. Found a relevant resource related to free systematic review course. Quality score assessed, methodology codes include SYN-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -610,97 +450,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -739,7 +539,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=article, methodology_codes=[SYN-02], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one article resource for SYN-02. Found a relevant resource related to scoping review methodology PRISMA-ScR. Quality score assessed, methodology codes include SYN-02. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -750,97 +550,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -879,7 +639,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=reporting_guideline, methodology_codes=[SYN-02], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one reporting_guideline resource for SYN-02. Found a relevant resource related to PRISMA-ScR guideline. Quality score assessed, methodology codes include SYN-02. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -890,97 +650,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -1019,7 +739,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=book, methodology_codes=[SYN-02], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one book resource for SYN-02. Found a relevant resource related to scoping review handbook. Quality score assessed, methodology codes include SYN-02. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -1030,97 +750,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -1159,7 +839,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=template, methodology_codes=[SYN-02], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one template resource for SYN-02. Found a relevant resource related to scoping review protocol template. Quality score assessed, methodology codes include SYN-02. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -1170,97 +850,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -1299,7 +939,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=web_guide, methodology_codes=[SYN-02], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one web_guide resource for SYN-02. Found a relevant resource related to JBI scoping review guidance. Quality score assessed, methodology codes include SYN-02. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -1310,97 +950,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -1439,7 +1039,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=article, methodology_codes=[OBS-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one article resource for OBS-01. Found a relevant resource related to STROBE RECORD chart review methodology. Quality score assessed, methodology codes include OBS-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -1450,97 +1050,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -1579,7 +1139,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=reporting_guideline, methodology_codes=[OBS-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one reporting_guideline resource for OBS-01. Found a relevant resource related to STROBE or RECORD checklist. Quality score assessed, methodology codes include OBS-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -1590,97 +1150,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -1719,7 +1239,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=template, methodology_codes=[OBS-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one template resource for OBS-01. Found a relevant resource related to chart review data extraction form. Quality score assessed, methodology codes include OBS-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -1730,97 +1250,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -1859,7 +1339,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=web_guide, methodology_codes=[OBS-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one web_guide resource for OBS-01. Found a relevant resource related to institutional chart review guidance. Quality score assessed, methodology codes include OBS-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -1870,97 +1350,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -1999,7 +1439,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=video, methodology_codes=[OBS-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one video resource for OBS-01. Found a relevant resource related to retrospective chart review tutorial. Quality score assessed, methodology codes include OBS-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -2010,97 +1450,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -2139,7 +1539,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=article, methodology_codes=[EVAL-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one article resource for EVAL-01. Found a relevant resource related to SQUIRE 2.0 clinical audit methodology. Quality score assessed, methodology codes include EVAL-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -2150,97 +1550,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -2279,7 +1639,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=reporting_guideline, methodology_codes=[EVAL-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one reporting_guideline resource for EVAL-01. Found a relevant resource related to SQUIRE 2.0 guideline. Quality score assessed, methodology codes include EVAL-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -2290,97 +1650,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -2419,7 +1739,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=web_guide, methodology_codes=[EVAL-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one web_guide resource for EVAL-01. Found a relevant resource related to NICE or HQIP clinical audit guidance. Quality score assessed, methodology codes include EVAL-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -2430,97 +1750,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -2559,7 +1839,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=template, methodology_codes=[EVAL-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one template resource for EVAL-01. Found a relevant resource related to clinical audit data collection template. Quality score assessed, methodology codes include EVAL-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -2570,97 +1850,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     },
     {
@@ -2699,7 +1939,7 @@
                 "function_call": null,
                 "function_response": null,
                 "inline_data": null,
-                "text": "Draft record created: resource_type_code=course, methodology_codes=[EVAL-01], editorial_status=proposed, quality_score present (0-100)",
+                "text": "Processed one course resource for EVAL-01. Found a relevant resource related to clinical audit training module. Quality score assessed, methodology codes include EVAL-01. Draft record created with editorial_status=proposed.",
                 "thought": null,
                 "thought_signature": null,
                 "video_metadata": null,
@@ -2710,97 +1950,57 @@
             ],
             "role": null
           },
-          "intermediate_data": {
-            "tool_uses": [
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              },
-              {
-                "id": null,
-                "args": null,
-                "name": null,
-                "partial_args": null,
-                "will_continue": null
-              }
-            ],
-            "tool_responses": [],
-            "intermediate_responses": []
-          },
+          "intermediate_data": null,
           "creation_timestamp": 0.0,
-          "rubrics": null,
+          "rubrics": [
+            {
+              "rubric_id": "e070ae9b",
+              "rubric_content": {
+                "text_property": "Response identifies at least one resource with a title and URL"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "66568629",
+              "rubric_content": {
+                "text_property": "Response includes a quality score between 0 and 100"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "c8d993e7",
+              "rubric_content": {
+                "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "674eb443",
+              "rubric_content": {
+                "text_property": "Response states or implies the resource has been processed through the pipeline"
+              },
+              "description": null,
+              "type": null
+            },
+            {
+              "rubric_id": "f15b0e06",
+              "rubric_content": {
+                "text_property": "Response does not include legacy RS- or OD- methodology codes"
+              },
+              "description": null,
+              "type": null
+            }
+          ],
           "app_details": null
         }
       ],
       "conversation_scenario": null,
       "session_input": null,
       "creation_timestamp": 0.0,
-      "rubrics": [
-        {
-          "rubric_id": "a7e3b99e",
-          "rubric_content": {
-            "text_property": "Response includes a resource_code in kebab-case format"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "d48f47d9",
-          "rubric_content": {
-            "text_property": "Response states a quality_score between 0 and 100"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "93834524",
-          "rubric_content": {
-            "text_property": "Response uses platform methodology codes (SYN-, OBS-, or EVAL- prefix)"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "66a80406",
-          "rubric_content": {
-            "text_property": "Response states editorial_status as proposed"
-          },
-          "description": null,
-          "type": null
-        },
-        {
-          "rubric_id": "37d901dc",
-          "rubric_content": {
-            "text_property": "editorial_description_plain contains no research jargon terms"
-          },
-          "description": null,
-          "type": null
-        }
-      ],
+      "rubrics": null,
       "final_session_state": {}
     }
   ],

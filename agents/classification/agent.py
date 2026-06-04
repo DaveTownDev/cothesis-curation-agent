@@ -25,7 +25,7 @@ except FileNotFoundError:
     _prompt_text = "Classification agent — see agents/prompts/classification.md"
 
 
-def _validate_classification(classification_json: str) -> dict:
+def validate_classification(classification_json: str) -> dict:
     """
     Validate a classification JSON string against the canonical schema.
     Returns {"valid": true, "result": {...}} or {"valid": false, "error": "..."}.
@@ -52,5 +52,5 @@ classification_agent = LlmAgent(
         "JSON-only output; retries once on parse failure."
     ),
     instruction=_prompt_text,
-    tools=[FunctionTool(func=_validate_classification)],
+    tools=[FunctionTool(func=validate_classification)],
 )

@@ -33,13 +33,20 @@ class TestEditorialOutput:
         assert out.summary
         assert out.editorial_description_plain
 
-    def test_all_four_fields_required(self):
+    def test_three_text_fields_required(self):
+        """The three text fields are required; difficulty_level defaults to intermediate."""
         from agents.shared.schema import EditorialOutput
-        for field in ("editorial_description", "summary",
-                      "editorial_description_plain", "difficulty_level"):
+        for field in ("editorial_description", "summary", "editorial_description_plain"):
             bad = {k: v for k, v in VALID_EDITORIAL.items() if k != field}
             with pytest.raises(ValidationError):
                 EditorialOutput(**bad)
+
+    def test_difficulty_level_defaults_to_intermediate(self):
+        """difficulty_level is optional — LLM may omit it; defaults to intermediate."""
+        from agents.shared.schema import EditorialOutput
+        no_difficulty = {k: v for k, v in VALID_EDITORIAL.items() if k != "difficulty_level"}
+        out = EditorialOutput(**no_difficulty)
+        assert out.difficulty_level == "intermediate"
 
     def test_editorial_note_not_a_field(self):
         """editorial_note must not be part of EditorialOutput (human-only)."""

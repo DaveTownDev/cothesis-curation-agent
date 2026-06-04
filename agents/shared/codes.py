@@ -19,6 +19,40 @@ CANONICAL_BADGES = frozenset({
     "best_time_poor", "essential", "expert_pick",
 })
 
+# LLM badge normalization — maps common LLM variations to canonical codes
+BADGE_NORMALIZATION: dict[str, str] = {
+    # Case/spacing variants of canonical names
+    "editors choice": "editors_choice",
+    "editor's choice": "editors_choice",
+    "editors_choice": "editors_choice",
+    "best free": "best_free",
+    "best free option": "best_free",
+    "best for beginners": "best_beginners",
+    "best beginners": "best_beginners",
+    "best_beginners": "best_beginners",
+    "best time poor": "best_time_poor",
+    "best for time poor": "best_time_poor",
+    "best_time_poor": "best_time_poor",
+    "essential": "essential",
+    "essential reference": "essential",
+    "must have": "essential",
+    "must-have": "essential",
+    "expert pick": "expert_pick",
+    "expert_pick": "expert_pick",
+    "expert choice": "expert_pick",
+}
+
+
+def normalize_badge(raw: str) -> str | None:
+    """Map a raw LLM badge string to its canonical code. Returns None if unrecognised."""
+    key = raw.lower().strip()
+    if key in BADGE_NORMALIZATION:
+        return BADGE_NORMALIZATION[key]
+    # Try exact match against canonical set
+    if key in CANONICAL_BADGES:
+        return key
+    return None
+
 # Research jargon terms banned from editorial_description_plain
 PLAIN_JARGON_TERMS = [
     "systematic review",

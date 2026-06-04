@@ -28,7 +28,7 @@ except FileNotFoundError:
     _prompt_text = "Arbiter agent — see agents/prompts/arbiter.md"
 
 
-def _route(routing_input_json: str) -> dict:
+def route(routing_input_json: str) -> dict:
     """
     Compute routing decision from classification + appraisal + panel signals.
 
@@ -52,7 +52,7 @@ def _route(routing_input_json: str) -> dict:
     )
 
 
-def _write_review_queue(queue_item_json: str) -> str:
+def write_review_queue(queue_item_json: str) -> str:
     """
     Write a review_needed item to the Firestore review_queue.
     Returns the Firestore document ID.
@@ -67,7 +67,7 @@ def _write_review_queue(queue_item_json: str) -> str:
     )
 
 
-def _check_review_status(resource_code: str) -> dict:
+def check_review_status(resource_code: str) -> dict:
     """Check if a resource has been reviewed by a human."""
     status = get_review_status(resource_code)
     return {"resource_code": resource_code, "status": status}
@@ -83,8 +83,8 @@ arbiter_agent = LlmAgent(
     ),
     instruction=_prompt_text,
     tools=[
-        FunctionTool(func=_route),
-        FunctionTool(func=_write_review_queue),
-        FunctionTool(func=_check_review_status),
+        FunctionTool(func=route),
+        FunctionTool(func=write_review_queue),
+        FunctionTool(func=check_review_status),
     ],
 )

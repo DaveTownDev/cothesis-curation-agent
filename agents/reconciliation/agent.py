@@ -31,7 +31,7 @@ except FileNotFoundError:
     _prompt_text = "Reconciliation agent — see agents/prompts/reconciliation.md"
 
 
-def _check_duplicate(candidate_title: str) -> dict:
+def check_duplicate(candidate_title: str) -> dict:
     """
     Check if a resource title already exists in the Compendium.
     Returns {"is_duplicate": bool, "duplicate_of": str | null}.
@@ -43,7 +43,7 @@ def _check_duplicate(candidate_title: str) -> dict:
     return {"is_duplicate": False, "duplicate_of": None}
 
 
-def _assemble_record(assembly_json: str) -> dict:
+def assemble_record(assembly_json: str) -> dict:
     """
     Assemble the final draft record from Classification + Editorial + Appraisal JSON.
     assembly_json: {"resource_code", "title", "url", "classification", "editorial", "appraisal"}
@@ -53,11 +53,78 @@ def _assemble_record(assembly_json: str) -> dict:
         AIAssessmentDraft, ClassificationResult, EditorialOutput, QualityDimensions
     )
     data = json.loads(assembly_json)
+    logger.info("assemble_record top-level keys: %s", list(data.keys()))
 
-    classification = ClassificationResult(**data["classification"])
-    editorial = EditorialOutput(**data["editorial"])
+    def _unwrap(d: dict, *alias_keys: str) -> dict:
+        """Unwrap a dict the LLM may have nested under an alias key."""
+        for alias in alias_keys:
+            if alias in d and isinstance(d[alias], dict):
+                return d[alias]
+        return d
 
-    ap = data["appraisal"]
+    def _fill_classification(raw: dict) -> dict:
+        """Fill required ClassificationResult fields with safe defaults if missing."""
+        raw = raw.copy()
+        raw.setdefault("resource_type_code", "article")
+        raw.setdefault("relevance_score", 0.5)
+        raw.setdefault("classification_confidence", 0.5)
+        raw.setdefault("access_type", "free")
+        # Scrub legacy methodology codes
+        from agents.shared.codes import LEGACY_METHODOLOGY_PREFIXES
+        codes = raw.get("methodology_codes", [])
+        raw["methodology_codes"] = [
+            c for c in codes
+            if not any(c.startswith(p) for p in LEGACY_METHODOLOGY_PREFIXES)
+        ]
+        return raw
+
+    from agents.shared.codes import normalize_badge
+
+    # LLM sometimes wraps under alias keys or sends a flat dict directly
+    raw_classification = _fill_classification(_unwrap(
+        data.get("classification", data),
+        "ai_classification", "classification_result", "classification",
+    ))
+    try:
+        classification = ClassificationResult(**raw_classification)
+    except Exception as exc:
+        logger.warning("ClassificationResult validation failed (%s); using defaults", exc)
+        classification = ClassificationResult(
+            resource_type_code="article",
+            relevance_score=0.5,
+            classification_confidence=0.5,
+            access_type="free",
+        )
+
+    # Normalize badge names — LLM may emit friendly strings like "Essential Reference"
+    raw_editorial = _unwrap(
+        data.get("editorial", data),
+        "editorial_output", "editorial_result", "editorial",
+    ).copy()
+    if "proposed_badges" in raw_editorial:
+        normalized = []
+        for b in raw_editorial["proposed_badges"]:
+            canon = normalize_badge(b)
+            if canon:
+                normalized.append(canon)
+            else:
+                logger.warning("Unrecognised badge %r — dropping", b)
+        raw_editorial["proposed_badges"] = normalized[:3]
+
+    try:
+        editorial = EditorialOutput(**raw_editorial)
+    except Exception as exc:
+        logger.warning("EditorialOutput validation failed (%s); using stubs", exc)
+        editorial = EditorialOutput(
+            editorial_description=raw_editorial.get("editorial_description", ""),
+            summary=raw_editorial.get("summary", raw_editorial.get("editorial_description_long", "")),
+            editorial_description_plain=raw_editorial.get("editorial_description_plain", ""),
+        )
+
+    ap = _unwrap(
+        data.get("appraisal", data),
+        "appraisal_result", "quality_assessment", "appraisal",
+    ).copy()
     raw_dims = ap.pop("quality_dimensions", {})
     dims_kwargs = {}
     for dim in ("relevance", "accuracy", "authority", "currency",
@@ -90,7 +157,7 @@ reconciliation_agent = LlmAgent(
     ),
     instruction=_prompt_text,
     tools=[
-        FunctionTool(func=_check_duplicate),
-        FunctionTool(func=_assemble_record),
+        FunctionTool(func=check_duplicate),
+        FunctionTool(func=assemble_record),
     ],
 )

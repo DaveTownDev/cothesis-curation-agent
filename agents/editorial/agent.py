@@ -34,13 +34,13 @@ except FileNotFoundError:
     _examples = ""
 
 
-def _check_jargon(plain_text: str) -> dict:
+def check_jargon(plain_text: str) -> dict:
     """Check editorial_description_plain for banned research terms. Returns violations list."""
     violations = check_plain_for_jargon(plain_text)
     return {"violations": violations, "clean": len(violations) == 0}
 
 
-def _validate_editorial(editorial_json: str) -> dict:
+def validate_editorial(editorial_json: str) -> dict:
     """
     Validate editorial JSON against the canonical schema.
     Returns {"valid": true, "result": {...}} or {"valid": false, "error": "...", "violations": [...]}.
@@ -76,7 +76,7 @@ editorial_agent = LlmAgent(
     ),
     instruction=_full_instruction,
     tools=[
-        FunctionTool(func=_check_jargon),
-        FunctionTool(func=_validate_editorial),
+        FunctionTool(func=check_jargon),
+        FunctionTool(func=validate_editorial),
     ],
 )

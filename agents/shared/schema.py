@@ -189,7 +189,7 @@ class EditorialOutput(BaseModel):
     summary: str
     editorial_description_plain: str
     proposed_badges: Annotated[list[str], Field(max_length=3)] = Field(default_factory=list)
-    difficulty_level: str
+    difficulty_level: str = "intermediate"  # default — LLM sometimes omits
 
     @field_validator("proposed_badges")
     @classmethod

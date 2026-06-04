@@ -16,12 +16,16 @@ import os
 from google.adk.agents import LlmAgent
 from google.adk.tools import FunctionTool
 
-from agents.discovery.tools import search_openalex, search_pubmed
+from agents.discovery.tools import search_openalex as _openalex_impl
+from agents.discovery.tools import search_pubmed as _pubmed_impl
 
 logger = logging.getLogger(__name__)
 
 MODEL = os.environ.get("MODEL_FLASH_LITE", "gemini-flash-lite-latest")
 MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "")
+# Treat placeholder values as unset
+if MCP_SERVER_URL in ("", "your_public_mcp_hostname_here"):
+    MCP_SERVER_URL = ""
 
 _PROMPT_PATH = "agents/prompts/discovery.md"
 try:
@@ -34,29 +38,29 @@ except FileNotFoundError:
 # Build tool list: MCP (production) or direct APIs (local dev)
 # ---------------------------------------------------------------------------
 
-def _search_openalex(methodology_code: str, resource_type: str, max_results: int = 10) -> list[dict]:
+def search_openalex(methodology_code: str, resource_type: str, max_results: int = 10) -> list[dict]:
     """Search OpenAlex for resources matching methodology + resource type."""
-    return search_openalex(methodology_code, resource_type, max_results)
+    return _openalex_impl(methodology_code, resource_type, max_results)
 
 
-def _search_pubmed(methodology_code: str, max_results: int = 10) -> list[dict]:
+def search_pubmed(methodology_code: str, max_results: int = 10) -> list[dict]:
     """Search PubMed for methodology-relevant articles."""
-    return search_pubmed(methodology_code, max_results)
+    return _pubmed_impl(methodology_code, max_results)
 
 
 _tools = [
-    FunctionTool(func=_search_openalex),
-    FunctionTool(func=_search_pubmed),
+    FunctionTool(func=search_openalex),
+    FunctionTool(func=search_pubmed),
 ]
 
 if MCP_SERVER_URL:
     # Production: add MCPToolset (SSE) — expands the tool set to all 17 APIs
     try:
-        from mcp import SseServerParameters
         from google.adk.tools import MCPToolset
+        from google.adk.tools.mcp_tool.mcp_session_manager import SseConnectionParams
 
         _mcp_toolset = MCPToolset(
-            connection_params=SseServerParameters(
+            connection_params=SseConnectionParams(
                 url=MCP_SERVER_URL,
                 headers={"Authorization": f"Bearer {os.environ.get('MCP_SERVER_KEY', '')}"},
             )

@@ -32,17 +32,17 @@ MODEL = os.environ.get("MODEL_FLASH", "gemini-flash-latest")
 # FunctionTool wrappers — deterministic API lookups
 # ---------------------------------------------------------------------------
 
-def _fetch_openalex(doi: str = "", title: str = "") -> dict:
+def fetch_openalex(doi: str = "", title: str = "") -> dict:
     """Fetch structured metadata from OpenAlex by DOI or title."""
     return fetch_openalex_metadata(doi=doi or None, title=title or None)
 
 
-def _fetch_pubmed(pmid: str = "") -> dict:
+def fetch_pubmed(pmid: str = "") -> dict:
     """Fetch PubMed summary for a PMID."""
     return fetch_pubmed_metadata(pmid=pmid or None)
 
 
-def _write_assessment(assessment_json: str, resource_code: str) -> str:
+def write_assessment(assessment_json: str, resource_code: str) -> str:
     """
     Parse the LLM's appraisal JSON and write a draft AIAssessment to Firestore.
     Returns the Firestore document ID.
@@ -81,8 +81,8 @@ appraisal_agent = LlmAgent(
     ),
     instruction=_prompt_text,
     tools=[
-        FunctionTool(func=_fetch_openalex),
-        FunctionTool(func=_fetch_pubmed),
-        FunctionTool(func=_write_assessment),
+        FunctionTool(func=fetch_openalex),
+        FunctionTool(func=fetch_pubmed),
+        FunctionTool(func=write_assessment),
     ],
 )
