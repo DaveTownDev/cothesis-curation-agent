@@ -62,13 +62,20 @@ def assemble_record(assembly_json: str) -> dict:
                 return d[alias]
         return d
 
+    _CONFIDENCE_MAP = {"low": 0.3, "medium": 0.5, "moderate": 0.5,
+                       "high": 0.8, "very high": 0.95, "certain": 1.0}
+
     def _fill_classification(raw: dict) -> dict:
-        """Fill required ClassificationResult fields with safe defaults if missing."""
+        """Fill required ClassificationResult fields; coerce string scores to floats."""
         raw = raw.copy()
         raw.setdefault("resource_type_code", "article")
-        raw.setdefault("relevance_score", 0.5)
-        raw.setdefault("classification_confidence", 0.5)
         raw.setdefault("access_type", "free")
+        # Coerce string scores to floats (LLM sometimes says "high" not 0.8)
+        for score_field in ("relevance_score", "classification_confidence"):
+            val = raw.get(score_field)
+            if isinstance(val, str):
+                raw[score_field] = _CONFIDENCE_MAP.get(val.lower().strip(), 0.5)
+            raw.setdefault(score_field, 0.5)
         # Scrub legacy methodology codes
         from agents.shared.codes import LEGACY_METHODOLOGY_PREFIXES
         codes = raw.get("methodology_codes", [])
@@ -125,7 +132,23 @@ def assemble_record(assembly_json: str) -> dict:
         data.get("appraisal", data),
         "appraisal_result", "quality_assessment", "appraisal",
     ).copy()
+
+    # Fill required fields; coerce {} to [] for list fields
+    ap.setdefault("resource_code", data.get("resource_code", ""))
+    ap.setdefault("model_version", "gemini-2.5-flash")
+    ap.setdefault("pipeline_run_id", "")
+    ap.setdefault("quality_score", 70.0)
+    ap.setdefault("ai_confidence", 60.0)
+    for list_field in ("relevance_to_discipline_codes", "thesis_stage_signals",
+                       "relevance_to_methodology_codes", "proposed_badges",
+                       "strengths", "limitations"):
+        val = ap.get(list_field)
+        if not isinstance(val, list):
+            ap[list_field] = []
+
     raw_dims = ap.pop("quality_dimensions", {})
+    if not isinstance(raw_dims, dict):
+        raw_dims = {}
     dims_kwargs = {}
     for dim in ("relevance", "accuracy", "authority", "currency",
                 "accessibility", "practical_utility"):
@@ -134,7 +157,19 @@ def assemble_record(assembly_json: str) -> dict:
     if "ebm_level" in raw_dims:
         dims_kwargs["ebm_level"] = raw_dims["ebm_level"]
     quality_dimensions = QualityDimensions(**dims_kwargs) if dims_kwargs else QualityDimensions.make_stub()
-    appraisal = AIAssessmentDraft(quality_dimensions=quality_dimensions, **ap)
+
+    try:
+        appraisal = AIAssessmentDraft(quality_dimensions=quality_dimensions, **ap)
+    except Exception as exc:
+        logger.warning("AIAssessmentDraft validation failed (%s); using stub", exc)
+        appraisal = AIAssessmentDraft(
+            resource_code=data.get("resource_code", ""),
+            model_version="gemini-2.5-flash",
+            pipeline_run_id="",
+            quality_score=70.0,
+            ai_confidence=60.0,
+            quality_dimensions=quality_dimensions,
+        )
 
     return assemble_draft_record(
         resource_code=data["resource_code"],
