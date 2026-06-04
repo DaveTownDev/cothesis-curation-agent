@@ -52,7 +52,17 @@ def assemble_record(assembly_json: str) -> dict:
     from agents.shared.schema import (
         AIAssessmentDraft, ClassificationResult, EditorialOutput, QualityDimensions
     )
-    data = json.loads(assembly_json)
+    # The LLM sometimes appends trailing text after the JSON object.
+    # Use a JSONDecoder in raw_decode mode to extract just the first valid object.
+    assembly_json = assembly_json.strip()
+    decoder = json.JSONDecoder()
+    try:
+        data, _ = decoder.raw_decode(assembly_json)
+    except json.JSONDecodeError:
+        # Last resort: strip to content between first { and last }
+        start = assembly_json.find("{")
+        end = assembly_json.rfind("}") + 1
+        data = json.loads(assembly_json[start:end]) if start != -1 else {}
     logger.info("assemble_record top-level keys: %s", list(data.keys()))
 
     def _unwrap(d: dict, *alias_keys: str) -> dict:
