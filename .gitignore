@@ -1,0 +1,26 @@
+# Secrets & credentials — NEVER commit
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+service-account*.json
+*-key.json
+application_default_credentials.json
+secrets/
+# Claude Code local
+.claude/settings.local.json
+.claude/**/*.local.*
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+# Node / Next.js
+node_modules/
+.next/
+out/
+# Misc
+*.log
+.DS_Store
