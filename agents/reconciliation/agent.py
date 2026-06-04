@@ -123,9 +123,9 @@ def assemble_record(assembly_json: str) -> dict:
     except Exception as exc:
         logger.warning("EditorialOutput validation failed (%s); using stubs", exc)
         editorial = EditorialOutput(
-            editorial_description=raw_editorial.get("editorial_description", ""),
-            summary=raw_editorial.get("summary", raw_editorial.get("editorial_description_long", "")),
-            editorial_description_plain=raw_editorial.get("editorial_description_plain", ""),
+            editorial_description=raw_editorial.get("editorial_description") or "",
+            summary=raw_editorial.get("summary") or raw_editorial.get("editorial_description_long") or "",
+            editorial_description_plain=raw_editorial.get("editorial_description_plain") or "",
         )
 
     ap = _unwrap(
@@ -133,8 +133,8 @@ def assemble_record(assembly_json: str) -> dict:
         "appraisal_result", "quality_assessment", "appraisal",
     ).copy()
 
-    # Fill required fields; coerce {} to [] for list fields
-    ap.setdefault("resource_code", data.get("resource_code", ""))
+    # Fill required fields; coerce {} to [] for list fields; or None to safe defaults
+    ap["resource_code"] = ap.get("resource_code") or data.get("resource_code") or ""
     ap.setdefault("model_version", "gemini-2.5-flash")
     ap.setdefault("pipeline_run_id", "")
     ap.setdefault("quality_score", 70.0)
@@ -163,7 +163,7 @@ def assemble_record(assembly_json: str) -> dict:
     except Exception as exc:
         logger.warning("AIAssessmentDraft validation failed (%s); using stub", exc)
         appraisal = AIAssessmentDraft(
-            resource_code=data.get("resource_code", ""),
+            resource_code=data.get("resource_code") or "",
             model_version="gemini-2.5-flash",
             pipeline_run_id="",
             quality_score=70.0,
