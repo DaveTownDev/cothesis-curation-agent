@@ -182,9 +182,9 @@ def assemble_record(assembly_json: str) -> dict:
         )
 
     return assemble_draft_record(
-        resource_code=data["resource_code"],
-        title=data["title"],
-        url=data["url"],
+        resource_code=data.get("resource_code") or "",
+        title=data.get("title") or "",
+        url=data.get("url") or "",
         classification=classification,
         editorial=editorial,
         appraisal=appraisal,
