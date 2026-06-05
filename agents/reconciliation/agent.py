@@ -181,7 +181,7 @@ def assemble_record(assembly_json: str) -> dict:
             quality_dimensions=quality_dimensions,
         )
 
-    return assemble_draft_record(
+    record = assemble_draft_record(
         resource_code=data.get("resource_code") or "",
         title=data.get("title") or "",
         url=data.get("url") or "",
@@ -189,6 +189,20 @@ def assemble_record(assembly_json: str) -> dict:
         editorial=editorial,
         appraisal=appraisal,
     )
+
+    # Persist the assembled record keyed by resource_code so the arbiter's
+    # write_review_queue can read it back — decouples the data handoff from
+    # the orchestrator LLM, which does not reliably thread it between tools.
+    rc = record.get("resource_code")
+    if rc:
+        try:
+            from agents.shared.firestore_utils import get_firestore_collection
+            get_firestore_collection("draft_records").document(rc).set(record)
+            logger.info("Persisted assembled draft_record: %s", rc)
+        except Exception as exc:
+            logger.warning("Could not persist draft_record %s: %s", rc, exc)
+
+    return record
 
 
 reconciliation_agent = LlmAgent(

@@ -9,3 +9,19 @@ classification_confidence < 0.5  OR panel disagreement high       -> review_need
 else                                                               -> review_needed
 ```
 Output: `{ "decision": "auto_accept|auto_exclude|review_needed", "composite_score": number, "panel_agreement": number, "reason": string }`. Auto-accepted items still pass the publish checklist; nothing is published without human ratification (the console writes provenance + sets editorial_status=published). Auto-accepted items get sampling audits.
+
+## Writing to the review queue
+
+When routing is `review_needed`, call `write_review_queue` with a JSON string containing ALL of the following fields — never omit them:
+
+```json
+{
+  "resource_code": "<the resource_code from the draft record>",
+  "routing": "review_needed",
+  "reason": "<the routing reason string>",
+  "panel_result": { "<panel scores dict from QC panel>" },
+  "draft_record": { "<the full assembled draft record from Reconciliation>" }
+}
+```
+
+The `resource_code` and `draft_record` fields are required for the human review console to display the item. A queue item without `draft_record` is invisible to the curator. You must pass the complete draft record object from the Reconciliation agent output.

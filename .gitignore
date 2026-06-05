@@ -24,3 +24,7 @@ out/
 # Misc
 *.log
 .DS_Store
+
+# Build artifacts / coverage
+.coverage
+*.egg-info/

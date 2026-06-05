@@ -150,5 +150,17 @@ def compute_panel_agreement(panel_scores: list[dict]) -> float:
     """
     if not panel_scores:
         return 0.0
-    pass_count = sum(1 for s in panel_scores if s.get("pass", False))
-    return round(pass_count / len(panel_scores), 3)
+    parsed = []
+    for s in panel_scores:
+        if isinstance(s, str):
+            try:
+                import json as _json
+                s = _json.loads(s)
+            except Exception:
+                continue
+        if isinstance(s, dict):
+            parsed.append(s)
+    if not parsed:
+        return 0.0
+    pass_count = sum(1 for s in parsed if s.get("pass", False))
+    return round(pass_count / len(parsed), 3)

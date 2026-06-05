@@ -96,11 +96,17 @@ def parse_appraisal_json(
                 f"Got: {list(raw_dims)}"
             )
 
+    def _coerce_dim(v: object) -> dict:
+        # LLM sometimes returns a plain number instead of {score, weight, reasoning}
+        if isinstance(v, (int, float)):
+            return {"score": float(v)}
+        return v  # type: ignore[return-value]
+
     dims_kwargs: dict[str, QualityDimension] = {
-        dim: QualityDimension(**raw_dims[dim]) for dim in _REQUIRED_DIMS
+        dim: QualityDimension(**_coerce_dim(raw_dims[dim])) for dim in _REQUIRED_DIMS
     }
     if "ebm_level" in raw_dims:
-        dims_kwargs["ebm_level"] = QualityDimension(**raw_dims["ebm_level"])
+        dims_kwargs["ebm_level"] = QualityDimension(**_coerce_dim(raw_dims["ebm_level"]))
 
     quality_dimensions = QualityDimensions(**dims_kwargs)
 

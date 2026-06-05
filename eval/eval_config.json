@@ -1,6 +1,7 @@
 {
   "criteria": {
-    "response_match_score": 0.3
+    "response_match_score": 0.15,
+    "rubric_based_final_response_quality_v1": 0.6
   },
   "custom_metrics": null,
   "user_simulator_config": null

@@ -45,7 +45,11 @@ def run_deterministic_checks(draft_record_json: str) -> dict:
     draft_record_json: the assembled draft record dict as a JSON string.
     Returns aggregated panel result.
     """
-    record = json.loads(draft_record_json)
+    try:
+        record = json.loads(draft_record_json)
+    except (json.JSONDecodeError, TypeError):
+        logger.warning("run_deterministic_checks: invalid JSON input, using empty record")
+        record = {}
 
     results = []
 
@@ -73,7 +77,13 @@ def score_dimension(dimension: str, score: float, reasoning: str) -> dict:
 
 def aggregate(panel_scores_json: str) -> dict:
     """Aggregate a list of panel evaluator results."""
-    scores = json.loads(panel_scores_json)
+    try:
+        scores = json.loads(panel_scores_json)
+    except (json.JSONDecodeError, TypeError):
+        logger.warning("aggregate: invalid JSON input, returning empty panel result")
+        scores = []
+    if not isinstance(scores, list):
+        scores = [scores] if isinstance(scores, dict) else []
     return aggregate_panel_results(scores)
 
 

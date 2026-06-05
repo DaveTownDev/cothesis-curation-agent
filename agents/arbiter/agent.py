@@ -43,10 +43,10 @@ def route(routing_input_json: str) -> dict:
     data = json.loads(routing_input_json)
     panel_agreement = compute_panel_agreement(data.get("panel_scores", []))
     return compute_routing_decision(
-        relevance_score=float(data.get("relevance_score", 0)),
-        classification_confidence=float(data.get("classification_confidence", 0)),
-        quality_score=float(data.get("quality_score", 0)),
-        ai_confidence=float(data.get("ai_confidence", 0)),
+        relevance_score=float(data.get("relevance_score") or 0),
+        classification_confidence=float(data.get("classification_confidence") or 0),
+        quality_score=float(data.get("quality_score") or 0),
+        ai_confidence=float(data.get("ai_confidence") or 0),
         panel_agreement=panel_agreement,
         skip_reason=data.get("skip_reason"),
     )
@@ -58,12 +58,27 @@ def write_review_queue(queue_item_json: str) -> str:
     Returns the Firestore document ID.
     """
     data = json.loads(queue_item_json)
+    resource_code = data.get("resource_code", "unknown")
+    draft_record = data.get("draft_record") or {}
+
+    # If the orchestrator didn't thread the assembled record through, read it
+    # back from Firestore (reconciliation persisted it keyed by resource_code).
+    if not draft_record or not draft_record.get("title"):
+        try:
+            from agents.shared.firestore_utils import get_firestore_collection
+            doc = get_firestore_collection("draft_records").document(resource_code).get()
+            if doc.exists:
+                draft_record = doc.to_dict() or draft_record
+                logger.info("Recovered draft_record from Firestore for %s", resource_code)
+        except Exception as exc:
+            logger.warning("Could not recover draft_record for %s: %s", resource_code, exc)
+
     return write_review_queue_item(
-        resource_code=data["resource_code"],
+        resource_code=resource_code,
         routing=data.get("routing", "review_needed"),
         reason=data.get("reason", ""),
         panel_result=data.get("panel_result", {}),
-        draft_record=data.get("draft_record", {}),
+        draft_record=draft_record,
     )
 
 

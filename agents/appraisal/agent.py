@@ -42,6 +42,38 @@ def fetch_pubmed(pmid: str = "") -> dict:
     return fetch_pubmed_metadata(pmid=pmid or None)
 
 
+_REQUIRED_DIMS = (
+    "relevance", "accuracy", "authority",
+    "currency", "accessibility", "practical_utility",
+)
+
+
+def _ensure_dimensions(data: dict) -> dict:
+    """
+    Resilience at the agent boundary: if the LLM omitted quality_dimensions
+    (returns [] or {} or partial), synthesise the 6 required dimensions from
+    the overall quality_score so the pipeline degrades instead of crashing.
+    The strict parser (parse_appraisal_json) still validates the final shape.
+    """
+    # Ensure the top-level numeric fields the strict parser indexes directly.
+    base_score = float(data.get("quality_score", 70) or 70)
+    data["quality_score"] = base_score
+    data["ai_confidence"] = float(data.get("ai_confidence", 50) or 50)
+
+    raw = data.get("quality_dimensions")
+    if not isinstance(raw, dict):
+        raw = {}
+    for dim in _REQUIRED_DIMS:
+        if dim not in raw or not isinstance(raw.get(dim), (dict, int, float)):
+            raw[dim] = {
+                "score": base_score,
+                "weight": 0.1,
+                "reasoning": "Synthesised from overall quality_score (LLM omitted this dimension).",
+            }
+    data["quality_dimensions"] = raw
+    return data
+
+
 def write_assessment(assessment_json: str, resource_code: str) -> str:
     """
     Parse the LLM's appraisal JSON and write a draft AIAssessment to Firestore.
@@ -50,6 +82,7 @@ def write_assessment(assessment_json: str, resource_code: str) -> str:
     resource_code: the resource's stable code (kebab-case).
     """
     data = json.loads(assessment_json)
+    data = _ensure_dimensions(data)
     draft = parse_appraisal_json(
         data,
         resource_code=resource_code,

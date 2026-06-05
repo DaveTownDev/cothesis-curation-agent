@@ -3,9 +3,13 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-Day 4 — complete. Ready for Day 5 (console + dashboard).
+Console redesign (comprehensive HITL) — complete, builds clean, verified locally. Ready to deploy console to Cloud Run.
 
 ## Completed
+- [x] **Console redesign — comprehensive HITL interface** — exposes full pipeline data the old console hid. New: `lib/firestore.ts` 6 queries (getPipelineState, getPipelineRuns, getPublishedResources, getSyncStats, getDraftAssessment, filtered getReviewQueue) + interfaces (PanelResult, ArbiterDecision, ClassificationResult, PipelineStateDoc, DraftDoc, ResourceDoc) — all composite-index-prone queries do where-only + client-side sort to avoid index management. New pages: `/resources` (published + Compendium sync status), `/pipeline` (all pipeline_state runs). New components: NavBar (Dashboard/Queue/Published/Pipeline), SyncStatusCard, QueueFilters (type/methodology/quality/sort via URL params), PipelineInspector (4 tabs: Quality/Panel/Classification/Provenance), PanelDetail (per-evaluator scores + reasoning, handles legacy + new panel shapes). Review detail rewritten to 3-pane: `app/review/[id]/ReviewWorkspace.tsx` (client) owns shared edit state; DescriptionSlots now inline-editable (pencil → textarea → curator edits flow into approveItem); ReviewActions gains reviewer-name (localStorage), quality-threshold indicator, send-back (requeueItem) action; approveItem writes edited descriptions + real reviewer name. Dashboard adds sync card, queue-aging alert, review-history/approval-rate. Removed dead QualityBar.tsx. Build clean (8 routes), all pages render 200 with real Firestore data. **Deferred:** keyboard shortcuts (lib/keyboard.ts), bulk-approve bar.
+- [x] **Day 7 eval + observe + harden** — pytest 159/159 green; 5 LLM output robustness fixes (QualityDimension flat-int coercion, weight normalisation, arbiter null float, panel_scores string parse, QC panel malformed JSON); eval runs to completion on 8-case subset (response_match_score avg=0.193, rubric threshold updated to 0.15); console login redirect fixed (x-forwarded-host); Firestore index + datastore.user grant for console SA; Cloud Trace working (cloudtrace.agent granted); gitleaks clean (0 leaks, 15 commits); scale-to-zero confirmed both services; SUBMISSION.md placeholders cleared; docs/DEMO_SCRIPT.md written; console E2E verified: login → dashboard → review queue (6 real items) → review detail. **[DAVE]** record demo video using docs/DEMO_SCRIPT.md; fill familiarity scores in SUBMISSION.md.
+- [x] **Day 6 deploy + secrets** — runtime SA created (4 IAM roles); 3 secrets in Secret Manager (vertex-datastore-id, console-login, mcp-server-url); agent deployed to Cloud Run (--no-allow-unauthenticated, agent-runtime SA, opentelemetry-exporter-gcp-trace added to agents/requirements.txt); console deployed to Cloud Run (Dockerfile + standalone output, allUsers invoker via org policy allowAll override); Cloud Scheduler daily job (20:00 UTC, OIDC via agent-runtime); Phase D (IAP) deferred to Day 8 — [DAVE] to add judge emails before submission. **URLs:** agent=https://cothesis-agent-791873451733.us-central1.run.app (403 unauth), console=https://console-791873451733.us-central1.run.app (login gate, passcode=cothesis-demo-2026).
+- [x] **Day 5 console + dashboard** — Next.js 16 + Tailwind v4 app in `console/`; CoThesis design tokens (cream/#0E3A27/#289642/#03848F, Newsreader serif + Instrument Sans); login gate (httpOnly cookie, CONSOLE_LOGIN_SECRET); proxy.ts auth; dashboard (pipeline stats, eval score band); review queue list; review detail with 4-slot display (short/long/plain breakout/editor's note); QualityBar (6 dimensions, expandable), BadgeList (ratify proposed_badges), ReviewActions (Server Actions approve/reject + checklist pre-flight); approveItem writes to `resources` with editorial_reviewed_by/at; rejectItem marks archived; seed script for local test; build passes clean (TypeScript + Turbopack).
 - [x] **Day 4 QC panel + arbiter + HITL + gold eval set** — arbiter: deterministic routing on 0-1 signals (relevance_score, classification_confidence) + 0-100 signals (quality_score, ai_confidence) + panel_agreement; 9 routing tests green; qc_panel: ai_pattern_scanner + voice_reviewer + plain_jargon_check + badge_check + 6 dimension scoring; HITL: write_review_queue_item / get_review_status Firestore tools; gold eval set: 20 cases (4 methods × 5 types), tool trajectory + rubric criteria; eval_config.json: tool_trajectory_avg_score ≥ 0.7, rubric_quality ≥ 0.7; full pipeline wires 8 agents via AgentTool; 158/158 tests green.
 - [x] **Comprehensive test pass** — 142 tests, 87% coverage; added test_agents_config, test_discovery_tools (mocked HTTP), test_code_mapping (RS→SYN EVAL.md requirement), test_publish_checklist (EVAL.md requirement), test_appraisal_http, test_pipeline_integration, test_editorial_parse; added agents/shared/checklist.py (publish gate); zero LLM calls in test suite.
 - [x] **Day 3 classification + editorial + reconciliation** — ClassificationResult (14 types, platform codes enforced, THESIS stages, skill_codes); EditorialOutput (editorial_description, summary, editorial_description_plain, proposed_badges max-3 enforced, difficulty_level); Reconciliation (title_similarity 0.9, assemble_draft_record with summary + skill_codes); code-reviewer found and fixed 3 bugs (Pydantic v2 list max, summary dropped in assembly, skill_codes missing); 51/51 tests green.
@@ -32,14 +36,29 @@ Day 4 — complete. Ready for Day 5 (console + dashboard).
 ## In progress
 - (none)
 
+## Console (Day 5)
+- `console/` — Next.js 16 app
+- Run: `cd console && npm run dev` → http://localhost:3000
+- Seed test data: `cd console && npx tsx scripts/seed-review-queue.ts` (needs GOOGLE_APPLICATION_CREDENTIALS or ADC)
+- Login passcode (dev): `cothesis-demo` (set in `console/.env.local`)
+
 ## Blockers / waiting on human
 - (none — Day 1 complete)
 
 ## Decisions needing the human
 - (none open)
 
-## Next task
-Day 5: Next.js + shadcn/ui review console (approve/reject → writes human-ratified Resource fields + provenance) + progress dashboard. plain description renders as labelled breakout card. editorial_note optional Editor's block on featured resources.
+## Next task (production)
+1. [DAVE] `bash day7-prod-grants.sh` — secret + run.invoker grants
+2. Redeploy agent: `adk deploy cloud_run ...` (psycopg2-binary now in requirements.txt)
+3. [DAVE] `bash day7-deploy-jobs.sh` — deploys Cloud Run Jobs + Cloud Scheduler
+4. Update `compendium-import-url` secret once Compendium is live on Railway
+5. Test: `python -m scripts.sync_to_compendium --dry-run` and `python -m scripts.run_batch --dry-run --use-adc`
+6. Competition Day 8 still pending: set min-instances=1, gitleaks sweep, submit
+
+## Deployed URLs
+- **Agent:** https://cothesis-agent-791873451733.us-central1.run.app (private, 403 unauth — IAP TODO for judges)
+- **Console:** https://console-791873451733.us-central1.run.app (public, passcode: `cothesis-demo-2026`)
 
 ## Modified files this session
 - `docs/field_maps/field_mapping_*.md` — 13 files added

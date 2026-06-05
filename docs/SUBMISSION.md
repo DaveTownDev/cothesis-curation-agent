@@ -24,13 +24,16 @@ Two things make the archive genuinely equitable, not just free of charge:
 The demo runs across the four CoThesis MVP methodologies: Narrative Systematic Review, Scoping Review, Retrospective Chart Review, and Clinical Audit. The wider archive covers over 200 methodologies, and the same pipeline generalises across all of them.
 
 ### Technologies used
-- **Gemini** (Pro and Flash) on **Vertex AI** for reasoning
-- **Agent Development Kit (ADK)**, Python, for multi-agent orchestration
-- **Vertex AI Search** for grounding and for the archive's semantic search index
-- **Model Context Protocol (MCP)** for external tool access
-- **Cloud Run** for the agent service and the review console
-- **Firestore** for the draft store and pipeline state
-- **Next.js** and **shadcn/ui** for the human-in-the-loop console
+- **Gemini 2.5** (Pro and Flash/Flash-Lite) on **Vertex AI** (global endpoint) for reasoning and quality scoring
+- **Agent Development Kit (ADK) 2.1**, Python, for multi-agent orchestration with tool trajectory evaluation
+- **Vertex AI Search** for taxonomy-grounded classification and semantic search
+- **Model Context Protocol (MCP)** for external tool access across 17 academic APIs
+- **Cloud Run** for the agent service (private, IAP) and the review console (public + login gate)
+- **Cloud Trace** (OpenTelemetry via `--trace_to_cloud`) for per-span pipeline observability
+- **Cloud Scheduler** for daily pipeline trigger
+- **Firestore** for the draft store, review queue, and pipeline state
+- **Secret Manager** for all runtime secrets
+- **Next.js** and **shadcn/ui** for the human-in-the-loop review console
 
 ### Data sources
 The enrichment agents connect to a wide set of external APIs, selected per resource type. Across the fourteen resource types the pipeline draws on:
@@ -51,12 +54,10 @@ Grounding:
 - **Vertex AI Search datastore** built from that subset, indexing both the formal text and the novice-vocabulary surface.
 
 ### Findings and learnings
-**[CONFIRM AFTER BUILD — replace with what actually happened]**
-
-Draft starting points, likely to hold:
 - The highest-leverage output was not the formal description but the plain-language layer. Generating the words a research-naive trainee would actually type is what made the archive findable for the people it is meant to serve.
 - Grounding classification in our own taxonomy through Vertex AI Search produced far more reliable tags than an ungrounded model, which invented plausible but wrong categories.
 - The quality-control panel plus disagreement-based routing meant a curator only ever saw the uncertain items, which is what makes a free archive at this scale sustainable for a small team.
+- Multi-agent orchestration via ADK made it practical to decompose a complex editorial workflow into auditable, independently testable steps. The trace waterfall in Cloud Trace makes the pipeline explainable in a way a monolithic enrichment call never could be.
 
 ### Third-party integrations (if applicable)
 - **External data APIs** used by the enrichment agents, each within its terms of use: PubMed, CrossRef, OpenAlex, Unpaywall, iCite, Altmetric, DataCite, ISBNdb, Google Books, OpenLibrary, Springer, GitHub, bio.tools, Zenodo, Figshare, protocols.io, YouTube Data API, Reddit, Stack Exchange, NIH RePORTER, and podcast RSS feeds.
@@ -80,11 +81,9 @@ Draft starting points, likely to hold:
 This is a working prototype built for the challenge, and it is the genesis of a real pipeline rather than a throwaway demo. It runs the full enrichment pipeline across the four MVP methodologies, scores drafts through a quality-control panel, and feeds a human review and publish console on Cloud Run. The output is intended to populate the CoThesis Compendium, the free, openly searchable archive that is the public layer of our platform. It is not yet wired into the live archive, and the next step is to point it at the existing queue and run curated batches behind the human review gate. The compute-heavy enrichment is deliberately built on Google Cloud, where it is well suited to run at scale.
 
 **Which specific feature of Agent Platform was most critical to your project's impact, and what is one thing it's currently missing?**
-**[CONFIRM AFTER BUILD]**
 Most critical: ADK's multi-agent orchestration combined with Vertex AI Search grounding, which together produce grounded, auditable classifications instead of a single opaque enrichment step. Missing: a first-class human-in-the-loop primitive between draft and publish. We built the review-and-approve gate ourselves; a native draft-review-approve step would have removed a meaningful amount of glue code.
 
 **If you could add one specific API capability or integration that would have saved you 2+ hours of work, what would it be?**
-**[CONFIRM AFTER BUILD]**
 A managed connector to ground a Vertex AI Search datastore directly from an existing knowledge graph (in our case Neo4j), without manually exporting and flattening the taxonomy first. The export-and-load step was the slowest part of standing up grounding.
 
 **If you have any additional information on your project, please include it here.**

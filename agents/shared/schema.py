@@ -17,8 +17,15 @@ from pydantic import conlist
 
 class QualityDimension(BaseModel):
     score: float = Field(..., ge=0, le=100)
-    weight: float = Field(..., ge=0, le=1)
-    reasoning: str
+    weight: float = Field(default=0.1, ge=0, le=1)
+    reasoning: str = Field(default="")
+
+    @field_validator("weight", mode="before")
+    @classmethod
+    def normalise_weight(cls, v: object) -> float:
+        # LLM sometimes returns weight as a percentage (e.g. 20) instead of fraction (0.2)
+        v = float(v) if v is not None else 0.1
+        return v / 100.0 if v > 1.0 else v
 
 
 class QualityDimensions(BaseModel):
