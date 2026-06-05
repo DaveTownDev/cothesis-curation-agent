@@ -41,32 +41,17 @@ def _get_adc_token() -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run a batch from the enrichment queue")
-    parser.add_argument("--dry-run", action="store_true", help="Show items without calling agent")
+    parser.add_argument("--dry-run", action="store_true", help="Show items without processing")
     parser.add_argument("--batch-size", type=int, default=50)
-    parser.add_argument("--use-adc", action="store_true",
-                        help="Get bearer token via gcloud ADC (for local dev)")
     args = parser.parse_args()
 
     db_url = os.environ.get("DATABASE_PUBLIC_URL", "")
-    agent_url = os.environ.get("AGENT_SERVICE_URL", _DEFAULT_AGENT_URL)
-    token = os.environ.get("AGENT_BEARER_TOKEN", "")
-
     if not db_url:
         logger.error("DATABASE_PUBLIC_URL not set — get it from Doppler dave-ai-stack/prd")
         return 1
 
-    if not token and not args.dry_run:
-        if args.use_adc:
-            try:
-                token = _get_adc_token()
-                logger.info("Using ADC identity token")
-            except Exception as e:
-                logger.error("Could not get ADC token: %s", e)
-                return 1
-        else:
-            logger.error("AGENT_BEARER_TOKEN not set. Use --use-adc for local dev.")
-            return 1
-
+    # The deterministic orchestrator runs in-process and uses ADC for Vertex AI.
+    # No agent URL / bearer token needed — it does not call the LlmAgent /run endpoint.
     import psycopg2
     import psycopg2.extras
     from scripts.batch import run_batch
@@ -75,8 +60,6 @@ def main() -> int:
     try:
         result = run_batch(
             conn=conn,
-            agent_url=agent_url,
-            bearer_token=token,
             batch_size=args.batch_size,
             dry_run=args.dry_run,
         )

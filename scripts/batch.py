@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -197,17 +198,44 @@ def call_agent(
 # Main
 # ---------------------------------------------------------------------------
 
+def _pascal_to_snake(s: str) -> str:
+    """ReportingGuideline -> reporting_guideline (queue data is PascalCase)."""
+    if not s:
+        return "article"
+    out = re.sub(r"(?<!^)(?=[A-Z])", "_", s).lower()
+    return out
+
+
+def build_resource_input(row: dict[str, Any]) -> dict[str, Any]:
+    """Map a Postgres enrichment_queue row to the run_pipeline input dict."""
+    return {
+        "resource_code": None,  # derived from title in the orchestrator
+        "title": row.get("title", ""),
+        "url": row.get("url", ""),
+        "description": row.get("description", ""),
+        "resource_type": _pascal_to_snake(row.get("resource_type", "")),
+        "methodology_tags": row.get("methodology_tags") or [],
+        "doi": row.get("doi"),
+        "pmid": row.get("pmid"),
+    }
+
+
 def run_batch(
     conn: Any,
-    agent_url: str,
-    bearer_token: str,
     batch_size: int = 50,
     dry_run: bool = False,
+    pipeline_fn: Any = None,
 ) -> BatchResult:
     """
-    Full batch run. Fetches pending items, calls the agent for each,
-    updates queue status.
+    Full batch run. Fetches pending items and runs each through the
+    DETERMINISTIC code orchestrator (agents.pipeline.deterministic.run_pipeline),
+    not the non-deterministic LlmAgent /run endpoint. Updates queue status.
+
+    pipeline_fn is injectable for testing; defaults to the real orchestrator.
     """
+    if pipeline_fn is None:
+        from agents.pipeline.deterministic import run_pipeline as pipeline_fn  # noqa: N806
+
     result = BatchResult(dry_run=dry_run)
     items = fetch_pending_items(conn, batch_size=batch_size)
 
@@ -215,7 +243,7 @@ def run_batch(
         logger.info("batch: no pending items in enrichment_queue")
         return result
 
-    logger.info("batch: processing %d items", len(items))
+    logger.info("batch: processing %d items (deterministic orchestrator)", len(items))
 
     if dry_run:
         logger.info("batch: dry-run — would process %d items", len(items))
@@ -226,11 +254,12 @@ def run_batch(
         resource_id = item.get("resource_id", "unknown")
         try:
             mark_item_processing(conn, queue_id)
-            message = build_agent_message(item)
-            call_agent(message, agent_url, bearer_token)
+            resource_input = build_resource_input(item)
+            outcome = pipeline_fn(resource_input, pipeline_run_id=str(resource_id))
             mark_item_complete(conn, queue_id)
             result.processed += 1
-            logger.info("batch: processed resource %s (queue_id=%s)", resource_id, queue_id)
+            logger.info("batch: processed %s -> %s (queue_id=%s)",
+                        resource_id, outcome.get("routing", "?"), queue_id)
         except Exception as exc:
             logger.error("batch: failed resource %s: %s", resource_id, exc)
             try:

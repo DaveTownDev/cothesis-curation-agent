@@ -3,7 +3,13 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-Console redesign (comprehensive HITL) — complete, builds clean, verified locally. Ready to deploy console to Cloud Run.
+Post-review plan: Phase 0 (commit/tag) ✓, Phase 1 (Gemini 3.x upgrade) ✓, Phase 2 (deterministic orchestrator) ✓. Next: Phase 3 (seed demo data), Phase 4 (demo video + submission).
+
+## Deterministic orchestrator (Phase 2)
+- `agents/pipeline/deterministic.py` — `run_pipeline(resource_input, pipeline_run_id)` — code-sequenced, LLM only for judgments, pure-Python arbiter, writes all Firestore collections incl. pipeline_state per stage. Verified live: 1 real resource → auto_accept in 46s, all collections written.
+- Batch runner (`scripts/batch.py`) now calls run_pipeline (not the LlmAgent /run). LlmAgent orchestrator kept for interactive `adk web`.
+- Models (Gemini 3.x): MODEL_PRO=gemini-3.1-pro-preview, MODEL_FLASH=gemini-3-flash-preview, MODEL_FLASH_LITE=gemini-3.1-flash-lite. Agent deployed rev 00009.
+- 245 tests green. Git: branch `production-integration-and-console`, tag `hackathon-snapshot-v1`.
 
 ## Completed
 - [x] **Console redesign — comprehensive HITL interface** — exposes full pipeline data the old console hid. New: `lib/firestore.ts` 6 queries (getPipelineState, getPipelineRuns, getPublishedResources, getSyncStats, getDraftAssessment, filtered getReviewQueue) + interfaces (PanelResult, ArbiterDecision, ClassificationResult, PipelineStateDoc, DraftDoc, ResourceDoc) — all composite-index-prone queries do where-only + client-side sort to avoid index management. New pages: `/resources` (published + Compendium sync status), `/pipeline` (all pipeline_state runs). New components: NavBar (Dashboard/Queue/Published/Pipeline), SyncStatusCard, QueueFilters (type/methodology/quality/sort via URL params), PipelineInspector (4 tabs: Quality/Panel/Classification/Provenance), PanelDetail (per-evaluator scores + reasoning, handles legacy + new panel shapes). Review detail rewritten to 3-pane: `app/review/[id]/ReviewWorkspace.tsx` (client) owns shared edit state; DescriptionSlots now inline-editable (pencil → textarea → curator edits flow into approveItem); ReviewActions gains reviewer-name (localStorage), quality-threshold indicator, send-back (requeueItem) action; approveItem writes edited descriptions + real reviewer name. Dashboard adds sync card, queue-aging alert, review-history/approval-rate. Removed dead QualityBar.tsx. Build clean (8 routes), all pages render 200 with real Firestore data. **Deferred:** keyboard shortcuts (lib/keyboard.ts), bulk-approve bar.

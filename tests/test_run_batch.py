@@ -213,65 +213,53 @@ class TestStatusUpdates:
 # ---------------------------------------------------------------------------
 
 class TestRunBatch:
+    """run_batch now uses the deterministic in-process orchestrator (pipeline_fn)."""
+
     def test_returns_batch_result(self):
         mock_conn = MagicMock()
         mock_cur = mock_conn.cursor.return_value.__enter__.return_value
         mock_cur.fetchall.return_value = [QUEUE_ROW_1]
-        with patch("scripts.batch.httpx.post") as mock_post:
-            mock_post.return_value.raise_for_status = MagicMock()
-            mock_post.return_value.json.return_value = AGENT_RUN_RESPONSE
-            result = run_batch(
-                conn=mock_conn,
-                agent_url="https://cothesis-agent.run.app",
-                bearer_token="t",
-                batch_size=10,
-            )
+        pipeline_fn = MagicMock(return_value={"routing": "review_needed"})
+        result = run_batch(conn=mock_conn, batch_size=10, pipeline_fn=pipeline_fn)
         assert isinstance(result, BatchResult)
         assert result.processed == 1
         assert result.failed == 0
+        pipeline_fn.assert_called_once()
+        # build_resource_input maps the row into the pipeline input
+        called_input = pipeline_fn.call_args.args[0]
+        assert called_input["title"] == QUEUE_ROW_1["title"]
+        assert called_input["resource_type"] == "article"
 
-    def test_dry_run_skips_agent_call(self):
+    def test_dry_run_skips_pipeline(self):
         mock_conn = MagicMock()
         mock_cur = mock_conn.cursor.return_value.__enter__.return_value
         mock_cur.fetchall.return_value = [QUEUE_ROW_1, QUEUE_ROW_2]
-        with patch("scripts.batch.httpx.post") as mock_post:
-            result = run_batch(
-                conn=mock_conn,
-                agent_url="https://cothesis-agent.run.app",
-                bearer_token="t",
-                batch_size=10,
-                dry_run=True,
-            )
-        mock_post.assert_not_called()
+        pipeline_fn = MagicMock()
+        result = run_batch(conn=mock_conn, batch_size=10, dry_run=True, pipeline_fn=pipeline_fn)
+        pipeline_fn.assert_not_called()
         assert result.processed == 0
         assert result.dry_run is True
 
-    def test_marks_failed_on_agent_error(self):
-        import httpx
+    def test_marks_failed_on_pipeline_error(self):
         mock_conn = MagicMock()
         mock_cur = mock_conn.cursor.return_value.__enter__.return_value
         mock_cur.fetchall.return_value = [QUEUE_ROW_1]
-        with patch("scripts.batch.httpx.post") as mock_post:
-            mock_post.return_value.raise_for_status.side_effect = httpx.HTTPStatusError(
-                "500", request=MagicMock(), response=MagicMock()
-            )
-            result = run_batch(
-                conn=mock_conn,
-                agent_url="https://cothesis-agent.run.app",
-                bearer_token="t",
-                batch_size=10,
-            )
+        pipeline_fn = MagicMock(side_effect=RuntimeError("boom"))
+        result = run_batch(conn=mock_conn, batch_size=10, pipeline_fn=pipeline_fn)
         assert result.failed == 1
         assert result.processed == 0
+
+    def test_pascal_resource_type_normalised(self):
+        from scripts.batch import build_resource_input
+        ri = build_resource_input(QUEUE_ROW_2)  # resource_type "book"
+        assert ri["resource_type"] == "book"
+        ri2 = build_resource_input({"resource_type": "ReportingGuideline", "title": "x"})
+        assert ri2["resource_type"] == "reporting_guideline"
 
     def test_no_items_returns_zero_result(self):
         mock_conn = MagicMock()
         mock_cur = mock_conn.cursor.return_value.__enter__.return_value
         mock_cur.fetchall.return_value = []
-        result = run_batch(
-            conn=mock_conn,
-            agent_url="https://cothesis-agent.run.app",
-            bearer_token="t",
-        )
+        result = run_batch(conn=mock_conn, pipeline_fn=MagicMock())
         assert result.processed == 0
         assert result.failed == 0

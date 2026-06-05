@@ -24,7 +24,7 @@ Two things make the archive genuinely equitable, not just free of charge:
 The demo runs across the four CoThesis MVP methodologies: Narrative Systematic Review, Scoping Review, Retrospective Chart Review, and Clinical Audit. The wider archive covers over 200 methodologies, and the same pipeline generalises across all of them.
 
 ### Technologies used
-- **Gemini 2.5** (Pro and Flash/Flash-Lite) on **Vertex AI** (global endpoint) for reasoning and quality scoring
+- **Gemini 3.x** (3.1 Pro for routing, 3 Flash for appraisal/editorial, 3.1 Flash-Lite for high-volume structured stages) on **Vertex AI** (global endpoint) for reasoning and quality scoring
 - **Agent Development Kit (ADK) 2.1**, Python, for multi-agent orchestration with tool trajectory evaluation
 - **Vertex AI Search** for taxonomy-grounded classification and semantic search
 - **Model Context Protocol (MCP)** for external tool access across 17 academic APIs
@@ -58,6 +58,7 @@ Grounding:
 - Grounding classification in our own taxonomy through Vertex AI Search produced far more reliable tags than an ungrounded model, which invented plausible but wrong categories.
 - The quality-control panel plus disagreement-based routing meant a curator only ever saw the uncertain items, which is what makes a free archive at this scale sustainable for a small team.
 - Multi-agent orchestration via ADK made it practical to decompose a complex editorial workflow into auditable, independently testable steps. The trace waterfall in Cloud Trace makes the pipeline explainable in a way a monolithic enrichment call never could be.
+- **Production pipelines with mandatory side-effects require deterministic orchestration.** We run the system in two modes that share the same eight ADK agents and the same Gemini 3.x model tiers — only the sequencing layer differs. Interactive exploration (via the ADK web UI) uses an LLM orchestrator that calls each agent as a tool, which is ideal for inspecting the system conversationally. For unattended batch curation we use a code-sequenced orchestrator, because we found that an LLM orchestrator non-deterministically skips stages — it would sometimes complete the full chain and sometimes stop after the first agent and summarise. When every stage and every Firestore write is mandatory, the LLM should produce the judgments and code should own the sequencing and the persistence. The arbiter's routing gate is therefore pure code, not a model call: it is a deterministic threshold decision, not a matter of judgment.
 
 ### Third-party integrations (if applicable)
 - **External data APIs** used by the enrichment agents, each within its terms of use: PubMed, CrossRef, OpenAlex, Unpaywall, iCite, Altmetric, DataCite, ISBNdb, Google Books, OpenLibrary, Springer, GitHub, bio.tools, Zenodo, Figshare, protocols.io, YouTube Data API, Reddit, Stack Exchange, NIH RePORTER, and podcast RSS feeds.
