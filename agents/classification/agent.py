@@ -15,7 +15,7 @@ from google.adk.tools import FunctionTool
 from agents.classification.tools import parse_classification_json
 
 logger = logging.getLogger(__name__)
-MODEL = os.environ.get("MODEL_FLASH_LITE", "gemini-flash-lite-latest")
+MODEL = os.environ.get("MODEL_FLASH_LITE", "gemini-3.1-flash-lite")
 
 _PROMPT_PATH = "agents/prompts/classification.md"
 try:

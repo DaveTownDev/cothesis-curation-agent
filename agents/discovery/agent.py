@@ -21,7 +21,7 @@ from agents.discovery.tools import search_pubmed as _pubmed_impl
 
 logger = logging.getLogger(__name__)
 
-MODEL = os.environ.get("MODEL_FLASH_LITE", "gemini-flash-lite-latest")
+MODEL = os.environ.get("MODEL_FLASH_LITE", "gemini-3.1-flash-lite")
 MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "")
 # Treat placeholder values as unset
 if MCP_SERVER_URL in ("", "your_public_mcp_hostname_here"):

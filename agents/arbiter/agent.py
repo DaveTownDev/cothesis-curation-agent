@@ -18,7 +18,7 @@ from agents.arbiter.tools import compute_routing_decision, compute_panel_agreeme
 from agents.shared.hitl import write_review_queue_item, get_review_status
 
 logger = logging.getLogger(__name__)
-MODEL = os.environ.get("MODEL_PRO", "gemini-2.5-pro")
+MODEL = os.environ.get("MODEL_PRO", "gemini-3.1-pro-preview")
 
 _PROMPT_PATH = "agents/prompts/arbiter.md"
 try:

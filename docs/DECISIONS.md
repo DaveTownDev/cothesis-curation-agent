@@ -1,7 +1,7 @@
 # DECISIONS — settled decisions & resolved inconsistencies
 
 ## Locked build decisions
-- **Region/models:** global endpoint, Gemini 3 (Pro + Flash/Flash-Lite), Vertex AI Search. Public data, so no AU residency requirement.
+- **Region/models:** global endpoint, Vertex AI Search. Public data, so no AU residency requirement. **Model tiering (Gemini 3.x):** arbiter (+ interactive orchestrator) = `gemini-3.1-pro-preview`; appraisal + editorial = `gemini-3-flash-preview`; discovery, classification, reconciliation, QC panel, grounding = `gemini-3.1-flash-lite`. Verified available on the global endpoint via live API call (2026-06-06).
 - **ADK is GA** (2.x): pin `google-adk==2.1.x`, never below 2.0.1; verify APIs live via Context7.
 - **Deploy to Cloud Run** (not Agent Engine). Judge access via Cloud Run IAP / console passcode; agent API + MCP stay private.
 - **Day 0 billing kill-switch** (Pub/Sub + Cloud Function) alongside budget alerts.

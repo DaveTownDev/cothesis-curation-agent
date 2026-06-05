@@ -29,7 +29,7 @@ from agents.qc_panel.tools import (
 )
 
 logger = logging.getLogger(__name__)
-MODEL = os.environ.get("MODEL_FLASH", "gemini-flash-latest")
+MODEL = os.environ.get("MODEL_FLASH_LITE", "gemini-3.1-flash-lite")
 
 _PROMPT_PATH = "agents/prompts/qc_panel.md"
 try:

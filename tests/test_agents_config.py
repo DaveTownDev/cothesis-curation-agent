@@ -95,9 +95,10 @@ class TestClassificationAgent:
 
 
 class TestEditorialAgent:
-    def test_uses_pro_model(self):
+    def test_uses_flash_model(self):
+        # Tiering (Gemini 3.x upgrade): editorial runs on Flash, not Pro
         from editorial.agent import MODEL
-        assert MODEL == "gemini-2.5-pro"
+        assert MODEL == "gemini-flash-latest"
 
     def test_has_two_tools(self):
         from editorial.agent import editorial_agent

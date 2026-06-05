@@ -17,7 +17,7 @@ from google.adk.tools import FunctionTool
 from agents.editorial.tools import parse_editorial_json, check_plain_for_jargon
 
 logger = logging.getLogger(__name__)
-MODEL = os.environ.get("MODEL_PRO", "gemini-2.5-pro")
+MODEL = os.environ.get("MODEL_FLASH", "gemini-3-flash-preview")
 
 _PROMPT_PATH = "agents/prompts/editorial.md"
 _EXAMPLES_PATH = "data/editorial_examples/editorial_examples.md"

@@ -23,7 +23,7 @@ from agents.reconciliation.agent import reconciliation_agent
 from agents.qc_panel.agent import qc_panel_agent
 from agents.arbiter.agent import arbiter_agent
 
-MODEL = os.environ.get("MODEL_PRO", "gemini-2.5-pro")
+MODEL = os.environ.get("MODEL_PRO", "gemini-3.1-pro-preview")
 
 root_agent = LlmAgent(
     model=MODEL,

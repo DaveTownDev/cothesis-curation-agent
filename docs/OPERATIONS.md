@@ -25,7 +25,7 @@ Runtime SA `agent-runtime@$PROJECT.iam.gserviceaccount.com` with only: `roles/ai
 `echo -n "VALUE" | gcloud secrets create NAME --data-file=- --replication-policy=automatic`, inject with `--set-secrets=ENV=NAME:latest`. Runtime SA needs `secretAccessor` before deploy. Next.js: keep secrets server-side (NEXT_PUBLIC_* bakes at build).
 
 ## Cost (target: well under $100)
-Model tiering (Flash-Lite for discovery/classification/reconciliation; Pro only for editorial polish + arbiter) is the biggest lever. Scale Cloud Run to zero; keep prompts < 200K tokens (Pro doubles above); Vertex AI Search free tier is 10k queries/month. Note: on the global endpoint, context caching and batch discounts are unavailable, so lean harder on tiering and trimming. The kill-switch covers the runaway-loop tail risk. The /cost-check skill summarises spend.
+Model tiering (Gemini 3.x: Flash-Lite for discovery/classification/reconciliation/QC; Flash for appraisal/editorial; Pro only for the arbiter routing decision) is the biggest lever. Scale Cloud Run to zero; keep prompts < 200K tokens (Pro doubles above); Vertex AI Search free tier is 10k queries/month. Note: on the global endpoint, context caching and batch discounts are unavailable, so lean harder on tiering and trimming. The kill-switch covers the runaway-loop tail risk. The /cost-check skill summarises spend.
 
 ## Claude Code billing note
 From 15 Jun 2026, headless `claude -p` / Agent SDK draws on a separate Agent SDK credit; interactive terminal/IDE use is unaffected. Build interactively; treat scheduled/headless eval runs as separately metered. Never set `ANTHROPIC_API_KEY` in the shell unless you intend API billing.
