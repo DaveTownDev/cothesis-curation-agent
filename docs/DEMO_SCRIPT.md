@@ -1,111 +1,78 @@
 # CoThesis Curation Agent — Demo Script (5 min)
 
+**Record against pre-seeded data — do NOT run the live pipeline in the video.**
+The console, Cloud Trace, and Compendium sync are all reliable. The batch
+pipeline is deterministic but slow (~45s/resource), so the queue is pre-populated.
+
 ## Setup before recording
-- Console open: https://console-791873451733.us-central1.run.app — log in with passcode `cothesis-demo-2026`
-- ADK Web UI open (authenticated): https://cothesis-agent-791873451733.us-central1.run.app/dev-ui
+- Console logged in: https://console-791873451733.us-central1.run.app (passcode `cothesis-demo-2026`)
 - Cloud Trace open: https://console.cloud.google.com/traces/list?project=cothesis-curation-agent
-- Firestore open: https://console.cloud.google.com/firestore/databases/-default-/data?project=cothesis-curation-agent
-- Screen recorder ready (Loom, OBS, or QuickTime)
+- Compendium open: https://compendium-web-production.up.railway.app
+- Seed data already loaded (`python -m scripts.seed_demo`): ~12 resources across the 4 methodologies in the review queue + pipeline_state.
+- Screen recorder ready (Loom / OBS / QuickTime).
 
 ---
 
-## Segment 1 — Problem + architecture (30s)
+## Segment 1 — The problem (30s)
 
-**Say:** "Knowing how to do research is unevenly distributed. The CoThesis Compendium is a free, openly searchable global archive of research methodology resources. The problem: curating it by hand doesn't scale. We have over 4,000 resources queued and not one has reached publishable quality, because the editorial work is the constraint."
+**Say:** "The CoThesis Compendium is a free, openly-searchable archive of research-methodology resources for medical trainees — especially those outside well-resourced institutions. Our own library has thousands of resources queued and not one has reached publishable quality, because the editorial work — appraising, classifying, and writing a findable description for each — doesn't scale by hand. This agent does that work."
 
-**Show:** `docs/AGENTS_SPEC.md` or the agent graph diagram — briefly walk through the 8 agents in order: Discovery → Appraisal → Classification → Editorial → Reconciliation → QC Panel → Arbiter → [human].
-
-**Say:** "Each step is a specialist agent. The arbiter routes only the uncertain ones to a human curator — everything else publishes automatically."
+**Show:** the dashboard — point to the queue count and 'oldest queued' card.
 
 ---
 
-## Segment 2 — Live pipeline run (90s)
+## Segment 2 — The architecture (45s)
 
-**Navigate to:** ADK Web UI → `agents` app → New session.
+**Say:** "Eight specialist ADK agents on Gemini 3.x: discovery, appraisal, classification, editorial, reconciliation, a QC evaluator panel, and an arbiter routing gate. Each runs on a model tier matched to its job — Flash-Lite for high-volume structured work, Flash for appraisal and editorial writing, 3.1 Pro for the arbiter."
 
-**Type this prompt:**
-```
-Curate one article for SYN-01 (Narrative Systematic Review). 
-Focus on: PRISMA reporting standard.
-```
+**Say (the engineering insight):** "We run it in two modes that share the same agents and models. Interactive exploration uses an LLM orchestrator you can talk to. But for unattended batch curation we use a *code-sequenced* orchestrator — we found LLM orchestrators non-deterministically skip stages, and when every quality check and every write is mandatory, the LLM should make the judgments while code owns the sequencing. The arbiter's routing decision is pure code, not a model call — it's a deterministic threshold, not a matter of opinion."
 
-**While it runs, narrate:**
-- "Discovery is querying OpenAlex and PubMed via MCP…"
-- "Appraisal is scoring methodological quality across 6 dimensions…"
-- "Classification is grounding the type against our Vertex AI Search taxonomy…"
-- "Editorial is drafting the plain-language description — the words a novice would actually search…"
-- "QC panel is running 4 evaluators: AI pattern scanner, voice reviewer, jargon check, badge check…"
-- "Arbiter is computing the composite score and routing…"
-
-**When complete:** show the final output — routing decision (auto_accept or review_needed), quality_score, proposed_badges.
+**Show:** the `/pipeline` page — the provenance of every resource the pipeline has processed, each with its stage timeline.
 
 ---
 
-## Segment 3 — Cloud Trace waterfall (30s)
+## Segment 3 — Console walkthrough (2 min)
 
-**Navigate to:** Cloud Trace → Latest traces → click the most recent one.
+**Navigate:** Dashboard → Queue.
 
-**Show:** the span tree — each agent as a span, LLM calls nested within, tool calls visible.
+**Show the queue:** filters (type / methodology / quality / sort), the routing-signal mini-bars (relevance + classification confidence), quality scores.
 
-**Say:** "Every agent invocation, LLM call, and tool call emits an OpenTelemetry span. This is the full audit trail of how a resource moved through the pipeline — latency, token counts, grounding confidence, all visible."
+**Open one `review_needed` item.** Walk the 3-pane review:
+- **Left:** the four description slots. Highlight the **plain-language card** — "this is the jargon-free layer: the words a research-naive trainee would actually type. A search that only works if you already know 'retrospective chart review' is exactly the barrier we're removing." Click the pencil on a description to show **inline editing**.
+- **Center:** the **Pipeline Inspector** — flip through the four tabs: Quality (dimensions with reasoning), Panel (each QC evaluator's pass/fail + reasoning), Classification (the model's relevance reasoning), Provenance (stage timeline + run ID + model version).
+- **Right:** the decision pane — ratify badges, the quality-threshold indicator, then **Approve & publish**.
 
----
-
-## Segment 4 — Console: review queue → approve (60s)
-
-**Navigate to:** https://console-791873451733.us-central1.run.app (already logged in).
-
-**Show:** Dashboard — pipeline stats, eval score band, pending review count.
-
-**Click into a pending review item** from the queue.
-
-**Highlight the four description slots:**
-- Short description (always visible)
-- Long AI assessment summary (always visible)
-- Plain breakout card: "This is the jargon-free layer — what a research-naive person would search for."
-- Quality bar with the 6 dimensions (expand it)
-
-**Click Approve:** tick all checklist items → Approve.
-
-**Show:** Firestore — navigate to the `resources` collection → show the newly written record with `editorial_status: approved`, `editorial_reviewed_by`, `editorial_reviewed_at`.
-
-**Say:** "The human approves, the record is written to the live Compendium store with full provenance."
+**Approve it.** Then go to **Published** (`/resources`) and show it there with your name as reviewer and a 'pending sync' badge.
 
 ---
 
-## Segment 5 — Arbiter routing demo (30s)
+## Segment 4 — Cloud Trace (30s)
 
-**In the ADK Web UI**, run a second prompt designed to trigger review:
-```
-Curate one resource for EVAL-01. Consider a resource with limited methodology alignment.
-```
+**Navigate:** Cloud Trace → latest trace.
 
-**Show the arbiter output:** routing = `review_needed`, and the reason string explaining which signal fell below threshold.
+**Say:** "Every agent call, model call, and tool call emits an OpenTelemetry span. This is the full audit trail of one resource moving through the pipeline."
 
-**Say:** "The arbiter only routes to human review when signals are genuinely uncertain — high-confidence items publish automatically. This is how a two-person team can curate at archive scale."
+**Show:** the span waterfall.
 
 ---
 
-## Segment 6 — Eval scoreboard (30s)
+## Segment 5 — Compendium sync (30s)
 
-**Navigate to:** ADK Web UI → `agents` app → Evals tab (or show the eval results JSON).
+**Say:** "Approved resources sync to the live Compendium every 30 minutes — the bridge maps our internal record to the Compendium's import format."
 
-**Show:** `response_match_score`, `rubric_based_final_response_quality_v1` scores across the 20-case gold set.
-
-**Say:** "The gold set covers 4 methodologies × 5 resource types. Tool trajectory scoring confirms the agents fire in the right order; LLM-as-judge scoring confirms editorial quality against hand-curated references."
+**Show:** the approved resource live on the public Compendium (or the `/resources` page flipping to a 'synced' badge).
 
 ---
 
-## Segment 7 — What's next (30s)
+## Segment 6 — The mission (15s)
 
-**Say:** "The pipeline is live on Cloud Run. The next step is to point it at our existing queue of 4,000 resources — that first real batch will be behind the human review gate. The Compendium is where it goes."
+**Say:** "The free archive answers 'what exists and what is this called' — in the learner's own words. The curation agent is what makes building it at scale possible for a small team."
 
-**End on:** the console dashboard or the architecture diagram.
+**End on:** the dashboard or the plain-language card.
 
 ---
 
 ## Tips
-- Keep the total under 5 minutes — judges watch many videos.
-- Show real output, not mockups — the live pipeline is the demo.
-- If a pipeline run takes too long live, pre-run one and show the saved output in Firestore + the trace.
-- Passcode for judges: `cothesis-demo-2026`
+- Show real data, not mockups — the seeded queue is real pipeline output.
+- Don't run the live pipeline in the video (the interactive orchestrator is non-deterministic and slow). Everything you demo — queue, review, approve, trace, sync — is reliable.
+- Passcode for judges: `cothesis-demo-2026`.

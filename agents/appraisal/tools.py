@@ -113,7 +113,7 @@ def parse_appraisal_json(
     return AIAssessmentDraft(
         resource_code=resource_code,
         model_version=model_version,
-        pipeline_run_id=llm_output.get("pipeline_run_id", ""),
+        pipeline_run_id=llm_output.get("pipeline_run_id") or "",
         quality_score=float(llm_output["quality_score"]),
         ai_confidence=float(llm_output.get("ai_confidence", 50)),
         quality_dimensions=quality_dimensions,

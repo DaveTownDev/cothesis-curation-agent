@@ -202,7 +202,8 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         return _finish("review_needed", "Appraisal LLM failed after retry", 0.0,
                        {"outcome_detail": "appraisal_error"})
     appraisal_raw["resource_code"] = rc
-    appraisal_raw.setdefault("pipeline_run_id", run_id)
+    # `or run_id` (not setdefault) — the LLM sometimes returns pipeline_run_id: null
+    appraisal_raw["pipeline_run_id"] = appraisal_raw.get("pipeline_run_id") or run_id
     draft = parse_appraisal_json(_ensure_dimensions(appraisal_raw), rc, MODEL_FLASH)
     try:
         write_draft_assessment(draft)

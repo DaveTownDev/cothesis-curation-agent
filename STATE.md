@@ -3,7 +3,12 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-Post-review plan: Phase 0 (commit/tag) ✓, Phase 1 (Gemini 3.x upgrade) ✓, Phase 2 (deterministic orchestrator) ✓. Next: Phase 3 (seed demo data), Phase 4 (demo video + submission).
+Post-review plan: Phase 0 ✓, Phase 1 (Gemini 3.x) ✓, Phase 2 (deterministic orchestrator) ✓, Phase 3 (pipeline_state + seed) ✓. Phase 4 remaining is [DAVE]: record demo video (docs/DEMO_SCRIPT.md), fill familiarity scores (SUBMISSION.md L75-79), IAP for judge agent access, push + submit.
+
+## Demo seed (Phase 3)
+- `scripts/seed_demo.py` — runs deterministic run_pipeline on 12 curated real resources. Verified: 12/12 full chain, 10 auto_accept + 2 review_needed, 0 errors. All collections populated (drafts/draft_records/review_queue/pipeline_state = 12 each). Console verified live: all 5 pages render real data, review detail shows 4 inspector tabs + Provenance with model version.
+- Re-seed anytime: clear Firestore collections, then `GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.seed_demo`
+- TODO before relying on schedule: rebuild Cloud Run Job `run-batch` from current image (deterministic orchestrator).
 
 ## Deterministic orchestrator (Phase 2)
 - `agents/pipeline/deterministic.py` — `run_pipeline(resource_input, pipeline_run_id)` — code-sequenced, LLM only for judgments, pure-Python arbiter, writes all Firestore collections incl. pipeline_state per stage. Verified live: 1 real resource → auto_accept in 46s, all collections written.
