@@ -103,6 +103,22 @@ export interface DraftRecord {
   type_fields?: Record<string, unknown>
 }
 
+export interface QaAudit {
+  checked_at?: string
+  data_quality?: "ok" | "warn" | "fail"
+  dq_issues?: string[]
+  url_status?: string
+  url_code?: number | null
+  source_verdict?: "pass" | "warn" | "fail"
+  fetchable?: string
+  type_match?: string
+  methodology_plausible?: string
+  description_accurate?: string
+  source_issues?: string[]
+  hallucinations?: string[]
+  source_notes?: string
+}
+
 export interface ReviewQueueItem {
   id: string
   resource_code: string
@@ -114,6 +130,7 @@ export interface ReviewQueueItem {
   queued_at: string
   rejected_reason?: string
   requeue_reason?: string
+  qa_audit?: QaAudit
 }
 
 export interface PipelineStateDoc {

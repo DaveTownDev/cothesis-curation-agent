@@ -134,6 +134,25 @@ def main() -> int:
                     pass
                 logger.error("[%2d/%d] %-50s -> ERROR %s", i, len(selection), str(row["title"])[:50], exc)
         logger.info("Import complete: %s", dict(outcomes))
+
+        # Per-run metrics (observability without Cloud Trace)
+        try:
+            import os
+            from datetime import datetime, timezone
+            from google.cloud import firestore as _fs
+            run_id = f"import-{len(selection)}-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}"
+            db = _fs.Client(project=os.environ.get("GOOGLE_CLOUD_PROJECT", "cothesis-curation-agent"))
+            db.collection("pipeline_runs").document(run_id).set({
+                "run_id": run_id,
+                "kind": "import_selection",
+                "count": len(selection),
+                "outcomes": dict(outcomes),
+                "models": {"flash": os.environ.get("MODEL_FLASH"), "flash_lite": os.environ.get("MODEL_FLASH_LITE")},
+                "finished_at": datetime.now(timezone.utc).isoformat(),
+            })
+            logger.info("Wrote pipeline_runs/%s", run_id)
+        except Exception as exc:
+            logger.warning("pipeline_runs write failed: %s", exc)
     finally:
         conn.close()
     return 0

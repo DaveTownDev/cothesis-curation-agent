@@ -103,6 +103,7 @@ export default async function ReviewQueuePage({
                 <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Resource</th>
                 <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Type</th>
                 <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Quality</th>
+                <th className="px-4 py-3 text-left font-medium text-[#6b7280]">QA</th>
                 <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Signals</th>
                 <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Reason</th>
                 <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Queued</th>
@@ -148,6 +149,22 @@ export default async function ReviewQueuePage({
                           {score}
                         </span>
                       ) : <span className="text-[#6b7280]">—</span>}
+                    </td>
+                    <td className="px-4 py-3">
+                      {item.qa_audit?.source_verdict ? (
+                        <span
+                          className="text-[10px] font-semibold rounded px-1.5 py-0.5"
+                          style={{
+                            backgroundColor: item.qa_audit.source_verdict === "pass" ? "#28964220"
+                              : item.qa_audit.source_verdict === "warn" ? "#f59e0b20" : "#dc262620",
+                            color: item.qa_audit.source_verdict === "pass" ? "#289642"
+                              : item.qa_audit.source_verdict === "warn" ? "#b45309" : "#dc2626",
+                          }}
+                          title={item.qa_audit.source_notes ?? ""}
+                        >
+                          {item.qa_audit.source_verdict.toUpperCase()}
+                        </span>
+                      ) : <span className="text-[#9ca3af] text-xs">—</span>}
                     </td>
                     <td className="px-4 py-3 space-y-1">
                       {rel !== undefined && (

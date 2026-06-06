@@ -181,6 +181,30 @@ export default async function ReviewDetailPage({
             <span className="font-semibold">Send-back note: </span>{item.requeue_reason}
           </div>
         )}
+        {item.qa_audit && (
+          <div className="mt-2 rounded-md border px-3 py-2 text-xs"
+            style={{
+              backgroundColor: item.qa_audit.source_verdict === "fail" ? "#fef2f2"
+                : item.qa_audit.source_verdict === "warn" ? "#fffbeb" : "#f0fdf4",
+              borderColor: item.qa_audit.source_verdict === "fail" ? "#fecaca"
+                : item.qa_audit.source_verdict === "warn" ? "#fde68a" : "#bbf7d0",
+            }}>
+            <div className="font-semibold text-[#0E3A27]">
+              QA audit: source {item.qa_audit.source_verdict ?? "—"} · link {item.qa_audit.url_status ?? "—"}
+              {item.qa_audit.type_match ? ` · type-match ${item.qa_audit.type_match}` : ""}
+              {item.qa_audit.methodology_plausible ? ` · methodology ${item.qa_audit.methodology_plausible}` : ""}
+            </div>
+            {item.qa_audit.source_notes && <p className="mt-1 text-[#4a5568]">{item.qa_audit.source_notes}</p>}
+            {(item.qa_audit.source_issues?.length ?? 0) > 0 && (
+              <ul className="mt-1 list-disc list-inside text-[#6b7280]">
+                {item.qa_audit.source_issues!.slice(0, 4).map((s, i) => <li key={i}>{s}</li>)}
+              </ul>
+            )}
+            {(item.qa_audit.hallucinations?.length ?? 0) > 0 && (
+              <p className="mt-1 text-red-700"><span className="font-semibold">Possible hallucinations:</span> {item.qa_audit.hallucinations!.length}</p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Interactive 3-pane workspace (client) */}
