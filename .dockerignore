@@ -1,0 +1,13 @@
+.venv
+.git
+node_modules
+console
+**/__pycache__
+**/*.pyc
+.pytest_cache
+**/.adk/eval_history
+.claude
+*.log
+.env
+.env.*
+!.env.example

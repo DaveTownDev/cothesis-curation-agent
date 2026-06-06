@@ -1,0 +1,18 @@
+# Batch image for the Cloud Run Jobs `run-batch` and `sync-to-compendium`.
+# These run the DETERMINISTIC in-process pipeline (scripts.run_batch / scripts.sync_to_compendium),
+# not the ADK /run endpoint. Full dep parity with the agent image (google-adk pulls google-genai).
+FROM python:3.12-slim
+
+WORKDIR /app
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+
+# Deps first for layer caching. agents/requirements.txt has firestore/aiplatform/
+# secret-manager/discoveryengine/pydantic/dotenv/httpx/psycopg2-binary; add google-adk
+# (which brings google-genai, used by agents/pipeline/deterministic.py).
+COPY agents/requirements.txt /app/agents/requirements.txt
+RUN pip install --no-cache-dir "google-adk>=2.1.0,<2.2.0" -r /app/agents/requirements.txt
+
+COPY . /app
+
+# Default entrypoint is the queue batch runner; sync job overrides args to scripts.sync_to_compendium.
+ENTRYPOINT ["python", "-m", "scripts.run_batch"]
