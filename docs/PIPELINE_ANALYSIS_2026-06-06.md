@@ -133,32 +133,47 @@ The cached selection of 60 turned out to be **51 unique resources + 8 duplicate 
 
 ### Source accuracy (the core metric)
 
-| Metric | Before (60) | After (50) |
+The "After" column is the **final** clean re-run, which includes a follow-up
+classification fix (the `reporting_guideline`-vs-journal-article disambiguation —
+a journal article titled "Guidelines for …" was inheriting the upstream queue's
+wrong `reporting_guideline` type). 49 review_queue docs (42 `review_needed` · 7
+`auto_accept`; 2 `auto_exclude` write no queue doc).
+
+| Metric | Before (60) | After (49) |
 |---|---|---|
-| **Verdict** | 7 pass · 24 warn · **29 fail** | **33 pass · 9 warn · 8 fail** |
-| **Resource-type** | 19 wrong | **41 match · 3 mismatch · 6 uncertain** |
-| **Methodology** | **40 wrong** | **13 plausible · 1 implausible · 36 n/a** (correctly empty) |
-| **Description accuracy** | 25 hallucinated/inaccurate | **45 accurate · 3 overstated · 1 inaccurate · 1 uncertain** |
+| **Verdict** | 7 pass · 24 warn · **29 fail** | **38 pass · 7 warn · 4 fail** |
+| **Resource-type** | 19 wrong | **46 match · 0 mismatch · 3 uncertain** |
+| **Methodology** | **40 wrong** | **13 plausible · 0 implausible · 36 n/a** (correctly empty) |
+| **Description accuracy** | 25 hallucinated/inaccurate | **44 accurate · 4 overstated · 1 uncertain** |
 
-Pass rate **12% → 66%**; methodology errors **40 → 1**; type errors **19 → 3** (+6 uncertain where the source is bot-blocked/unconfirmable).
+Pass rate **12% → 78%**; methodology errors **40 → 0**; type errors **19 → 0**
+(3 "uncertain" only because the source is dead/bot-blocked and can't be confirmed).
+The type fix lifted the first re-run's 33/9/8 to 38/7/4 by eliminating the last
+3 type mismatches and the 1 implausible methodology.
 
-### The remaining 8 fails are mostly the pipeline doing the *right* thing
-- **4 are dead/fabricated/unreachable sources** the pipeline correctly short-circuited to `review_needed` with **no fabricated description** — the fabricated JAMA DOI (`10.1001/jama.2021.1000`, 404), the unresolvable mirikizumab chart-review DOI, ROSe (`roser.org`, ECONNREFUSED), and one AWS-docs page confirmable only indirectly. Before, these got confident invented write-ups; now they get an empty minimal record flagged for a human.
-- **~3–4 are residual type mismatches** — review articles/scales whose titles contain the word "Guidelines" still type as `reporting_guideline` (e.g. *Guidelines for diagnostic tests…*, RoBiNT scale, *Guidelines for reporting non-randomised pilot…*). A title-vs-content nuance for a future pass; not a regression.
-- **1 implausible methodology** (institutional-use-of-national-clinical-audits) — down from 40.
+### The 4 remaining fails are all the pipeline doing the *right* thing
+Every remaining fail is a dead, fabricated, or unconfirmable source that the
+pipeline correctly short-circuited to `review_needed` with **no fabricated
+description** (before, these got confident invented write-ups):
+- the fabricated JAMA DOI (`10.1001/jama.2021.1000`, 404),
+- the unresolvable mirikizumab chart-review DOI,
+- ROSe (`roser.org`, dead/parked),
+- an AWS-docs page confirmable only indirectly.
+
+There are **no residual type or methodology errors** on confirmable sources.
 
 ### Completeness & integrity
 
 | Metric | Before | After |
 |---|---|---|
 | `resource_code` collisions | present | **none** (`{}`) |
-| `type_fields` populated | 0/60 | **34/50** (16 warn where free sources returned nothing) |
-| `content_format` / `time_to_consume` | 0/60 | **44/50** |
+| `type_fields` populated | 0/60 | **34/49** (15 warn where free sources returned nothing) |
+| `content_format` / `time_to_consume` | 0/60 | **43/49** |
 | Pipeline errors | 0 | **0** |
-| Within-batch dedup | none | **1 `auto_exclude`** (true duplicate caught) |
+| Within-batch dedup | none | **2 `auto_exclude`** (true duplicates caught) |
 
 ### Verification
 - `scripts/rerun_60.py --clear` re-ran the 51 unique resources (gemini-3.5-flash + gemini-3.1-flash-lite, both credit-covered); `pipeline_runs/rerun60-*` metrics doc written.
 - `scripts/audit_records.py` re-ran clean; `resource_code_dupes: {}`.
-- 50-agent source-accuracy workflow returned 50/50 verdicts; `scripts/write_qa_audit.py` wrote `qa_audit` to all 50 review_queue docs (console QA column/panel render them).
-- 269 pytest tests green (24 new for source-check, enrichment, no-MVP routing, completeness, resource_code hashing).
+- 49-agent source-accuracy workflow returned 49/49 verdicts; `scripts/write_qa_audit.py` wrote `qa_audit` to every review_queue doc (console QA column/panel render them).
+- 271 pytest tests green (26 new for source-check, enrichment, no-MVP routing, completeness, resource_code hashing, reporting_guideline disambiguation).
