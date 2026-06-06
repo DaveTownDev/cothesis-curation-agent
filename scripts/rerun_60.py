@@ -44,7 +44,13 @@ def clear_firestore(project: str) -> None:
         logger.info("cleared %s: %d docs", name, deleted)
 
 
-def fetch_by_queue_ids(conn, queue_ids: list[str]) -> list[dict]:
+def fetch_for_cache(conn, cached: list[dict]) -> list[dict]:
+    """Pull the ORIGINAL Postgres rows for the cached selection.
+
+    The cache's `queue_id` is a Firestore auto-ID (the cache was built by reading
+    Firestore), so it can't join to Postgres. We join on the shared keys URL and
+    title instead: URL first, title as fallback (together they cover all 60).
+    """
     import psycopg2.extras
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute("""
@@ -53,16 +59,21 @@ def fetch_by_queue_ids(conn, queue_ids: list[str]) -> list[dict]:
                    ic.doi, ic.pmid, ic.isbn, ic.access_type
             FROM compendium.enrichment_queue eq
             JOIN compendium.import_candidates ic ON ic.resource_id = eq.resource_id
-            WHERE eq.id = ANY(%s)
-        """, (queue_ids,))
-        rows = {r["queue_id"]: r for r in cur.fetchall()}
-    # preserve original order, warn on any missing
-    ordered = []
-    for qid in queue_ids:
-        if qid in rows:
-            ordered.append(rows[qid])
-        else:
-            logger.warning("queue_id not found in Railway: %s", qid)
+        """)
+        rows = cur.fetchall()
+    by_url = {r["url"]: r for r in rows if r.get("url")}
+    by_title = {r["title"]: r for r in rows if r.get("title")}
+    ordered, seen = [], set()
+    for rec in cached:
+        match = by_url.get(rec.get("url")) or by_title.get(rec.get("title"))
+        if not match:
+            logger.warning("no Postgres row for: %s", str(rec.get("title"))[:60])
+            continue
+        key = match["resource_id"]
+        if key in seen:  # same Postgres resource matched twice (cache dup) — skip
+            continue
+        seen.add(key)
+        ordered.append(match)
     return ordered
 
 
@@ -80,19 +91,18 @@ def main() -> int:
 
     with open(args.cache) as fh:
         cached = json.load(fh)
-    queue_ids = [r["queue_id"] for r in cached]
-    logger.info("Re-running %d resources from %s", len(queue_ids), args.cache)
-
-    if args.clear:
-        clear_firestore(project)
+    logger.info("Re-running %d resources from %s", len(cached), args.cache)
 
     import psycopg2
     conn = psycopg2.connect(db_url)
     try:
-        rows = fetch_by_queue_ids(conn, queue_ids)
+        rows = fetch_for_cache(conn, cached)
     finally:
         conn.close()
-    logger.info("Pulled %d original rows from Railway", len(rows))
+    logger.info("Pulled %d original rows from Railway (of %d cached)", len(rows), len(cached))
+
+    if args.clear:
+        clear_firestore(project)
 
     from scripts.batch import build_resource_input
     from agents.pipeline.deterministic import run_pipeline
