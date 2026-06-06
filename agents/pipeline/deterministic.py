@@ -102,11 +102,14 @@ def _as_dict(x: object) -> Optional[dict]:
     return None
 
 
-# Stable 2.5 fallbacks for when a preview model is transiently unavailable (504s).
+# Fallback when a model transiently 504s. MUST stay on Gemini 3.x — only 3.x
+# is covered by the promotional credit; 2.5 incurs real charges. Cross-fall
+# between covered 3.x models so a load spike on one doesn't drop the resource.
 _FALLBACK_MODEL = {
-    "gemini-3-flash-preview": "gemini-2.5-flash",
-    "gemini-3.1-flash-lite": "gemini-2.5-flash-lite",
-    "gemini-3.1-pro-preview": "gemini-2.5-pro",
+    "gemini-3-flash-preview": "gemini-3.1-flash-lite",
+    "gemini-3.1-flash-lite": "gemini-3-flash-preview",
+    "gemini-3.1-pro-preview": "gemini-3-flash-preview",
+    "gemini-3.5-flash": "gemini-3-flash-preview",
 }
 
 
