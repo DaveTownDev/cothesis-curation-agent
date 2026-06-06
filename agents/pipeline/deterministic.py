@@ -66,10 +66,14 @@ def _llm_judgment(system_prompt: str, payload: dict, model: str, temperature: fl
     from google import genai
     from google.genai import types
 
+    # Hard per-call timeout (ms) so a stuck Vertex connection can't hang the
+    # whole batch — a timeout becomes a caught error -> retry -> review_needed.
+    timeout_ms = int(os.environ.get("LLM_TIMEOUT_MS", "90000"))
     client = genai.Client(
         vertexai=True,
         project=os.environ.get("GOOGLE_CLOUD_PROJECT", "cothesis-curation-agent"),
         location=os.environ.get("GOOGLE_CLOUD_LOCATION", "global"),
+        http_options=types.HttpOptions(timeout=timeout_ms),
     )
     contents = (
         f"{system_prompt}\n\n"
@@ -86,11 +90,24 @@ def _llm_judgment(system_prompt: str, payload: dict, model: str, temperature: fl
     return json.loads(resp.text)
 
 
+def _as_dict(x: object) -> Optional[dict]:
+    """Coerce an LLM judgment to a dict — the model sometimes wraps it in a
+    JSON array. Returns the first dict element of a list, or None."""
+    if isinstance(x, dict):
+        return x
+    if isinstance(x, list):
+        for item in x:
+            if isinstance(item, dict):
+                return item
+    return None
+
+
 def _judge_with_retry(system_prompt: str, payload: dict, model: str) -> Optional[dict]:
-    """LLM judgment with one retry at temp 0. Returns None if both attempts fail."""
+    """LLM judgment with one retry at temp 0. Returns a dict, or None if both
+    attempts fail / the output isn't usable as an object."""
     for attempt in (1, 2):
         try:
-            return _llm_judgment(system_prompt, payload, model, temperature=0.0)
+            return _as_dict(_llm_judgment(system_prompt, payload, model, temperature=0.0))
         except Exception as exc:
             logger.warning("LLM judgment failed (attempt %d, model=%s): %s", attempt, model, exc)
     return None
@@ -199,6 +216,21 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         MODEL_FLASH,
     )
     if appraisal_raw is None:
+        # Appraisal failed — still surface the item to a human reviewer with a
+        # minimal record so it is never invisible (don't just write pipeline_state).
+        minimal = {
+            "resource_code": rc, "title": title, "url": url,
+            "resource_type_code": resource_input.get("resource_type", "article"),
+            "editorial_description": "", "editorial_description_plain": "", "summary": "",
+            "methodology_codes": [], "quality_score": 0, "ai_confidence": 0,
+            "relevance_score": 0, "classification_confidence": 0, "proposed_badges": [],
+        }
+        try:
+            write_review_queue_item(resource_code=rc, routing="review_needed",
+                                    reason="Appraisal LLM failed after retry — needs manual triage",
+                                    panel_result={}, draft_record=minimal)
+        except Exception as exc:
+            logger.warning("minimal review_queue write failed for %s: %s", rc, exc)
         return _finish("review_needed", "Appraisal LLM failed after retry", 0.0,
                        {"outcome_detail": "appraisal_error"})
     appraisal_raw["resource_code"] = rc
