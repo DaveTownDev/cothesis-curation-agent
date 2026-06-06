@@ -21,6 +21,12 @@ import os
 import sys
 from collections import Counter
 
+# gRPC (used by the Firestore/Vertex clients) aborts the CHILD when the process
+# forks after gRPC threads start (google-auth cred refresh / DNS). Enable fork
+# support so forked children don't SIGABRT. Must be set before any google import.
+os.environ.setdefault("GRPC_ENABLE_FORK_SUPPORT", "1")
+os.environ.setdefault("GRPC_POLL_STRATEGY", "poll")
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger("rerun-60")
 

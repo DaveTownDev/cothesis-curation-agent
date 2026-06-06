@@ -1,5 +1,12 @@
 """Firestore client helpers for the curation pipeline."""
 import os
+
+# gRPC aborts a forked CHILD process if forking happens after its threads start
+# (google-auth credential refresh, c-ares DNS). Enable fork support so local
+# batch/eval runs don't emit SIGABRT crash reports. Set before importing gRPC.
+os.environ.setdefault("GRPC_ENABLE_FORK_SUPPORT", "1")
+os.environ.setdefault("GRPC_POLL_STRATEGY", "poll")
+
 from functools import lru_cache
 from google.cloud import firestore
 
