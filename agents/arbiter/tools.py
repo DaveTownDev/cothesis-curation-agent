@@ -39,6 +39,7 @@ def compute_routing_decision(
     ai_confidence: float,
     panel_agreement: float,
     skip_reason: Optional[str],
+    has_mvp_methodology: bool = True,
 ) -> dict:
     """
     Compute the arbiter's routing decision.
@@ -48,6 +49,10 @@ def compute_routing_decision(
       auto_accept   — high confidence, high relevance, high quality, panel agrees
       review_needed — borderline on any signal; human must decide
       auto_exclude  — skip_reason set, very low relevance, or very low quality
+
+    has_mvp_methodology=False (no methodology matched the 4 MVP methods) never
+    auto-accepts — a human decides whether it belongs, since the classifier
+    should not force-fit a code.
     """
     composite = _compute_composite_score(
         relevance_score, classification_confidence, quality_score,
@@ -60,6 +65,14 @@ def compute_routing_decision(
             "routing": "auto_exclude",
             "composite_score": composite,
             "reason": f"skip_reason set: {skip_reason}",
+        }
+
+    # 1b. No MVP methodology matched → human decides (never silent auto-accept)
+    if not has_mvp_methodology and quality_score >= QUALITY_EXCLUDE:
+        return {
+            "routing": "review_needed",
+            "composite_score": composite,
+            "reason": "outside the 4 MVP methodologies — human to confirm scope/fit",
         }
 
     # 2. Quality floor — very low quality excludes regardless of routing signals

@@ -56,11 +56,17 @@ def mocked(monkeypatch):
     # No metadata fetch (avoid HTTP)
     monkeypatch.setattr("agents.appraisal.tools.fetch_openalex_metadata", lambda **k: {})
     monkeypatch.setattr("agents.appraisal.tools.fetch_pubmed_metadata", lambda **k: {})
+    # Source verification → live (no HTTP); enrichment → empty (no HTTP)
+    monkeypatch.setattr("agents.shared.source_check.verify_source",
+                        lambda url, doi=None, **k: {"status": "live", "code": 200, "final_url": url, "resolved": True})
+    monkeypatch.setattr("agents.enrichment.enrich",
+                        lambda rtype, ids: {"type_fields": {}, "enrichment_sources": [], "needs_api_key": []})
     # No draft write
     monkeypatch.setattr("agents.appraisal.tools.write_draft_assessment",
                         lambda d: rec["drafts"].append(d) or "draft-id")
     # No existing titles (no dup) unless a test overrides
     monkeypatch.setattr("agents.reconciliation.tools.fetch_existing_titles", lambda: [])
+    monkeypatch.setattr("agents.reconciliation.tools.fetch_existing_keys", lambda exclude_code=None: [])
     # Capture review_queue writes
     monkeypatch.setattr("agents.shared.hitl.write_review_queue_item",
                         lambda **kw: rec["queue"].append(kw) or "queue-id")
@@ -83,7 +89,7 @@ class TestHappyPath:
         with _patch_judgments([APPRAISAL_OK, CLASSIFICATION_AUTO, EDITORIAL_OK]):
             out = run_pipeline(RESOURCE, pipeline_run_id="run-1")
         assert out["routing"] == "auto_accept"
-        assert out["resource_code"] == "a-guide-to-the-retrospective-chart-review"
+        assert out["resource_code"].startswith("a-guide-to-the-retrospective-chart-review")
         # Draft written, queue item written (auto_accept still queues for ratification)
         assert len(mocked["drafts"]) == 1
         assert len(mocked["queue"]) == 1
@@ -132,8 +138,8 @@ class TestDedup:
     def test_duplicate_stops_and_excludes(self, mocked, monkeypatch):
         from agents.pipeline.deterministic import run_pipeline
         monkeypatch.setattr(
-            "agents.reconciliation.tools.fetch_existing_titles",
-            lambda: [{"title": RESOURCE["title"], "resource_code": "existing-001"}],
+            "agents.reconciliation.tools.fetch_existing_keys",
+            lambda exclude_code=None: [{"title": RESOURCE["title"], "resource_code": "existing-001"}],
         )
         with _patch_judgments([APPRAISAL_OK, CLASSIFICATION_AUTO, EDITORIAL_OK]):
             out = run_pipeline(RESOURCE, pipeline_run_id="r")
@@ -173,5 +179,11 @@ class TestLLMFailure:
 
 def test_derive_resource_code():
     from agents.pipeline.deterministic import derive_resource_code
-    assert derive_resource_code("PRISMA 2020 Statement!") == "prisma-2020-statement"
-    assert derive_resource_code("") == "untitled"
+    # kebab slug + short stable hash suffix
+    code = derive_resource_code("PRISMA 2020 Statement!", doi="10.1136/bmj.n71")
+    assert code.startswith("prisma-2020-statement-")
+    # same input -> same code (stable/idempotent)
+    assert code == derive_resource_code("PRISMA 2020 Statement!", doi="10.1136/bmj.n71")
+    # different DOI -> different code (no collision)
+    assert code != derive_resource_code("PRISMA 2020 Statement!", doi="10.9999/other")
+    assert derive_resource_code("").startswith("untitled")

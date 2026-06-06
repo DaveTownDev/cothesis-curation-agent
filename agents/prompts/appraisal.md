@@ -34,3 +34,9 @@ Return ONLY a single JSON object (no prose, no fences):
 }
 ```
 Temperature 0. Editorial descriptions (editorial_description, summary, editorial_description_plain) are produced by the Editorial agent — do not emit them here.
+
+## Grounding rule (anti-hallucination — audit 2026-06-06)
+Base every score and every line of `reasoning` ONLY on the supplied title and
+metadata. Do NOT invent specifics you cannot see (sample sizes, findings,
+journal, year, venue). If metadata is sparse or absent, lower `ai_confidence`
+accordingly and keep reasoning general — never fabricate detail to fill a field.

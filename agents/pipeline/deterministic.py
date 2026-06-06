@@ -42,10 +42,17 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def derive_resource_code(title: str) -> str:
-    """Kebab-case resource code from a title (stable join key across stages)."""
-    slug = re.sub(r"[^a-z0-9]+", "-", (title or "untitled").lower()).strip("-")
-    return slug[:60] or "untitled"
+def derive_resource_code(title: str, doi: str | None = None, url: str | None = None) -> str:
+    """
+    Kebab-case resource code + a short stable hash of the DOI/URL/title so that
+    distinct resources with similar titles don't collide (audit 2026-06-06 found
+    8 collisions that overwrote pipeline_state/draft_records). Same input → same code.
+    """
+    import hashlib
+    slug = re.sub(r"[^a-z0-9]+", "-", (title or "untitled").lower()).strip("-")[:52] or "untitled"
+    seed = (doi or url or title or "").strip().lower()
+    h = hashlib.sha1(seed.encode("utf-8")).hexdigest()[:6] if seed else "000000"
+    return f"{slug}-{h}"
 
 
 def _load_prompt(name: str) -> str:
@@ -205,10 +212,14 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
     from agents.shared.hitl import write_review_queue_item
     from agents.shared.firestore_utils import get_firestore_collection
     from agents.shared.schema import ClassificationResult, EditorialOutput, AIAssessmentDraft
+    from agents.shared.codes import METHODOLOGY_GUIDE, CONTENT_FORMAT_MAP, content_format_for, time_to_consume_for
+    from agents.shared.source_check import verify_source
+    from agents.enrichment import enrich
 
     title = resource_input.get("title", "")
     url = resource_input.get("url", "")
-    rc = resource_input.get("resource_code") or derive_resource_code(title)
+    doi = resource_input.get("doi")
+    rc = resource_input.get("resource_code") or derive_resource_code(title, doi=doi, url=url)
     run_id = pipeline_run_id or rc
 
     state = {
@@ -227,14 +238,36 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         return {"resource_code": rc, "routing": routing, "reason": reason,
                 "composite_score": composite, **detail}
 
-    # ── Stage 1: Appraisal ────────────────────────────────────────────────
-    metadata: dict[str, Any] = {}
-    if resource_input.get("doi"):
-        metadata = fetch_openalex_metadata(doi=resource_input["doi"]) or {}
-    if not metadata and resource_input.get("pmid"):
-        metadata = fetch_pubmed_metadata(pmid=resource_input["pmid"]) or {}
-    if not metadata and title:
-        metadata = fetch_openalex_metadata(title=title) or {}
+    orig_type = resource_input.get("resource_type") or "article"
+
+    # ── Stage 0: Source verification — don't enrich dead/fabricated sources ─
+    src = verify_source(url, doi)
+    if src["status"] == "dead":
+        minimal = {
+            "resource_code": rc, "title": title, "url": url,
+            "resource_type_code": orig_type,
+            "editorial_description": "", "editorial_description_plain": "", "summary": "",
+            "methodology_codes": [], "quality_score": 0, "ai_confidence": 0,
+            "relevance_score": 0, "classification_confidence": 0, "proposed_badges": [],
+        }
+        try:
+            write_review_queue_item(
+                resource_code=rc, routing="review_needed",
+                reason=f"Unverified source — link/DOI does not resolve (HTTP {src.get('code')})",
+                panel_result={}, draft_record=minimal,
+            )
+        except Exception as exc:
+            logger.warning("minimal review_queue write failed for %s: %s", rc, exc)
+        return _finish("review_needed", "Unverified source (link/DOI does not resolve)", 0.0,
+                       {"outcome_detail": "dead_source"})
+    state["source_status"] = src["status"]
+
+    # ── Stage 1: Enrichment (free sources) + Appraisal ────────────────────
+    enrichment = enrich(orig_type, {
+        "doi": doi, "pmid": resource_input.get("pmid"),
+        "isbn": resource_input.get("isbn"), "url": url, "title": title,
+    })
+    metadata: dict[str, Any] = enrichment.get("type_fields", {})
 
     appraisal_raw = _judge_with_retry(
         _load_prompt("appraisal"),
@@ -269,16 +302,25 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         logger.warning("write_draft_assessment failed for %s: %s", rc, exc)
     _write_state(state, stage="appraisal", run_id=run_id)
 
-    # ── Stage 2: Classification ───────────────────────────────────────────
+    # ── Stage 2: Classification (grounded; respects the source's real type) ─
+    cls_prompt = (
+        _load_prompt("classification")
+        + "\n\n## Methodology grounding (assign the best match or [] — do NOT force-fit)\n"
+        + METHODOLOGY_GUIDE
+        + "\n\n## Resource type\nThe source was ingested as type '" + orig_type + "'. "
+        "Treat this as a STRONG prior for resource_type_code — only override with clear "
+        "evidence from the source, and never default to 'article' for databases, registries, "
+        "books, datasets, videos, or funding calls."
+    )
     cls_raw = _judge_with_retry(
-        _load_prompt("classification"),
-        {"resource": resource_input, "metadata": metadata},
+        cls_prompt,
+        {"resource": resource_input, "metadata": metadata, "type_hint": orig_type},
         MODEL_FLASH_LITE,
     )
     classification = parse_classification_json(cls_raw) if cls_raw else None
     if classification is None:
         classification = ClassificationResult(
-            resource_type_code=resource_input.get("resource_type", "article"),
+            resource_type_code=orig_type,
             relevance_score=0.5, classification_confidence=0.5, access_type="free",
         )
     _write_state(state, stage="classification", run_id=run_id,
@@ -310,9 +352,10 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         )
     _write_state(state, stage="editorial", run_id=run_id)
 
-    # ── Stage 4: Reconciliation (pure code) ───────────────────────────────
+    # ── Stage 4: Reconciliation (pure code) — within-batch + published dedup ─
+    from agents.reconciliation.tools import fetch_existing_keys
     try:
-        dup = is_duplicate(title, fetch_existing_titles())
+        dup = is_duplicate(title, fetch_existing_keys(exclude_code=rc))
     except Exception:
         dup = None
     if dup:
@@ -323,6 +366,14 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         resource_code=rc, title=title, url=url,
         classification=classification, editorial=editorial, appraisal=draft,
     )
+    # Completeness + enrichment fields (Wave C/D)
+    final_type = record.get("resource_type_code") or orig_type
+    record["content_format"] = content_format_for(final_type)
+    record["type_fields"] = enrichment.get("type_fields", {})
+    record["time_to_consume"] = time_to_consume_for(final_type, record["type_fields"])
+    record["enrichment_sources"] = enrichment.get("enrichment_sources", [])
+    if enrichment.get("needs_api_key"):
+        record["enrichment_pending_keys"] = enrichment["needs_api_key"]
     try:
         get_firestore_collection("draft_records").document(rc).set(record)
     except Exception as exc:
@@ -350,6 +401,7 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         ai_confidence=draft.ai_confidence,
         panel_agreement=panel_agreement,
         skip_reason=classification.skip_reason,
+        has_mvp_methodology=bool(classification.methodology_codes),
     )
     routing = decision["routing"]
     reason = decision["reason"]

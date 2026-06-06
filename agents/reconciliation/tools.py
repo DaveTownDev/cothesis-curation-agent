@@ -117,3 +117,23 @@ def fetch_existing_titles() -> list[dict]:
     except Exception as exc:
         logger.warning("Could not fetch existing titles for dedup: %s", exc)
         return []
+
+
+def fetch_existing_keys(exclude_code: str | None = None) -> list[dict]:
+    """
+    Titles already seen — published `resources` AND in-flight `draft_records`
+    (within-batch dedup; the source queue contains duplicates that the
+    published-only check missed — audit 2026-06-06).
+    Returns list of {"title", "resource_code"}; excludes `exclude_code` (self).
+    """
+    from agents.shared.firestore_utils import get_firestore_collection
+    out: list[dict] = []
+    for coll in ("resources", "draft_records"):
+        try:
+            for d in get_firestore_collection(coll).select(["title"]).limit(1000).stream():
+                if d.id == exclude_code:
+                    continue
+                out.append({"title": (d.to_dict() or {}).get("title", ""), "resource_code": d.id})
+        except Exception as exc:
+            logger.warning("fetch_existing_keys(%s) failed: %s", coll, exc)
+    return out

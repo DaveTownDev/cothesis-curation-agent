@@ -28,3 +28,9 @@ Long (`summary`) = scope, fit, workflow placement, one genuinely useful detail.
 Plain = the same resource in everyday language.
 
 Do NOT emit `editorial_note` — that field is human-authored only and never AI-written.
+
+## Grounding rule (anti-hallucination — audit 2026-06-06)
+Ground every statement in the supplied title + metadata. Never invent specifics
+(sample sizes, results, journal, dates, authors). If a detail isn't in the
+inputs, describe the resource's purpose and scope in general terms instead. An
+honest general description beats a confident wrong one.
