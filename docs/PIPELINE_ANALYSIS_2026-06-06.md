@@ -198,4 +198,15 @@ What this run produced beyond the score:
 
 Honest reads:
 - The rubric mean of exactly 1.00 means the LLM judge (`gemini-3-flash-preview`) found no rubric violations in any case — strong, but read it as "no violations" rather than a hard-discriminating score.
-- The eval surfaced two **interactive-path** (`adk web`) fragilities left as documented findings (the deterministic production pipeline is unaffected and is validated by §8): the interactive classifier occasionally emits an out-of-enum `resource_type_code` (`'guideline'`, `'methodological_article'`), and the interactive editorial agent occasionally omits `editorial_description`. Both are caught as warnings and recovered; neither affects the deterministic batch path.
+- The two "fails" are both `response_match_score` at 0.144–0.148 vs the 0.15 lexical threshold, each with a perfect rubric 1.0 — phrasing differences from the gold reference, not quality regressions.
+
+### Interactive (`adk web`) path hardening — the eval found & fixed four bugs
+
+Because `adk eval` runs the **interactive** `LlmAgent` orchestrator (not the deterministic batch path), it surfaced four robustness bugs in that path. All are now fixed at a single chokepoint each, **before** Pydantic validation, so one bad LLM field no longer discards the whole classification/editorial:
+
+1. **`resource_type_code` out-of-enum** (`'guideline'`, `'methodological_article'`) → `normalize_resource_type` alias map. (was 12 → **0**)
+2. **`editorial_description` missing** (model returned only `summary`) → backfill the three editorial text fields from each other. (was 18 → **0**)
+3. **`stage_codes` free-text** (`'planning'`, `'research_design'`, `'writing'`) → `normalize_stage_code` to THESIS codes, drop unmappable. (uncovered by #1; → **0**)
+4. **`Tool 'write_review_queue' not found`** — the orchestrator instruction told the LLM to call a tool that lives only inside `arbiter_agent`; reworded to delegate. (was crashing one case; → **0**, eval now runs to completion)
+
+The deterministic production pipeline already tolerated all four (via grounding + defensive parsing) and was unaffected; this brings the `adk web` demo path to the same robustness. 279 pytest tests green.
