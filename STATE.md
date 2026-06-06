@@ -3,6 +3,9 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
+**Audit-driven fix plan (Waves A–F) ✓ — committed + pushed (2026-06-06).** Implemented all P0/P1/P2 findings from `docs/PIPELINE_ANALYSIS_2026-06-06.md`: grounded methodology classification + no force-fit + type-prior (A), unique resource_code + within-batch dedup (B), real per-type enrichment from ~10 free sources `agents/enrichment/` (C), content_format/time_to_consume (D), pipeline_runs metrics + console qa_audit UI (E). Re-ran the 51 unique resources (`scripts/rerun_60.py --clear`) + re-audited (`scripts/audit_records.py` + 50-agent source-accuracy workflow + `scripts/write_qa_audit.py`). **Source-accuracy pass rate 12%→66%; methodology errors 40→1; type errors 19→3.** See §8 of the analysis doc. 269 tests green.
+- Known residuals: ~3 type-mismatches (review articles/scales with "Guidelines" in title → reporting_guideline); console with qa_audit UI built clean but **not yet redeployed**; ADK eval not re-run against the grounded pipeline.
+
 Post-review plan: Phases 0-3 ✓. Pushed to PRIVATE GitHub repo: https://github.com/DaveTownDev/cothesis-curation-agent (branch main). History scrubbed of infra topology (gateway.md removed, vps-gateway redacted) + ops/internal files (day6/7 scripts, HANDOFF) via git-filter-repo; gitleaks clean. Pre-scrub backup bundle: /tmp/cothesis-pre-scrub-backup.bundle (move somewhere durable). Deploy scripts + HANDOFF kept LOCAL (gitignored) in repo dir + /tmp/cothesis-ops-backup/.
 Phase 4 remaining is [DAVE]: record demo video (docs/DEMO_SCRIPT.md), fill familiarity scores (SUBMISSION.md L75-79), add judges as repo collaborators (private repo), optional IAP for agent, submit.
 
