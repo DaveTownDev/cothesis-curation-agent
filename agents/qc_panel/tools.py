@@ -19,6 +19,19 @@ from typing import Any
 
 from agents.shared.codes import PLAIN_JARGON_TERMS, CANONICAL_BADGES
 
+
+def _as_float(value: Any, default: float = 0.0) -> float:
+    """Coerce a panelist score to float, tolerating Gemini's format variations
+    (None, ints, "85", "85%", stringified). Returns default on anything unparseable."""
+    if value is None:
+        return default
+    if isinstance(value, (int, float)):
+        return float(value)
+    try:
+        return float(str(value).strip().rstrip("%"))
+    except (ValueError, TypeError):
+        return default
+
 logger = logging.getLogger(__name__)
 
 _PASS_THRESHOLD = 60.0  # score >= 60 = pass for a panel dimension
@@ -147,9 +160,11 @@ def aggregate_panel_results(results: list[dict]) -> dict:
 
     pass_count = sum(1 for r in results if r.get("pass", False))
     agreement = round(pass_count / len(results), 3)
-    avg_score = round(sum(r["score"] for r in results) / len(results), 1)
+    # Gemini occasionally omits 'score'/'dimension' on a panelist row — default
+    # rather than KeyError (which crashes the panel and the ADK eval).
+    avg_score = round(sum(_as_float(r.get("score")) for r in results) / len(results), 1)
 
-    failures = [r["dimension"] for r in results if not r.get("pass", False)]
+    failures = [r.get("dimension", "unknown") for r in results if not r.get("pass", False)]
     summary = (
         f"Panel: {pass_count}/{len(results)} pass, avg_score={avg_score}, "
         f"agreement={agreement}"
