@@ -102,14 +102,37 @@ def _as_dict(x: object) -> Optional[dict]:
     return None
 
 
+# Stable 2.5 fallbacks for when a preview model is transiently unavailable (504s).
+_FALLBACK_MODEL = {
+    "gemini-3-flash-preview": "gemini-2.5-flash",
+    "gemini-3.1-flash-lite": "gemini-2.5-flash-lite",
+    "gemini-3.1-pro-preview": "gemini-2.5-pro",
+}
+
+
 def _judge_with_retry(system_prompt: str, payload: dict, model: str) -> Optional[dict]:
-    """LLM judgment with one retry at temp 0. Returns a dict, or None if both
-    attempts fail / the output isn't usable as an object."""
-    for attempt in (1, 2):
+    """
+    LLM judgment with exponential backoff and a model fallback.
+
+    Vertex's preview models intermittently return 504 DEADLINE_EXCEEDED under
+    load; two immediate retries can both land in the same spike. So: attempt 1
+    immediate, attempt 2 after ~3s, attempt 3 after ~12s on a stable fallback
+    model. Returns a dict, or None if all attempts fail.
+    """
+    import time
+
+    fallback = _FALLBACK_MODEL.get(model, model)
+    attempts = [(0.0, model), (3.0, model), (12.0, fallback)]
+    for i, (delay, m) in enumerate(attempts, 1):
+        if delay:
+            time.sleep(delay)
         try:
-            return _as_dict(_llm_judgment(system_prompt, payload, model, temperature=0.0))
+            result = _as_dict(_llm_judgment(system_prompt, payload, m, temperature=0.0))
+            if result is not None:
+                return result
+            logger.warning("LLM judgment unusable (attempt %d, model=%s)", i, m)
         except Exception as exc:
-            logger.warning("LLM judgment failed (attempt %d, model=%s): %s", attempt, model, exc)
+            logger.warning("LLM judgment failed (attempt %d, model=%s): %s", i, m, str(exc)[:120])
     return None
 
 
