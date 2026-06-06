@@ -31,3 +31,8 @@ out/
 
 # Infrastructure reference (never commit — contains private topology)
 docs/reference/gateway.md
+
+# Operational deploy scripts + internal handoff (kept local, never committed)
+day6-*
+day7-*
+docs/HANDOFF_*.md
