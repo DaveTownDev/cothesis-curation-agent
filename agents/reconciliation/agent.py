@@ -78,7 +78,11 @@ def assemble_record(assembly_json: str) -> dict:
     def _fill_classification(raw: dict) -> dict:
         """Fill required ClassificationResult fields; coerce string scores to floats."""
         raw = raw.copy()
-        raw.setdefault("resource_type_code", "article")
+        # Normalize resource_type_code aliases (e.g. 'guideline' -> 'reporting_guideline',
+        # 'methodological_article' -> 'article') so one bad enum value doesn't sink the
+        # whole classification into all-defaults.
+        from agents.shared.codes import normalize_resource_type
+        raw["resource_type_code"] = normalize_resource_type(raw.get("resource_type_code")) or "article"
         raw.setdefault("access_type", "free")
         # Coerce string scores to floats (LLM sometimes says "high" not 0.8)
         for score_field in ("relevance_score", "classification_confidence"):
@@ -127,6 +131,17 @@ def assemble_record(assembly_json: str) -> dict:
             else:
                 logger.warning("Unrecognised badge %r — dropping", b)
         raw_editorial["proposed_badges"] = normalized[:3]
+
+    # Backfill the required editorial text fields when the LLM emits only some of
+    # them (commonly returns a summary but omits editorial_description), so one
+    # missing field doesn't drop the whole record to empty stubs.
+    _long = raw_editorial.get("summary") or raw_editorial.get("editorial_description_long") or ""
+    if not raw_editorial.get("editorial_description"):
+        raw_editorial["editorial_description"] = _long
+    if not raw_editorial.get("summary"):
+        raw_editorial["summary"] = raw_editorial.get("editorial_description") or _long
+    if not raw_editorial.get("editorial_description_plain"):
+        raw_editorial["editorial_description_plain"] = raw_editorial.get("editorial_description") or ""
 
     try:
         editorial = EditorialOutput(**raw_editorial)

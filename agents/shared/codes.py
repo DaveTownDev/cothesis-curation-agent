@@ -8,6 +8,40 @@ RESOURCE_TYPES = frozenset({
 
 LEGACY_METHODOLOGY_PREFIXES = frozenset({"RS-", "OD-", "EI-", "QI-"})
 
+# Common LLM aliases → canonical resource_type_code. The interactive (adk web)
+# classifier occasionally emits these free-text variants; map them rather than
+# discarding the whole classification on a Pydantic enum failure.
+RESOURCE_TYPE_ALIASES = {
+    "guideline": "reporting_guideline", "guidelines": "reporting_guideline",
+    "reporting guideline": "reporting_guideline", "checklist": "reporting_guideline",
+    "standard": "reporting_guideline", "reporting_standard": "reporting_guideline",
+    "methodological_article": "article", "methods_article": "article",
+    "research_article": "article", "journal_article": "article", "review": "article",
+    "review_article": "article", "paper": "article", "preprint": "article",
+    "editorial": "article", "commentary": "article", "scale": "article",
+    "textbook": "book", "monograph": "book", "ebook": "book",
+    "chapter": "book_chapter",
+    "tool": "software", "package": "software", "library": "software",
+    "code": "software", "repository": "software", "repo": "software", "app": "software",
+    "database": "dataset", "registry": "dataset", "data_portal": "dataset",
+    "data_set": "dataset", "data": "dataset", "repository_data": "dataset",
+    "website": "web_guide", "web_resource": "web_guide", "web_page": "web_guide",
+    "webpage": "web_guide", "blog": "web_guide", "guide": "web_guide",
+    "grant": "funding", "funding_call": "funding", "fellowship": "funding", "award": "funding",
+    "webinar": "video", "lecture": "video", "talk": "video",
+    "forum": "community", "network": "community",
+}
+
+
+def normalize_resource_type(value) -> str | None:
+    """Map an LLM resource_type to the canonical enum. Returns None if unmappable."""
+    if not value:
+        return None
+    v = str(value).strip().lower().replace("-", "_").replace(" ", "_")
+    if v in RESOURCE_TYPES:
+        return v
+    return RESOURCE_TYPE_ALIASES.get(v) or RESOURCE_TYPE_ALIASES.get(v.replace("_", " "))
+
 STAGE_CODES = frozenset({"TH", "HI", "EV", "ST", "IN", "SH"})
 
 ACCESS_TYPES = frozenset({"free", "freemium", "paid", "subscription", "institutional", "open_access"})
