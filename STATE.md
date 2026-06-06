@@ -3,7 +3,8 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-Post-review plan: Phase 0 ✓, Phase 1 (Gemini 3.x) ✓, Phase 2 (deterministic orchestrator) ✓, Phase 3 (pipeline_state + seed) ✓. Phase 4 remaining is [DAVE]: record demo video (docs/DEMO_SCRIPT.md), fill familiarity scores (SUBMISSION.md L75-79), IAP for judge agent access, push + submit.
+Post-review plan: Phases 0-3 ✓. Pushed to PRIVATE GitHub repo: https://github.com/DaveTownDev/cothesis-curation-agent (branch main). History scrubbed of infra topology (gateway.md removed, vps-gateway redacted) + ops/internal files (day6/7 scripts, HANDOFF) via git-filter-repo; gitleaks clean. Pre-scrub backup bundle: /tmp/cothesis-pre-scrub-backup.bundle (move somewhere durable). Deploy scripts + HANDOFF kept LOCAL (gitignored) in repo dir + /tmp/cothesis-ops-backup/.
+Phase 4 remaining is [DAVE]: record demo video (docs/DEMO_SCRIPT.md), fill familiarity scores (SUBMISSION.md L75-79), add judges as repo collaborators (private repo), optional IAP for agent, submit.
 
 ## Demo seed (Phase 3)
 - `scripts/seed_demo.py` — runs deterministic run_pipeline on 12 curated real resources. Verified: 12/12 full chain, 10 auto_accept + 2 review_needed, 0 errors. All collections populated (drafts/draft_records/review_queue/pipeline_state = 12 each). Console verified live: all 5 pages render real data, review detail shows 4 inspector tabs + Provenance with model version.
