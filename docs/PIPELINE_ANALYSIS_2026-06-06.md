@@ -121,3 +121,44 @@ Each `review_queue` doc now has a `qa_audit` map: `{data_quality, dq_issues[], u
 - Source workflow returned 60/60 verdicts (reconciled to 60).
 - URL liveness cross-checked: 18 httpx-"dead" confirmed reachable via WebFetch → true-dead ≈ 13.
 - Spot-checks confirm the pattern: chart-review→EVAL-01 (OBS-01 correct), scoping→SYN-01 (SYN-02 correct), data-portal→article.
+
+---
+
+## 8. After the fixes — re-run + re-audit (2026-06-06)
+
+All P0/P1/P2 fixes were implemented (Waves A–E) and the **same selection was re-run through the fixed pipeline** and re-audited with the identical tooling (`scripts/audit_records.py` + the 50-agent source-accuracy workflow).
+
+### What "the 60" actually was
+The cached selection of 60 turned out to be **51 unique resources + 8 duplicate copies + 1 record not present in the queue** (a manual addition). The 8 duplicates are precisely the within-batch duplication that **B2 now prevents** — so the re-run processes the **51 unique resources** (→ 50 review_queue docs: 44 `review_needed`, 6 `auto_accept`, 1 `auto_exclude` for a true duplicate). Re-running the 8 duplicate copies is unnecessary; the new dedup would `auto_exclude` them (verified in smoke).
+
+### Source accuracy (the core metric)
+
+| Metric | Before (60) | After (50) |
+|---|---|---|
+| **Verdict** | 7 pass · 24 warn · **29 fail** | **33 pass · 9 warn · 8 fail** |
+| **Resource-type** | 19 wrong | **41 match · 3 mismatch · 6 uncertain** |
+| **Methodology** | **40 wrong** | **13 plausible · 1 implausible · 36 n/a** (correctly empty) |
+| **Description accuracy** | 25 hallucinated/inaccurate | **45 accurate · 3 overstated · 1 inaccurate · 1 uncertain** |
+
+Pass rate **12% → 66%**; methodology errors **40 → 1**; type errors **19 → 3** (+6 uncertain where the source is bot-blocked/unconfirmable).
+
+### The remaining 8 fails are mostly the pipeline doing the *right* thing
+- **4 are dead/fabricated/unreachable sources** the pipeline correctly short-circuited to `review_needed` with **no fabricated description** — the fabricated JAMA DOI (`10.1001/jama.2021.1000`, 404), the unresolvable mirikizumab chart-review DOI, ROSe (`roser.org`, ECONNREFUSED), and one AWS-docs page confirmable only indirectly. Before, these got confident invented write-ups; now they get an empty minimal record flagged for a human.
+- **~3–4 are residual type mismatches** — review articles/scales whose titles contain the word "Guidelines" still type as `reporting_guideline` (e.g. *Guidelines for diagnostic tests…*, RoBiNT scale, *Guidelines for reporting non-randomised pilot…*). A title-vs-content nuance for a future pass; not a regression.
+- **1 implausible methodology** (institutional-use-of-national-clinical-audits) — down from 40.
+
+### Completeness & integrity
+
+| Metric | Before | After |
+|---|---|---|
+| `resource_code` collisions | present | **none** (`{}`) |
+| `type_fields` populated | 0/60 | **34/50** (16 warn where free sources returned nothing) |
+| `content_format` / `time_to_consume` | 0/60 | **44/50** |
+| Pipeline errors | 0 | **0** |
+| Within-batch dedup | none | **1 `auto_exclude`** (true duplicate caught) |
+
+### Verification
+- `scripts/rerun_60.py --clear` re-ran the 51 unique resources (gemini-3.5-flash + gemini-3.1-flash-lite, both credit-covered); `pipeline_runs/rerun60-*` metrics doc written.
+- `scripts/audit_records.py` re-ran clean; `resource_code_dupes: {}`.
+- 50-agent source-accuracy workflow returned 50/50 verdicts; `scripts/write_qa_audit.py` wrote `qa_audit` to all 50 review_queue docs (console QA column/panel render them).
+- 269 pytest tests green (24 new for source-check, enrichment, no-MVP routing, completeness, resource_code hashing).
