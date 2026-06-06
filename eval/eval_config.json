@@ -5,7 +5,39 @@
       "threshold": 0.6,
       "judge_model_options": {
         "judge_model": "gemini-3-flash-preview"
-      }
+      },
+      "rubrics": [
+        {
+          "rubric_id": "type_methodology_correct",
+          "rubric_content": {
+            "text_property": "The response assigns a resource type and methodology codes consistent with what the source actually is. It uses platform methodology codes (SYN-01, SYN-02, OBS-01, EVAL-01) and assigns no MVP methodology (empty list) when none genuinely applies, rather than force-fitting one of the four."
+          }
+        },
+        {
+          "rubric_id": "description_grounded",
+          "rubric_content": {
+            "text_property": "The editorial description and AI summary are accurate to the resource and contain no invented specifics — no fabricated sample sizes, findings, statistics, dates, authors, or publication venues that are not supported by the supplied metadata or title."
+          }
+        },
+        {
+          "rubric_id": "plain_language_clear",
+          "rubric_content": {
+            "text_property": "The plain-language description is genuinely free of unexplained jargon and is understandable to a non-specialist reader, while remaining faithful to the resource."
+          }
+        },
+        {
+          "rubric_id": "structured_completeness",
+          "rubric_content": {
+            "text_property": "The response includes a quality_score on a 0-100 scale, the six canonical quality dimensions (relevance, accuracy, authority, currency, accessibility, practical_utility), and any editorial badges are drawn only from the canonical badge set."
+          }
+        },
+        {
+          "rubric_id": "routing_justified",
+          "rubric_content": {
+            "text_property": "The routing decision (auto_accept, review_needed, or auto_exclude) is consistent with the quality and confidence signals, and resources that are unverifiable, dead-linked, or outside the four MVP methodologies are routed to human review rather than auto-accepted."
+          }
+        }
+      ]
     }
   },
   "custom_metrics": null,
