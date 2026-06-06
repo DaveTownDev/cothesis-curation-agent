@@ -42,6 +42,35 @@ def normalize_resource_type(value) -> str | None:
         return v
     return RESOURCE_TYPE_ALIASES.get(v) or RESOURCE_TYPE_ALIASES.get(v.replace("_", " "))
 
+
+# Free-text research-lifecycle stage names → THESIS codes
+# (TH=Theory, HI=History, EV=Evaluate, ST=Study, IN=Interpret, SH=Share).
+STAGE_CODE_ALIASES = {
+    "theory": "TH", "theoretical": "TH", "concept": "TH", "conceptual": "TH",
+    "framework": "TH", "background": "HI", "history": "HI", "literature": "HI",
+    "literature_review": "HI", "prior_work": "HI",
+    "evaluate": "EV", "evaluation": "EV", "appraisal": "EV", "critical_appraisal": "EV",
+    "assessment": "EV", "quality": "EV", "quality_appraisal": "EV",
+    "study": "ST", "design": "ST", "research_design": "ST", "methodology": "ST",
+    "methods": "ST", "methodology_development": "ST", "planning": "ST", "conduct": "ST",
+    "data_collection": "ST", "data-collection": "ST", "implementation": "ST",
+    "execution": "ST", "fieldwork": "ST",
+    "interpret": "IN", "interpretation": "IN", "analysis": "IN", "synthesis": "IN",
+    "data_synthesis": "IN", "results": "IN", "findings": "IN", "discussion": "IN",
+    "share": "SH", "writing": "SH", "write_up": "SH", "dissemination": "SH",
+    "reporting": "SH", "publication": "SH", "communicate": "SH", "communication": "SH",
+}
+
+
+def normalize_stage_code(value) -> str | None:
+    """Map an LLM stage label to a THESIS code. Returns None if unmappable."""
+    if not value:
+        return None
+    v = str(value).strip().upper()
+    if v in STAGE_CODES:
+        return v
+    return STAGE_CODE_ALIASES.get(str(value).strip().lower().replace("-", "_").replace(" ", "_"))
+
 STAGE_CODES = frozenset({"TH", "HI", "EV", "ST", "IN", "SH"})
 
 ACCESS_TYPES = frozenset({"free", "freemium", "paid", "subscription", "institutional", "open_access"})

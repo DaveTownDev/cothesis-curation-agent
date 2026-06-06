@@ -91,12 +91,22 @@ def assemble_record(assembly_json: str) -> dict:
                 raw[score_field] = _CONFIDENCE_MAP.get(val.lower().strip(), 0.5)
             raw.setdefault(score_field, 0.5)
         # Scrub legacy methodology codes
-        from agents.shared.codes import LEGACY_METHODOLOGY_PREFIXES
+        from agents.shared.codes import LEGACY_METHODOLOGY_PREFIXES, normalize_stage_code
         codes = raw.get("methodology_codes", [])
         raw["methodology_codes"] = [
             c for c in codes
             if not any(c.startswith(p) for p in LEGACY_METHODOLOGY_PREFIXES)
         ]
+        # Normalize free-text stage labels to THESIS codes; drop unmappable ones
+        # (rather than failing the whole ClassificationResult on an invalid enum).
+        seen: set[str] = set()
+        norm_stages = []
+        for s in raw.get("stage_codes", []) or []:
+            code = normalize_stage_code(s)
+            if code and code not in seen:
+                seen.add(code)
+                norm_stages.append(code)
+        raw["stage_codes"] = norm_stages
         return raw
 
     from agents.shared.codes import normalize_badge

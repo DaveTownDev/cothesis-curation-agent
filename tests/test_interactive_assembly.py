@@ -4,8 +4,18 @@ Both were surfaced by the ADK gold eval.
 """
 import json
 
-from agents.shared.codes import normalize_resource_type, RESOURCE_TYPES
+from agents.shared.codes import normalize_resource_type, normalize_stage_code, RESOURCE_TYPES, STAGE_CODES
 from agents.reconciliation.agent import assemble_record
+
+
+def test_normalize_stage_code_aliases():
+    assert normalize_stage_code("planning") == "ST"
+    assert normalize_stage_code("research_design") == "ST"
+    assert normalize_stage_code("writing") == "SH"
+    assert normalize_stage_code("analysis") == "IN"
+    assert normalize_stage_code("ST") == "ST"          # already canonical
+    assert normalize_stage_code("clinical-practice") is None
+    assert normalize_stage_code(None) is None
 
 
 def test_normalize_resource_type_aliases():
@@ -25,7 +35,9 @@ def test_assemble_normalizes_bad_type_and_keeps_methodology():
         "resource_code": "x-123456", "title": "Guidelines for X", "url": "https://e/x",
         "classification": {
             "resource_type_code": "guideline",          # invalid enum -> should normalize
-            "methodology_codes": ["SYN-02"], "relevance_score": 0.8,
+            "methodology_codes": ["SYN-02"],
+            "stage_codes": ["planning", "writing", "clinical-practice"],  # free-text + unmappable
+            "relevance_score": 0.8,
             "classification_confidence": 0.8, "access_type": "open_access",
         },
         "editorial": {
@@ -40,5 +52,9 @@ def test_assemble_normalizes_bad_type_and_keeps_methodology():
     assert rec["resource_type_code"] in RESOURCE_TYPES
     # methodology survived (not wiped by an all-defaults fallback)
     assert "SYN-02" in rec.get("methodology_codes", [])
+    # free-text stage codes normalized (planning->ST, writing->SH); unmappable dropped
+    stages = rec.get("stage_codes", [])
+    assert "ST" in stages and "SH" in stages
+    assert all(s in STAGE_CODES for s in stages)
     # missing editorial_description backfilled from summary (non-empty)
     assert rec["editorial_description"]
