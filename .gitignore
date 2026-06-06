@@ -28,3 +28,6 @@ out/
 # Build artifacts / coverage
 .coverage
 *.egg-info/
+
+# Infrastructure reference (never commit — contains private topology)
+docs/reference/gateway.md
