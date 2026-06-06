@@ -1,0 +1,951 @@
+{
+  "eval_set_result_id": "pipeline_cothesis_pipeline_gold_1780740940.954294",
+  "eval_set_result_name": "pipeline_cothesis_pipeline_gold_1780740940.954294",
+  "eval_set_id": "cothesis_pipeline_gold",
+  "eval_case_results": [
+    {
+      "eval_set_file": "cothesis_pipeline_gold",
+      "eval_set_id": "cothesis_pipeline_gold",
+      "eval_id": "syn01_article_001",
+      "final_eval_status": 1,
+      "eval_metric_results": null,
+      "overall_eval_metric_results": [
+        {
+          "metric_name": "response_match_score",
+          "threshold": 0.15,
+          "criterion": {
+            "threshold": 0.15,
+            "include_intermediate_responses_in_final": false
+          },
+          "custom_function_path": null,
+          "score": 0.23469387755102042,
+          "eval_status": 1,
+          "details": {
+            "rubric_scores": null
+          }
+        },
+        {
+          "metric_name": "rubric_based_final_response_quality_v1",
+          "threshold": 0.6,
+          "criterion": {
+            "threshold": 0.6,
+            "include_intermediate_responses_in_final": false,
+            "judge_model_options": {
+              "judge_model": "gemini-3-flash-preview"
+            }
+          },
+          "custom_function_path": null,
+          "score": null,
+          "eval_status": 3,
+          "details": {
+            "rubric_scores": null
+          }
+        }
+      ],
+      "eval_metric_result_per_invocation": [
+        {
+          "actual_invocation": {
+            "invocation_id": "e-ae757425-210a-486f-b8b1-d31d0ba1caba",
+            "user_content": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Curate one article for SYN-01. Focus on: PRISMA reporting standard.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null
+                }
+              ],
+              "role": "user"
+            },
+            "final_response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "I have successfully executed the curation pipeline for a PRISMA reporting standard article under the SYN-01 methodology. \n\nHere is the summary of the pipeline execution:\n\n*   **Discovered Resource:** *The PRISMA 2020 statement: an updated guideline for reporting systematic reviews* (URL: https://doi.org/10.1136/bmj.n71)\n*   **Resource Code:** `the-prisma-2020-statement`\n*   **Methodology & Relevance:** SYN-01 (Systematic Reviews), with a 100/100 relevance and classification confidence score (1.0).\n*   **Quality Assessment:** Scored 99 overall with 100 on Relevance, Accuracy, Authority, and Practical Utility. It earned the proposed badges: `essential` and `editors_choice`.\n*   **QC Panel:** Passed all deterministic checks (AI pattern scanner, brand voice, plain jargon check) with total panel consensus (1.0).\n*   **Routing Decision:** `auto_accept` (All signals green: classification confidence=1.0, relevance=1.0, quality=99.0, AI confidence=98.0, QC panel=1.0). \n\n**Firestore Records Written:**\n*   `AIAssessments/the-prisma-2020-statement` (Appraisal metadata and quality dimension reasoning)\n*   `Resources/the-prisma-2020-statement` (The reconciled, compiled draft record with editorial fields)",
+                  "thought": null,
+                  "thought_signature": "AY89a195sH8PecAuRmsEokBLKkhWlNJ_IMws8ZbSXpZBOKBX5SqXicC4SA7dDI2dDJfcQ5mcoGnawCur0WaEigYGdvmi6NAyoUyRq1mXVO05teDfnu0lZ4qHChy3Gitk5lBd28EF2eG1Km09ibd6juC3c1skTCENwRXIDFQq-VpjvPB6aG9mZBcNpMw6o6X--dSHS572KIurwVqPWJRExSMS5xt1QzzigAULe2G5ZTy8L5_eBTX5XkKlhJWhdNRpcf0lTZ0BYXn1EVp5DShD0UdJuybAm8-CeJTjucGQyo0HKfXVQzc-160lY1kwK500VxP68IF-hKSG1ho_ohFlBO_Fs_6TSo_mD7cIC-yccrlHuDSlbubHDOwgjyuXE6TTZeKWW1Xr48xr8z0EsUrGvBPJnvskf6aYrZRDG-6MO4xGo3EN8og4ztJXzg5zeCDKNsk9VmAkSw4o7SKE8EkV-wUx2wrJ8aLEYPVLL1TLHYWL0A1EFw0rdssF8w9y6nV1qOVtrNoV18QhM2lSRMSOLmvAyOS09hmZAXl1-kU3rSmCuC_bGv98ctQJu812JDWHNwhbw4miK1lcd1rTGXMALl0ZhLMAlHvNWD8WCtx2vv_4xUoQk-ojHtN-eSVuO2dEEAaqRTMk6QSqGpR_wcJ5Ppsz6LYkN5UbaEbNDS4OYhGPmIYJncia2SBZuBO9yl8W2ML8pQXOXbjVWqgcg1jRtePbR1C20T2Qs6YjihcSA9kti8PemyWWrhMoyQtLjKldLKcEY1pKvnNLsxuSPyIONdQ2h1z2HiY3FMJaI4eqt79SxAtYa_MTXNL0UmWZiXGX6OtJDrOkmDV4kTkvbZ60rb2ultOrZEwL10jvdZcga3mq5tscfDA65PJUEidLF9-T-NdPLDgKHDNQRYpNFZyka6ekf7zqc2QZZOaCqIFaV36GSYXku5daIUGHKiFRVLGaCLpTbc-1IqIgz-VGq2lqNf_i68M6h5E-vo5V1s9X4V3KGStfnDEdx8MMWc7PbcIx-C6ao9lcn1eKlsbyjk9_Lh5oesmgT-7YmhqdG4UF6CdVph4AWX2CYCqYBPl7b7aA_Lq-51mk9APlxbAzbvlHvoPD0wLncL2r4wueKaubI12pGn1L1ZVL3TWUUXdAyLCsfnXW9WFIHqpTjE8NhSu8ma1Ty6Wv3O24Gs9xoHBLGQU2cChCETQDKt7EODvhmAgRBeeGoPwNEZPYQm5eK04Oz7AGvHNBmYt722AaNkjimsUJyyrLQ5IInsaox0t-MrLmVSl2Lqrrl9xsvhZcQhJmdlU9KMk3PrFopRVvHYqGWDZIAPY18FZi9yfFcCNl1c_fHXZw9FwEOiotTbqR5SEoSc5WIEJr3snfaclbBFpCWNtBPjwPRgf01EAk7t_9Tzl7rmWXSrY3wL1PtIHvx17pRN-qDlhRUE74LlopIHNrQGYUsoNDq_BYVlYdIA_AktXugOhdYM-WUbJx9HzmSDQ63XbNetYSwzX-FhPAMxYNLIRgARiSyacee6c-qoUKmTAgCj95pMBBb5VZ",
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null
+                }
+              ],
+              "role": "model"
+            },
+            "intermediate_data": {
+              "invocation_events": [
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": {
+                          "id": "adk-c232eb00-8cee-4c45-ae70-47e4b2a93cf5",
+                          "args": {
+                            "request": "Find one candidate article for SYN-01 methodology focusing on the PRISMA reporting standard."
+                          },
+                          "name": "discovery_agent",
+                          "partial_args": null,
+                          "will_continue": null
+                        },
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": "CpAIAY89a18LjY75FHorob7C_LInvxBBbjZd9aOrHqga8-0HlCAJ8mvO9HE10rcpQNIRD_UGKLw4yYXVsBIesHWAHpQBAcN9hqHclxO9NfEtXGuTYLPSaF_ol546C4M77Y7UxxkOjCePWXjrjejp9erDpqAV-bgDIqtfHFmKNSpj1Q3k5imCuJDojAsT_eIFgr8h6xozBuEA-X84EcRUbR5OEdbG1KhkfadtkWJ1AhzFi8xDhsre6V6Bvavjn4rVS4k6NtkMhcNxr9lX2vESY48Ffm3mNnxSytoqVOgXaFCTBU9d7uzng0eEuaTHjKJz9RJdeShuwn5u3lSemaiHwt9kCPmnTHYVaiVRAjgeLKgqwa1vHnLvIxCoCohn7UWJd1U4TrW8uCetTkeEtAufb1ubkqXu5uQNACQQTjptfzWKW0mvqexh84wrNKzdTw2nBUC3dqkGGkV9sUsmbUXRkgEcxffO0UkAd8aUUTekZodAJqjECK-hF5ENUhaED-YdrL3TKsCpD8gyZO7xIvIZZ2tnnZv8IPKmfkkd7qigMdEnhw0pDnao4w-d57H8GveOiFhVZEPHQYGVZkdOzfYumO5YW7FrLkIhXpAgENejlAIdINsmfEng2b-1ACbORw2CuFzJ3_yIMLETcyZB9Cm9_B-B8mdDsWaZXZFH-IXgb62cubUyG8d6uez3WcJlErLb5Ao-GB4gqZ4ASIlObcvjR5Ark-8gHZgM8f6KmlppQR17U1TkuKZG4ljCuOHxbmTSWAo4fvpVTroKp3I1FmJ6PVuDyvcUOAKHojUHMsyyKC_s70J78Dp8cauxCTykZZytjVY8DbVATViVrQfhmJd8zVwt7PI2f5bVqwk19yLKvuCroO8DjW-aCOL0zdJkl7pVSQ6ZHY9pgEm9PdLzy9jlUDwr1_E_PgPpavgWwn3pk5mx5oNq6fzO4VLxg9lNgV558ysyvswpAlHHxEomEM7nRgDWZmiyQJq9M5QOfDzJNQqrbAqjDZaIUDt1UGny7HFkDfqbhI5jHBI3pNbr_HqMVCGlaaM07l5kh5WJLrgL7-szkvxfUoTGbiBY1GXp4Qi3xW1AUMtCWKvX9m84PIlUZiAt7n0uZvUOaURGcfrf9mIHh0D0BKMlP-Eo85HssivWm5ZWD2z1HOcLg98k2PB3vOvmWkYrMiG2Tkr5oDJ5x24MlZ_9pnmCBIUG32Grs2oGBMqS33fyOtnubvs6focV1fkaOjc-5BIxU9lwuk7k-Mbe_tp06x-MlK3DCrwKNXiD0GEgF6kVUtyKF5QZjEBFjjady2JeDhlsR5ZXEnIFrbTPDsZhvSzbj33AIFMfX-VJlavlVrap1bX0vgCoUeNoh_iI-56ioAA35qaH5Lgy6OgJixU=",
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-c232eb00-8cee-4c45-ae70-47e4b2a93cf5",
+                          "name": "discovery_agent",
+                          "response": {
+                            "result": "{\n  \"title\": \"The PRISMA 2020 statement: an updated guideline for reporting systematic reviews\",\n  \"url\": \"https://doi.org/10.1136/bmj.n71\",\n  \"source\": \"openalex\",\n  \"type_hint\": \"article\",\n  \"raw_metadata\": {\n    \"cited_by_count\": 92891,\n    \"doi\": \"https://doi.org/10.1136/bmj.n71\",\n    \"is_open_access\": true,\n    \"openalex_id\": \"https://openalex.org/W3118615836\",\n    \"year\": 2021\n  },\n  \"skip_reason\": null\n}"
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "user"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": {
+                          "id": "adk-90392b3a-5985-4c96-8791-dd3e021910f6",
+                          "args": {
+                            "request": "Score quality and write draft AIAssessment to Firestore for the resource: \"The PRISMA 2020 statement: an updated guideline for reporting systematic reviews\" (URL: https://doi.org/10.1136/bmj.n71). resource_code: the-prisma-2020-statement"
+                          },
+                          "name": "appraisal_agent",
+                          "partial_args": null,
+                          "will_continue": null
+                        },
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": "AY89a187_HXr30XikIbkM2mBaqt5e8iIblHslgW_srcyZHh7M67kTsSSI4lqPuG-e5Zb5OMbrJ0uwIJoI38L6Fg7l4ma4NJhV4KIPB-HSxWJCEdRqpvfKBos878uJPVAA5EON6IuNnFZnBJ1wQ0JsmfuBEzf67XiQozIMRMnaiRuHXj3cVVkpts3pM8dkDQiu4-6Tc9lXsqxjGsufoucanlR_eEw3CHK-ySmQ1YrgcTzzoTaGgq6-tG6GpBtAVv0-nQg-r9o47-ztVHYDOarUFamCQEXutNJHkl69WORBLL-7xeuriZUoSA7D7q4eXMEm9z-Fl_el5PTEa1khgP9RjcQ009AGeTJ32NLLADloj5nRVpbJj1kx9vM0UOG-JFV5Gqx6nWRFaLgmfqGlbhMIZq-BbsLOzQqilSmqWnXRezP0D6xiOnRgog-ZElrEAK6P_Aypzwlhlfv1g8vvWxey95CSRdMbJJAxhGZWadw49_yLGnWsOOM9GZHyaaMJJF2534C6xIUVs_Mosjq8KYlX0jIaaJmcHgElFSAXLbPEDqdvCTlE55ZVzMmFlsOh2XolGKuTn2rxFoQD-iupsRpzqjfIdJuFn6oOp6rKAVV_bGeJwQFiCV7kzbNH3vAcIyco5s5UlH6-vSUBbWv47USwnSK8nJDHw1MIQWAEjQ-AdOEFcppzqe0YVcAyQeXkl9PNHppVmZmwRqZ6J4A2nnI4_Zd9CHTWHQgBTQ_f3UBqZ4exk0npMhASiOf3gEKtrKbg17WtmNKQci01SmpWDqtCSBrUpns_NEv7PACBvw4q1g6ZvTJPb4heoQ1X-TNeZObcbICXH9C_nKR8Jos3SRHrWCTJkLLz8IsDMrPUMoMsQrkAsBNAKyczWgITk3Wc4AoYzqkmP-Lm5wUGwSLwRLFjS_DutdWgQjqF6Ae6Y0ApWiCSW8pgg==",
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      },
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": {
+                          "id": "adk-cd85863f-7ca3-40ab-b3ae-1e6c3942c752",
+                          "args": {
+                            "request": "Classify the resource: \"The PRISMA 2020 statement: an updated guideline for reporting systematic reviews\" (URL: https://doi.org/10.1136/bmj.n71). Assign SYN-01 methodology and other applicable codes. resource_code: the-prisma-2020-statement"
+                          },
+                          "name": "classification_agent",
+                          "partial_args": null,
+                          "will_continue": null
+                        },
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      },
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": {
+                          "id": "adk-a919368f-466b-4047-8bcd-efd05a1e8aaf",
+                          "args": {
+                            "request": "Write editorial_description, summary, editorial_description_plain, and propose badges for the resource: \"The PRISMA 2020 statement: an updated guideline for reporting systematic reviews\". resource_code: the-prisma-2020-statement"
+                          },
+                          "name": "editorial_agent",
+                          "partial_args": null,
+                          "will_continue": null
+                        },
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-90392b3a-5985-4c96-8791-dd3e021910f6",
+                          "name": "appraisal_agent",
+                          "response": {
+                            "result": "{\n  \"quality_score\": 99,\n  \"quality_dimensions\": {\n    \"relevance\": {\n      \"score\": 100,\n      \"weight\": 0.15,\n      \"reasoning\": \"The PRISMA 2020 statement is the direct global standard for reporting systematic reviews, making it of peerless relevance for medical research trainees and students conducting or writing evidence syntheses.\"\n    },\n    \"accuracy\": {\n      \"score\": 100,\n      \"weight\": 0.15,\n      \"reasoning\": \"Highly accurate and robustly formulated consensus guideline, developed by a multi-disciplinary international panel of leading clinical epidemiologists and methodologists.\"\n    },\n    \"authority\": {\n      \"score\": 100,\n      \"weight\": 0.15,\n      \"reasoning\": \"Published in the highly prestigious BMJ by top-tier authorities in systematic review methodology (including David Moher and Matthew Page), and cited over 90,000 times.\"\n    },\n    \"currency\": {\n      \"score\": 95,\n      \"weight\": 0.15,\n      \"reasoning\": \"Published in 2021, the PRISMA 2020 statement is the current active version, successfully replacing the original 2009 statement and incorporating contemporary methodological developments.\"\n    },\n    \"accessibility\": {\n      \"score\": 100,\n      \"weight\": 0.15,\n      \"reasoning\": \"Fully open access (published under a CC-BY license) with multiple repository copies and PDF files freely available to all users.\"\n    },\n    \"practical_utility\": {\n      \"score\": 100,\n      \"weight\": 0.15,\n      \"reasoning\": \"Provides highly structured checklists, items, and revised flow diagrams that are universally required by journals and directly actionable for authors during manuscript preparation.\"\n    },\n    \"ebm_level\": {\n      \"score\": 95,\n      \"weight\": 0.10,\n      \"reasoning\": \"Represents an internationally recognized methodological reporting guideline and consensus statement, which sits at the pinnacle of evidence-based methodology guidelines.\"\n    }\n  },\n  \"methodology_codes\": [\n    \"SYN-01\",\n    \"SYN-02\",\n    \"EVAL-01\"\n  ],\n  \"thesis_stage_signals\": [\n    \"EV\",\n    \"ST\",\n    \"SH\"\n  ],\n  \"difficulty_level\": \"intermediate\",\n  \"relevance_to_discipline_codes\": [],\n  \"proposed_badges\": [\n    \"editors_choice\",\n    \"essential\",\n    \"best_free\"\n  ],\n  \"ai_subtype_signal\": \"Reporting Guideline\",\n  \"ai_confidence\": 98,\n  \"trainee_suitability_score\": 100,\n  \"strengths\": [\n    \"Widely accepted as the gold-standard reporting guideline for systematic reviews across all medical disciplines.\",\n    \"Provides extremely practical, clear tools including a 27-item checklist and updated flow diagrams.\",\n    \"Fully open access and highly authoritative, developed by global methodology leaders.\"\n  ],\n  \"limitations\": [\n    \"Focuses strictly on transparent reporting of systematic reviews rather than instructing on how to conduct the underlying literature searches or statistical meta-analysis.\",\n    \"Can be complex and overwhelming for absolute beginners without prior guidance on evidence synthesis principles.\"\n  ],\n  \"pipeline_run_id\": \"pipeline-run-1\",\n  \"requires_human_review\": false\n}"
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      },
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-cd85863f-7ca3-40ab-b3ae-1e6c3942c752",
+                          "name": "classification_agent",
+                          "response": {
+                            "result": "{\n  \"resource_type_code\": \"reporting_guideline\",\n  \"resource_subtype_code\": \"systematic_review\",\n  \"methodology_codes\": [\n    \"SYN-01\"\n  ],\n  \"stage_codes\": [\n    \"SH\"\n  ],\n  \"relevance_score\": 1.0,\n  \"relevance_reasoning\": \"The PRISMA statement is the definitive standard for reporting systematic reviews in clinical research.\",\n  \"classification_confidence\": 1.0,\n  \"access_type\": \"open_access\",\n  \"skip_reason\": null,\n  \"discipline_codes\": [\n    \"medicine\",\n    \"public-health\"\n  ],\n  \"difficulty_level\": \"intermediate\"\n}"
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      },
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-a919368f-466b-4047-8bcd-efd05a1e8aaf",
+                          "name": "editorial_agent",
+                          "response": {
+                            "result": "```json\n{\n  \"editorial_description\": \"The updated international reporting standard for systematic reviews, providing a 27-item checklist and a flow diagram. It helps structure your review paper from the design phase to final write-up, ensuring completeness and transparency.\",\n  \"summary\": \"The PRISMA 2020 statement provides an updated, structured framework to guide the transparent and complete reporting of systematic reviews. It details what should be included in your manuscript across its comprehensive checklist, covering everything from search strategies and eligibility criteria to synthesis methods. Using this guideline helps align your write-up with the expectations of peer-reviewed journals and academic supervisors. Integrating PRISMA 2020 early in your study design ensures that your search, screening, and analysis processes are documented systematically.\",\n  \"editorial_description_plain\": \"A helpful checklist for writing up a research project where you gather and analyze all existing studies on a specific topic. It guides you on what details to share about how you searched for articles, decided which ones to include, and summarized their findings, making your final report clear and reliable.\",\n  \"proposed_badges\": [\n    \"essential\",\n    \"editors_choice\"\n  ],\n  \"difficulty_level\": \"intermediate\"\n}\n```"
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "user"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": {
+                          "id": "adk-01718817-407b-4c6c-80dd-83a7d8d71126",
+                          "args": {
+                            "request": "Deduplicate and assemble the draft record for resource_code: the-prisma-2020-statement using outputs from Classification, Editorial, and Appraisal."
+                          },
+                          "name": "reconciliation_agent",
+                          "partial_args": null,
+                          "will_continue": null
+                        },
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": "AY89a19xpRLrzqh-Lwq0eKxIV4aR-CQ-KVZSHSxnzKHIoQMEn7NNEEEqj67dBiJE4cRNAVVVmk-BsyAUr7tYqOiyiIJvRK-MZZO2WVjwxy63QEx4JpDBduzsssUotbijWXytFVzrI9ZpUkhhKjGAEvcXIqyxHmEULQRS4SXQNj4i-zpfZ0Hh5Z5z3dUBr9R3sRcpDiKVXCcYyer-ak8UfwvQ1iqI8s83L9t3_Jb6Vb5_WpP1OH195k5px77qrSAyxJqTl4KQYUh_DgLpycstEfbzcvhkx0u1CJtnkXoq660Zqp3E96BmFM_JrWwcD3a0GRXXFFMTQmhX3uvOrBE3ZneVmmmrl-D13MQVetuUP3TmU_-DVc5jxHW9Cdn9FixIQOkqOBamOk7qWmi2sVZKgOSWoRn4yu7aqtTKlJ3AgFvf0BnOkOQkj4w9w925vwJ2JqG4UJqGBBjZDOPDXJo1nwyoE9f21tz4DEjlS6Gny4Fu7L5-i_hRWITgJPJc80jPz0CHvVblTi38uWlc4gO7nZOz_GGr8HpkXiT1lHxkMoIOmRbrA_cmikJ89EwZGPOccpsp6rYbA0Pj_ZIHkntK5E5y2X7AF6WLub3sENaXjXgV5e7mlefoDiAxjoaSXyJIK6bkt6ZD61WyjUrT3ZT8dLESVm3WDREVv7tdNKL_FjksADEXYqAyOnaPCWBUFWEfCNjsv7z2vF5oKtm5cfQoV8pbkE_wad6HS9uG22TS3zspkzxDHHgTb8X7Fz3Fp4xllznhgKhUPGk5s-U=",
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-01718817-407b-4c6c-80dd-83a7d8d71126",
+                          "name": "reconciliation_agent",
+                          "response": {
+                            "result": "The resource \"The PRISMA 2020 statement\" has been processed. It was not identified as a duplicate. The draft record has been assembled with `editorial_status: proposed`.\n\n**Assembled Record:**\n*   **Resource Code:** the-prisma-2020-statement\n*   **Title:** The PRISMA 2020 statement: an updated guideline for reporting systematic reviews\n*   **URL:** https://doi.org/10.1136/bmj.n71\n*   **Summary:** The PRISMA 2020 statement is an updated reporting guideline designed to facilitate transparent and complete reporting of systematic reviews. It replaces the PRISMA 2009 statement and incorporates advancements in research methodology.\n*   **Status:** proposed"
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "user"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": {
+                          "id": "adk-ebb42ed3-9585-4a86-a2f0-5cc9f6266056",
+                          "args": {
+                            "request": "Run the QC evaluator panel on the assembled draft record for resource_code: the-prisma-2020-statement."
+                          },
+                          "name": "qc_panel_agent",
+                          "partial_args": null,
+                          "will_continue": null
+                        },
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": "AY89a1-5cb1zjeeMMLnIXPLNcKX8V8q3icqZkiZ6QP7524eRzwsSLwFMYkXGAy-7hiO_nAGlyrH2aF7g9eZs8PHMIaVwpQVu5rAPY9scl_pjigKAfODUMzFQPXJn5aX5yXIfEgOBs95O3VHf2PKyQdy-MJD4RofNMy2KGpfM7nr8Rkc_tH6HP5WlYMl8YhJXw4VNUhCNbEBSZX2DZPhMfmLDTgBC3Fb4MHE=",
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-ebb42ed3-9585-4a86-a2f0-5cc9f6266056",
+                          "name": "qc_panel_agent",
+                          "response": {
+                            "result": "The QC evaluator panel for `the-prisma-2020-statement` has completed its assessment. The record passed all checks with a high degree of panel consensus.\n\n### Panel Results Summary\n*   **Overall Pass:** Yes\n*   **Average Score:** 99.2 / 100\n*   **Panel Agreement:** 1.0 (Total consensus)\n\n### Dimension Scores\n| Dimension | Score | Reasoning |\n| :--- | :--- | :--- |\n| **Relevance** | 100 | Highly relevant for systematic review practitioners; accurate description. |\n| **Accuracy** | 100 | Metadata accurately reflects the PRISMA 2020 Statement. |\n| **Authority** | 100 | PRISMA is the industry standard; high authority. |\n| **Currency** | 100 | Correctly identifies the current 2020 version. |\n| **Accessibility** | 95 | Provided URL is accessible and direct. |\n| **Practical Utility** | 100 | High utility for researchers. |\n\n### Deterministic Checks\n*   **AI Pattern Scanner:** Passed (No AI-generated markers)\n*   **Voice Reviewer:** Passed (Compliant with brand guidelines)\n*   **Plain Jargon:** Passed (Clear and accessible)\n*   **Badge Validation:** Passed (Canonical)\n\nThe record for `the-prisma-2020-statement` is ready for deployment."
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "user"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": {
+                          "id": "adk-07fc8e2a-7ec8-47ca-8d95-33e6db88dffe",
+                          "args": {
+                            "request": "Compute routing for resource_code: the-prisma-2020-statement using the classification, quality, and QC panel outputs. If routing is 'review_needed', call write_review_queue. Output the final routing decision."
+                          },
+                          "name": "arbiter_agent",
+                          "partial_args": null,
+                          "will_continue": null
+                        },
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": "AY89a19sKvwN7gsQZSWRQrP06hycjqrK25Gnkk-ZmES2D8Gc0vtLwGrzFah5vrxmEDWeovbrFgmDHzToUQY75xKDMSlx3xyoIrn8uSpqe-4heIXMXqnwVrewjdC3jmYSAJ5WVeWoCId7ILfDR_deFaZGaShDDWnoVKbpwEvPlxH7K2l_JYyYlKxvTxCLJRuYTF_470Kb_w83PstM",
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-07fc8e2a-7ec8-47ca-8d95-33e6db88dffe",
+                          "name": "arbiter_agent",
+                          "response": {
+                            "result": "To process the routing for `the-prisma-2020-statement`, I need the current classification outputs, quality signals, QC panel results, and the assembled draft record. \n\nCould you please provide the following information?\n1. `relevance_score` (0-1)\n2. `classification_confidence` (0-1)\n3. `quality_score` (0-100)\n4. `ai_confidence` (0-100)\n5. `panel_scores` (QC panel results)\n6. `skip_reason` (if any)\n7. The full assembled `draft_record` (needed in case the item requires human review)"
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "user"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": {
+                          "id": "adk-005779ba-bfa7-4685-b623-524f83c8e321",
+                          "args": {
+                            "request": "Compute routing for resource_code: the-prisma-2020-statement with the following data: relevance_score: 1.0, classification_confidence: 1.0, quality_score: 99, ai_confidence: 98, panel_agreement: 1.0, skip_reason: null, draft_record: {\"resource_code\":\"the-prisma-2020-statement\",\"title\":\"The PRISMA 2020 statement: an updated guideline for reporting systematic reviews\",\"url\":\"https://doi.org/10.1136/bmj.n71\",\"summary\":\"The PRISMA 2020 statement provides an updated, structured framework to guide the transparent and complete reporting of systematic reviews.\",\"editorial_status\":\"proposed\"}"
+                          },
+                          "name": "arbiter_agent",
+                          "partial_args": null,
+                          "will_continue": null
+                        },
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": "AY89a1_OpsL3ynIM_NXJ-o8u2kNOPrzC2ymVnLNj--7S6bLRxgirhbxsYtWJU81ENYAmSXzow37ck36ay2YAJfbeBbHLRgkH5y3bnW93AWPMHsAq4TYUnJ3zDtUNXIPiUXiK6F5ijw7lOgB1c_Y7UpCV_rWjoeFndqyTgMSC2WCigVWqqYy1DD7yoECaNHRoZzqsAWy2FPg5qOe8ARNiSGsicYBjM72N77OvHq4TjHQLhrAfHOy3htQRvDdn4q23pnNIHI_M6IT_FefT9SlTuWxorsEQNlz23Tc8m4kpP2r-LCGUt_1AZuEdMqpjTOsu3DMl5KWEsG_xlIs-x8gp9fFrJ64SYPJu9XHo3JRnDWU1lTQCqDXV6qhF8MbtBu8w87qywUkKSFasOh231xr3wBUFUchxbJteGJ1KRMZ7PZUu9yGsGM8mCVrHp9o8zyHTia9dfIO29Cg_oIm2XLxiW-dxvdu_ZA2isNDghfi1bCHYO39w98EaNhIa8uJM9xVwhKkVBMP9bPpUHSsgxXpOkdajc75qWOwFSvixWNEOSZbM8iUQbBVu6rwOcfiq8N82L_G9qEjifJcG5CkLAKY9Y3IM1vBdYA0uIPm0lsbhbLQPi9L8UlZamJPfrVaypGNfwNqtf1pGt1navhJ0Ehi0r8Lbmc4En3nggIrZ34h89MsxxPYSTlMGEllY_7feAIM2MORKnwxCXQ==",
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  }
+                },
+                {
+                  "author": "cothesis_curation_pipeline",
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": null,
+                        "function_response": {
+                          "will_continue": null,
+                          "scheduling": null,
+                          "parts": null,
+                          "id": "adk-005779ba-bfa7-4685-b623-524f83c8e321",
+                          "name": "arbiter_agent",
+                          "response": {
+                            "result": "```json\n{\n  \"decision\": \"auto_accept\",\n  \"composite_score\": 99.2,\n  \"panel_agreement\": 1.0,\n  \"reason\": \"all signals green — conf=1.00, rel=1.00, quality=99.0, ai_conf=98.0, panel=1.00\"\n}\n```"
+                          }
+                        },
+                        "inline_data": null,
+                        "text": null,
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null,
+                        "tool_call": null,
+                        "tool_response": null,
+                        "part_metadata": null
+                      }
+                    ],
+                    "role": "user"
+                  }
+                }
+              ]
+            },
+            "creation_timestamp": 1780740759.67055,
+            "rubrics": [
+              {
+                "rubric_id": "e070ae9b",
+                "rubric_content": {
+                  "text_property": "Response identifies at least one resource with a title and URL"
+                },
+                "description": null,
+                "type": null
+              },
+              {
+                "rubric_id": "66568629",
+                "rubric_content": {
+                  "text_property": "Response includes a quality score between 0 and 100"
+                },
+                "description": null,
+                "type": null
+              },
+              {
+                "rubric_id": "c8d993e7",
+                "rubric_content": {
+                  "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+                },
+                "description": null,
+                "type": null
+              },
+              {
+                "rubric_id": "674eb443",
+                "rubric_content": {
+                  "text_property": "Response states or implies the resource has been processed through the pipeline"
+                },
+                "description": null,
+                "type": null
+              },
+              {
+                "rubric_id": "f15b0e06",
+                "rubric_content": {
+                  "text_property": "Response does not include legacy RS- or OD- methodology codes"
+                },
+                "description": null,
+                "type": null
+              }
+            ],
+            "app_details": {
+              "agent_details": {
+                "cothesis_curation_pipeline": {
+                  "name": "cothesis_curation_pipeline",
+                  "instructions": "You are the CoThesis Curation Pipeline orchestrator. You operate in TWO modes.\n\nMODE A — CURATE A SPECIFIC RESOURCE (when the request gives you a concrete resource with a title and URL, e.g. 'Curate this article: ...'):\n  SKIP discovery entirely. The resource is already given. You MUST run EVERY step below in order, calling each tool exactly once, and you MUST NOT stop or summarise until arbiter_agent has been called:\n  1. appraisal_agent: score quality, then call write_assessment to persist the draft AIAssessment to Firestore. Derive a kebab-case resource_code from the title.\n  2. classification_agent: assign type/methodology/stage/access. Map free-text methodology hints to platform codes (SYN-01, SYN-02, OBS-01, EVAL-01).\n  3. editorial_agent: write short + long + plain descriptions, propose badges.\n  4. reconciliation_agent: assemble the final draft record (use assemble_record).\n  5. qc_panel_agent: run deterministic + LLM quality checks on the draft record.\n  6. arbiter_agent: compute routing, and if routing is 'review_needed' you MUST call write_review_queue with the full draft_record AND resource_code so it appears in the human console. Always pass the complete assembled draft_record.\n  Use the SAME resource_code across every step.\n\nMODE B — DISCOVER THEN CURATE (when given only a methodology code + type):\n  1. discovery_agent: find candidates, then run steps 1-6 of Mode A for each processable candidate (skip_reason is null).\n\nCRITICAL: never end your turn after only discovery or only appraisal. The job is not done until the arbiter has routed the resource and (for review_needed) write_review_queue has been called. Report the resource_code, routing decision, and Firestore doc IDs written.\n\nYou are an agent. Your internal name is \"cothesis_curation_pipeline\". The description about you is \"Orchestrates the CoThesis research-resource curation pipeline: discovers, appraises, classifies, edits, QC-evaluates, and routes medical research training resources for the CoThesis Compendium.\".",
+                  "tool_declarations": [
+                    {
+                      "retrieval": null,
+                      "computer_use": null,
+                      "file_search": null,
+                      "google_search": null,
+                      "google_maps": null,
+                      "code_execution": null,
+                      "enterprise_web_search": null,
+                      "function_declarations": [
+                        {
+                          "description": "Retrieves grounded methodology definitions and research context from the CoThesis Vertex AI Search datastore. Use for: confirming a resource's methodology alignment, checking quality standards, or retrieving reporting guidelines.",
+                          "name": "grounding_agent",
+                          "parameters": null,
+                          "parameters_json_schema": {
+                            "type": "object",
+                            "properties": {
+                              "request": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "request"
+                            ]
+                          },
+                          "response": null,
+                          "response_json_schema": {
+                            "type": "string"
+                          },
+                          "behavior": null
+                        },
+                        {
+                          "description": "Finds candidate research resources for a given methodology code (SYN-01, SYN-02, OBS-01, EVAL-01) and resource type. Returns raw candidate metadata for the Appraisal agent.",
+                          "name": "discovery_agent",
+                          "parameters": null,
+                          "parameters_json_schema": {
+                            "type": "object",
+                            "properties": {
+                              "request": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "request"
+                            ]
+                          },
+                          "response": null,
+                          "response_json_schema": {
+                            "type": "string"
+                          },
+                          "behavior": null
+                        },
+                        {
+                          "description": "Quality-assesses a candidate resource. Fetches structured metadata (OpenAlex, PubMed) first, then scores all 6 quality dimensions. Writes a draft AIAssessment to Firestore.",
+                          "name": "appraisal_agent",
+                          "parameters": null,
+                          "parameters_json_schema": {
+                            "type": "object",
+                            "properties": {
+                              "request": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "request"
+                            ]
+                          },
+                          "response": null,
+                          "response_json_schema": {
+                            "type": "string"
+                          },
+                          "behavior": null
+                        },
+                        {
+                          "description": "Classifies a resource: resource_type_code, resource_subtype_code, methodology_codes (platform SYN/OBS/EVAL), stage_codes, relevance_score (0-1), classification_confidence (0-1), access_type, discipline_codes, difficulty_level. JSON-only output; retries once on parse failure.",
+                          "name": "classification_agent",
+                          "parameters": null,
+                          "parameters_json_schema": {
+                            "type": "object",
+                            "properties": {
+                              "request": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "request"
+                            ]
+                          },
+                          "response": null,
+                          "response_json_schema": {
+                            "type": "string"
+                          },
+                          "behavior": null
+                        },
+                        {
+                          "description": "Writes editorial_description (short), summary (long), editorial_description_plain (jargon-free), and proposes badges. Never writes editorial_note (human-only field).",
+                          "name": "editorial_agent",
+                          "parameters": null,
+                          "parameters_json_schema": {
+                            "type": "object",
+                            "properties": {
+                              "request": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "request"
+                            ]
+                          },
+                          "response": null,
+                          "response_json_schema": {
+                            "type": "string"
+                          },
+                          "behavior": null
+                        },
+                        {
+                          "description": "Deduplicates a candidate against existing Compendium resources (title similarity >= 0.9 = duplicate; stop and flag). On no duplicate: assembles the final draft Resource record from Classification + Editorial + Appraisal outputs.",
+                          "name": "reconciliation_agent",
+                          "parameters": null,
+                          "parameters_json_schema": {
+                            "type": "object",
+                            "properties": {
+                              "request": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "request"
+                            ]
+                          },
+                          "response": null,
+                          "response_json_schema": {
+                            "type": "string"
+                          },
+                          "behavior": null
+                        },
+                        {
+                          "description": "Runs the QC evaluator panel on a draft record. Deterministic checks: AI tell scan, brand voice, plain-field jargon, badge validation. LLM-based: scores all 6 quality dimensions with reasoning. Returns panel_scores, panel_agreement, and overall_pass.",
+                          "name": "qc_panel_agent",
+                          "parameters": null,
+                          "parameters_json_schema": {
+                            "type": "object",
+                            "properties": {
+                              "request": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "request"
+                            ]
+                          },
+                          "response": null,
+                          "response_json_schema": {
+                            "type": "string"
+                          },
+                          "behavior": null
+                        },
+                        {
+                          "description": "Routes a resource to auto_accept, review_needed, or auto_exclude based on classification signals (0-1), quality signals (0-100), and QC panel agreement. Writes review_needed items to the review queue.",
+                          "name": "arbiter_agent",
+                          "parameters": null,
+                          "parameters_json_schema": {
+                            "type": "object",
+                            "properties": {
+                              "request": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "request"
+                            ]
+                          },
+                          "response": null,
+                          "response_json_schema": {
+                            "type": "string"
+                          },
+                          "behavior": null
+                        }
+                      ],
+                      "google_search_retrieval": null,
+                      "parallel_ai_search": null,
+                      "url_context": null,
+                      "mcp_servers": null
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "expected_invocation": {
+            "invocation_id": "",
+            "user_content": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Curate one article for SYN-01. Focus on: PRISMA reporting standard.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null
+                }
+              ],
+              "role": "user"
+            },
+            "final_response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Processed one article resource for SYN-01. Found a relevant resource related to PRISMA reporting standard. Quality score assessed, methodology codes include SYN-01. Draft record created with editorial_status=proposed.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null
+                }
+              ],
+              "role": null
+            },
+            "intermediate_data": null,
+            "creation_timestamp": 0.0,
+            "rubrics": [
+              {
+                "rubric_id": "e070ae9b",
+                "rubric_content": {
+                  "text_property": "Response identifies at least one resource with a title and URL"
+                },
+                "description": null,
+                "type": null
+              },
+              {
+                "rubric_id": "66568629",
+                "rubric_content": {
+                  "text_property": "Response includes a quality score between 0 and 100"
+                },
+                "description": null,
+                "type": null
+              },
+              {
+                "rubric_id": "c8d993e7",
+                "rubric_content": {
+                  "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+                },
+                "description": null,
+                "type": null
+              },
+              {
+                "rubric_id": "674eb443",
+                "rubric_content": {
+                  "text_property": "Response states or implies the resource has been processed through the pipeline"
+                },
+                "description": null,
+                "type": null
+              },
+              {
+                "rubric_id": "f15b0e06",
+                "rubric_content": {
+                  "text_property": "Response does not include legacy RS- or OD- methodology codes"
+                },
+                "description": null,
+                "type": null
+              }
+            ],
+            "app_details": null
+          },
+          "eval_metric_results": [
+            {
+              "metric_name": "response_match_score",
+              "threshold": 0.15,
+              "criterion": {
+                "threshold": 0.15,
+                "include_intermediate_responses_in_final": false
+              },
+              "custom_function_path": null,
+              "score": 0.23469387755102042,
+              "eval_status": 1,
+              "details": {
+                "rubric_scores": null
+              }
+            },
+            {
+              "metric_name": "rubric_based_final_response_quality_v1",
+              "threshold": 0.6,
+              "criterion": {
+                "threshold": 0.6,
+                "include_intermediate_responses_in_final": false,
+                "judge_model_options": {
+                  "judge_model": "gemini-3-flash-preview"
+                }
+              },
+              "custom_function_path": null,
+              "score": null,
+              "eval_status": 3,
+              "details": {
+                "rubric_scores": null
+              }
+            }
+          ]
+        }
+      ],
+      "session_id": "___eval___session___f72ce14d-85d2-4c83-938c-98f329ecd4bd",
+      "session_details": null,
+      "user_id": "test_user_id"
+    }
+  ],
+  "creation_timestamp": 1780740940.954294
+}

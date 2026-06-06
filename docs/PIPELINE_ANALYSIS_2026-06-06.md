@@ -176,4 +176,26 @@ There are **no residual type or methodology errors** on confirmable sources.
 - `scripts/rerun_60.py --clear` re-ran the 51 unique resources (gemini-3.5-flash + gemini-3.1-flash-lite, both credit-covered); `pipeline_runs/rerun60-*` metrics doc written.
 - `scripts/audit_records.py` re-ran clean; `resource_code_dupes: {}`.
 - 49-agent source-accuracy workflow returned 49/49 verdicts; `scripts/write_qa_audit.py` wrote `qa_audit` to every review_queue doc (console QA column/panel render them).
-- 271 pytest tests green (26 new for source-check, enrichment, no-MVP routing, completeness, resource_code hashing, reporting_guideline disambiguation).
+- 276 pytest tests green (source-check, enrichment, no-MVP routing, completeness, resource_code hashing, reporting_guideline disambiguation, FIRESTORE_COLLECTION_PREFIX, qc_panel score coercion).
+
+---
+
+## 9. ADK gold-set eval (2026-06-06)
+
+Ran `adk eval agents/pipeline eval/gold_set.json` (20 hand-curated cases × 4 MVP
+methodologies × resource types) against the committed `eval/eval_config.json`.
+
+| Metric | Result |
+|---|---|
+| **`rubric_based_final_response_quality_v1`** | **20/20 ≥ 0.6** (mean 1.00) — every case satisfied all 5 quality rubrics |
+| **`response_match_score`** (threshold 0.15) | **19/20** — the one miss (`syn02_web_guide_010`) scored 0.146, a 0.004 lexical shortfall while rubric-scoring a perfect 1.0 |
+| **Overall** | **19/20 pass** |
+
+What this run produced beyond the score:
+- **Authored the 5 missing rubrics** the config required (`type_methodology_correct`, `description_grounded`, `plain_language_clear`, `structured_completeness`, `routing_justified`) — before this the rubric metric raised `Rubrics are required` and the eval scored on `response_match` alone.
+- **Found + fixed a real robustness bug**: `aggregate_panel_results` did raw `r["score"]`, which `KeyError`-crashed the QC panel (and the whole eval) when Gemini omitted a panelist field — now coerced defensively (`_as_float`).
+- **Isolation + fork-safety**: the eval runs the *interactive* agent, which writes to Firestore; `FIRESTORE_COLLECTION_PREFIX=eval_` directs those to throwaway `eval_*` collections (dropped after) so the demo `review_queue` (49) is never touched, and `GRPC_ENABLE_FORK_SUPPORT=1` stops gRPC-after-fork SIGABRTs.
+
+Honest reads:
+- The rubric mean of exactly 1.00 means the LLM judge (`gemini-3-flash-preview`) found no rubric violations in any case — strong, but read it as "no violations" rather than a hard-discriminating score.
+- The eval surfaced two **interactive-path** (`adk web`) fragilities left as documented findings (the deterministic production pipeline is unaffected and is validated by §8): the interactive classifier occasionally emits an out-of-enum `resource_type_code` (`'guideline'`, `'methodological_article'`), and the interactive editorial agent occasionally omits `editorial_description`. Both are caught as warnings and recovered; neither affects the deterministic batch path.
