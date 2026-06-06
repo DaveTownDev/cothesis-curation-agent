@@ -27,7 +27,7 @@ from typing import Any, Optional
 logger = logging.getLogger(__name__)
 
 # Model tiering — same env vars as the agents (see docs/DECISIONS.md)
-MODEL_FLASH = os.environ.get("MODEL_FLASH", "gemini-3-flash-preview")
+MODEL_FLASH = os.environ.get("MODEL_FLASH", "gemini-3.5-flash")
 MODEL_FLASH_LITE = os.environ.get("MODEL_FLASH_LITE", "gemini-3.1-flash-lite")
 MODEL_PRO = os.environ.get("MODEL_PRO", "gemini-3.1-pro-preview")
 

@@ -145,7 +145,7 @@ def assemble_record(assembly_json: str) -> dict:
 
     # Fill required fields; coerce {} to [] for list fields; or None to safe defaults
     ap["resource_code"] = ap.get("resource_code") or data.get("resource_code") or ""
-    ap.setdefault("model_version", "gemini-3-flash-preview")
+    ap.setdefault("model_version", "gemini-3.5-flash")
     ap.setdefault("pipeline_run_id", "")
     ap.setdefault("quality_score", 70.0)
     ap.setdefault("ai_confidence", 60.0)
@@ -174,7 +174,7 @@ def assemble_record(assembly_json: str) -> dict:
         logger.warning("AIAssessmentDraft validation failed (%s); using stub", exc)
         appraisal = AIAssessmentDraft(
             resource_code=data.get("resource_code") or "",
-            model_version="gemini-3-flash-preview",
+            model_version="gemini-3.5-flash",
             pipeline_run_id="",
             quality_score=70.0,
             ai_confidence=60.0,

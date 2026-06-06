@@ -11,7 +11,7 @@ import os
 from google.adk.agents import LlmAgent
 from google.adk.tools.vertex_ai_search_tool import VertexAiSearchTool
 
-MODEL = os.environ.get("MODEL_FLASH", "gemini-3-flash-preview")
+MODEL = os.environ.get("MODEL_FLASH", "gemini-3.5-flash")
 DATASTORE_ID = os.environ.get(
     "VERTEX_DATASTORE_ID",
     "projects/cothesis-curation-agent/locations/global"

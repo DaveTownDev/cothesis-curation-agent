@@ -11,9 +11,9 @@ def _set_env(monkeypatch):
     monkeypatch.setenv("GOOGLE_CLOUD_PROJECT", "test-project")
     monkeypatch.setenv("GOOGLE_CLOUD_LOCATION", "global")
     monkeypatch.setenv("GOOGLE_GENAI_USE_VERTEXAI", "TRUE")
-    monkeypatch.setenv("MODEL_PRO", "gemini-2.5-pro")
-    monkeypatch.setenv("MODEL_FLASH", "gemini-flash-latest")
-    monkeypatch.setenv("MODEL_FLASH_LITE", "gemini-flash-lite-latest")
+    monkeypatch.setenv("MODEL_PRO", "gemini-3.1-pro-preview")
+    monkeypatch.setenv("MODEL_FLASH", "gemini-3.5-flash")
+    monkeypatch.setenv("MODEL_FLASH_LITE", "gemini-3.1-flash-lite")
     monkeypatch.setenv(
         "VERTEX_DATASTORE_ID",
         "projects/test-project/locations/global/collections/default_collection"
@@ -50,7 +50,7 @@ class TestDiscoveryAgent:
 
     def test_uses_flash_lite_model(self):
         from discovery.agent import discovery_agent, MODEL
-        assert MODEL == "gemini-flash-lite-latest"
+        assert MODEL == "gemini-3.1-flash-lite"
 
     def test_name(self):
         from discovery.agent import discovery_agent
@@ -71,7 +71,7 @@ class TestAppraisalAgent:
 
     def test_uses_flash_model(self):
         from appraisal.agent import MODEL
-        assert MODEL == "gemini-flash-latest"
+        assert MODEL == "gemini-3.5-flash"
 
     def test_name(self):
         from appraisal.agent import appraisal_agent
@@ -87,7 +87,7 @@ class TestAppraisalAgent:
 class TestClassificationAgent:
     def test_uses_flash_lite_model(self):
         from classification.agent import MODEL
-        assert MODEL == "gemini-flash-lite-latest"
+        assert MODEL == "gemini-3.1-flash-lite"
 
     def test_name(self):
         from classification.agent import classification_agent
@@ -98,7 +98,7 @@ class TestEditorialAgent:
     def test_uses_flash_model(self):
         # Tiering (Gemini 3.x upgrade): editorial runs on Flash, not Pro
         from editorial.agent import MODEL
-        assert MODEL == "gemini-flash-latest"
+        assert MODEL == "gemini-3.5-flash"
 
     def test_has_two_tools(self):
         from editorial.agent import editorial_agent
@@ -129,7 +129,7 @@ class TestPipelineAgent:
 
     def test_uses_pro_model(self):
         from pipeline.agent import MODEL
-        assert MODEL == "gemini-2.5-pro"
+        assert MODEL == "gemini-3.1-pro-preview"
 
     def test_name(self):
         from pipeline.agent import root_agent

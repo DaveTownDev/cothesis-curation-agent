@@ -26,7 +26,7 @@ from agents.shared.schema import AIAssessmentDraft, QualityDimensions
 
 logger = logging.getLogger(__name__)
 
-MODEL = os.environ.get("MODEL_FLASH", "gemini-3-flash-preview")
+MODEL = os.environ.get("MODEL_FLASH", "gemini-3.5-flash")
 
 # ---------------------------------------------------------------------------
 # FunctionTool wrappers — deterministic API lookups
