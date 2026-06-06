@@ -212,7 +212,7 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
     from agents.shared.hitl import write_review_queue_item
     from agents.shared.firestore_utils import get_firestore_collection
     from agents.shared.schema import ClassificationResult, EditorialOutput, AIAssessmentDraft
-    from agents.shared.codes import METHODOLOGY_GUIDE, CONTENT_FORMAT_MAP, content_format_for, time_to_consume_for
+    from agents.shared.codes import METHODOLOGY_GUIDE, REPORTING_GUIDELINE_GUIDE, CONTENT_FORMAT_MAP, content_format_for, time_to_consume_for
     from agents.shared.source_check import verify_source
     from agents.enrichment import enrich
 
@@ -308,9 +308,11 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         + "\n\n## Methodology grounding (assign the best match or [] — do NOT force-fit)\n"
         + METHODOLOGY_GUIDE
         + "\n\n## Resource type\nThe source was ingested as type '" + orig_type + "'. "
-        "Treat this as a STRONG prior for resource_type_code — only override with clear "
-        "evidence from the source, and never default to 'article' for databases, registries, "
-        "books, datasets, videos, or funding calls."
+        "Treat this as a prior for resource_type_code, but OVERRIDE it when the metadata "
+        "contradicts it — never default to 'article' for databases, registries, books, "
+        "datasets, videos, or funding calls, and conversely do not keep 'reporting_guideline' "
+        "for what is actually a journal article (see below).\n"
+        + REPORTING_GUIDELINE_GUIDE
     )
     cls_raw = _judge_with_retry(
         cls_prompt,

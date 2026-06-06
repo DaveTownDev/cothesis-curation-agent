@@ -113,6 +113,21 @@ best-matching code, or [] if the resource genuinely matches none — do NOT forc
 Resources outside these four (cohort/case-control/RCT/meta-analysis/qualitative/
 funding calls/data portals/general textbooks) → methodology_codes: [] (route to human)."""
 
+
+REPORTING_GUIDELINE_GUIDE = """`reporting_guideline` means a FORMAL reporting standard,
+checklist, or appraisal tool for research — e.g. CONSORT, PRISMA, STROBE, STARD,
+SPIRIT, TRIPOD, SRQR, COREQ, the EQUATOR Network items, or a named risk-of-bias /
+quality-appraisal scale. These are the checklist/standard ITSELF, usually hosted on
+equator-network.org or a society site (not a journal article DOI).
+
+A peer-reviewed JOURNAL ARTICLE that merely discusses, reviews, introduces, applies,
+or is titled "Guidelines for …" is `article`, NOT `reporting_guideline` — even when
+its title contains "guideline(s)". Tell-tale signs it is an `article`: the metadata
+shows a journal_name / volume / issue / a journal DOI (10.xxxx via a publisher like
+Wiley, Elsevier, Taylor & Francis, Springer), or it is a narrative/methods review or
+a validation study of a scale. When in doubt and the metadata says it is in a journal,
+choose `article`."""
+
 # Deterministic resource_type -> primary content_format (canonical, no LLM)
 CONTENT_FORMAT_MAP = {
     "article": "text",

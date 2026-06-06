@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from agents.arbiter.tools import compute_routing_decision
-from agents.shared.codes import content_format_for, time_to_consume_for
+from agents.shared.codes import content_format_for, time_to_consume_for, REPORTING_GUIDELINE_GUIDE
 
 
 # ── Arbiter: no MVP methodology never auto-accepts ───────────────────────────
@@ -50,6 +50,23 @@ def test_content_format_map(rtype, fmt):
 def test_time_to_consume_uses_page_count():
     assert "hour" in time_to_consume_for("book", {"page_count": 300})
     assert time_to_consume_for("article", {}) == "~20–40 min"
+
+
+# ── reporting_guideline disambiguation (journal article vs the checklist itself) ──
+
+def test_reporting_guideline_guide_distinguishes_articles():
+    g = REPORTING_GUIDELINE_GUIDE
+    # names the canonical checklists/standards
+    assert "PRISMA" in g and "CONSORT" in g and "STARD" in g
+    # tells the classifier a journal article titled "Guidelines for…" is an article
+    assert "article" in g.lower() and "journal" in g.lower()
+    assert "guideline" in g.lower()
+
+def test_classification_prompt_includes_reporting_guideline_guide():
+    # the deterministic classification stage injects the guide into the type block
+    import agents.pipeline.deterministic as det
+    src = __import__("inspect").getsource(det.run_pipeline)
+    assert "REPORTING_GUIDELINE_GUIDE" in src
 
 
 # ── run_pipeline: dead source is guarded before any LLM call ─────────────────
