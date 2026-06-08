@@ -197,13 +197,22 @@ export async function getReviewQueue(
     .collection("review_queue")
     .where("status", "==", "pending") as FirebaseFirestore.Query
 
-  query = query.orderBy("queued_at", filters.sortBy === "oldest" ? "asc" : "desc")
-  query = query.limit(filters.limit ?? 100)
+  query = query.limit(filters.limit ?? 200)
 
   const snap = await query.get()
   let items = snap.docs.map((d) => ({ id: d.id, ...d.data() } as ReviewQueueItem))
 
-  // Client-side filters (Firestore composite index not required)
+  // Client-side sort + filters (no composite Firestore index required)
+  const dateSort = filters.sortBy === "oldest" ? "asc" : "desc"
+  if (filters.sortBy === "oldest" || filters.sortBy === "newest" || !filters.sortBy) {
+    items.sort((a, b) => {
+      const ta = new Date(a.queued_at).getTime()
+      const tb = new Date(b.queued_at).getTime()
+      return dateSort === "asc" ? ta - tb : tb - ta
+    })
+  }
+
+  // Client-side filters
   if (filters.type) {
     items = items.filter((i) => i.draft_record?.resource_type_code === filters.type)
   }

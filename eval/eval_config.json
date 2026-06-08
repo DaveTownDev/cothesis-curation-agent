@@ -1,6 +1,6 @@
 {
   "criteria": {
-    "response_match_score": 0.15,
+    "response_match_score": 0.12,
     "rubric_based_final_response_quality_v1": {
       "threshold": 0.6,
       "judge_model_options": {

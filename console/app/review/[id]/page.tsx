@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { requireAuth } from "@/lib/auth"
@@ -100,6 +101,17 @@ async function requeueItem(itemId: string, reason: string) {
 // ── Page ────────────────────────────────────────────────────────────────────
 
 export const revalidate = 0
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+  const item = await getReviewQueueItem(id)
+  const title = item?.draft_record?.title ?? item?.resource_code ?? "Review"
+  return { title: `${title} — CoThesis` }
+}
 
 export default async function ReviewDetailPage({
   params,

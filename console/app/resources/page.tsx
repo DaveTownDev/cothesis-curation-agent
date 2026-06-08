@@ -3,6 +3,8 @@ import { getPublishedResources } from "@/lib/firestore"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Clock, AlertCircle } from "lucide-react"
 
+export const metadata = { title: "Published — CoThesis" }
+
 export const revalidate = 0
 
 const TYPE_LABELS: Record<string, string> = {

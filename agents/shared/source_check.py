@@ -14,6 +14,8 @@ import logging
 
 import httpx
 
+from agents.shared.url_safety import _MAX_REDIRECTS, is_safe_outbound_url, normalise_doi
+
 logger = logging.getLogger(__name__)
 
 _HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; CoThesis-curation/1.0)"}
@@ -28,12 +30,24 @@ def verify_source(url: str | None, doi: str | None = None, timeout: int = 12) ->
     A 'dead' result should stop confident enrichment and route to human review.
     """
     # Prefer the DOI (authoritative); fall back to the URL.
-    target = f"https://doi.org/{doi}" if doi else url
+    target: str | None = None
+    if doi:
+        clean = normalise_doi(doi)
+        if not clean:
+            return {"status": "dead", "code": None, "final_url": None, "resolved": False, "err": "invalid doi"}
+        target = f"https://doi.org/{clean}"
+    elif url:
+        if not is_safe_outbound_url(url):
+            logger.warning("verify_source blocked unsafe URL: %s", url[:80])
+            return {"status": "dead", "code": None, "final_url": None, "resolved": False, "err": "blocked url"}
+        target = url
     if not target:
         return {"status": "unknown", "code": None, "final_url": None, "resolved": False}
 
     try:
-        with httpx.Client(follow_redirects=True, timeout=timeout, headers=_HEADERS) as c:
+        with httpx.Client(
+            follow_redirects=True, max_redirects=_MAX_REDIRECTS, timeout=timeout, headers=_HEADERS,
+        ) as c:
             r = c.get(target)
             code = r.status_code
             if code in _DEAD_CODES:

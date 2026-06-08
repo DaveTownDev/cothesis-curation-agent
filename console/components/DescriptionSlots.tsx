@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Pencil, Check, X } from "lucide-react"
 import type { DraftRecord } from "@/lib/firestore"
 
@@ -15,9 +15,14 @@ interface EditableFieldProps {
 function EditableField({ label, value, accent = "#6b7280", bg, onChange }: EditableFieldProps) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(value)
-  const edited = value !== (draft === value ? value : draft)
+  const original = useRef(value)
+  const [wasEdited, setWasEdited] = useState(false)
 
-  const commit = () => { onChange(draft); setEditing(false) }
+  const commit = () => {
+    if (draft !== original.current) setWasEdited(true)
+    onChange(draft)
+    setEditing(false)
+  }
   const cancel = () => { setDraft(value); setEditing(false) }
 
   return (
@@ -25,10 +30,15 @@ function EditableField({ label, value, accent = "#6b7280", bg, onChange }: Edita
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-xs font-semibold uppercase tracking-widest" style={{ color: accent }}>
           {label}
-          {edited && <span className="ml-2 text-[10px] normal-case tracking-normal text-[#f59e0b]">(edited)</span>}
+          {wasEdited && <span className="ml-2 text-[10px] normal-case tracking-normal text-[#f59e0b]">(edited)</span>}
         </h3>
         {!editing ? (
-          <button onClick={() => { setDraft(value); setEditing(true) }} className="text-[#6b7280] hover:text-[#0E3A27]">
+          <button
+            type="button"
+            aria-label={`Edit ${label}`}
+            onClick={() => { setDraft(value); setEditing(true) }}
+            className="text-[#6b7280] hover:text-[#0E3A27] focus:outline-none focus:ring-2 focus:ring-[#289642] rounded"
+          >
             <Pencil size={12} />
           </button>
         ) : (

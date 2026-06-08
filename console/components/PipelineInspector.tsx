@@ -77,8 +77,10 @@ function CopyButton({ value }: { value: string }) {
   const [copied, setCopied] = useState(false)
   return (
     <button
+      type="button"
+      aria-label="Copy pipeline run ID"
       onClick={() => { navigator.clipboard.writeText(value); setCopied(true); setTimeout(() => setCopied(false), 1500) }}
-      className="text-[#6b7280] hover:text-[#0E3A27] transition-colors ml-1"
+      className="text-[#6b7280] hover:text-[#0E3A27] transition-colors ml-1 focus:outline-none focus:ring-2 focus:ring-[#289642] rounded"
       title="Copy"
     >
       {copied ? <CheckCircle size={12} className="text-[#289642]" /> : <Copy size={12} />}

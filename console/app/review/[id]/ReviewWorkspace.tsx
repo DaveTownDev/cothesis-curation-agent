@@ -149,6 +149,7 @@ export function ReviewWorkspace({
           <ReviewActions
             itemId={itemId}
             proposedBadges={draft?.proposed_badges ?? []}
+            editorialNote={editorialNote}
             checklistErrors={liveErrors}
             qualityScore={draft?.quality_score ?? 0}
             aiConfidence={draft?.ai_confidence ?? 0}

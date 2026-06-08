@@ -52,6 +52,13 @@ def test_doi_network_failure_is_dead():
         assert verify_source(None, doi="10.0000/fake")["status"] == "dead"
 
 
+def test_unsafe_url_blocked_without_fetch():
+    with patch("agents.shared.source_check.is_safe_outbound_url", return_value=False):
+        result = verify_source("https://169.254.169.254/latest/meta-data/")
+    assert result["status"] == "dead"
+    assert result.get("err") == "blocked url"
+
+
 def test_bare_url_network_blip_is_blocked_not_dead():
     with patch("agents.shared.source_check.httpx.Client",
                return_value=_client_returning(exc=httpx.ReadTimeout("slow"))):

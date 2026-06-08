@@ -4,7 +4,10 @@ import { requireAuth } from "@/lib/auth"
 import { getReviewQueue, type ReviewQueueFilters } from "@/lib/firestore"
 import { Badge } from "@/components/ui/badge"
 import { QueueFilters } from "@/components/QueueFilters"
+import { QueueTableRow } from "@/components/QueueTableRow"
 import { ExternalLink } from "lucide-react"
+
+export const metadata = { title: "Review queue — CoThesis" }
 
 export const revalidate = 0
 
@@ -90,8 +93,14 @@ export default async function ReviewQueuePage({
       )}
 
       {!error && items.length === 0 && (
-        <div className="rounded-xl border border-[#d4cfc5] bg-white p-12 text-center">
+        <div className="rounded-xl border border-[#d4cfc5] bg-white p-12 text-center space-y-3">
           <p className="text-[#6b7280]">No items match the current filters.</p>
+          <p className="text-xs text-[#9ca3af]">
+            Demo seed:{" "}
+            <code className="bg-[#F8F5EE] px-2 py-1 rounded text-[#0E3A27]">
+              GOOGLE_CLOUD_PROJECT=cothesis-curation-agent python -m scripts.seed_demo
+            </code>
+          </p>
         </div>
       )}
 
@@ -117,7 +126,7 @@ export default async function ReviewQueuePage({
                 const rel = draft?.relevance_score
                 const conf = draft?.classification_confidence
                 return (
-                  <tr key={item.id} className="hover:bg-[#F8F5EE] transition-colors">
+                  <QueueTableRow key={item.id} href={`/review/${item.id}`}>
                     <td className="px-4 py-3">
                       <div className="font-medium text-[#0E3A27] max-w-xs truncate">
                         {draft?.title ?? item.resource_code}
@@ -184,14 +193,11 @@ export default async function ReviewQueuePage({
                       })}
                     </td>
                     <td className="px-4 py-3">
-                      <Link
-                        href={`/review/${item.id}`}
-                        className="flex items-center gap-1 text-[#289642] text-sm font-medium hover:underline whitespace-nowrap"
-                      >
+                      <span className="flex items-center gap-1 text-[#289642] text-sm font-medium whitespace-nowrap">
                         Review <ExternalLink size={12} />
-                      </Link>
+                      </span>
                     </td>
-                  </tr>
+                  </QueueTableRow>
                 )
               })}
             </tbody>

@@ -49,7 +49,9 @@ export function BadgeList({ proposed, onChange }: Props) {
               key={badge}
               type="button"
               onClick={() => toggle(badge)}
-              className="focus:outline-none"
+              className="focus:outline-none focus:ring-2 focus:ring-[#289642] focus:ring-offset-1 rounded-full"
+              aria-label={`Toggle badge ${BADGE_LABELS[badge]}`}
+              aria-pressed={isSelected}
             >
               <Badge
                 variant={isSelected ? "default" : isProposed ? "secondary" : "outline"}

@@ -37,15 +37,21 @@ _REQUIRED_DIMS = (
 
 def fetch_openalex_metadata(doi: str | None = None, title: str | None = None) -> dict:
     """Fetch structured metadata from OpenAlex. Returns {} on failure."""
+    params: dict[str, str | int] | None = None
     if doi:
         url = f"https://api.openalex.org/works/https://doi.org/{doi}"
     elif title:
-        url = f"https://api.openalex.org/works?search={httpx.URL(title)}&per_page=1"
+        url = "https://api.openalex.org/works"
+        params = {"search": title, "per_page": 1}
     else:
         return {}
     try:
         with httpx.Client(timeout=10) as client:
-            resp = client.get(url, headers={"User-Agent": "CoThesis-curation/1.0"})
+            resp = client.get(
+                url,
+                params=params if title else None,
+                headers={"User-Agent": "CoThesis-curation/1.0"},
+            )
             resp.raise_for_status()
             data = resp.json()
             if "results" in data:

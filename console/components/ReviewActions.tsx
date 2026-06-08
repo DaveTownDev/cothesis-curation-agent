@@ -16,6 +16,7 @@ interface EditedDescriptions {
 interface Props {
   itemId: string
   proposedBadges: string[]
+  editorialNote: string
   checklistErrors: ChecklistError[]
   qualityScore: number
   aiConfidence: number
@@ -35,11 +36,12 @@ const THRESHOLD_OK = (q: number, c: number) => q >= 80 && c >= 70
 const THRESHOLD_BORDER = (q: number, c: number) => (q >= 60 && q < 80) || (c >= 50 && c < 70)
 
 export function ReviewActions({
-  itemId, proposedBadges, checklistErrors, qualityScore, aiConfidence,
+  itemId, proposedBadges, editorialNote, checklistErrors, qualityScore, aiConfidence,
   edited, approveAction, rejectAction, requeueAction,
 }: Props) {
   const [ratifiedBadges, setRatifiedBadges] = useState<string[]>(proposedBadges.slice(0, 3))
-  const [editorialNote, setEditorialNote] = useState("")
+  const [actionError, setActionError] = useState<string | null>(null)
+  const [submitted, setSubmitted] = useState(false)
   const [reviewerName, setReviewerName] = useState<string>(() => {
     if (typeof window !== "undefined") return localStorage.getItem("cothesis_reviewer") ?? ""
     return ""
@@ -59,18 +61,31 @@ export function ReviewActions({
     setEditingReviewer(false)
   }
 
+  async function runAction(action: () => Promise<void>) {
+    setActionError(null)
+    setSubmitted(true)
+    try {
+      await action()
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Action failed — try again")
+      setSubmitted(false)
+    }
+  }
+
   function handleApprove() {
     startTransition(() => {
-      approveAction(itemId, ratifiedBadges, editorialNote, reviewerName || "console", edited)
+      void runAction(() =>
+        approveAction(itemId, ratifiedBadges, editorialNote, reviewerName || "console", edited)
+      )
     })
   }
   function handleReject() {
     if (!rejectReason.trim()) return
-    startTransition(() => { rejectAction(itemId, rejectReason) })
+    startTransition(() => { void runAction(() => rejectAction(itemId, rejectReason)) })
   }
   function handleRequeue() {
     if (!requeueReason.trim()) return
-    startTransition(() => { requeueAction(itemId, requeueReason) })
+    startTransition(() => { void runAction(() => requeueAction(itemId, requeueReason)) })
   }
 
   const autoOk = THRESHOLD_OK(qualityScore, aiConfidence)
@@ -134,10 +149,16 @@ export function ReviewActions({
         )}
       </div>
 
+      {actionError && (
+        <div className="rounded-md border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-700">
+          {actionError}
+        </div>
+      )}
+
       {/* Action buttons */}
       {!rejecting && !requeueing && (
         <div className="space-y-2">
-          <Button onClick={handleApprove} disabled={!canApprove || isPending} className="w-full">
+          <Button onClick={handleApprove} disabled={!canApprove || isPending || submitted} className="w-full">
             <CheckCircle size={14} />
             {isPending ? "Publishing…" : "Approve & publish"}
           </Button>
