@@ -4,9 +4,13 @@ import Link from "next/link"
 import { requireAuth } from "@/lib/auth"
 import {
   getReviewQueueItem, getFirestoreDb, FieldValue,
-  getPipelineState, getDraftAssessment,
+  getPipelineState, getDraftAssessment, getReviewQueue,
 } from "@/lib/firestore"
 import { validatePublishChecklist } from "@/lib/checklist"
+import {
+  parseReviewQueueFilters, queueQueryString, reviewDetailHref,
+} from "@/lib/queue-filters"
+import type { TaxonomyEdits } from "@/lib/taxonomy"
 import { ReviewWorkspace } from "./ReviewWorkspace"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, ExternalLink } from "lucide-react"
@@ -18,6 +22,11 @@ const TYPE_LABELS: Record<string, string> = {
   visual_reference: "Visual", dataset: "Dataset", community: "Community", funding: "Funding",
 }
 
+function redirectAfterQueueAction(nextId: string | null, queueQuery: string) {
+  if (nextId) redirect(`/review/${nextId}${queueQuery ? `?${queueQuery}` : ""}`)
+  redirect(queueQuery ? `/review?${queueQuery}` : "/review")
+}
+
 // ── Server Actions ──────────────────────────────────────────────────────────
 
 async function approveItem(
@@ -25,7 +34,10 @@ async function approveItem(
   badges: string[],
   editorialNote: string,
   reviewerName: string,
-  edited: { editorial_description: string; summary: string; editorial_description_plain: string }
+  edited: { editorial_description: string; summary: string; editorial_description_plain: string },
+  taxonomy: TaxonomyEdits,
+  nextId: string | null,
+  queueQuery: string,
 ) {
   "use server"
   const item = await getReviewQueueItem(itemId)
@@ -34,13 +46,12 @@ async function approveItem(
   const reviewedBy = reviewerName || "console"
   const workingRecord = {
     ...item.draft_record,
-    editorial_description: edited.editorial_description,
-    summary: edited.summary,
-    editorial_description_plain: edited.editorial_description_plain,
+    ...edited,
+    ...taxonomy,
   }
   const errors = validatePublishChecklist(
     workingRecord as unknown as Record<string, unknown>,
-    reviewedBy
+    reviewedBy,
   )
   if (errors.length > 0) {
     throw new Error(`Checklist failed: ${errors.map((e) => e.message).join("; ")}`)
@@ -63,10 +74,15 @@ async function approveItem(
   batch.update(queueRef, { status: "approved" })
 
   await batch.commit()
-  redirect("/review")
+  redirectAfterQueueAction(nextId, queueQuery)
 }
 
-async function rejectItem(itemId: string, reason: string) {
+async function rejectItem(
+  itemId: string,
+  reason: string,
+  nextId: string | null,
+  queueQuery: string,
+) {
   "use server"
   const item = await getReviewQueueItem(itemId)
   if (!item) throw new Error("Review queue item not found")
@@ -83,19 +99,26 @@ async function rejectItem(itemId: string, reason: string) {
   }
 
   await batch.commit()
-  redirect("/review")
+  redirectAfterQueueAction(nextId, queueQuery)
 }
 
-async function requeueItem(itemId: string, reason: string) {
+async function requeueItem(
+  itemId: string,
+  reason: string,
+  stage: string,
+  nextId: string | null,
+  queueQuery: string,
+) {
   "use server"
   const db = getFirestoreDb()
   const queueRef = db.collection("review_queue").doc(itemId)
   await queueRef.update({
     status: "pending",
     requeue_reason: reason,
+    requeue_stage: stage,
     queued_at: new Date().toISOString(),
   })
-  redirect("/review")
+  redirectAfterQueueAction(nextId, queueQuery)
 }
 
 // ── Page ────────────────────────────────────────────────────────────────────
@@ -115,17 +138,31 @@ export async function generateMetadata({
 
 export default async function ReviewDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<Record<string, string | undefined>>
 }) {
   await requireAuth()
   const { id } = await params
+  const sp = await searchParams
 
   const item = await getReviewQueueItem(id)
   if (!item) notFound()
 
   const draft = item.draft_record
   const resourceCode = item.resource_code || draft?.resource_code || ""
+  const queueQuery = queueQueryString(sp)
+  const filters = parseReviewQueueFilters(sp)
+  const queueItems = await getReviewQueue(filters)
+  const ids = queueItems.map((i) => i.id)
+  const idx = ids.indexOf(id)
+  const position = idx >= 0 ? idx + 1 : 1
+  const total = ids.length || 1
+  const prevId = idx > 0 ? ids[idx - 1] : null
+  const nextId = idx >= 0 && idx < ids.length - 1 ? ids[idx + 1] : null
+  const prevHref = prevId ? reviewDetailHref(prevId, sp) : null
+  const nextHref = nextId ? reviewDetailHref(nextId, sp) : null
 
   const [pipelineState, draftDoc] = await Promise.all([
     resourceCode ? getPipelineState(resourceCode).catch(() => null) : Promise.resolve(null),
@@ -134,20 +171,23 @@ export default async function ReviewDetailPage({
 
   const checklistErrors = validatePublishChecklist(
     draft as unknown as Record<string, unknown>,
-    "console"
+    "console",
   )
+
+  const gcpProjectId = process.env.GOOGLE_CLOUD_PROJECT ?? "cothesis-curation-agent"
 
   return (
     <div className="space-y-4">
-      {/* Breadcrumb */}
       <div className="flex items-center gap-3">
-        <Link href="/review" className="flex items-center gap-1 text-sm text-[#6b7280] hover:text-[#0E3A27]">
+        <Link
+          href={queueQuery ? `/review?${queueQuery}` : "/review"}
+          className="flex items-center gap-1 text-sm text-[#6b7280] hover:text-[#0E3A27]"
+        >
           <ArrowLeft size={14} /> Review queue
         </Link>
         {item.routing && <Badge variant="outline" className="text-xs">{item.routing}</Badge>}
       </div>
 
-      {/* Resource header */}
       <div className="bg-white rounded-xl border border-[#d4cfc5] px-5 py-4">
         <h1 className="font-serif text-2xl font-semibold text-[#0E3A27] leading-tight">
           {draft?.title ?? resourceCode}
@@ -176,21 +216,11 @@ export default async function ReviewDetailPage({
           {draft?.access_type && (
             <Badge variant="secondary" className="text-xs capitalize">{draft.access_type.replace(/_/g, " ")}</Badge>
           )}
-          {draft?.language_detected && draft.language_detected !== "en" && (
-            <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-800">
-              {draft.language_detected.toUpperCase()}
-            </Badge>
-          )}
         </div>
 
         {item.reason && (
           <div className="mt-3 rounded-md bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-800">
             <span className="font-semibold">Routing reason: </span>{item.reason}
-          </div>
-        )}
-        {item.requeue_reason && (
-          <div className="mt-2 rounded-md bg-blue-50 border border-blue-200 px-3 py-2 text-xs text-blue-800">
-            <span className="font-semibold">Send-back note: </span>{item.requeue_reason}
           </div>
         )}
         {item.qa_audit && (
@@ -203,23 +233,17 @@ export default async function ReviewDetailPage({
             }}>
             <div className="font-semibold text-[#0E3A27]">
               QA audit: source {item.qa_audit.source_verdict ?? "—"} · link {item.qa_audit.url_status ?? "—"}
-              {item.qa_audit.type_match ? ` · type-match ${item.qa_audit.type_match}` : ""}
-              {item.qa_audit.methodology_plausible ? ` · methodology ${item.qa_audit.methodology_plausible}` : ""}
             </div>
             {item.qa_audit.source_notes && <p className="mt-1 text-[#4a5568]">{item.qa_audit.source_notes}</p>}
-            {(item.qa_audit.source_issues?.length ?? 0) > 0 && (
-              <ul className="mt-1 list-disc list-inside text-[#6b7280]">
-                {item.qa_audit.source_issues!.slice(0, 4).map((s, i) => <li key={i}>{s}</li>)}
-              </ul>
-            )}
             {(item.qa_audit.hallucinations?.length ?? 0) > 0 && (
-              <p className="mt-1 text-red-700"><span className="font-semibold">Possible hallucinations:</span> {item.qa_audit.hallucinations!.length}</p>
+              <ul className="mt-1 list-disc list-inside text-red-700">
+                {item.qa_audit.hallucinations!.map((h, i) => <li key={i}>{h}</li>)}
+              </ul>
             )}
           </div>
         )}
       </div>
 
-      {/* Interactive 3-pane workspace (client) */}
       <ReviewWorkspace
         itemId={id}
         draft={draft}
@@ -227,6 +251,13 @@ export default async function ReviewDetailPage({
         pipelineState={pipelineState}
         draftDoc={draftDoc}
         checklistErrors={checklistErrors}
+        queuePosition={position}
+        queueTotal={total}
+        prevHref={prevHref}
+        nextHref={nextHref}
+        nextId={nextId}
+        queueQuery={queueQuery}
+        gcpProjectId={gcpProjectId}
         approveAction={approveItem}
         rejectAction={rejectItem}
         requeueAction={requeueItem}

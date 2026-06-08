@@ -101,6 +101,17 @@ export interface DraftRecord {
   language_detected?: string | null
   alternative_titles?: string[]
   type_fields?: Record<string, unknown>
+  enrichment_sources?: string[]
+  enrichment_pending_keys?: string[]
+  field_provenance?: Record<string, FieldProvenanceEntry>
+  content_format?: string
+  time_to_consume?: string
+}
+
+export interface FieldProvenanceEntry {
+  source?: string
+  timestamp?: string
+  value?: unknown
 }
 
 export interface QaAudit {
@@ -130,6 +141,7 @@ export interface ReviewQueueItem {
   queued_at: string
   rejected_reason?: string
   requeue_reason?: string
+  requeue_stage?: string
   qa_audit?: QaAudit
 }
 
@@ -183,7 +195,8 @@ export interface ReviewQueueFilters {
   minQuality?: number
   maxQuality?: number
   methodology?: string
-  sortBy?: "newest" | "oldest" | "quality_asc" | "quality_desc"
+  sortBy?: "newest" | "oldest" | "quality_asc" | "quality_desc" | "attention"
+  preset?: string
   limit?: number
 }
 
@@ -231,6 +244,42 @@ export async function getReviewQueue(
     items.sort((a, b) => (a.draft_record?.quality_score ?? 0) - (b.draft_record?.quality_score ?? 0))
   } else if (filters.sortBy === "quality_desc") {
     items.sort((a, b) => (b.draft_record?.quality_score ?? 0) - (a.draft_record?.quality_score ?? 0))
+  }
+
+  if (filters.preset === "qa_issues") {
+    items = items.filter((i) => {
+      const v = i.qa_audit?.source_verdict
+      return v === "fail" || v === "warn"
+    })
+  } else if (filters.preset === "low_confidence") {
+    items = items.filter((i) => {
+      const d = i.draft_record
+      return (d?.classification_confidence ?? 1) < 0.5 || (d?.ai_confidence ?? 100) < 70
+    })
+  } else if (filters.preset === "ready_to_clear") {
+    items = items.filter((i) => {
+      const d = i.draft_record
+      const qa = i.qa_audit?.source_verdict
+      return (
+        (qa === "pass" || !qa) &&
+        (d?.quality_score ?? 0) >= 80 &&
+        (d?.ai_confidence ?? 0) >= 70 &&
+        (d?.classification_confidence ?? 0) >= 0.5
+      )
+    })
+  }
+
+  if (filters.sortBy === "attention") {
+    const qaRank = (v?: string) => (v === "fail" ? 0 : v === "warn" ? 1 : 2)
+    items.sort((a, b) => {
+      const qa = qaRank(a.qa_audit?.source_verdict) - qaRank(b.qa_audit?.source_verdict)
+      if (qa !== 0) return qa
+      const conf =
+        (a.draft_record?.classification_confidence ?? 1) -
+        (b.draft_record?.classification_confidence ?? 1)
+      if (conf !== 0) return conf
+      return new Date(a.queued_at).getTime() - new Date(b.queued_at).getTime()
+    })
   }
 
   return items

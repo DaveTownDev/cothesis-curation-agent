@@ -1,22 +1,18 @@
-import Link from "next/link"
 import { Suspense } from "react"
 import { requireAuth } from "@/lib/auth"
-import { getReviewQueue, type ReviewQueueFilters } from "@/lib/firestore"
+import { getReviewQueue } from "@/lib/firestore"
+import {
+  parseReviewQueueFilters, isCompactView, reviewDetailHref, currentPreset,
+  queueQueryString,
+} from "@/lib/queue-filters"
 import { Badge } from "@/components/ui/badge"
 import { QueueFilters } from "@/components/QueueFilters"
-import { QueueTableRow } from "@/components/QueueTableRow"
-import { ExternalLink } from "lucide-react"
+import { TriagePresets } from "@/components/TriagePresets"
+import { ReviewQueueTable } from "@/components/ReviewQueueTable"
 
 export const metadata = { title: "Review queue — CoThesis" }
 
 export const revalidate = 0
-
-const TYPE_LABELS: Record<string, string> = {
-  article: "Article", book: "Book", book_chapter: "Book chapter", video: "Video",
-  podcast: "Podcast", software: "Software", reporting_guideline: "Guideline",
-  course: "Course", web_guide: "Web guide", template: "Template",
-  visual_reference: "Visual", dataset: "Dataset", community: "Community", funding: "Funding",
-}
 
 function qualityColour(score: number): string {
   if (score >= 80) return "#289642"
@@ -24,39 +20,17 @@ function qualityColour(score: number): string {
   return "#dc2626"
 }
 
-function MiniBar({ value, max = 100, colour }: { value: number; max?: number; colour: string }) {
-  return (
-    <div className="flex items-center gap-1.5">
-      <span className="text-xs font-mono w-6 text-right" style={{ color: colour }}>
-        {max === 1 ? value.toFixed(2) : value}
-      </span>
-      <div className="h-1.5 w-12 bg-[#e8e4dc] rounded-full overflow-hidden">
-        <div
-          className="h-full rounded-full"
-          style={{ width: `${(value / max) * 100}%`, backgroundColor: colour }}
-        />
-      </div>
-    </div>
-  )
-}
-
 export default async function ReviewQueuePage({
   searchParams,
 }: {
-  searchParams: Promise<Record<string, string>>
+  searchParams: Promise<Record<string, string | undefined>>
 }) {
   await requireAuth()
   const sp = await searchParams
-
-  const qualityBand = sp.quality ?? ""
-  const filters: ReviewQueueFilters = {
-    type: sp.type || undefined,
-    methodology: sp.methodology || undefined,
-    sortBy: (sp.sort as ReviewQueueFilters["sortBy"]) || "newest",
-    minQuality: qualityBand === "green" ? 80 : qualityBand === "amber" ? 60 : undefined,
-    maxQuality: qualityBand === "amber" ? 79 : qualityBand === "red" ? 59 : undefined,
-    limit: 200,
-  }
+  const compact = isCompactView(sp)
+  const preset = currentPreset(sp)
+  const filters = parseReviewQueueFilters(sp)
+  const detailQuery = queueQueryString(sp)
 
   let items: Awaited<ReturnType<typeof getReviewQueue>> = []
   let error: string | null = null
@@ -66,25 +40,41 @@ export default async function ReviewQueuePage({
     error = err instanceof Error ? err.message : "Could not load queue"
   }
 
-  // Stats bar
   const avgQuality = items.length
     ? Math.round(items.reduce((s, i) => s + (i.draft_record?.quality_score ?? 0), 0) / items.length)
     : null
 
+  const startHref = items.length > 0 ? reviewDetailHref(items[0].id, sp) : null
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <h1 className="font-serif text-3xl font-semibold text-[#0E3A27]">Review queue</h1>
           <Badge variant="secondary">{items.length} pending</Badge>
           {avgQuality !== null && (
-            <span className="text-sm text-[#6b7280]">avg quality: <strong style={{ color: qualityColour(avgQuality) }}>{avgQuality}</strong></span>
+            <span className="text-sm text-[#6b7280]">
+              avg quality: <strong style={{ color: qualityColour(avgQuality) }}>{avgQuality}</strong>
+            </span>
+          )}
+          {startHref && (
+            <a href={startHref} className="text-sm font-medium text-[#289642] hover:underline">
+              Start reviewing →
+            </a>
           )}
         </div>
         <Suspense fallback={null}>
           <QueueFilters />
         </Suspense>
       </div>
+
+      <Suspense fallback={null}>
+        <TriagePresets active={preset} />
+      </Suspense>
+
+      <p className="text-xs text-[#9ca3af]">
+        Select rows for bulk approve/reject. Use <strong>Ready to clear</strong> + bulk approve for high-throughput sessions.
+      </p>
 
       {error && (
         <div className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">
@@ -95,114 +85,11 @@ export default async function ReviewQueuePage({
       {!error && items.length === 0 && (
         <div className="rounded-xl border border-[#d4cfc5] bg-white p-12 text-center space-y-3">
           <p className="text-[#6b7280]">No items match the current filters.</p>
-          <p className="text-xs text-[#9ca3af]">
-            Demo seed:{" "}
-            <code className="bg-[#F8F5EE] px-2 py-1 rounded text-[#0E3A27]">
-              GOOGLE_CLOUD_PROJECT=cothesis-curation-agent python -m scripts.seed_demo
-            </code>
-          </p>
         </div>
       )}
 
       {items.length > 0 && (
-        <div className="overflow-hidden rounded-xl border border-[#d4cfc5] bg-white">
-          <table className="w-full text-sm">
-            <thead className="border-b border-[#d4cfc5] bg-[#F8F5EE]">
-              <tr>
-                <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Resource</th>
-                <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Type</th>
-                <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Quality</th>
-                <th className="px-4 py-3 text-left font-medium text-[#6b7280]">QA</th>
-                <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Signals</th>
-                <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Reason</th>
-                <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Queued</th>
-                <th className="px-4 py-3" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#e8e4dc]">
-              {items.map((item) => {
-                const draft = item.draft_record
-                const score = draft?.quality_score
-                const rel = draft?.relevance_score
-                const conf = draft?.classification_confidence
-                return (
-                  <QueueTableRow key={item.id} href={`/review/${item.id}`}>
-                    <td className="px-4 py-3">
-                      <div className="font-medium text-[#0E3A27] max-w-xs truncate">
-                        {draft?.title ?? item.resource_code}
-                      </div>
-                      {draft?.url && (
-                        <div className="text-xs text-[#6b7280] truncate max-w-xs">
-                          {draft.url}
-                        </div>
-                      )}
-                      {draft?.methodology_codes?.length > 0 && (
-                        <div className="flex gap-1 mt-1 flex-wrap">
-                          {draft.methodology_codes.map((c) => (
-                            <span key={c} className="text-[10px] bg-[#e8e4dc] text-[#4a6741] rounded px-1">{c}</span>
-                          ))}
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-4 py-3">
-                      <Badge variant="outline">
-                        {TYPE_LABELS[draft?.resource_type_code] ?? draft?.resource_type_code}
-                      </Badge>
-                      {draft?.resource_subtype_code && (
-                        <div className="text-[10px] text-[#6b7280] mt-0.5">{draft.resource_subtype_code}</div>
-                      )}
-                    </td>
-                    <td className="px-4 py-3">
-                      {score !== undefined ? (
-                        <span className="font-bold text-sm" style={{ color: qualityColour(score) }}>
-                          {score}
-                        </span>
-                      ) : <span className="text-[#6b7280]">—</span>}
-                    </td>
-                    <td className="px-4 py-3">
-                      {item.qa_audit?.source_verdict ? (
-                        <span
-                          className="text-[10px] font-semibold rounded px-1.5 py-0.5"
-                          style={{
-                            backgroundColor: item.qa_audit.source_verdict === "pass" ? "#28964220"
-                              : item.qa_audit.source_verdict === "warn" ? "#f59e0b20" : "#dc262620",
-                            color: item.qa_audit.source_verdict === "pass" ? "#289642"
-                              : item.qa_audit.source_verdict === "warn" ? "#b45309" : "#dc2626",
-                          }}
-                          title={item.qa_audit.source_notes ?? ""}
-                        >
-                          {item.qa_audit.source_verdict.toUpperCase()}
-                        </span>
-                      ) : <span className="text-[#9ca3af] text-xs">—</span>}
-                    </td>
-                    <td className="px-4 py-3 space-y-1">
-                      {rel !== undefined && (
-                        <MiniBar value={rel} max={1} colour="#03848F" />
-                      )}
-                      {conf !== undefined && (
-                        <MiniBar value={conf} max={1} colour="#289642" />
-                      )}
-                    </td>
-                    <td className="px-4 py-3 max-w-[200px]">
-                      <span className="text-[#6b7280] text-xs line-clamp-2">{item.reason}</span>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-[#6b7280] whitespace-nowrap">
-                      {new Date(item.queued_at).toLocaleDateString("en-AU", {
-                        day: "numeric", month: "short",
-                        hour: "2-digit", minute: "2-digit",
-                      })}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="flex items-center gap-1 text-[#289642] text-sm font-medium whitespace-nowrap">
-                        Review <ExternalLink size={12} />
-                      </span>
-                    </td>
-                  </QueueTableRow>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+        <ReviewQueueTable items={items} compact={compact} detailQuery={detailQuery} />
       )}
     </div>
   )

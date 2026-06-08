@@ -37,10 +37,16 @@ const QUALITY_BANDS = [
 ]
 
 const SORT_OPTIONS = [
+  ["attention", "Needs attention"],
   ["newest", "Newest first"],
   ["oldest", "Oldest first"],
   ["quality_desc", "Highest quality"],
   ["quality_asc", "Lowest quality"],
+]
+
+const VIEW_OPTIONS = [
+  ["comfortable", "Comfortable"],
+  ["compact", "Compact"],
 ]
 
 export function QueueFilters() {
@@ -61,9 +67,12 @@ export function QueueFilters() {
   const select =
     "h-8 rounded border border-[#d4cfc5] bg-white px-2 text-sm text-[#0E3A27] focus:outline-none focus:ring-1 focus:ring-[#289642]"
 
-  const hasFilters = ["type", "methodology", "quality", "sort"].some((k) => {
+  const hasFilters = ["type", "methodology", "quality", "sort", "view", "preset"].some((k) => {
     const v = params.get(k)
-    return v && (k !== "sort" || v !== "newest")
+    if (k === "sort") return v && v !== "attention"
+    if (k === "view") return v && v !== "comfortable"
+    if (k === "preset") return Boolean(v)
+    return Boolean(v)
   })
 
   const clearFilters = () => router.replace(pathname)
@@ -101,10 +110,19 @@ export function QueueFilters() {
       <select
         id="filter-sort"
         className={select}
-        value={params.get("sort") ?? "newest"}
+        value={params.get("sort") ?? "attention"}
         onChange={(e) => update("sort", e.target.value)}
       >
         {SORT_OPTIONS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+      </select>
+      <label className="sr-only" htmlFor="filter-view">Table density</label>
+      <select
+        id="filter-view"
+        className={select}
+        value={params.get("view") ?? "comfortable"}
+        onChange={(e) => update("view", e.target.value === "comfortable" ? "" : e.target.value)}
+      >
+        {VIEW_OPTIONS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
       </select>
       {hasFilters && (
         <button
