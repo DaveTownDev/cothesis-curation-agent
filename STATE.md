@@ -51,7 +51,12 @@ Phase 4 remaining is [DAVE]: record demo video (docs/DEMO_SCRIPT.md), fill famil
 - [x] `research_database` resolved: subtype of `dataset` (v2.2) — 14-type enum unchanged
 
 ## In progress
-- (none)
+- **HITL Phase C (console)** — implemented locally on `cursor/hackathon-audit-fixes`, not yet committed: undo-after-approve (8s toast), reopen-from-published on `/resources`, session stats on dashboard, duplicate hint on review detail, server actions return paths (no redirect) for client navigation. Build clean; 289 pytest green.
+
+## Completed (HITL Phases A–C, hackathon audit branch)
+- [x] **Phase A** — auto-advance queue nav, keyboard shortcuts, enrichment provenance tab, inline taxonomy on approve, sticky decision pane, smart sort + compact queue
+- [x] **Phase B** — bulk approve/reject, triage presets, Compendium card preview, structured send-back, Cloud Trace/Logs links
+- [x] **Phase C** — undo approve window, reopen published for amendment, reviewer session stats (localStorage), duplicate routing hint
 
 ## Console (Day 5)
 - `console/` — Next.js 16 app
@@ -77,7 +82,18 @@ Phase 4 remaining is [DAVE]: record demo video (docs/DEMO_SCRIPT.md), fill famil
 - **Agent:** https://cothesis-agent-791873451733.us-central1.run.app (private, 403 unauth — IAP TODO for judges)
 - **Console:** https://console-791873451733.us-central1.run.app (public, passcode: `cothesis-demo-2026`)
 
-## Modified files this session
+## Modified files this session (Phase C)
+- `console/app/review/actions.ts` — approve/reject/requeue return `nextPath`; `undoApprove`, `reopenForReview`
+- `console/app/review/[id]/page.tsx` — imports shared actions; `DuplicateHint`
+- `console/app/review/[id]/ReviewWorkspace.tsx` — undo toast + client navigation
+- `console/components/ReviewActions.tsx` — session stats + `onNavigate` callback
+- `console/components/ReviewQueueTable.tsx` — bulk session stats
+- `console/components/SessionStatsCard.tsx`, `UndoApproveToast.tsx`, `DuplicateHint.tsx`, `PublishedResourcesTable.tsx` — new
+- `console/lib/session-stats.ts`, `console/lib/review-navigation.ts` — new
+- `console/app/dashboard/page.tsx` — session stats card
+- `console/app/resources/page.tsx` — reopen action column
+
+## Modified files (historical)
 - `docs/field_maps/field_mapping_*.md` — 13 files added
 - `docs/reference/` — 5 reference specs + SCHEMA_RECONCILIATION.md added
 - `docs/reference/entities/` — 65 canonical entity files added
@@ -108,3 +124,6 @@ Phase 4 remaining is [DAVE]: record demo video (docs/DEMO_SCRIPT.md), fill famil
 - Run evals: `adk eval` (see docs/EVAL.md) or the /run-evals skill
 - Deploy agent: `adk deploy cloud_run ...` (see docs/OPERATIONS.md)
 - Secret scan: `gitleaks git -v`
+- Console dev: `cd console && npm run dev`
+- Console build: `cd console && npm run build`
+- Tests: `.venv/bin/pytest tests/ -q` (289 passed 2026-06-08)

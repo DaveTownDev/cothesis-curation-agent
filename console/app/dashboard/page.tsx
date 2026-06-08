@@ -3,6 +3,7 @@ import { requireAuth } from "@/lib/auth"
 import { getPipelineStats, getSyncStats } from "@/lib/firestore"
 import { PipelineStatsCard } from "@/components/PipelineStatsCard"
 import { SyncStatusCard } from "@/components/SyncStatusCard"
+import { SessionStatsCard } from "@/components/SessionStatsCard"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, ClipboardList } from "lucide-react"
@@ -58,6 +59,8 @@ export default async function DashboardPage() {
           </span>
         </div>
       )}
+
+      <SessionStatsCard />
 
       {/* Sync & queue health */}
       <SyncStatusCard {...syncStats} />

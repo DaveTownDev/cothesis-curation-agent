@@ -1,17 +1,18 @@
 import type { Metadata } from "next"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import Link from "next/link"
 import { requireAuth } from "@/lib/auth"
 import {
-  getReviewQueueItem, getFirestoreDb, FieldValue,
+  getReviewQueueItem,
   getPipelineState, getDraftAssessment, getReviewQueue,
 } from "@/lib/firestore"
 import { validatePublishChecklist } from "@/lib/checklist"
 import {
   parseReviewQueueFilters, queueQueryString, reviewDetailHref,
 } from "@/lib/queue-filters"
-import type { TaxonomyEdits } from "@/lib/taxonomy"
+import { approveItem, rejectItem, requeueItem } from "@/app/review/actions"
 import { ReviewWorkspace } from "./ReviewWorkspace"
+import { DuplicateHint } from "@/components/DuplicateHint"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, ExternalLink } from "lucide-react"
 
@@ -20,105 +21,6 @@ const TYPE_LABELS: Record<string, string> = {
   podcast: "Podcast", software: "Software", reporting_guideline: "Guideline",
   course: "Course", web_guide: "Web guide", template: "Template",
   visual_reference: "Visual", dataset: "Dataset", community: "Community", funding: "Funding",
-}
-
-function redirectAfterQueueAction(nextId: string | null, queueQuery: string) {
-  if (nextId) redirect(`/review/${nextId}${queueQuery ? `?${queueQuery}` : ""}`)
-  redirect(queueQuery ? `/review?${queueQuery}` : "/review")
-}
-
-// ── Server Actions ──────────────────────────────────────────────────────────
-
-async function approveItem(
-  itemId: string,
-  badges: string[],
-  editorialNote: string,
-  reviewerName: string,
-  edited: { editorial_description: string; summary: string; editorial_description_plain: string },
-  taxonomy: TaxonomyEdits,
-  nextId: string | null,
-  queueQuery: string,
-) {
-  "use server"
-  const item = await getReviewQueueItem(itemId)
-  if (!item) throw new Error("Review queue item not found")
-
-  const reviewedBy = reviewerName || "console"
-  const workingRecord = {
-    ...item.draft_record,
-    ...edited,
-    ...taxonomy,
-  }
-  const errors = validatePublishChecklist(
-    workingRecord as unknown as Record<string, unknown>,
-    reviewedBy,
-  )
-  if (errors.length > 0) {
-    throw new Error(`Checklist failed: ${errors.map((e) => e.message).join("; ")}`)
-  }
-
-  const db = getFirestoreDb()
-  const batch = db.batch()
-
-  const resourceRef = db.collection("resources").doc(item.resource_code)
-  batch.set(resourceRef, {
-    ...workingRecord,
-    editorial_badges: badges,
-    editorial_note: editorialNote.trim() || null,
-    editorial_reviewed_by: reviewedBy,
-    editorial_reviewed_at: FieldValue.serverTimestamp(),
-    editorial_status: "published",
-  })
-
-  const queueRef = db.collection("review_queue").doc(itemId)
-  batch.update(queueRef, { status: "approved" })
-
-  await batch.commit()
-  redirectAfterQueueAction(nextId, queueQuery)
-}
-
-async function rejectItem(
-  itemId: string,
-  reason: string,
-  nextId: string | null,
-  queueQuery: string,
-) {
-  "use server"
-  const item = await getReviewQueueItem(itemId)
-  if (!item) throw new Error("Review queue item not found")
-
-  const db = getFirestoreDb()
-  const batch = db.batch()
-
-  const queueRef = db.collection("review_queue").doc(itemId)
-  batch.update(queueRef, { status: "rejected", rejected_reason: reason })
-
-  if (item.resource_code) {
-    const resourceRef = db.collection("resources").doc(item.resource_code)
-    batch.set(resourceRef, { editorial_status: "archived" }, { merge: true })
-  }
-
-  await batch.commit()
-  redirectAfterQueueAction(nextId, queueQuery)
-}
-
-async function requeueItem(
-  itemId: string,
-  reason: string,
-  stage: string,
-  nextId: string | null,
-  queueQuery: string,
-) {
-  "use server"
-  const db = getFirestoreDb()
-  const queueRef = db.collection("review_queue").doc(itemId)
-  await queueRef.update({
-    status: "pending",
-    requeue_reason: reason,
-    requeue_stage: stage,
-    queued_at: new Date().toISOString(),
-  })
-  redirectAfterQueueAction(nextId, queueQuery)
 }
 
 // ── Page ────────────────────────────────────────────────────────────────────
@@ -223,6 +125,8 @@ export default async function ReviewDetailPage({
             <span className="font-semibold">Routing reason: </span>{item.reason}
           </div>
         )}
+        <DuplicateHint reason={item.reason} />
+        <DuplicateHint reason={pipelineState?.skip_reason} />
         {item.qa_audit && (
           <div className="mt-2 rounded-md border px-3 py-2 text-xs"
             style={{

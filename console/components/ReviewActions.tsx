@@ -7,6 +7,8 @@ import { BadgeList } from "@/components/BadgeList"
 import type { ChecklistError } from "@/lib/checklist"
 import type { TaxonomyEdits } from "@/lib/taxonomy"
 import { REQUEUE_STAGES, formatRequeueReason, type RequeueStage } from "@/lib/requeue"
+import { recordSessionStat } from "@/lib/session-stats"
+import type { ApproveResult } from "@/app/review/actions"
 import { CheckCircle, XCircle, AlertCircle, RotateCcw, Pencil } from "lucide-react"
 
 interface EditedDescriptions {
@@ -42,20 +44,21 @@ interface Props {
     taxonomy: TaxonomyEdits,
     nextId: string | null,
     queueQuery: string,
-  ) => Promise<void>
+  ) => Promise<ApproveResult>
   rejectAction: (
     itemId: string,
     reason: string,
     nextId: string | null,
     queueQuery: string,
-  ) => Promise<void>
+  ) => Promise<{ nextPath: string }>
   requeueAction: (
     itemId: string,
     reason: string,
     stage: string,
     nextId: string | null,
     queueQuery: string,
-  ) => Promise<void>
+  ) => Promise<{ nextPath: string }>
+  onNavigate: (nextPath: string, undo?: ApproveResult["undo"]) => void
 }
 
 const THRESHOLD_OK = (q: number, c: number) => q >= 80 && c >= 70
@@ -64,7 +67,7 @@ const THRESHOLD_BORDER = (q: number, c: number) => (q >= 60 && q < 80) || (c >= 
 export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function ReviewActions({
   itemId, proposedBadges, editorialNote, taxonomy, checklistErrors, qualityScore, aiConfidence,
   edited, nextId, queueQuery,
-  approveAction, rejectAction, requeueAction,
+  approveAction, rejectAction, requeueAction, onNavigate,
 }, ref) {
   const [ratifiedBadges, setRatifiedBadges] = useState<string[]>(proposedBadges.slice(0, 3))
   const [actionError, setActionError] = useState<string | null>(null)
@@ -89,11 +92,12 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
     setEditingReviewer(false)
   }
 
-  async function runAction(action: () => Promise<void>) {
+  async function runAction<T>(action: () => Promise<T>, onSuccess: (result: T) => void) {
     setActionError(null)
     setSubmitted(true)
     try {
-      await action()
+      const result = await action()
+      onSuccess(result)
     } catch (err) {
       setActionError(err instanceof Error ? err.message : "Action failed — try again")
       setSubmitted(false)
@@ -103,11 +107,15 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
   function handleApprove() {
     if (!canApprove || isPending || submitted) return
     startTransition(() => {
-      void runAction(() =>
-        approveAction(
+      void runAction(
+        () => approveAction(
           itemId, ratifiedBadges, editorialNote, reviewerName || "console",
           edited, taxonomy, nextId, queueQuery,
-        )
+        ),
+        (result) => {
+          recordSessionStat("approved")
+          onNavigate(result.nextPath, result.undo)
+        },
       )
     })
   }
@@ -115,7 +123,13 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
   function handleReject() {
     if (!rejectReason.trim()) return
     startTransition(() => {
-      void runAction(() => rejectAction(itemId, rejectReason, nextId, queueQuery))
+      void runAction(
+        () => rejectAction(itemId, rejectReason, nextId, queueQuery),
+        (result) => {
+          recordSessionStat("rejected")
+          onNavigate(result.nextPath)
+        },
+      )
     })
   }
 
@@ -124,7 +138,10 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
     if (requeueStage === "other" && !note) return
     const reason = formatRequeueReason(requeueStage, note)
     startTransition(() => {
-      void runAction(() => requeueAction(itemId, reason, requeueStage, nextId, queueQuery))
+      void runAction(
+        () => requeueAction(itemId, reason, requeueStage, nextId, queueQuery),
+        (result) => onNavigate(result.nextPath),
+      )
     })
   }
 

@@ -1,7 +1,10 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
+import { undoApprove, type ApproveResult } from "@/app/review/actions"
+import { UndoApproveToast, useUndoCountdown } from "@/components/UndoApproveToast"
+import { adjustSessionStat } from "@/lib/session-stats"
 import { DescriptionSlots } from "@/components/DescriptionSlots"
 import { PipelineInspector } from "@/components/PipelineInspector"
 import { ReviewActions, type ReviewActionsHandle } from "@/components/ReviewActions"
@@ -42,12 +45,12 @@ interface Props {
     itemId: string, badges: string[], editorialNote: string,
     reviewerName: string, edited: EditedDescriptions, taxonomy: TaxonomyEdits,
     nextId: string | null, queueQuery: string,
-  ) => Promise<void>
-  rejectAction: (itemId: string, reason: string, nextId: string | null, queueQuery: string) => Promise<void>
+  ) => Promise<ApproveResult>
+  rejectAction: (itemId: string, reason: string, nextId: string | null, queueQuery: string) => Promise<{ nextPath: string }>
   requeueAction: (
     itemId: string, reason: string, stage: string,
     nextId: string | null, queueQuery: string,
-  ) => Promise<void>
+  ) => Promise<{ nextPath: string }>
 }
 
 function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
@@ -69,6 +72,48 @@ export function ReviewWorkspace({
   const router = useRouter()
   const actionsRef = useRef<ReviewActionsHandle>(null)
   const [helpOpen, setHelpOpen] = useState(false)
+  const [undoPending, setUndoPending] = useState<{
+    undo: ApproveResult["undo"]
+    nextPath: string
+  } | null>(null)
+  const [isUndoing, startUndo] = useTransition()
+
+  const undoPendingRef = useRef(undoPending)
+  undoPendingRef.current = undoPending
+
+  const finishNavigate = useCallback((nextPath: string) => {
+    setUndoPending(null)
+    router.push(nextPath)
+  }, [router])
+
+  const handleNavigate = useCallback((nextPath: string, undo?: ApproveResult["undo"]) => {
+    if (undo) {
+      setUndoPending({ undo, nextPath })
+    } else {
+      router.push(nextPath)
+    }
+  }, [router])
+
+  const onUndoExpire = useCallback(() => {
+    const pending = undoPendingRef.current
+    if (pending) finishNavigate(pending.nextPath)
+  }, [finishNavigate])
+
+  const secondsLeft = useUndoCountdown(undoPending !== null, 8, onUndoExpire)
+
+  function handleUndo() {
+    if (!undoPending) return
+    const { undo, nextPath } = undoPending
+    startUndo(async () => {
+      try {
+        await undoApprove(undo.itemId, undo.resourceCode)
+        adjustSessionStat("approved", -1)
+        finishNavigate(`/review/${undo.itemId}${queueQuery ? `?${queueQuery}` : ""}`)
+      } catch {
+        finishNavigate(nextPath)
+      }
+    })
+  }
 
   const [shortDesc, setShortDesc] = useState(draft?.editorial_description ?? "")
   const [longDesc, setLongDesc] = useState(draft?.summary ?? "")
@@ -278,6 +323,7 @@ export function ReviewWorkspace({
               approveAction={approveAction}
               rejectAction={rejectAction}
               requeueAction={requeueAction}
+              onNavigate={handleNavigate}
             />
           </CardContent>
         </Card>
@@ -289,6 +335,15 @@ export function ReviewWorkspace({
         onApprove={() => actionsRef.current?.approve()}
         onReject={() => actionsRef.current?.openReject()}
         onRequeue={() => actionsRef.current?.openRequeue()}
+      />
+
+      <UndoApproveToast
+        visible={undoPending !== null}
+        resourceTitle={draft?.title ?? ""}
+        secondsLeft={secondsLeft}
+        onUndo={handleUndo}
+        onDismiss={() => undoPending && finishNavigate(undoPending.nextPath)}
+        isUndoing={isUndoing}
       />
     </>
   )

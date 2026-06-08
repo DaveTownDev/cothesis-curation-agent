@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { QueueTableRow } from "@/components/QueueTableRow"
 import { BulkPreflightModal, type BulkRowStatus } from "@/components/BulkPreflightModal"
 import { bulkApproveAsDrafted, bulkReject } from "@/app/review/actions"
+import { recordSessionStat } from "@/lib/session-stats"
 import { ExternalLink } from "lucide-react"
 
 const TYPE_LABELS: Record<string, string> = {
@@ -92,7 +93,8 @@ export function ReviewQueueTable({ items, compact, detailQuery }: Props) {
     startTransition(async () => {
       const reviewer = localStorage.getItem("cothesis_reviewer") ?? "console"
       const readyIds = bulkRows.filter((r) => r.canApprove).map((r) => r.id)
-      await bulkApproveAsDrafted(readyIds, reviewer)
+      const result = await bulkApproveAsDrafted(readyIds, reviewer)
+      if (result.approved > 0) recordSessionStat("approved", result.approved)
       setModal(null)
       setSelected(new Set())
       router.refresh()
@@ -101,7 +103,8 @@ export function ReviewQueueTable({ items, compact, detailQuery }: Props) {
 
   function runBulkReject() {
     startTransition(async () => {
-      await bulkReject(selectedItems.map((i) => i.id), rejectReason)
+      const result = await bulkReject(selectedItems.map((i) => i.id), rejectReason)
+      if (result.rejected > 0) recordSessionStat("rejected", result.rejected)
       setModal(null)
       setRejectReason("")
       setSelected(new Set())
