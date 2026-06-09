@@ -14,12 +14,14 @@ import { TaxonomyEditor } from "@/components/TaxonomyEditor"
 import { ReviewSessionBar } from "@/components/ReviewSessionBar"
 import { KeyboardHelp } from "@/components/KeyboardHelp"
 import { CompendiumCardPreview } from "@/components/CompendiumCardPreview"
+import { QaAuditBanner } from "@/components/QaAuditBanner"
+import type { QaRecommendation } from "@/lib/qa-recommendations"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { validatePublishChecklist } from "@/lib/checklist"
 import { isTypingTarget } from "@/lib/keyboard"
 import type { TaxonomyEdits } from "@/lib/taxonomy"
 import type {
-  DraftRecord, PanelResult, PipelineStateDoc, DraftDoc,
+  DraftRecord, PanelResult, PipelineStateDoc, DraftDoc, QaAudit,
 } from "@/lib/firestore"
 
 interface EditedDescriptions {
@@ -31,6 +33,8 @@ interface EditedDescriptions {
 interface Props {
   itemId: string
   draft: DraftRecord
+  qaAudit?: QaAudit
+  routingReason?: string
   panel: PanelResult | Record<string, unknown>
   pipelineState: PipelineStateDoc | null
   draftDoc: DraftDoc | null
@@ -50,6 +54,7 @@ interface Props {
   requeueAction: (
     itemId: string, reason: string, stage: string,
     nextId: string | null, queueQuery: string,
+    draftPatch?: Record<string, unknown>,
   ) => Promise<{ nextPath: string }>
 }
 
@@ -57,6 +62,7 @@ function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
   return {
     resource_type_code: draft.resource_type_code ?? "article",
     methodology_codes: [...(draft.methodology_codes ?? [])],
+    discipline_codes: [...(draft.discipline_codes ?? [])],
     stage_codes: [...(draft.stage_codes ?? [])],
     difficulty_level: draft.difficulty_level ?? "intermediate",
     access_type: draft.access_type ?? "free",
@@ -64,7 +70,7 @@ function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
 }
 
 export function ReviewWorkspace({
-  itemId, draft, panel, pipelineState, draftDoc,
+  itemId, draft, qaAudit, routingReason, panel, pipelineState, draftDoc,
   queuePosition, queueTotal,
   prevHref, nextHref, nextId, queueQuery, gcpProjectId,
   approveAction, rejectAction, requeueAction,
@@ -119,19 +125,46 @@ export function ReviewWorkspace({
   const [longDesc, setLongDesc] = useState(draft?.summary ?? "")
   const [plainDesc, setPlainDesc] = useState(draft?.editorial_description_plain ?? "")
   const [editorialNote, setEditorialNote] = useState(draft?.editorial_note ?? "")
+  const [draftUrl, setDraftUrl] = useState(draft?.url ?? "")
   const [taxonomy, setTaxonomy] = useState<TaxonomyEdits>(() => initialTaxonomy(draft))
 
   const edited = useMemo(() => ({
     editorial_description: shortDesc,
     summary: longDesc,
     editorial_description_plain: plainDesc,
-  }), [shortDesc, longDesc, plainDesc])
+    url: draftUrl,
+  }), [shortDesc, longDesc, plainDesc, draftUrl])
 
   const liveRecord = useMemo(() => ({
     ...draft,
     ...edited,
     ...taxonomy,
   }), [draft, edited, taxonomy])
+
+  const handleQaChangeType = useCallback((code: string) => {
+    setTaxonomy((prev) => ({ ...prev, resource_type_code: code }))
+  }, [])
+
+  const handleQaFixUrlAndRequeue = useCallback((url: string, rec: QaRecommendation) => {
+    setDraftUrl(url)
+    const stage = rec.requeueStage ?? "classification"
+    const note = rec.requeueNote ?? `QA audit: updated URL to ${url}`
+    actionsRef.current?.quickRequeue(stage, note, { url })
+  }, [])
+
+  const handleQaRequeue = useCallback((rec: QaRecommendation) => {
+    const stage = rec.requeueStage ?? "classification"
+    const note = rec.requeueNote ?? "QA audit follow-up"
+    actionsRef.current?.quickRequeue(stage, note)
+  }, [])
+
+  const handleQaReject = useCallback((reason: string) => {
+    actionsRef.current?.quickReject(reason)
+  }, [])
+
+  const handleQaPrefillReject = useCallback((reason: string) => {
+    actionsRef.current?.prefillReject(reason)
+  }, [])
 
   const liveErrors = useMemo(
     () => validatePublishChecklist(liveRecord as unknown as Record<string, unknown>, "console"),
@@ -187,6 +220,20 @@ export function ReviewWorkspace({
 
   return (
     <>
+      {qaAudit && (
+        <QaAuditBanner
+          qaAudit={qaAudit}
+          itemReason={routingReason}
+          currentType={taxonomy.resource_type_code}
+          currentUrl={draftUrl}
+          onChangeType={handleQaChangeType}
+          onFixUrlAndRequeue={handleQaFixUrlAndRequeue}
+          onRequeue={handleQaRequeue}
+          onReject={handleQaReject}
+          onPrefillReject={handleQaPrefillReject}
+        />
+      )}
+
       <ReviewSessionBar
         position={queuePosition}
         total={queueTotal}

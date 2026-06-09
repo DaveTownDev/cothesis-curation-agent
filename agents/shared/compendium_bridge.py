@@ -11,6 +11,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from agents.taxonomy import normalize_discipline_slug
+
 
 # Agent access_type values that the Compendium doesn't have a 1:1 for
 _ACCESS_TYPE_MAP: dict[str, str] = {
@@ -50,6 +52,10 @@ def to_compendium_record(resource: dict[str, Any]) -> dict[str, Any]:
         out["subtype"] = None
 
     out["methodology_tags"] = resource.get("methodology_codes") or []
+
+    # discipline_codes (agent) → specialty_tags (Compendium ImportCandidate)
+    discipline_codes = resource.get("discipline_codes") or []
+    out["specialty_tags"] = [normalize_discipline_slug(d) for d in discipline_codes]
 
     # Access type — normalise open_access → free
     raw_access = resource.get("access_type", "free")

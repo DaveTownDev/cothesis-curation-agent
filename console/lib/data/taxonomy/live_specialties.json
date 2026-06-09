@@ -1,0 +1,272 @@
+{
+  "source": "https://compendium-web-production.up.railway.app",
+  "fetched_at": "2026-06-09T12:55:48.388490+00:00",
+  "count": 53,
+  "specialties": [
+    {
+      "slug": "addiction-psychiatry",
+      "name": "Addiction Psychiatry Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/addiction-psychiatry"
+    },
+    {
+      "slug": "adult-psychiatry",
+      "name": "Adult Psychiatry Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/adult-psychiatry"
+    },
+    {
+      "slug": "anaesthesia",
+      "name": "Anaesthesia Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/anaesthesia"
+    },
+    {
+      "slug": "cardiology",
+      "name": "Cardiology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/cardiology"
+    },
+    {
+      "slug": "child-adolescent-psychiatry",
+      "name": "Child &amp; Adolescent Psychiatry Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/child-adolescent-psychiatry"
+    },
+    {
+      "slug": "clinical-psychology",
+      "name": "Clinical Psychology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/clinical-psychology"
+    },
+    {
+      "slug": "colorectal-surgery",
+      "name": "Colorectal Surgery Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/colorectal-surgery"
+    },
+    {
+      "slug": "consultation-liaison-psychiatry",
+      "name": "Consultation-Liaison Psychiatry Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/consultation-liaison-psychiatry"
+    },
+    {
+      "slug": "dermatology",
+      "name": "Dermatology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/dermatology"
+    },
+    {
+      "slug": "emergency-medicine",
+      "name": "Emergency Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/emergency-medicine"
+    },
+    {
+      "slug": "endocrinology",
+      "name": "Endocrinology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/endocrinology"
+    },
+    {
+      "slug": "family-medicine-general-practice",
+      "name": "Family Medicine / General Practice Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/family-medicine-general-practice"
+    },
+    {
+      "slug": "forensic-psychiatry",
+      "name": "Forensic Psychiatry Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/forensic-psychiatry"
+    },
+    {
+      "slug": "gastroenterology",
+      "name": "Gastroenterology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/gastroenterology"
+    },
+    {
+      "slug": "general-paediatrics",
+      "name": "General Paediatrics Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/general-paediatrics"
+    },
+    {
+      "slug": "general-practice",
+      "name": "General Practice Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/general-practice"
+    },
+    {
+      "slug": "general-surgery",
+      "name": "General Surgery Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/general-surgery"
+    },
+    {
+      "slug": "geriatric-medicine",
+      "name": "Geriatric Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/geriatric-medicine"
+    },
+    {
+      "slug": "geriatric-psychiatry",
+      "name": "Geriatric Psychiatry Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/geriatric-psychiatry"
+    },
+    {
+      "slug": "haematology",
+      "name": "Haematology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/haematology"
+    },
+    {
+      "slug": "immunology-allergy",
+      "name": "Immunology &amp; Allergy Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/immunology-allergy"
+    },
+    {
+      "slug": "infectious-diseases",
+      "name": "Infectious Diseases Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/infectious-diseases"
+    },
+    {
+      "slug": "intensive-care-medicine",
+      "name": "Intensive Care Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/intensive-care-medicine"
+    },
+    {
+      "slug": "internal-medicine-general",
+      "name": "Internal Medicine (General) Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/internal-medicine-general"
+    },
+    {
+      "slug": "medical-genetics",
+      "name": "Medical Genetics Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/medical-genetics"
+    },
+    {
+      "slug": "medical-oncology",
+      "name": "Medical Oncology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/medical-oncology"
+    },
+    {
+      "slug": "neonatology",
+      "name": "Neonatology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/neonatology"
+    },
+    {
+      "slug": "nephrology",
+      "name": "Nephrology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/nephrology"
+    },
+    {
+      "slug": "neurology",
+      "name": "Neurology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/neurology"
+    },
+    {
+      "slug": "neurosurgery",
+      "name": "Neurosurgery Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/neurosurgery"
+    },
+    {
+      "slug": "nuclear-medicine",
+      "name": "Nuclear Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/nuclear-medicine"
+    },
+    {
+      "slug": "obstetrics-gynaecology",
+      "name": "Obstetrics &amp; Gynaecology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/obstetrics-gynaecology"
+    },
+    {
+      "slug": "occupational-medicine",
+      "name": "Occupational Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/occupational-medicine"
+    },
+    {
+      "slug": "ophthalmology",
+      "name": "Ophthalmology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/ophthalmology"
+    },
+    {
+      "slug": "orthopaedic-surgery",
+      "name": "Orthopaedic Surgery Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/orthopaedic-surgery"
+    },
+    {
+      "slug": "otolaryngology-ent",
+      "name": "Otolaryngology (ENT) Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/otolaryngology-ent"
+    },
+    {
+      "slug": "pain-medicine",
+      "name": "Pain Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/pain-medicine"
+    },
+    {
+      "slug": "palliative-medicine",
+      "name": "Palliative Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/palliative-medicine"
+    },
+    {
+      "slug": "pathology",
+      "name": "Pathology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/pathology"
+    },
+    {
+      "slug": "plastic-reconstructive-surgery",
+      "name": "Plastic &amp; Reconstructive Surgery Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/plastic-reconstructive-surgery"
+    },
+    {
+      "slug": "public-health-medicine",
+      "name": "Public Health Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/public-health-medicine"
+    },
+    {
+      "slug": "radiation-oncology",
+      "name": "Radiation Oncology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/radiation-oncology"
+    },
+    {
+      "slug": "radiology",
+      "name": "Radiology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/radiology"
+    },
+    {
+      "slug": "rehabilitation-medicine",
+      "name": "Rehabilitation Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/rehabilitation-medicine"
+    },
+    {
+      "slug": "respiratory-medicine",
+      "name": "Respiratory Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/respiratory-medicine"
+    },
+    {
+      "slug": "rheumatology",
+      "name": "Rheumatology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/rheumatology"
+    },
+    {
+      "slug": "sexual-health-medicine",
+      "name": "Sexual Health Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/sexual-health-medicine"
+    },
+    {
+      "slug": "sleep-medicine",
+      "name": "Sleep Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/sleep-medicine"
+    },
+    {
+      "slug": "sport-exercise-medicine",
+      "name": "Sport &amp; Exercise Medicine Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/sport-exercise-medicine"
+    },
+    {
+      "slug": "surgical-oncology",
+      "name": "Surgical Oncology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/surgical-oncology"
+    },
+    {
+      "slug": "thoraciccardiothoracic-surgery",
+      "name": "Thoracic/Cardiothoracic Surgery Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/thoraciccardiothoracic-surgery"
+    },
+    {
+      "slug": "urology",
+      "name": "Urology Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/urology"
+    },
+    {
+      "slug": "vascular-surgery",
+      "name": "Vascular Surgery Research Resources",
+      "url": "https://compendium-web-production.up.railway.app/library/specialty/vascular-surgery"
+    }
+  ]
+}

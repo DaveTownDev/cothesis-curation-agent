@@ -6,33 +6,33 @@ from agents.arbiter.tools import compute_routing_decision
 from agents.shared.codes import content_format_for, time_to_consume_for, REPORTING_GUIDELINE_GUIDE
 
 
-# ── Arbiter: no MVP methodology never auto-accepts ───────────────────────────
+# ── Arbiter: no methodology never auto-accepts ───────────────────────────────
 
-def test_no_mvp_methodology_routes_review_not_accept():
+def test_no_methodology_routes_review_not_accept():
     # All signals would otherwise auto-accept
     d = compute_routing_decision(
         relevance_score=0.9, classification_confidence=0.9, quality_score=90,
         ai_confidence=90, panel_agreement=1.0, skip_reason=None,
-        has_mvp_methodology=False,
+        has_methodology=False,
     )
     assert d["routing"] == "review_needed"
-    assert "MVP" in d["reason"]
+    assert "no methodology code" in d["reason"]
 
 
-def test_with_mvp_methodology_still_auto_accepts():
+def test_with_methodology_still_auto_accepts():
     d = compute_routing_decision(
         relevance_score=0.9, classification_confidence=0.9, quality_score=90,
         ai_confidence=90, panel_agreement=1.0, skip_reason=None,
-        has_mvp_methodology=True,
+        has_methodology=True,
     )
     assert d["routing"] == "auto_accept"
 
 
-def test_no_mvp_but_low_quality_still_excludes():
+def test_no_methodology_but_low_quality_still_excludes():
     d = compute_routing_decision(
         relevance_score=0.9, classification_confidence=0.9, quality_score=40,
         ai_confidence=90, panel_agreement=1.0, skip_reason=None,
-        has_mvp_methodology=False,
+        has_methodology=False,
     )
     assert d["routing"] == "auto_exclude"
 

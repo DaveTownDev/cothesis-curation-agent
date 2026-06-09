@@ -13,6 +13,7 @@ Returns a list of error strings; empty list = passes.
 from __future__ import annotations
 
 from agents.shared.codes import LEGACY_METHODOLOGY_PREFIXES
+from agents.taxonomy import is_valid_methodology_code, normalize_methodology_code
 
 
 def validate_publish_checklist(record: dict) -> list[str]:
@@ -38,6 +39,12 @@ def validate_publish_checklist(record: dict) -> list[str]:
                         f"Legacy methodology code {code!r} (prefix {legacy!r}) in "
                         f"methodology_codes — emit platform codes only"
                     )
+            norm = normalize_methodology_code(code)
+            if not is_valid_methodology_code(norm):
+                errors.append(
+                    f"methodology_codes: unknown platform code {code!r} "
+                    f"(not in live Compendium taxonomy)"
+                )
 
     # 3. quality_score present and ≥ 60
     quality_score = record.get("quality_score")

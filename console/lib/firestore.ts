@@ -213,7 +213,9 @@ export async function getReviewQueue(
   query = query.limit(filters.limit ?? 200)
 
   const snap = await query.get()
-  let items = snap.docs.map((d) => ({ id: d.id, ...d.data() } as ReviewQueueItem))
+  let items = snap.docs
+    .map((d) => ({ id: d.id, ...d.data() } as ReviewQueueItem))
+    .filter((i) => i.status === "pending")
 
   // Client-side sort + filters (no composite Firestore index required)
   const dateSort = filters.sortBy === "oldest" ? "asc" : "desc"

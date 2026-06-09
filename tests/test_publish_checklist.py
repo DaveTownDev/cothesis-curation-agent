@@ -96,3 +96,10 @@ class TestPublishChecklist:
         record = _make_valid_record(methodology_codes=["RS-01"])
         errors = validate_publish_checklist(record)
         assert any("platform" in e or "legacy" in e.lower() or "RS-" in e for e in errors)
+
+    def test_live_non_syn_methodology_code_passes(self):
+        """Full live taxonomy codes (e.g. CASE-01) must pass — not limited to SYN/OBS/EVAL."""
+        from agents.shared.checklist import validate_publish_checklist
+        record = _make_valid_record(methodology_codes=["CASE-01"])
+        errors = validate_publish_checklist(record)
+        assert errors == []

@@ -121,30 +121,13 @@ export default async function ReviewDetailPage({
         )}
         <DuplicateHint reason={item.reason} />
         <DuplicateHint reason={pipelineState?.skip_reason} />
-        {item.qa_audit && (
-          <div className="mt-2 rounded-md border px-3 py-2 text-xs"
-            style={{
-              backgroundColor: item.qa_audit.source_verdict === "fail" ? "#fef2f2"
-                : item.qa_audit.source_verdict === "warn" ? "#fffbeb" : "#f0fdf4",
-              borderColor: item.qa_audit.source_verdict === "fail" ? "#fecaca"
-                : item.qa_audit.source_verdict === "warn" ? "#fde68a" : "#bbf7d0",
-            }}>
-            <div className="font-semibold text-[#0E3A27]">
-              QA audit: source {item.qa_audit.source_verdict ?? "—"} · link {item.qa_audit.url_status ?? "—"}
-            </div>
-            {item.qa_audit.source_notes && <p className="mt-1 text-[#4a5568]">{item.qa_audit.source_notes}</p>}
-            {(item.qa_audit.hallucinations?.length ?? 0) > 0 && (
-              <ul className="mt-1 list-disc list-inside text-red-700">
-                {item.qa_audit.hallucinations!.map((h, i) => <li key={i}>{h}</li>)}
-              </ul>
-            )}
-          </div>
-        )}
       </div>
 
       <ReviewWorkspace
         itemId={id}
         draft={draft}
+        qaAudit={item.qa_audit}
+        routingReason={item.reason}
         panel={item.panel_result}
         pipelineState={pipelineState}
         draftDoc={draftDoc}

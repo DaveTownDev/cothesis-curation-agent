@@ -1,7 +1,8 @@
 "use client"
 
+import { useMemo, useState } from "react"
 import {
-  RESOURCE_TYPES, METHODOLOGY_CODES, STAGE_CODES,
+  RESOURCE_TYPES, METHODOLOGY_OPTIONS, SPECIALTY_OPTIONS, STAGE_CODES,
   DIFFICULTY_LEVELS, ACCESS_TYPES, type TaxonomyEdits,
 } from "@/lib/taxonomy"
 
@@ -13,8 +14,32 @@ interface Props {
 const selectCls =
   "w-full h-8 rounded border border-[#d4cfc5] bg-white px-2 text-xs text-[#0E3A27] focus:outline-none focus:ring-1 focus:ring-[#289642]"
 
+const scrollCls = "max-h-28 overflow-y-auto rounded border border-[#e8e4dc] p-1.5 space-y-0.5"
+
 export function TaxonomyEditor({ value, onChange }: Props) {
-  function toggleCode(field: "methodology_codes" | "stage_codes", code: string) {
+  const [methFilter, setMethFilter] = useState("")
+  const [specFilter, setSpecFilter] = useState("")
+
+  const filteredMeth = useMemo(() => {
+    const q = methFilter.trim().toLowerCase()
+    if (!q) return METHODOLOGY_OPTIONS
+    return METHODOLOGY_OPTIONS.filter(
+      (m) => m.code.toLowerCase().includes(q) || m.name.toLowerCase().includes(q),
+    )
+  }, [methFilter])
+
+  const filteredSpec = useMemo(() => {
+    const q = specFilter.trim().toLowerCase()
+    if (!q) return SPECIALTY_OPTIONS
+    return SPECIALTY_OPTIONS.filter(
+      (s) => s.slug.includes(q) || s.name.toLowerCase().includes(q),
+    )
+  }, [specFilter])
+
+  function toggleCode(
+    field: "methodology_codes" | "stage_codes" | "discipline_codes",
+    code: string,
+  ) {
     const set = new Set(value[field])
     if (set.has(code)) set.delete(code)
     else set.add(code)
@@ -41,23 +66,68 @@ export function TaxonomyEditor({ value, onChange }: Props) {
       </label>
 
       <div>
-        <span className="text-[#6b7280] block mb-1">Methodology codes</span>
-        <div className="flex flex-wrap gap-1">
-          {METHODOLOGY_CODES.map((code) => {
-            const on = value.methodology_codes.includes(code)
-            return (
-              <button
-                key={code}
-                type="button"
-                onClick={() => toggleCode("methodology_codes", code)}
-                className={`rounded px-2 py-0.5 font-mono transition-colors ${
-                  on ? "bg-[#289642] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
-                }`}
-              >
-                {code}
-              </button>
-            )
-          })}
+        <span className="text-[#6b7280] block mb-1">
+          Methodology codes ({value.methodology_codes.length} selected)
+        </span>
+        <input
+          type="search"
+          placeholder="Filter methodologies…"
+          value={methFilter}
+          onChange={(e) => setMethFilter(e.target.value)}
+          className="mb-1 w-full h-7 rounded border border-[#d4cfc5] px-2 text-xs"
+        />
+        <div className={scrollCls}>
+          <div className="flex flex-wrap gap-1">
+            {filteredMeth.map((m) => {
+              const on = value.methodology_codes.includes(m.code)
+              return (
+                <button
+                  key={m.code}
+                  type="button"
+                  title={m.name}
+                  onClick={() => toggleCode("methodology_codes", m.code)}
+                  className={`rounded px-1.5 py-0.5 font-mono text-[10px] transition-colors ${
+                    on ? "bg-[#289642] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
+                  }`}
+                >
+                  {m.code}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <span className="text-[#6b7280] block mb-1">
+          Specialty slugs ({value.discipline_codes.length} selected, max 3)
+        </span>
+        <input
+          type="search"
+          placeholder="Filter specialties…"
+          value={specFilter}
+          onChange={(e) => setSpecFilter(e.target.value)}
+          className="mb-1 w-full h-7 rounded border border-[#d4cfc5] px-2 text-xs"
+        />
+        <div className={scrollCls}>
+          <div className="flex flex-wrap gap-1">
+            {filteredSpec.map((s) => {
+              const on = value.discipline_codes.includes(s.slug)
+              return (
+                <button
+                  key={s.slug}
+                  type="button"
+                  title={s.name}
+                  onClick={() => toggleCode("discipline_codes", s.slug)}
+                  className={`rounded px-1.5 py-0.5 text-[10px] transition-colors ${
+                    on ? "bg-[#6b4fa0] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
+                  }`}
+                >
+                  {s.slug}
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
 

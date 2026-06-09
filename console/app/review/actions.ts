@@ -187,15 +187,23 @@ export async function requeueItem(
   stage: string,
   nextId: string | null,
   queueQuery: string,
+  draftPatch?: Record<string, unknown>,
 ): Promise<{ nextPath: string }> {
   const db = getFirestoreDb()
   const queueRef = db.collection("review_queue").doc(itemId)
-  await queueRef.update({
+  const updates: Record<string, unknown> = {
     status: "pending",
     requeue_reason: reason,
     requeue_stage: stage,
     queued_at: new Date().toISOString(),
-  })
+  }
+  if (draftPatch && Object.keys(draftPatch).length > 0) {
+    const item = await getReviewQueueItem(itemId)
+    if (item?.draft_record) {
+      updates.draft_record = { ...item.draft_record, ...draftPatch }
+    }
+  }
+  await queueRef.update(updates)
   return { nextPath: reviewNextPath(nextId, queueQuery) }
 }
 

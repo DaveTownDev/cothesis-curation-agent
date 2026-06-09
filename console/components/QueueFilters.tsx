@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { useCallback } from "react"
+import { methodologyFilterOptions } from "@/lib/taxonomy"
 
 const RESOURCE_TYPES = [
   ["", "All types"],
@@ -21,13 +22,7 @@ const RESOURCE_TYPES = [
   ["funding", "Funding"],
 ]
 
-const METHODOLOGY_CODES = [
-  ["", "All methodologies"],
-  ["SYN-01", "SYN-01 — Narrative Systematic Review"],
-  ["SYN-02", "SYN-02 — Scoping Review"],
-  ["OBS-01", "OBS-01 — Retrospective Chart Review"],
-  ["EVAL-01", "EVAL-01 — Clinical Audit"],
-]
+const METHODOLOGY_CODES = methodologyFilterOptions()
 
 const QUALITY_BANDS = [
   ["", "All quality"],

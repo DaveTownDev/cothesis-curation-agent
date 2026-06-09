@@ -1,0 +1,895 @@
+{
+  "source": "https://compendium-web-production.up.railway.app",
+  "fetched_at": "2026-06-09T12:55:48.388490+00:00",
+  "count": 148,
+  "methodologies": [
+    {
+      "code": "CASE-01",
+      "slug": "case-01",
+      "name": "Case Report",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/case-01"
+    },
+    {
+      "code": "CASE-02",
+      "slug": "case-02",
+      "name": "Case Series",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/case-02"
+    },
+    {
+      "code": "CASE-03",
+      "slug": "case-03",
+      "name": "Image Case Report",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/case-03"
+    },
+    {
+      "code": "CASE-04",
+      "slug": "case-04",
+      "name": "Video Case Report",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/case-04"
+    },
+    {
+      "code": "EVAL-01",
+      "slug": "eval-01",
+      "name": "Standards-Based Clinical Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-01"
+    },
+    {
+      "code": "EVAL-02",
+      "slug": "eval-02",
+      "name": "Prescribing Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-02"
+    },
+    {
+      "code": "EVAL-03",
+      "slug": "eval-03",
+      "name": "Process Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-03"
+    },
+    {
+      "code": "EVAL-04",
+      "slug": "eval-04",
+      "name": "Outcome Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-04"
+    },
+    {
+      "code": "EVAL-05",
+      "slug": "eval-05",
+      "name": "Morbidity &amp; Mortality (M&amp;M) Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-05"
+    },
+    {
+      "code": "EVAL-06",
+      "slug": "eval-06",
+      "name": "Documentation Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-06"
+    },
+    {
+      "code": "EVAL-07",
+      "slug": "eval-07",
+      "name": "Adverse Event Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-07"
+    },
+    {
+      "code": "EVAL-08",
+      "slug": "eval-08",
+      "name": "Referral Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-08"
+    },
+    {
+      "code": "EVAL-09",
+      "slug": "eval-09",
+      "name": "Waiting Time/Access Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-09"
+    },
+    {
+      "code": "EVAL-10",
+      "slug": "eval-10",
+      "name": "Infection Control Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-10"
+    },
+    {
+      "code": "EVAL-11",
+      "slug": "eval-11",
+      "name": "Compliance Audit",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-11"
+    },
+    {
+      "code": "EVAL-12",
+      "slug": "eval-12",
+      "name": "Re-Audit (Full Cycle Audit)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-12"
+    },
+    {
+      "code": "EVAL-13",
+      "slug": "eval-13",
+      "name": "Service Evaluation",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-13"
+    },
+    {
+      "code": "EVAL-14",
+      "slug": "eval-14",
+      "name": "PDSA Cycle",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-14"
+    },
+    {
+      "code": "EVAL-15",
+      "slug": "eval-15",
+      "name": "Root Cause Analysis (RCA)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-15"
+    },
+    {
+      "code": "EVAL-16",
+      "slug": "eval-16",
+      "name": "Failure Mode and Effects Analysis (FMEA)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-16"
+    },
+    {
+      "code": "EVAL-17",
+      "slug": "eval-17",
+      "name": "Lean Methodology",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-17"
+    },
+    {
+      "code": "EVAL-18",
+      "slug": "eval-18",
+      "name": "Six Sigma",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-18"
+    },
+    {
+      "code": "EVAL-19",
+      "slug": "eval-19",
+      "name": "Significant Event Analysis (SEA)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-19"
+    },
+    {
+      "code": "EVAL-20",
+      "slug": "eval-20",
+      "name": "After Action Review (AAR)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-20"
+    },
+    {
+      "code": "EVAL-21",
+      "slug": "eval-21",
+      "name": "Curriculum Evaluation Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-21"
+    },
+    {
+      "code": "EVAL-22",
+      "slug": "eval-22",
+      "name": "Educational Intervention Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-22"
+    },
+    {
+      "code": "EVAL-23",
+      "slug": "eval-23",
+      "name": "Assessment/Exam Validation Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-23"
+    },
+    {
+      "code": "EVAL-24",
+      "slug": "eval-24",
+      "name": "Faculty Development Evaluation",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-24"
+    },
+    {
+      "code": "EVAL-25",
+      "slug": "eval-25",
+      "name": "Simulation-Based Research",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-25"
+    },
+    {
+      "code": "EVAL-26",
+      "slug": "eval-26",
+      "name": "Competency-Based Assessment Research",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-26"
+    },
+    {
+      "code": "EVAL-27",
+      "slug": "eval-27",
+      "name": "Needs Assessment Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-27"
+    },
+    {
+      "code": "EVAL-28",
+      "slug": "eval-28",
+      "name": "Program Evaluation Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/eval-28"
+    },
+    {
+      "code": "EXP-01",
+      "slug": "exp-01",
+      "name": "Parallel RCT (Standard)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-01"
+    },
+    {
+      "code": "EXP-02",
+      "slug": "exp-02",
+      "name": "Cluster RCT",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-02"
+    },
+    {
+      "code": "EXP-03",
+      "slug": "exp-03",
+      "name": "Crossover RCT",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-03"
+    },
+    {
+      "code": "EXP-04",
+      "slug": "exp-04",
+      "name": "Stepped-Wedge RCT",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-04"
+    },
+    {
+      "code": "EXP-05",
+      "slug": "exp-05",
+      "name": "Factorial RCT",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-05"
+    },
+    {
+      "code": "EXP-06",
+      "slug": "exp-06",
+      "name": "Adaptive/Platform Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-06"
+    },
+    {
+      "code": "EXP-07",
+      "slug": "exp-07",
+      "name": "Pragmatic Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-07"
+    },
+    {
+      "code": "EXP-08",
+      "slug": "exp-08",
+      "name": "N-of-1 Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-08"
+    },
+    {
+      "code": "EXP-09",
+      "slug": "exp-09",
+      "name": "Non-Inferiority Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-09"
+    },
+    {
+      "code": "EXP-10",
+      "slug": "exp-10",
+      "name": "Equivalence Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-10"
+    },
+    {
+      "code": "EXP-11",
+      "slug": "exp-11",
+      "name": "Pilot/Feasibility RCT",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-11"
+    },
+    {
+      "code": "EXP-12",
+      "slug": "exp-12",
+      "name": "Wait-List Control Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-12"
+    },
+    {
+      "code": "EXP-13",
+      "slug": "exp-13",
+      "name": "Preference-Based Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-13"
+    },
+    {
+      "code": "EXP-14",
+      "slug": "exp-14",
+      "name": "Zelen Design",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-14"
+    },
+    {
+      "code": "EXP-15",
+      "slug": "exp-15",
+      "name": "Phase 0 (Microdosing) Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-15"
+    },
+    {
+      "code": "EXP-16",
+      "slug": "exp-16",
+      "name": "Phase I (Safety/Dosing) Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-16"
+    },
+    {
+      "code": "EXP-17",
+      "slug": "exp-17",
+      "name": "Phase Ia (Single Ascending Dose)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-17"
+    },
+    {
+      "code": "EXP-18",
+      "slug": "exp-18",
+      "name": "Phase Ib (Multiple Ascending Dose)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-18"
+    },
+    {
+      "code": "EXP-19",
+      "slug": "exp-19",
+      "name": "Phase II (Efficacy) Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-19"
+    },
+    {
+      "code": "EXP-20",
+      "slug": "exp-20",
+      "name": "Phase IIa (Dose-Finding)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-20"
+    },
+    {
+      "code": "EXP-21",
+      "slug": "exp-21",
+      "name": "Phase IIb (Efficacy)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-21"
+    },
+    {
+      "code": "EXP-22",
+      "slug": "exp-22",
+      "name": "Phase III (Comparative/Confirmatory) Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-22"
+    },
+    {
+      "code": "EXP-23",
+      "slug": "exp-23",
+      "name": "Phase IV (Post-Marketing) Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-23"
+    },
+    {
+      "code": "EXP-24",
+      "slug": "exp-24",
+      "name": "First-in-Human Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/exp-24"
+    },
+    {
+      "code": "IMP-01",
+      "slug": "imp-01",
+      "name": "Implementation Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/imp-01"
+    },
+    {
+      "code": "IMP-02",
+      "slug": "imp-02",
+      "name": "Hybrid Effectiveness-Implementation Trial",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/imp-02"
+    },
+    {
+      "code": "IMP-03",
+      "slug": "imp-03",
+      "name": "Knowledge Translation Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/imp-03"
+    },
+    {
+      "code": "IMP-04",
+      "slug": "imp-04",
+      "name": "Feasibility/Pilot Implementation Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/imp-04"
+    },
+    {
+      "code": "IMP-05",
+      "slug": "imp-05",
+      "name": "Fidelity Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/imp-05"
+    },
+    {
+      "code": "IMP-06",
+      "slug": "imp-06",
+      "name": "Process Evaluation",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/imp-06"
+    },
+    {
+      "code": "IMP-07",
+      "slug": "imp-07",
+      "name": "Realist Evaluation",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/imp-07"
+    },
+    {
+      "code": "IMP-08",
+      "slug": "imp-08",
+      "name": "Adaptation Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/imp-08"
+    },
+    {
+      "code": "IMP-09",
+      "slug": "imp-09",
+      "name": "Sustainability Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/imp-09"
+    },
+    {
+      "code": "IMP-10",
+      "slug": "imp-10",
+      "name": "Scale-Up/Spread Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/imp-10"
+    },
+    {
+      "code": "MEAS-01",
+      "slug": "meas-01",
+      "name": "Delphi Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-01"
+    },
+    {
+      "code": "MEAS-02",
+      "slug": "meas-02",
+      "name": "Modified Delphi Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-02"
+    },
+    {
+      "code": "MEAS-03",
+      "slug": "meas-03",
+      "name": "Nominal Group Technique (NGT)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-03"
+    },
+    {
+      "code": "MEAS-04",
+      "slug": "meas-04",
+      "name": "RAND/UCLA Appropriateness Method",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-04"
+    },
+    {
+      "code": "MEAS-05",
+      "slug": "meas-05",
+      "name": "Consensus Conference",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-05"
+    },
+    {
+      "code": "MEAS-06",
+      "slug": "meas-06",
+      "name": "Scale Development/Validation Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-06"
+    },
+    {
+      "code": "MEAS-07",
+      "slug": "meas-07",
+      "name": "Diagnostic Accuracy Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-07"
+    },
+    {
+      "code": "MEAS-08",
+      "slug": "meas-08",
+      "name": "Reliability Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-08"
+    },
+    {
+      "code": "MEAS-09",
+      "slug": "meas-09",
+      "name": "Measurement Invariance Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-09"
+    },
+    {
+      "code": "MEAS-10",
+      "slug": "meas-10",
+      "name": "Item Response Theory (IRT) Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-10"
+    },
+    {
+      "code": "MEAS-11",
+      "slug": "meas-11",
+      "name": "Clinical Prediction Rule Development",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/meas-11"
+    },
+    {
+      "code": "MIX-01",
+      "slug": "mix-01",
+      "name": "Convergent Parallel Mixed Methods",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mix-01"
+    },
+    {
+      "code": "MIX-02",
+      "slug": "mix-02",
+      "name": "Explanatory Sequential Mixed Methods",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mix-02"
+    },
+    {
+      "code": "MIX-03",
+      "slug": "mix-03",
+      "name": "Exploratory Sequential Mixed Methods",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mix-03"
+    },
+    {
+      "code": "MIX-04",
+      "slug": "mix-04",
+      "name": "Embedded/Nested Mixed Methods",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mix-04"
+    },
+    {
+      "code": "MIX-05",
+      "slug": "mix-05",
+      "name": "Transformative Mixed Methods",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mix-05"
+    },
+    {
+      "code": "MIX-06",
+      "slug": "mix-06",
+      "name": "Multiphase Mixed Methods",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mix-06"
+    },
+    {
+      "code": "MOD-01",
+      "slug": "mod-01",
+      "name": "Cost-Effectiveness Analysis (CEA)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mod-01"
+    },
+    {
+      "code": "MOD-02",
+      "slug": "mod-02",
+      "name": "Cost-Utility Analysis (CUA)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mod-02"
+    },
+    {
+      "code": "MOD-03",
+      "slug": "mod-03",
+      "name": "Cost-Benefit Analysis (CBA)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mod-03"
+    },
+    {
+      "code": "MOD-04",
+      "slug": "mod-04",
+      "name": "Budget Impact Analysis (BIA)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mod-04"
+    },
+    {
+      "code": "MOD-05",
+      "slug": "mod-05",
+      "name": "Decision-Analytic Modeling",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mod-05"
+    },
+    {
+      "code": "MOD-06",
+      "slug": "mod-06",
+      "name": "Cost-Minimization Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mod-06"
+    },
+    {
+      "code": "MOD-07",
+      "slug": "mod-07",
+      "name": "Willingness-to-Pay Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/mod-07"
+    },
+    {
+      "code": "OBS-01",
+      "slug": "obs-01",
+      "name": "Retrospective Chart Review",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-01"
+    },
+    {
+      "code": "OBS-02",
+      "slug": "obs-02",
+      "name": "Cross-Sectional Survey",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-02"
+    },
+    {
+      "code": "OBS-03",
+      "slug": "obs-03",
+      "name": "Retrospective Cohort Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-03"
+    },
+    {
+      "code": "OBS-04",
+      "slug": "obs-04",
+      "name": "Prospective Cohort Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-04"
+    },
+    {
+      "code": "OBS-05",
+      "slug": "obs-05",
+      "name": "Case-Control Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-05"
+    },
+    {
+      "code": "OBS-06",
+      "slug": "obs-06",
+      "name": "Nested Case-Control Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-06"
+    },
+    {
+      "code": "OBS-07",
+      "slug": "obs-07",
+      "name": "Case-Cohort Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-07"
+    },
+    {
+      "code": "OBS-08",
+      "slug": "obs-08",
+      "name": "Ecological Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-08"
+    },
+    {
+      "code": "OBS-09",
+      "slug": "obs-09",
+      "name": "Longitudinal Panel Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-09"
+    },
+    {
+      "code": "OBS-10",
+      "slug": "obs-10",
+      "name": "Registry Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-10"
+    },
+    {
+      "code": "OBS-11",
+      "slug": "obs-11",
+      "name": "Administrative Database Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-11"
+    },
+    {
+      "code": "OBS-12",
+      "slug": "obs-12",
+      "name": "Secondary Data Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-12"
+    },
+    {
+      "code": "OBS-13",
+      "slug": "obs-13",
+      "name": "Cross-Sectional Analytic Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-13"
+    },
+    {
+      "code": "OBS-14",
+      "slug": "obs-14",
+      "name": "Prevalence Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-14"
+    },
+    {
+      "code": "OBS-15",
+      "slug": "obs-15",
+      "name": "Incidence Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/obs-15"
+    },
+    {
+      "code": "PRE-01",
+      "slug": "pre-01",
+      "name": "In Vitro Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/pre-01"
+    },
+    {
+      "code": "PRE-02",
+      "slug": "pre-02",
+      "name": "Animal Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/pre-02"
+    },
+    {
+      "code": "PRE-03",
+      "slug": "pre-03",
+      "name": "Ex Vivo Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/pre-03"
+    },
+    {
+      "code": "PRE-04",
+      "slug": "pre-04",
+      "name": "Computational/In Silico Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/pre-04"
+    },
+    {
+      "code": "PRE-05",
+      "slug": "pre-05",
+      "name": "Translational Study (T1)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/pre-05"
+    },
+    {
+      "code": "PRE-06",
+      "slug": "pre-06",
+      "name": "Biomarker Discovery/Validation Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/pre-06"
+    },
+    {
+      "code": "PRE-07",
+      "slug": "pre-07",
+      "name": "Pharmacokinetic/Pharmacodynamic Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/pre-07"
+    },
+    {
+      "code": "PRE-08",
+      "slug": "pre-08",
+      "name": "Toxicology Study",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/pre-08"
+    },
+    {
+      "code": "QUAL-01",
+      "slug": "qual-01",
+      "name": "Thematic Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/qual-01"
+    },
+    {
+      "code": "QUAL-02",
+      "slug": "qual-02",
+      "name": "Content Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/qual-02"
+    },
+    {
+      "code": "QUAL-03",
+      "slug": "qual-03",
+      "name": "Framework Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/qual-03"
+    },
+    {
+      "code": "QUAL-04",
+      "slug": "qual-04",
+      "name": "Phenomenology (Descriptive)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/qual-04"
+    },
+    {
+      "code": "QUAL-05",
+      "slug": "qual-05",
+      "name": "Interpretative Phenomenological Analysis (IPA)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/qual-05"
+    },
+    {
+      "code": "QUAL-06",
+      "slug": "qual-06",
+      "name": "Grounded Theory",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/qual-06"
+    },
+    {
+      "code": "QUAL-07",
+      "slug": "qual-07",
+      "name": "Ethnography",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/qual-07"
+    },
+    {
+      "code": "QUAL-08",
+      "slug": "qual-08",
+      "name": "Narrative Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/qual-08"
+    },
+    {
+      "code": "QUAL-09",
+      "slug": "qual-09",
+      "name": "Discourse Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/qual-09"
+    },
+    {
+      "code": "QUAL-10",
+      "slug": "qual-10",
+      "name": "Template Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/qual-10"
+    },
+    {
+      "code": "SYN-01",
+      "slug": "syn-01",
+      "name": "Narrative Systematic Review",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-01"
+    },
+    {
+      "code": "SYN-02",
+      "slug": "syn-02",
+      "name": "Scoping Review",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-02"
+    },
+    {
+      "code": "SYN-03",
+      "slug": "syn-03",
+      "name": "Rapid Review",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-03"
+    },
+    {
+      "code": "SYN-04",
+      "slug": "syn-04",
+      "name": "Cochrane Systematic Review",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-04"
+    },
+    {
+      "code": "SYN-05",
+      "slug": "syn-05",
+      "name": "Living Systematic Review",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-05"
+    },
+    {
+      "code": "SYN-06",
+      "slug": "syn-06",
+      "name": "Umbrella Review",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-06"
+    },
+    {
+      "code": "SYN-07",
+      "slug": "syn-07",
+      "name": "Realist Review",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-07"
+    },
+    {
+      "code": "SYN-08",
+      "slug": "syn-08",
+      "name": "Critical Interpretive Synthesis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-08"
+    },
+    {
+      "code": "SYN-09",
+      "slug": "syn-09",
+      "name": "Integrative Review",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-09"
+    },
+    {
+      "code": "SYN-10",
+      "slug": "syn-10",
+      "name": "State-of-the-Art Review",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-10"
+    },
+    {
+      "code": "SYN-11",
+      "slug": "syn-11",
+      "name": "Standard Meta-Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-11"
+    },
+    {
+      "code": "SYN-12",
+      "slug": "syn-12",
+      "name": "Network Meta-Analysis (NMA)",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-12"
+    },
+    {
+      "code": "SYN-13",
+      "slug": "syn-13",
+      "name": "Individual Patient Data (IPD) Meta-Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-13"
+    },
+    {
+      "code": "SYN-14",
+      "slug": "syn-14",
+      "name": "Cumulative Meta-Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-14"
+    },
+    {
+      "code": "SYN-15",
+      "slug": "syn-15",
+      "name": "Meta-Regression",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-15"
+    },
+    {
+      "code": "SYN-16",
+      "slug": "syn-16",
+      "name": "Dose-Response Meta-Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-16"
+    },
+    {
+      "code": "SYN-17",
+      "slug": "syn-17",
+      "name": "Diagnostic Test Accuracy Meta-Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-17"
+    },
+    {
+      "code": "SYN-18",
+      "slug": "syn-18",
+      "name": "Prevalence Meta-Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-18"
+    },
+    {
+      "code": "SYN-19",
+      "slug": "syn-19",
+      "name": "Prognostic Factor Meta-Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-19"
+    },
+    {
+      "code": "SYN-20",
+      "slug": "syn-20",
+      "name": "Bayesian Meta-Analysis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-20"
+    },
+    {
+      "code": "SYN-21",
+      "slug": "syn-21",
+      "name": "Meta-Synthesis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-21"
+    },
+    {
+      "code": "SYN-22",
+      "slug": "syn-22",
+      "name": "Meta-Ethnography",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-22"
+    },
+    {
+      "code": "SYN-23",
+      "slug": "syn-23",
+      "name": "Thematic Synthesis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-23"
+    },
+    {
+      "code": "SYN-24",
+      "slug": "syn-24",
+      "name": "Meta-Aggregation",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-24"
+    },
+    {
+      "code": "SYN-25",
+      "slug": "syn-25",
+      "name": "Framework Synthesis",
+      "url": "https://compendium-web-production.up.railway.app/library/methodology/syn-25"
+    }
+  ]
+}

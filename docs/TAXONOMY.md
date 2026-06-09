@@ -1,6 +1,6 @@
 # TAXONOMY — controlled vocabularies
 
-Full canonical taxonomies (162 methodologies, 48 subtypes, 46 agent-discovery types) live in the Cowork project / Qdrant. The MVP grounds on the four methodologies below; classification still uses the full 14 resource types and the FS/THESIS vocabularies.
+Full canonical taxonomies live on the production Compendium site. **Runtime source of truth for the curation pipeline:** `data/taxonomy/live_methodologies.json` (148 platform codes, refreshed via `python -m scripts.fetch_live_taxonomy`) and `data/taxonomy/live_specialties.json` (53 specialty slugs). Vertex AI Search still grounds on the four MVP methodology cards below; the classifier may assign any live platform code.
 
 ## Resource types (14)
 `article, book, book_chapter, video, podcast, software, reporting_guideline, course, web_guide, template, visual_reference, dataset, community, funding`. Each has subtypes (full set in Cowork); `type_fields` is discriminated by the type code (docs/SCHEMA.md, docs/field_maps/).
@@ -25,4 +25,4 @@ The legacy classifier prompt uses display codes (RS-/OD-/EI-…). Emit platform 
 Project Management, Literature Searching, Literature Synthesis, Critical Appraisal, Research Ethics, Quantitative Methods, Qualitative Methods, Mixed Methods, Statistical Literacy, Data Management, Research Software, Academic Writing, Research Presentation, Research Dissemination, Supervision & Mentoring, Grant Writing. Use FS codes only for resources that *teach* the skill, not ones that merely use it.
 
 ## Specialty slugs (max 3 per resource)
-psychiatry, cardiology, general-practice, emergency-medicine, surgery, internal-medicine, paediatrics, obstetrics-gynaecology, radiology, pathology, anaesthetics, oncology, neurology, dermatology, ophthalmology, orthopaedics, urology, ent, geriatrics, rheumatology, endocrinology, gastroenterology, respiratory, nephrology, haematology, infectious-diseases, immunology, public-health, sports-medicine, palliative-care, intensive-care, rehabilitation, psychiatry-child-adolescent, addiction-medicine. Omit if the resource applies broadly.
+Use slugs from `data/taxonomy/live_specialties.json` (e.g. `cardiology`, `adult-psychiatry`, `general-practice`). Omit if the resource applies broadly.

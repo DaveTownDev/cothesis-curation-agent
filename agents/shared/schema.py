@@ -166,16 +166,38 @@ class ClassificationResult(BaseModel):
     @classmethod
     def validate_methodology_codes(cls, codes: list[str]) -> list[str]:
         from agents.shared.codes import LEGACY_METHODOLOGY_PREFIXES
+        from agents.taxonomy import is_valid_methodology_code, normalize_methodology_code
+        normalized: list[str] = []
         for code in codes:
-            prefix = code[:3] + "-" if len(code) >= 3 else code
-            # Check each legacy prefix
             for legacy in LEGACY_METHODOLOGY_PREFIXES:
                 if code.startswith(legacy):
                     raise ValueError(
                         f"Legacy methodology code {code!r} (prefix {legacy!r}) detected. "
                         f"Emit platform codes (SYN-, OBS-, EVAL-…) per docs/TAXONOMY.md."
                     )
-        return codes
+            norm = normalize_methodology_code(code)
+            if not is_valid_methodology_code(norm):
+                raise ValueError(
+                    f"Invalid methodology code {code!r}. "
+                    f"Must be a live platform code from data/taxonomy/live_methodologies.json."
+                )
+            normalized.append(norm)
+        return normalized
+
+    @field_validator("discipline_codes")
+    @classmethod
+    def validate_discipline_codes(cls, codes: list[str]) -> list[str]:
+        from agents.taxonomy import is_valid_discipline_slug, normalize_discipline_slug
+        normalized: list[str] = []
+        for slug in codes:
+            norm = normalize_discipline_slug(slug)
+            if not is_valid_discipline_slug(norm):
+                raise ValueError(
+                    f"Invalid discipline slug {slug!r}. "
+                    f"Must be a live specialty slug from data/taxonomy/live_specialties.json."
+                )
+            normalized.append(norm)
+        return normalized
 
     @field_validator("stage_codes")
     @classmethod

@@ -7,6 +7,7 @@ import { BadgeList } from "@/components/BadgeList"
 import type { ChecklistError } from "@/lib/checklist"
 import type { TaxonomyEdits } from "@/lib/taxonomy"
 import { REQUEUE_STAGES, formatRequeueReason, type RequeueStage } from "@/lib/requeue"
+import { REJECT_PRESETS } from "@/lib/reject-presets"
 import { recordSessionStat } from "@/lib/session-stats"
 import type { ApproveResult } from "@/app/review/actions"
 import { CheckCircle, XCircle, AlertCircle, RotateCcw, Pencil } from "lucide-react"
@@ -22,6 +23,9 @@ export interface ReviewActionsHandle {
   openReject: () => void
   openRequeue: () => void
   closeForms: () => void
+  prefillReject: (reason: string) => void
+  quickReject: (reason: string) => void
+  quickRequeue: (stage: RequeueStage, note: string, draftPatch?: Record<string, unknown>) => void
 }
 
 interface Props {
@@ -57,6 +61,7 @@ interface Props {
     stage: string,
     nextId: string | null,
     queueQuery: string,
+    draftPatch?: Record<string, unknown>,
   ) => Promise<{ nextPath: string }>
   onNavigate: (nextPath: string, undo?: ApproveResult["undo"]) => void
 }
@@ -145,11 +150,53 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
     })
   }
 
+  function submitRequeue(
+    stage: RequeueStage,
+    note: string,
+    draftPatch?: Record<string, unknown>,
+  ) {
+    const reason = formatRequeueReason(stage, note.trim())
+    startTransition(() => {
+      void runAction(
+        () => requeueAction(itemId, reason, stage, nextId, queueQuery, draftPatch),
+        (result) => onNavigate(result.nextPath),
+      )
+    })
+  }
+
+  function submitReject(reason: string) {
+    const trimmed = reason.trim()
+    if (!trimmed) return
+    startTransition(() => {
+      void runAction(
+        () => rejectAction(itemId, trimmed, nextId, queueQuery),
+        (result) => {
+          recordSessionStat("rejected")
+          onNavigate(result.nextPath)
+        },
+      )
+    })
+  }
+
   useImperativeHandle(ref, () => ({
     approve: handleApprove,
     openReject: () => { setRejecting(true); setRequeueing(false) },
     openRequeue: () => { setRequeueing(true); setRejecting(false) },
     closeForms: () => { setRejecting(false); setRequeueing(false) },
+    prefillReject: (reason: string) => {
+      setRejectReason(reason)
+      setRejecting(true)
+      setRequeueing(false)
+    },
+    quickReject: (reason: string) => {
+      setRejectReason(reason)
+      submitReject(reason)
+    },
+    quickRequeue: (stage: RequeueStage, note: string, draftPatch?: Record<string, unknown>) => {
+      setRequeueStage(stage)
+      setRequeueReason(note)
+      submitRequeue(stage, note, draftPatch)
+    },
   }))
 
   const autoOk = THRESHOLD_OK(qualityScore, aiConfidence)
@@ -280,6 +327,22 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
       {rejecting && (
         <div className="space-y-2 rounded-md border border-red-300 p-3">
           <h3 className="text-xs font-semibold text-red-600">Reject resource</h3>
+          <div className="flex flex-wrap gap-1.5">
+            {REJECT_PRESETS.map((preset) => (
+              <button
+                key={preset.id}
+                type="button"
+                className={`text-[10px] rounded-full px-2.5 py-1 border transition-colors ${
+                  rejectReason === preset.reason
+                    ? "bg-red-100 border-red-300 text-red-800"
+                    : "bg-white border-red-200 text-red-700 hover:bg-red-50"
+                }`}
+                onClick={() => setRejectReason(preset.reason)}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
           <Textarea
             placeholder="Required: reason for rejection…"
             value={rejectReason}

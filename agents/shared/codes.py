@@ -151,30 +151,22 @@ PLAIN_JARGON_TERMS = [
 
 
 # ---------------------------------------------------------------------------
-# Methodology grounding — injected into classification so the LLM disambiguates
-# the 4 MVP methodologies instead of force-fitting (audit 2026-06-06: 40/60
-# methodology codes were wrong without this). Source: data/methodologies/*.md.
+# Methodology grounding — full live platform code list from data/taxonomy/*.json.
+# MVP disambiguation text retained for the four grounding-card methodologies.
 # ---------------------------------------------------------------------------
 
-METHODOLOGY_GUIDE = """The four MVP methodology codes and how to tell them apart. Assign the SINGLE
-best-matching code, or [] if the resource genuinely matches none — do NOT force-fit.
+def get_methodology_guide() -> str:
+    from agents.taxonomy import build_methodology_guide
+    return build_methodology_guide()
 
-- SYN-01 Narrative Systematic Review: a systematic literature search synthesised
-  in WORDS (narrative), not statistics. Use when studies are too heterogeneous to
-  pool. NOT a scoping review (that maps gaps), NOT a meta-analysis (statistical pooling).
-- SYN-02 Scoping Review: maps the breadth of evidence/concepts/gaps in a field with
-  broad inclusion and NO formal quality appraisal. If the title/abstract says
-  "scoping review" it is SYN-02 (never SYN-01).
-- OBS-01 Retrospective Chart Review: an OBSERVATIONAL study extracting data from
-  existing medical records/EHR/registries to answer a question. If the title says
-  "retrospective chart review", "chart review", or "review of records/EHR" it is
-  OBS-01 (never EVAL-01).
-- EVAL-01 Standards-Based Clinical Audit: compares actual clinical practice against
-  an explicit evidence-based STANDARD/guideline to find gaps ("what we do" vs "what
-  we should do"). Only EVAL-01 if it measures practice against a defined standard.
 
-Resources outside these four (cohort/case-control/RCT/meta-analysis/qualitative/
-funding calls/data portals/general textbooks) → methodology_codes: [] (route to human)."""
+def get_discipline_guide() -> str:
+    from agents.taxonomy import build_discipline_guide
+    return build_discipline_guide()
+
+
+# Back-compat alias used by deterministic pipeline
+METHODOLOGY_GUIDE = get_methodology_guide()
 
 
 REPORTING_GUIDELINE_GUIDE = """`reporting_guideline` means a FORMAL reporting standard,

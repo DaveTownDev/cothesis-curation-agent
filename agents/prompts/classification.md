@@ -23,4 +23,4 @@ Respond with JSON only — no markdown, no explanation:
   "difficulty_level": one of [beginner, intermediate, advanced] (beginner = no prior research experience; advanced = assumes research background)
 }
 ```
-Methodology and Foundation-Skill code lists: see docs/TAXONOMY.md (use FS codes only for resources that *teach* the skill). For the four MVP methodologies the relevant platform codes are SYN-01, SYN-02, OBS-01, EVAL-01.
+Methodology codes: choose only from the injected allowed platform code list (live Compendium taxonomy — SYN/OBS/EVAL/CASE/…). Foundation Skills (FS-01..FS-16): use only for resources that *teach* the skill. Discipline codes: choose only from the injected specialty slug list (max 3).

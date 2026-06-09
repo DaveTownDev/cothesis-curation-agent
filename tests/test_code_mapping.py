@@ -65,7 +65,7 @@ class TestLegacyCodeRejection:
 
 
 class TestPlatformCodeAcceptance:
-    """The four MVP platform codes must always be accepted."""
+    """MVP and live platform codes must be accepted."""
 
     def test_accepts_syn01_narrative_systematic_review(self):
         from agents.shared.schema import ClassificationResult
@@ -99,6 +99,11 @@ class TestPlatformCodeAcceptance:
         r = ClassificationResult(**{**VALID_BASE, "resource_type_code": "funding",
                                     "methodology_codes": []})
         assert r.methodology_codes == []
+
+    def test_accepts_live_non_mvp_platform_code(self):
+        from agents.shared.schema import ClassificationResult
+        r = ClassificationResult(**{**VALID_BASE, "methodology_codes": ["CASE-01"]})
+        assert r.methodology_codes == ["CASE-01"]
 
 
 class TestCrossWalkDocumented:

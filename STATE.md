@@ -3,6 +3,8 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
+**Live taxonomy alignment (2026-06-09).** Pipeline + console now use full Compendium methodology (148) and specialty (53) lists from `data/taxonomy/live_*.json`. Refresh: `python -m scripts.fetch_live_taxonomy`. MVP grounding cards unchanged in `data/methodologies/*.md`.
+
 **Merged to `main` @ `47b6fcb` (2026-06-09).** PR #1 (audit fixes + HITL Phases A–C) + PR #2 (review agents + guard) merged. **293 pytest**, console lint/build clean, `bash scripts/e2e_console_smoke.sh` green.
 
 **Deployed (2026-06-09):** console rev `console-00006-q68` @ https://console-791873451733.us-central1.run.app (`min-instances=1`, `CONSOLE_PUBLIC_URL` set). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.

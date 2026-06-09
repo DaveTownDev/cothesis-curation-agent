@@ -31,7 +31,7 @@ FULL_RESOURCE = {
     **MINIMAL_RESOURCE,
     "resource_subtype_code": "meta_analysis",
     "stage_codes": ["SY", "RE"],
-    "discipline_codes": ["medicine"],
+    "discipline_codes": ["cardiology", "Adult-Psychiatry"],
     "skill_codes": ["SYN-01-S01"],
     "quality_score": 88.0,
     "ai_confidence": 91.0,
@@ -125,6 +125,25 @@ class TestAccessType:
 
 
 # ---------------------------------------------------------------------------
+# Discipline codes → specialty_tags
+# ---------------------------------------------------------------------------
+
+class TestSpecialtyTags:
+    def test_discipline_codes_mapped_to_specialty_tags(self):
+        out = to_compendium_record(FULL_RESOURCE)
+        assert out["specialty_tags"] == ["cardiology", "adult-psychiatry"]
+
+    def test_empty_discipline_codes(self):
+        r = {**MINIMAL_RESOURCE, "discipline_codes": []}
+        out = to_compendium_record(r)
+        assert out["specialty_tags"] == []
+
+    def test_missing_discipline_codes(self):
+        out = to_compendium_record(MINIMAL_RESOURCE)
+        assert out["specialty_tags"] == []
+
+
+# ---------------------------------------------------------------------------
 # Subtype
 # ---------------------------------------------------------------------------
 
@@ -179,7 +198,7 @@ class TestIdentifiers:
 
 ALLOWED_OUTPUT_KEYS = {
     "title", "url", "description", "resource_type", "subtype",
-    "methodology_tags", "access_type", "doi", "isbn", "pmid",
+    "methodology_tags", "specialty_tags", "access_type", "doi", "isbn", "pmid",
     "github_url", "authors", "publisher", "journal_name",
     "platform", "year", "language", "source_tool", "discovery_context",
 }
@@ -190,7 +209,7 @@ class TestOutputShape:
         internal_fields = {
             "resource_code", "editorial_status", "quality_score", "ai_confidence",
             "relevance_score", "classification_confidence", "requires_human_review",
-            "stage_codes", "skill_codes", "proposed_badges", "summary",
+            "stage_codes", "skill_codes", "discipline_codes", "proposed_badges", "summary",
             "editorial_reviewed_by", "editorial_reviewed_at",
         }
         leaked = set(out.keys()) & internal_fields
