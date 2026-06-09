@@ -1,0 +1,114 @@
+"use client"
+
+import {
+  RESOURCE_TYPES, METHODOLOGY_CODES, STAGE_CODES,
+  DIFFICULTY_LEVELS, ACCESS_TYPES, type TaxonomyEdits,
+} from "@/lib/taxonomy"
+
+interface Props {
+  value: TaxonomyEdits
+  onChange: (v: TaxonomyEdits) => void
+}
+
+const selectCls =
+  "w-full h-8 rounded border border-[#d4cfc5] bg-white px-2 text-xs text-[#0E3A27] focus:outline-none focus:ring-1 focus:ring-[#289642]"
+
+export function TaxonomyEditor({ value, onChange }: Props) {
+  function toggleCode(field: "methodology_codes" | "stage_codes", code: string) {
+    const set = new Set(value[field])
+    if (set.has(code)) set.delete(code)
+    else set.add(code)
+    onChange({ ...value, [field]: Array.from(set) })
+  }
+
+  return (
+    <div className="space-y-3 text-xs">
+      <p className="text-[10px] font-semibold uppercase tracking-wide text-[#4a6741]">
+        Taxonomy — edits saved on approve
+      </p>
+
+      <label className="block space-y-1">
+        <span className="text-[#6b7280]">Resource type</span>
+        <select
+          className={selectCls}
+          value={value.resource_type_code}
+          onChange={(e) => onChange({ ...value, resource_type_code: e.target.value })}
+        >
+          {RESOURCE_TYPES.map(([code, label]) => (
+            <option key={code} value={code}>{label}</option>
+          ))}
+        </select>
+      </label>
+
+      <div>
+        <span className="text-[#6b7280] block mb-1">Methodology codes</span>
+        <div className="flex flex-wrap gap-1">
+          {METHODOLOGY_CODES.map((code) => {
+            const on = value.methodology_codes.includes(code)
+            return (
+              <button
+                key={code}
+                type="button"
+                onClick={() => toggleCode("methodology_codes", code)}
+                className={`rounded px-2 py-0.5 font-mono transition-colors ${
+                  on ? "bg-[#289642] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
+                }`}
+              >
+                {code}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      <div>
+        <span className="text-[#6b7280] block mb-1">THESIS stages</span>
+        <div className="flex flex-wrap gap-1">
+          {STAGE_CODES.map(([code, label]) => {
+            const on = value.stage_codes.includes(code)
+            return (
+              <button
+                key={code}
+                type="button"
+                title={label}
+                onClick={() => toggleCode("stage_codes", code)}
+                className={`rounded px-2 py-0.5 font-mono transition-colors ${
+                  on ? "bg-[#03848F] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
+                }`}
+              >
+                {code}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <label className="space-y-1">
+          <span className="text-[#6b7280]">Difficulty</span>
+          <select
+            className={selectCls}
+            value={value.difficulty_level}
+            onChange={(e) => onChange({ ...value, difficulty_level: e.target.value })}
+          >
+            {DIFFICULTY_LEVELS.map((d) => (
+              <option key={d} value={d} className="capitalize">{d}</option>
+            ))}
+          </select>
+        </label>
+        <label className="space-y-1">
+          <span className="text-[#6b7280]">Access</span>
+          <select
+            className={selectCls}
+            value={value.access_type}
+            onChange={(e) => onChange({ ...value, access_type: e.target.value })}
+          >
+            {ACCESS_TYPES.map((a) => (
+              <option key={a} value={a}>{a.replace(/_/g, " ")}</option>
+            ))}
+          </select>
+        </label>
+      </div>
+    </div>
+  )
+}

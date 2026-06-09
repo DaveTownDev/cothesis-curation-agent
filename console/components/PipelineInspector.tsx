@@ -1,21 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { PanelDetail } from "@/components/PanelDetail"
-import { CheckCircle, Copy, ChevronDown, ChevronUp } from "lucide-react"
+import { EnrichmentPanel } from "@/components/EnrichmentPanel"
+import { CheckCircle, Copy, ExternalLink } from "lucide-react"
+import { cloudTraceListUrl, cloudLogsForRunUrl } from "@/lib/gcp-links"
 import type {
   DraftRecord, PanelResult, PipelineStateDoc, DraftDoc, QualityDimension,
 } from "@/lib/firestore"
 
-const TABS = ["Quality", "Panel", "Classification", "Provenance"] as const
+const TABS = ["Quality", "Panel", "Classification", "Enrichment", "Provenance"] as const
 type Tab = typeof TABS[number]
 
-const STAGE_LABELS: Record<string, string> = {
-  discovered: "Discovered", appraised: "Appraised", classified: "Classified",
-  edited: "Editorial", reconciled: "Reconciled", qc_panel: "QC Panel",
-  arbiter: "Arbiter",
-}
 const STAGE_KEYS: Array<[string, keyof PipelineStateDoc]> = [
   ["Discovered", "discovered_at"],
   ["Appraised", "appraised_at"],
@@ -77,8 +74,10 @@ function CopyButton({ value }: { value: string }) {
   const [copied, setCopied] = useState(false)
   return (
     <button
+      type="button"
+      aria-label="Copy pipeline run ID"
       onClick={() => { navigator.clipboard.writeText(value); setCopied(true); setTimeout(() => setCopied(false), 1500) }}
-      className="text-[#6b7280] hover:text-[#0E3A27] transition-colors ml-1"
+      className="text-[#6b7280] hover:text-[#0E3A27] transition-colors ml-1 focus:outline-none focus:ring-2 focus:ring-[#289642] rounded"
       title="Copy"
     >
       {copied ? <CheckCircle size={12} className="text-[#289642]" /> : <Copy size={12} />}
@@ -91,9 +90,10 @@ interface Props {
   panel: PanelResult | Record<string, unknown>
   pipelineState: PipelineStateDoc | null
   draftDoc: DraftDoc | null
+  gcpProjectId?: string
 }
 
-export function PipelineInspector({ draft, panel, pipelineState, draftDoc }: Props) {
+export function PipelineInspector({ draft, panel, pipelineState, draftDoc, gcpProjectId }: Props) {
   const [tab, setTab] = useState<Tab>("Quality")
   const arbiter = pipelineState?.arbiter_decision
   const classification = pipelineState?.classification_result
@@ -233,6 +233,9 @@ export function PipelineInspector({ draft, panel, pipelineState, draftDoc }: Pro
           </div>
         )}
 
+        {/* ── Enrichment tab ──────────────────────────────────────────────── */}
+        {tab === "Enrichment" && <EnrichmentPanel draft={draft} />}
+
         {/* ── Provenance tab ──────────────────────────────────────────────── */}
         {tab === "Provenance" && (
           <div className="space-y-4">
@@ -240,10 +243,30 @@ export function PipelineInspector({ draft, panel, pipelineState, draftDoc }: Pro
             {pipelineState?.pipeline_run_id && (
               <div>
                 <p className="text-xs font-medium text-[#4a6741] uppercase tracking-wide mb-1">Pipeline run</p>
-                <code className="text-xs text-[#4a5568] bg-[#F8F5EE] px-2 py-1 rounded font-mono">
+                <code className="text-xs text-[#4a5568] bg-[#F8F5EE] px-2 py-1 rounded font-mono break-all">
                   {pipelineState.pipeline_run_id}
                   <CopyButton value={pipelineState.pipeline_run_id} />
                 </code>
+                {gcpProjectId && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <a
+                      href={cloudTraceListUrl(gcpProjectId)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[10px] text-[#03848F] hover:underline"
+                    >
+                      Cloud Trace <ExternalLink size={10} />
+                    </a>
+                    <a
+                      href={cloudLogsForRunUrl(gcpProjectId, pipelineState.pipeline_run_id)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[10px] text-[#03848F] hover:underline"
+                    >
+                      Logs for run <ExternalLink size={10} />
+                    </a>
+                  </div>
+                )}
               </div>
             )}
 

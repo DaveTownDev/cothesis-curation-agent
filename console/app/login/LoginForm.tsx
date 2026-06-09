@@ -28,7 +28,10 @@ function LoginFormInner() {
           placeholder="Enter your passcode"
         />
       </div>
-      {error && (
+      {error === "locked" && (
+        <p className="text-sm text-[#dc2626]">Too many attempts — try again in 15 minutes.</p>
+      )}
+      {error && error !== "locked" && (
         <p className="text-sm text-[#dc2626]">Incorrect passcode — please try again.</p>
       )}
       <Button type="submit" className="w-full">

@@ -1,6 +1,9 @@
+import Link from "next/link"
 import { requireAuth } from "@/lib/auth"
 import { getPipelineRuns } from "@/lib/firestore"
 import { Badge } from "@/components/ui/badge"
+
+export const metadata = { title: "Pipeline — CoThesis" }
 
 export const revalidate = 0
 
@@ -73,6 +76,7 @@ export default async function PipelinePage({
                 <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Composite</th>
                 <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Run ID</th>
                 <th className="px-4 py-3 text-left font-medium text-[#6b7280]">Updated</th>
+                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e8e4dc]">
@@ -106,6 +110,16 @@ export default async function PipelinePage({
                       {run.pipeline_run_id ?? "—"}
                     </td>
                     <td className="px-4 py-3 text-xs text-[#6b7280] whitespace-nowrap">{fmtDate(run.updated_at)}</td>
+                    <td className="px-4 py-3">
+                      {routing === "review_needed" && (
+                        <Link
+                          href="/review"
+                          className="text-xs text-[#289642] font-medium hover:underline whitespace-nowrap"
+                        >
+                          View queue
+                        </Link>
+                      )}
+                    </td>
                   </tr>
                 )
               })}

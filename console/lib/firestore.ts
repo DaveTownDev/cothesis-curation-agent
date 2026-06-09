@@ -101,6 +101,17 @@ export interface DraftRecord {
   language_detected?: string | null
   alternative_titles?: string[]
   type_fields?: Record<string, unknown>
+  enrichment_sources?: string[]
+  enrichment_pending_keys?: string[]
+  field_provenance?: Record<string, FieldProvenanceEntry>
+  content_format?: string
+  time_to_consume?: string
+}
+
+export interface FieldProvenanceEntry {
+  source?: string
+  timestamp?: string
+  value?: unknown
 }
 
 export interface QaAudit {
@@ -130,6 +141,7 @@ export interface ReviewQueueItem {
   queued_at: string
   rejected_reason?: string
   requeue_reason?: string
+  requeue_stage?: string
   qa_audit?: QaAudit
 }
 
@@ -183,7 +195,8 @@ export interface ReviewQueueFilters {
   minQuality?: number
   maxQuality?: number
   methodology?: string
-  sortBy?: "newest" | "oldest" | "quality_asc" | "quality_desc"
+  sortBy?: "newest" | "oldest" | "quality_asc" | "quality_desc" | "attention"
+  preset?: string
   limit?: number
 }
 
@@ -197,13 +210,22 @@ export async function getReviewQueue(
     .collection("review_queue")
     .where("status", "==", "pending") as FirebaseFirestore.Query
 
-  query = query.orderBy("queued_at", filters.sortBy === "oldest" ? "asc" : "desc")
-  query = query.limit(filters.limit ?? 100)
+  query = query.limit(filters.limit ?? 200)
 
   const snap = await query.get()
   let items = snap.docs.map((d) => ({ id: d.id, ...d.data() } as ReviewQueueItem))
 
-  // Client-side filters (Firestore composite index not required)
+  // Client-side sort + filters (no composite Firestore index required)
+  const dateSort = filters.sortBy === "oldest" ? "asc" : "desc"
+  if (filters.sortBy === "oldest" || filters.sortBy === "newest" || !filters.sortBy) {
+    items.sort((a, b) => {
+      const ta = new Date(a.queued_at).getTime()
+      const tb = new Date(b.queued_at).getTime()
+      return dateSort === "asc" ? ta - tb : tb - ta
+    })
+  }
+
+  // Client-side filters
   if (filters.type) {
     items = items.filter((i) => i.draft_record?.resource_type_code === filters.type)
   }
@@ -222,6 +244,42 @@ export async function getReviewQueue(
     items.sort((a, b) => (a.draft_record?.quality_score ?? 0) - (b.draft_record?.quality_score ?? 0))
   } else if (filters.sortBy === "quality_desc") {
     items.sort((a, b) => (b.draft_record?.quality_score ?? 0) - (a.draft_record?.quality_score ?? 0))
+  }
+
+  if (filters.preset === "qa_issues") {
+    items = items.filter((i) => {
+      const v = i.qa_audit?.source_verdict
+      return v === "fail" || v === "warn"
+    })
+  } else if (filters.preset === "low_confidence") {
+    items = items.filter((i) => {
+      const d = i.draft_record
+      return (d?.classification_confidence ?? 1) < 0.5 || (d?.ai_confidence ?? 100) < 70
+    })
+  } else if (filters.preset === "ready_to_clear") {
+    items = items.filter((i) => {
+      const d = i.draft_record
+      const qa = i.qa_audit?.source_verdict
+      return (
+        (qa === "pass" || !qa) &&
+        (d?.quality_score ?? 0) >= 80 &&
+        (d?.ai_confidence ?? 0) >= 70 &&
+        (d?.classification_confidence ?? 0) >= 0.5
+      )
+    })
+  }
+
+  if (filters.sortBy === "attention") {
+    const qaRank = (v?: string) => (v === "fail" ? 0 : v === "warn" ? 1 : 2)
+    items.sort((a, b) => {
+      const qa = qaRank(a.qa_audit?.source_verdict) - qaRank(b.qa_audit?.source_verdict)
+      if (qa !== 0) return qa
+      const conf =
+        (a.draft_record?.classification_confidence ?? 1) -
+        (b.draft_record?.classification_confidence ?? 1)
+      if (conf !== 0) return conf
+      return new Date(a.queued_at).getTime() - new Date(b.queued_at).getTime()
+    })
   }
 
   return items
@@ -307,11 +365,22 @@ export async function getPublishedResources(limit = 200): Promise<ResourceDoc[]>
   return docs
 }
 
+function queueAgeLabel(isoString: string, nowMs: number): string {
+  const ms = nowMs - new Date(isoString).getTime()
+  const h = Math.floor(ms / 3_600_000)
+  const m = Math.floor((ms % 3_600_000) / 60_000)
+  if (h >= 24) return `${Math.floor(h / 24)}d`
+  if (h > 0) return `${h}h ${m}m`
+  return `${m}m`
+}
+
 export async function getSyncStats(): Promise<{
   synced: number
   pending: number
   total: number
   oldest_pending_at: string | null
+  oldest_age_label: string | null
+  queue_stale: boolean
 }> {
   const db = getFirestoreDb()
   const [resourcesSnap, queueSnap] = await Promise.all([
@@ -332,7 +401,22 @@ export async function getSyncStats(): Promise<{
     }
   })
 
-  return { synced, pending: total - synced, total, oldest_pending_at }
+  const nowMs = Date.now()
+  const oldest_age_label = oldest_pending_at
+    ? queueAgeLabel(oldest_pending_at, nowMs)
+    : null
+  const queue_stale = oldest_pending_at
+    ? nowMs - new Date(oldest_pending_at).getTime() > 24 * 3_600_000
+    : false
+
+  return {
+    synced,
+    pending: total - synced,
+    total,
+    oldest_pending_at,
+    oldest_age_label,
+    queue_stale,
+  }
 }
 
 // ── Dashboard stats ──────────────────────────────────────────────────────────

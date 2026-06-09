@@ -13,8 +13,7 @@ Usage:
 
 Environment variables:
   DATABASE_PUBLIC_URL   Railway Postgres URL (from Doppler dave-ai-stack/prd)
-  AGENT_SERVICE_URL     Cloud Run agent URL (default: https://cothesis-agent-791873451733.us-central1.run.app)
-  AGENT_BEARER_TOKEN    Bearer token for the private agent service
+  AGENT_SERVICE_URL     (legacy) unused — batch runs the deterministic orchestrator in-process
 """
 from __future__ import annotations
 
@@ -25,19 +24,6 @@ import sys
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
-
-_DEFAULT_AGENT_URL = "https://cothesis-agent-791873451733.us-central1.run.app"
-
-
-def _get_adc_token() -> str:
-    """Get an OIDC identity token from ADC for calling the private Cloud Run agent."""
-    import subprocess
-    result = subprocess.run(
-        ["gcloud", "auth", "print-identity-token"],
-        capture_output=True, text=True, check=True,
-    )
-    return result.stdout.strip()
-
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run a batch from the enrichment queue")

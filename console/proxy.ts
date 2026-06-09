@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-const PROTECTED = ["/dashboard", "/review"]
+const PROTECTED = ["/dashboard", "/review", "/resources", "/pipeline"]
 const SESSION_COOKIE = "cothesis_session"
 
 export function proxy(req: NextRequest) {
@@ -16,5 +16,10 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/review/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/review/:path*",
+    "/resources/:path*",
+    "/pipeline/:path*",
+  ],
 }

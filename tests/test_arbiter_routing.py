@@ -81,6 +81,21 @@ class TestComputeRoutingDecision:
         )
         assert decision["routing"] == "review_needed"
 
+    def test_review_needed_no_mvp_methodology(self):
+        """Outside MVP methodologies: high quality still routes to human review."""
+        from agents.arbiter.tools import compute_routing_decision
+        decision = compute_routing_decision(
+            relevance_score=0.85,
+            classification_confidence=0.85,
+            quality_score=85,
+            ai_confidence=80,
+            panel_agreement=0.8,
+            skip_reason=None,
+            has_mvp_methodology=False,
+        )
+        assert decision["routing"] == "review_needed"
+        assert "MVP methodologies" in decision["reason"]
+
     def test_review_needed_low_panel_agreement(self):
         """panel_agreement < 0.5 (high disagreement) → review_needed."""
         from agents.arbiter.tools import compute_routing_decision

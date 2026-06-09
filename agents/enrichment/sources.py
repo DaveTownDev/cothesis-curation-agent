@@ -13,6 +13,8 @@ import os
 
 import httpx
 
+from agents.shared.url_safety import _MAX_REDIRECTS, is_safe_outbound_url
+
 logger = logging.getLogger(__name__)
 
 CONTACT_EMAIL = os.environ.get("ENRICHMENT_CONTACT_EMAIL", "research@cothesis.ai")
@@ -23,8 +25,13 @@ NEEDS_API_KEY = ["altmetric", "dimensions", "scite", "isbndb"]
 
 
 def _get(url: str, params: dict | None = None) -> dict | None:
+    if not is_safe_outbound_url(url):
+        logger.warning("source GET blocked unsafe URL: %s", url[:80])
+        return None
     try:
-        with httpx.Client(timeout=_TIMEOUT, headers=_UA, follow_redirects=True) as c:
+        with httpx.Client(
+            timeout=_TIMEOUT, headers=_UA, follow_redirects=True, max_redirects=_MAX_REDIRECTS,
+        ) as c:
             r = c.get(url, params=params)
             r.raise_for_status()
             return r.json()

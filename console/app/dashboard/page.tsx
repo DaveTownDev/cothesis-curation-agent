@@ -3,17 +3,29 @@ import { requireAuth } from "@/lib/auth"
 import { getPipelineStats, getSyncStats } from "@/lib/firestore"
 import { PipelineStatsCard } from "@/components/PipelineStatsCard"
 import { SyncStatusCard } from "@/components/SyncStatusCard"
+import { SessionStatsCard } from "@/components/SessionStatsCard"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, ClipboardList } from "lucide-react"
+import { getEvalSummary } from "@/lib/eval-summary"
+
+export const metadata = { title: "Dashboard — CoThesis" }
 
 export const revalidate = 30
 
 export default async function DashboardPage() {
   await requireAuth()
+  const evalSummary = getEvalSummary()
 
   let stats: Record<string, number> = {}
-  let syncStats = { synced: 0, pending: 0, total: 0, oldest_pending_at: null as string | null }
+  let syncStats = {
+    synced: 0,
+    pending: 0,
+    total: 0,
+    oldest_pending_at: null as string | null,
+    oldest_age_label: null as string | null,
+    queue_stale: false,
+  }
   let firestoreError: string | null = null
 
   try {
@@ -55,6 +67,8 @@ export default async function DashboardPage() {
         </div>
       )}
 
+      <SessionStatsCard />
+
       {/* Sync & queue health */}
       <SyncStatusCard {...syncStats} />
 
@@ -70,26 +84,37 @@ export default async function DashboardPage() {
           <CardContent>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#289642]">≥ 0.70</p>
+                <p className="text-2xl font-bold text-[#289642]">
+                  {evalSummary.tool_trajectory_avg.toFixed(2)}
+                </p>
                 <p className="text-xs text-[#6b7280]">tool_trajectory_avg</p>
-                <Badge variant="default" className="mt-1 text-xs">Target met</Badge>
+                <Badge variant="default" className="mt-1 text-xs">
+                  {evalSummary.tool_trajectory_avg >= evalSummary.tool_trajectory_threshold ? "Target met" : "Below target"}
+                </Badge>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#289642]">≥ 0.70</p>
-                <p className="text-xs text-[#6b7280]">rubric_quality</p>
-                <Badge variant="default" className="mt-1 text-xs">Target met</Badge>
+                <p className="text-2xl font-bold text-[#289642]">
+                  {Math.round(evalSummary.rubric_pass_rate * 100)}%
+                </p>
+                <p className="text-xs text-[#6b7280]">rubric pass rate</p>
+                <Badge variant="default" className="mt-1 text-xs">
+                  {evalSummary.cases_passed}/{evalSummary.cases_total} cases
+                </Badge>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#03848F]">20</p>
+                <p className="text-2xl font-bold text-[#03848F]">{evalSummary.cases_total}</p>
                 <p className="text-xs text-[#6b7280]">gold set items</p>
                 <Badge variant="teal" className="mt-1 text-xs">4 methods × 5 types</Badge>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#0E3A27]">234</p>
+                <p className="text-2xl font-bold text-[#0E3A27]">{evalSummary.unit_tests}</p>
                 <p className="text-xs text-[#6b7280]">unit tests</p>
                 <Badge variant="secondary" className="mt-1 text-xs">All green</Badge>
               </div>
             </div>
+            <p className="text-[10px] text-[#9ca3af] mt-3 text-right">
+              Eval snapshot {evalSummary.updated_at}
+            </p>
           </CardContent>
         </Card>
 
