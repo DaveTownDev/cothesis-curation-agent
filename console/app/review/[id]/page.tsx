@@ -6,7 +6,6 @@ import {
   getReviewQueueItem,
   getPipelineState, getDraftAssessment, getReviewQueue,
 } from "@/lib/firestore"
-import { validatePublishChecklist } from "@/lib/checklist"
 import {
   parseReviewQueueFilters, queueQueryString, reviewDetailHref,
 } from "@/lib/queue-filters"
@@ -70,11 +69,6 @@ export default async function ReviewDetailPage({
     resourceCode ? getPipelineState(resourceCode).catch(() => null) : Promise.resolve(null),
     resourceCode ? getDraftAssessment(resourceCode).catch(() => null) : Promise.resolve(null),
   ])
-
-  const checklistErrors = validatePublishChecklist(
-    draft as unknown as Record<string, unknown>,
-    "console",
-  )
 
   const gcpProjectId = process.env.GOOGLE_CLOUD_PROJECT ?? "cothesis-curation-agent"
 
@@ -154,7 +148,6 @@ export default async function ReviewDetailPage({
         panel={item.panel_result}
         pipelineState={pipelineState}
         draftDoc={draftDoc}
-        checklistErrors={checklistErrors}
         queuePosition={position}
         queueTotal={total}
         prevHref={prevHref}

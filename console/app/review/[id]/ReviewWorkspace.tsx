@@ -15,7 +15,7 @@ import { ReviewSessionBar } from "@/components/ReviewSessionBar"
 import { KeyboardHelp } from "@/components/KeyboardHelp"
 import { CompendiumCardPreview } from "@/components/CompendiumCardPreview"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { validatePublishChecklist, type ChecklistError } from "@/lib/checklist"
+import { validatePublishChecklist } from "@/lib/checklist"
 import { isTypingTarget } from "@/lib/keyboard"
 import type { TaxonomyEdits } from "@/lib/taxonomy"
 import type {
@@ -34,7 +34,6 @@ interface Props {
   panel: PanelResult | Record<string, unknown>
   pipelineState: PipelineStateDoc | null
   draftDoc: DraftDoc | null
-  checklistErrors: ChecklistError[]
   queuePosition: number
   queueTotal: number
   prevHref: string | null
@@ -122,11 +121,11 @@ export function ReviewWorkspace({
   const [editorialNote, setEditorialNote] = useState(draft?.editorial_note ?? "")
   const [taxonomy, setTaxonomy] = useState<TaxonomyEdits>(() => initialTaxonomy(draft))
 
-  const edited: EditedDescriptions = {
+  const edited = useMemo(() => ({
     editorial_description: shortDesc,
     summary: longDesc,
     editorial_description_plain: plainDesc,
-  }
+  }), [shortDesc, longDesc, plainDesc])
 
   const liveRecord = useMemo(() => ({
     ...draft,
