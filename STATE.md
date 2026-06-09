@@ -51,7 +51,15 @@ Phase 4 remaining is [DAVE]: record demo video (docs/DEMO_SCRIPT.md), fill famil
 - [x] `research_database` resolved: subtype of `dataset` (v2.2) — 14-type enum unchanged
 
 ## In progress
-- **HITL Phase C (console)** — implemented locally on `cursor/hackathon-audit-fixes`, not yet committed: undo-after-approve (8s toast), reopen-from-published on `/resources`, session stats on dashboard, duplicate hint on review detail, server actions return paths (no redirect) for client navigation. Build clean; 289 pytest green.
+- (none)
+
+## Latest verification (2026-06-08)
+- Synced `.env` + `console/.env.local` from main repo worktree (GCP project, Vertex datastore, MCP keys, console passcode).
+- **293 pytest** green (incl. `tests/test_review_navigation.py`).
+- **gitleaks** clean.
+- **Console:** `npm run lint` (0 errors), `npm run build` clean.
+- **E2E smoke:** `bash scripts/e2e_console_smoke.sh` — login gate, auth redirect, form login, dashboard/review/resources/pipeline (review detail skipped when queue empty).
+- **Lint fixes:** React 19 purity rules (`SyncStatusCard`, `UndoCountdown`, `SessionStatsCard`); queue age computed in `getSyncStats()`.
 
 ## Completed (HITL Phases A–C, hackathon audit branch)
 - [x] **Phase A** — auto-advance queue nav, keyboard shortcuts, enrichment provenance tab, inline taxonomy on approve, sticky decision pane, smart sort + compact queue
@@ -126,4 +134,5 @@ Phase 4 remaining is [DAVE]: record demo video (docs/DEMO_SCRIPT.md), fill famil
 - Secret scan: `gitleaks git -v`
 - Console dev: `cd console && npm run dev`
 - Console build: `cd console && npm run build`
-- Tests: `.venv/bin/pytest tests/ -q` (289 passed 2026-06-08)
+- Tests: `.venv/bin/pytest tests/ -q` (293 passed 2026-06-08)
+- Console E2E: `bash scripts/e2e_console_smoke.sh`

@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { RotateCcw } from "lucide-react"
 
@@ -37,30 +36,4 @@ export function UndoApproveToast({
       </div>
     </div>
   )
-}
-
-export function useUndoCountdown(
-  active: boolean,
-  seconds: number,
-  onExpire: () => void,
-) {
-  const [left, setLeft] = useState(seconds)
-
-  useEffect(() => {
-    if (!active) return
-    setLeft(seconds)
-    const t = setInterval(() => {
-      setLeft((n) => {
-        if (n <= 1) {
-          clearInterval(t)
-          onExpire()
-          return 0
-        }
-        return n - 1
-      })
-    }, 1000)
-    return () => clearInterval(t)
-  }, [active, seconds, onExpire])
-
-  return left
 }

@@ -5,10 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { readSessionStats, type SessionStats } from "@/lib/session-stats"
 
 export function SessionStatsCard() {
-  const [stats, setStats] = useState<SessionStats | null>(null)
+  const [stats, setStats] = useState<SessionStats | null>(() =>
+    typeof window !== "undefined" ? readSessionStats() : null,
+  )
 
   useEffect(() => {
-    setStats(readSessionStats())
     const refresh = () => setStats(readSessionStats())
     window.addEventListener("cothesis-session-stats", refresh)
     return () => window.removeEventListener("cothesis-session-stats", refresh)

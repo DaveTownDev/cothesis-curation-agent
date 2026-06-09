@@ -5,28 +5,19 @@ interface Props {
   synced: number
   pending: number
   total: number
-  oldest_pending_at: string | null
+  oldest_age_label: string | null
+  queue_stale: boolean
 }
 
-function ageLabel(isoString: string): string {
-  const ms = Date.now() - new Date(isoString).getTime()
-  const h = Math.floor(ms / 3_600_000)
-  const m = Math.floor((ms % 3_600_000) / 60_000)
-  if (h >= 24) return `${Math.floor(h / 24)}d`
-  if (h > 0) return `${h}h ${m}m`
-  return `${m}m`
-}
-
-export function SyncStatusCard({ synced, pending, total, oldest_pending_at }: Props) {
+export function SyncStatusCard({
+  synced, pending, total,
+  oldest_age_label, queue_stale,
+}: Props) {
   const pct = total > 0 ? Math.round((synced / total) * 100) : 0
-  const oldestAge = oldest_pending_at ? ageLabel(oldest_pending_at) : null
-  const queueStale = oldest_pending_at
-    ? Date.now() - new Date(oldest_pending_at).getTime() > 24 * 3_600_000
-    : false
+  const oldestAge = oldest_age_label ?? null
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      {/* Compendium sync */}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-[#4a6741]">Compendium sync</CardTitle>
@@ -52,7 +43,6 @@ export function SyncStatusCard({ synced, pending, total, oldest_pending_at }: Pr
         </CardContent>
       </Card>
 
-      {/* Queue health */}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-[#4a6741]">Oldest queued item</CardTitle>
@@ -60,25 +50,24 @@ export function SyncStatusCard({ synced, pending, total, oldest_pending_at }: Pr
         <CardContent>
           {oldestAge ? (
             <div className="flex items-center gap-2">
-              {queueStale ? (
+              {queue_stale ? (
                 <AlertCircle className="h-4 w-4 text-red-500" />
               ) : (
                 <Clock className="h-4 w-4 text-[#03848F]" />
               )}
-              <span className={`text-2xl font-bold ${queueStale ? "text-red-600" : "text-[#0E3A27]"}`}>
+              <span className={`text-2xl font-bold ${queue_stale ? "text-red-600" : "text-[#0E3A27]"}`}>
                 {oldestAge}
               </span>
             </div>
           ) : (
             <p className="text-sm text-[#6b7c68]">Queue empty</p>
           )}
-          {queueStale && (
+          {queue_stale && (
             <p className="text-xs text-red-500 mt-1">Items waiting &gt;24h</p>
           )}
         </CardContent>
       </Card>
 
-      {/* Sync pct */}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-[#4a6741]">Sync coverage</CardTitle>

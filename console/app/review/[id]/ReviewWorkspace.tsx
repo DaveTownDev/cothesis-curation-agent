@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { undoApprove, type ApproveResult } from "@/app/review/actions"
-import { UndoApproveToast, useUndoCountdown } from "@/components/UndoApproveToast"
+import { UndoApproveToast } from "@/components/UndoApproveToast"
+import { UndoCountdown } from "@/components/UndoCountdown"
 import { adjustSessionStat } from "@/lib/session-stats"
 import { DescriptionSlots } from "@/components/DescriptionSlots"
 import { PipelineInspector } from "@/components/PipelineInspector"
@@ -65,7 +66,7 @@ function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
 
 export function ReviewWorkspace({
   itemId, draft, panel, pipelineState, draftDoc,
-  checklistErrors, queuePosition, queueTotal,
+  queuePosition, queueTotal,
   prevHref, nextHref, nextId, queueQuery, gcpProjectId,
   approveAction, rejectAction, requeueAction,
 }: Props) {
@@ -79,7 +80,9 @@ export function ReviewWorkspace({
   const [isUndoing, startUndo] = useTransition()
 
   const undoPendingRef = useRef(undoPending)
-  undoPendingRef.current = undoPending
+  useEffect(() => {
+    undoPendingRef.current = undoPending
+  }, [undoPending])
 
   const finishNavigate = useCallback((nextPath: string) => {
     setUndoPending(null)
@@ -98,8 +101,6 @@ export function ReviewWorkspace({
     const pending = undoPendingRef.current
     if (pending) finishNavigate(pending.nextPath)
   }, [finishNavigate])
-
-  const secondsLeft = useUndoCountdown(undoPending !== null, 8, onUndoExpire)
 
   function handleUndo() {
     if (!undoPending) return
@@ -337,14 +338,24 @@ export function ReviewWorkspace({
         onRequeue={() => actionsRef.current?.openRequeue()}
       />
 
-      <UndoApproveToast
-        visible={undoPending !== null}
-        resourceTitle={draft?.title ?? ""}
-        secondsLeft={secondsLeft}
-        onUndo={handleUndo}
-        onDismiss={() => undoPending && finishNavigate(undoPending.nextPath)}
-        isUndoing={isUndoing}
-      />
+      {undoPending && (
+        <UndoCountdown
+          key={undoPending.undo.itemId}
+          seconds={8}
+          onExpire={onUndoExpire}
+        >
+          {(secondsLeft) => (
+            <UndoApproveToast
+              visible
+              resourceTitle={draft?.title ?? ""}
+              secondsLeft={secondsLeft}
+              onUndo={handleUndo}
+              onDismiss={() => finishNavigate(undoPending.nextPath)}
+              isUndoing={isUndoing}
+            />
+          )}
+        </UndoCountdown>
+      )}
     </>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { PanelDetail } from "@/components/PanelDetail"
 import { EnrichmentPanel } from "@/components/EnrichmentPanel"
 import { CheckCircle, Copy, ExternalLink } from "lucide-react"
@@ -13,11 +13,6 @@ import type {
 const TABS = ["Quality", "Panel", "Classification", "Enrichment", "Provenance"] as const
 type Tab = typeof TABS[number]
 
-const STAGE_LABELS: Record<string, string> = {
-  discovered: "Discovered", appraised: "Appraised", classified: "Classified",
-  edited: "Editorial", reconciled: "Reconciled", qc_panel: "QC Panel",
-  arbiter: "Arbiter",
-}
 const STAGE_KEYS: Array<[string, keyof PipelineStateDoc]> = [
   ["Discovered", "discovered_at"],
   ["Appraised", "appraised_at"],

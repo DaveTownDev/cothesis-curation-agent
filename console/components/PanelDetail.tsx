@@ -1,6 +1,6 @@
 "use client"
 
-import { CheckCircle, XCircle, Minus } from "lucide-react"
+import { CheckCircle, XCircle } from "lucide-react"
 import type { PanelResult, PanelScore } from "@/lib/firestore"
 
 const EVALUATOR_LABELS: Record<string, string> = {

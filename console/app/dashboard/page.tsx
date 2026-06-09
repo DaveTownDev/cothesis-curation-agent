@@ -18,7 +18,14 @@ export default async function DashboardPage() {
   const evalSummary = getEvalSummary()
 
   let stats: Record<string, number> = {}
-  let syncStats = { synced: 0, pending: 0, total: 0, oldest_pending_at: null as string | null }
+  let syncStats = {
+    synced: 0,
+    pending: 0,
+    total: 0,
+    oldest_pending_at: null as string | null,
+    oldest_age_label: null as string | null,
+    queue_stale: false,
+  }
   let firestoreError: string | null = null
 
   try {

@@ -365,11 +365,22 @@ export async function getPublishedResources(limit = 200): Promise<ResourceDoc[]>
   return docs
 }
 
+function queueAgeLabel(isoString: string, nowMs: number): string {
+  const ms = nowMs - new Date(isoString).getTime()
+  const h = Math.floor(ms / 3_600_000)
+  const m = Math.floor((ms % 3_600_000) / 60_000)
+  if (h >= 24) return `${Math.floor(h / 24)}d`
+  if (h > 0) return `${h}h ${m}m`
+  return `${m}m`
+}
+
 export async function getSyncStats(): Promise<{
   synced: number
   pending: number
   total: number
   oldest_pending_at: string | null
+  oldest_age_label: string | null
+  queue_stale: boolean
 }> {
   const db = getFirestoreDb()
   const [resourcesSnap, queueSnap] = await Promise.all([
@@ -390,7 +401,22 @@ export async function getSyncStats(): Promise<{
     }
   })
 
-  return { synced, pending: total - synced, total, oldest_pending_at }
+  const nowMs = Date.now()
+  const oldest_age_label = oldest_pending_at
+    ? queueAgeLabel(oldest_pending_at, nowMs)
+    : null
+  const queue_stale = oldest_pending_at
+    ? nowMs - new Date(oldest_pending_at).getTime() > 24 * 3_600_000
+    : false
+
+  return {
+    synced,
+    pending: total - synced,
+    total,
+    oldest_pending_at,
+    oldest_age_label,
+    queue_stale,
+  }
 }
 
 // ── Dashboard stats ──────────────────────────────────────────────────────────
