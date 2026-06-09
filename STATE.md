@@ -7,13 +7,16 @@
 
 **Merged to `main` @ `47b6fcb` (2026-06-09).** PR #1 (audit fixes + HITL Phases A–C) + PR #2 (review agents + guard) merged. **293 pytest**, console lint/build clean, `bash scripts/e2e_console_smoke.sh` green.
 
-**Deployed (2026-06-09):** console rev `console-00006-q68` @ https://console-791873451733.us-central1.run.app (`min-instances=1`, `CONSOLE_PUBLIC_URL` set). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.
+**Pushed @ `dbbd801` (2026-06-09):** live taxonomy alignment + QA console quick actions on `origin/main`.
+
+**Deployed (2026-06-09):** console rev `console-00007-l4h` @ https://console-791873451733.us-central1.run.app (`min-instances=1`, `CONSOLE_PUBLIC_URL` set). Live taxonomy: **148** methodologies + **53** specialties (`data/taxonomy/live_*.json`). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.
 
 **Submission (human):** demo video (`docs/DEMO_SCRIPT.md`), Devpost submit, familiarity scores (`docs/SUBMISSION.md` L75–79), judge GitHub access.
 
 Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 
 ### Residuals (non-blocking)
+- **Remaining ops:** redeploy agent (`adk deploy cloud_run` / current image); MCP IAM grants for production MCP access.
 - Interactive `adk web` path: assembly normalizes out-of-enum types + backfills missing descriptions (`tests/test_interactive_assembly.py`); demo video uses pre-seeded batch data, not live pipeline.
 - Premium enrichment (Altmetric, ISBNdb, etc.): optional keys in `.env.example`; Tier-1 free sources cover MVP article/book paths.
 - Eval rubric judge may score all-pass — read as "no violations".
@@ -61,13 +64,14 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - (none)
 
 ## Latest verification (2026-06-09)
-- **main** merged PR #1 + PR #2; working tree clean.
+- **main** @ `dbbd801` pushed to `origin/main`; working tree clean.
+- Live taxonomy **148 + 53**; refresh `python -m scripts.fetch_live_taxonomy`.
 - **293 pytest** green; gitleaks clean; console lint/build clean; E2E smoke green.
-- **Redeploy + seed:** in progress — see deploy log below.
+- **Still open:** agent redeploy; MCP IAM — see deploy log.
 
 ## Deploy log (2026-06-09)
 - **Seed:** `scripts/seed_demo` → `{'auto_accept': 2, 'review_needed': 10, 'auto_exclude': 0, 'error': 0}` (~7 min)
-- **Console deploy:** `console-00006-q68` via `scripts/deploy_console.sh` (exit 0)
+- **Console deploy:** `console-00007-l4h` via `scripts/deploy_console.sh` (post-`dbbd801`, exit 0)
 - **Firestore counts:** pending review_queue=298, published=0
 - **E2E smoke:** passed locally incl. review detail `/review/L07zC93w2ptRKBxXKV2c`
 - **Skipped:** `firebase deploy --only firestore:rules` — Firebase CLI not installed on this machine
