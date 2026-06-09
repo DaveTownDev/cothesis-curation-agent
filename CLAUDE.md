@@ -10,7 +10,7 @@ CoThesis Curation Agent: a multi-agent system (ADK on Vertex AI / Cloud Run) tha
 - **`VertexAiSearchTool` is exclusive** — it cannot share an agent with other tools. Isolate grounding in its own sub-agent or wrap via `AgentTool`.
 - **Secrets never enter the repo.** No keys, no `.env` with real values, no service-account JSON, no Tailscale IPs / VPS hostnames, no AWS code. Real values come from Secret Manager at deploy. Use placeholders in samples.
 - **No completion claims without fresh verification evidence.** Before saying anything is done, run the command fresh and paste the output. "Tests pass" with no visible run is not done.
-- **Gated to the human (never do these without explicit approval):** `git push`, `gcloud billing`, any IAM role grant, `gcloud ... delete`, anything `--force`, and any `--allow-unauthenticated` decision.
+- **Gated to the human (never do these without explicit approval):** `gcloud billing`, any IAM role grant, `gcloud ... delete`, anything `--force`, and any `--allow-unauthenticated` decision. push allowed when explicitly requested.
 - **Emit platform methodology codes** (SYN-01, SYN-02, OBS-01, EVAL-01), never the legacy RS/OD display codes. See `docs/TAXONOMY.md` for the mapping.
 - **quality_score is 0–100**; quality dimensions are the canonical six (relevance, accuracy, authority, currency, accessibility, practical_utility); editorial badges come from the canonical set in `docs/SCHEMA.md`.
 
