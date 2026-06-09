@@ -11,7 +11,7 @@
 
 **Pushed @ `dbbd801` (2026-06-09):** live taxonomy alignment + QA console quick actions on `origin/main`.
 
-**Deployed (2026-06-09):** agent rev `cothesis-agent-00012-cn8` — fresh source image `sha256:4422e65e…` (built 2026-06-09, includes taxonomy Python post-`dbbd801`); MCP + datastore secrets + SA `agent-runtime@cothesis-curation-agent.iam.gserviceaccount.com`. Prior config-only rev `00011-fhk` (stale Jun 5 image). **Deployed (2026-06-09):** console rev `console-00007-l4h` @ https://console-791873451733.us-central1.run.app (`min-instances=1`, `CONSOLE_PUBLIC_URL` set). Live taxonomy: **148** methodologies + **53** specialties (`data/taxonomy/live_*.json`). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.
+**Deployed (2026-06-09):** agent rev `cothesis-agent-00012-cn8` — fresh source image `sha256:4422e65e…` (built 2026-06-09, includes taxonomy Python post-`dbbd801`); MCP + datastore secrets + SA `agent-runtime@cothesis-curation-agent.iam.gserviceaccount.com`. Prior config-only rev `00011-fhk` (stale Jun 5 image). **Deployed (2026-06-09):** console rev `console-00010-5rt` @ https://console-791873451733.us-central1.run.app (compendium sync @ `843a9fa`; `COMPENDIUM_IMPORT_URL` + `IMPORT_API_KEY` from Secret Manager; `min-instances=1`, `CONSOLE_PUBLIC_URL` set). Live taxonomy: **148** methodologies + **53** specialties (`data/taxonomy/live_*.json`). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.
 
 **Submission (human):** demo video (`docs/DEMO_SCRIPT.md`), Devpost submit, familiarity scores (`docs/SUBMISSION.md` L75–79), judge GitHub access.
 
@@ -69,14 +69,14 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - Compendium console sync: **322 pytest** green; console lint/build green.
 - **main** @ `1b1623a` pushed to `origin/main`; agent source redeploy `00012-cn8`.
 - Live taxonomy **148 + 53**; refresh `python -m scripts.fetch_live_taxonomy`.
-- gitleaks clean; E2E smoke green (re-run after console redeploy with Compendium secrets).
+- gitleaks clean; E2E smoke green; console redeploy `00010-5rt` with Compendium secrets verified (`/login` **200**).
 - Agent **source** redeploy **done** (`00012-cn8`); MCP IAM + secret mount verified on new revision.
 
 ## Deploy log (2026-06-09)
 - **Agent rev `cothesis-agent-00012-cn8`:** `adk deploy cloud_run` from workspace `agents/` (--no-allow-unauthenticated); image `sha256:4422e65edf6a659522ea4e86bdff0bafa5f085ea02684c7e8619c5287ce52272` built **2026-06-09T21:54:47Z**; secrets `VERTEX_DATASTORE_ID`, `MCP_SERVER_URL`, `MCP_SERVER_KEY` + SA preserved; curl root **403** unauth.
 - **Agent rev `cothesis-agent-00011-fhk`:** MCP `MCP_SERVER_KEY` + `MCP_SERVER_URL` + `VERTEX_DATASTORE_ID` secrets; runtime SA `agent-runtime@cothesis-curation-agent.iam.gserviceaccount.com`. Same image as `00009`/`00010`: `sha256:899c970a…` built **2026-06-05** — does **not** include taxonomy commit `dbbd801` (2026-06-09).
 - **Seed:** `scripts/seed_demo` → `{'auto_accept': 2, 'review_needed': 10, 'auto_exclude': 0, 'error': 0}` (~7 min)
-- **Console deploy:** `console-00007-l4h` via `scripts/deploy_console.sh` (post-`dbbd801`, exit 0)
+- **Console deploy:** `console-00010-5rt` via `scripts/deploy_console.sh` (compendium sync `843a9fa`, exit 0; secrets `compendium-import-url`, `import-api-key` mounted)
 - **Firestore counts:** pending review_queue=298, published=0
 - **E2E smoke:** passed locally incl. review detail `/review/L07zC93w2ptRKBxXKV2c`
 - **Skipped:** `firebase deploy --only firestore:rules` — Firebase CLI not installed on this machine
