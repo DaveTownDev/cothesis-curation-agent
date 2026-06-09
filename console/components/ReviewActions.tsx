@@ -63,7 +63,7 @@ interface Props {
     queueQuery: string,
     draftPatch?: Record<string, unknown>,
   ) => Promise<{ nextPath: string }>
-  onNavigate: (nextPath: string, undo?: ApproveResult["undo"]) => void
+  onNavigate: (nextPath: string, undo?: ApproveResult["undo"], sync?: ApproveResult["sync"]) => void
 }
 
 const THRESHOLD_OK = (q: number, c: number) => q >= 80 && c >= 70
@@ -119,7 +119,7 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
         ),
         (result) => {
           recordSessionStat("approved")
-          onNavigate(result.nextPath, result.undo)
+          onNavigate(result.nextPath, result.undo, result.sync)
         },
       )
     })

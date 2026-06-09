@@ -30,6 +30,7 @@ export default async function ResourcesPage() {
     editorial_reviewed_at: r.editorial_reviewed_at,
     compendium_synced_at: r.compendium_synced_at,
     compendium_sync_error: r.compendium_sync_error,
+    compendium_url: r.compendium_url,
   }))
 
   return (

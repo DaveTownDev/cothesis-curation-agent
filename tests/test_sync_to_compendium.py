@@ -117,6 +117,13 @@ class TestPostToCompendium:
                 "success": True,
                 "import_batch_id": "batch-uuid-123",
                 "job_id": "job-456",
+                "resources": [
+                    {
+                        "resource_id": "rid-1",
+                        "public_url": "https://cothesis.ai/library/resources/rid-1",
+                    },
+                    {"resource_id": "rid-2"},
+                ],
             }
             mock_post.return_value.raise_for_status = MagicMock()
             result = post_to_compendium(
@@ -124,7 +131,9 @@ class TestPostToCompendium:
                 compendium_url="https://cothesis.ai",
                 api_key="test-key",
             )
-        assert result == "batch-uuid-123"
+        assert result.import_batch_id == "batch-uuid-123"
+        assert result.outcomes[0].compendium_id == "rid-1"
+        assert result.outcomes[0].compendium_url == "https://cothesis.ai/library/resources/rid-1"
         call_kwargs = mock_post.call_args
         body = call_kwargs.kwargs.get("json") or call_kwargs.args[1] if len(call_kwargs.args) > 1 else call_kwargs.kwargs["json"]
         assert body["source_tool"] == "claude"
@@ -178,15 +187,24 @@ class TestPostToCompendium:
 
 class TestMarkSynced:
     def test_writes_synced_at_and_batch_id(self):
+        from agents.shared.compendium_sync import ResourceSyncOutcome
+
         mock_db = MagicMock()
         col = mock_db.collection.return_value
         doc_ref = col.document.return_value
-        mark_synced(mock_db, "doc1", "batch-uuid-abc")
+        mark_synced(
+            mock_db,
+            "doc1",
+            "batch-uuid-abc",
+            ResourceSyncOutcome("rid-1", "https://cothesis.ai/library/resources/rid-1"),
+        )
         mock_db.collection.assert_called_with("resources")
         col.document.assert_called_with("doc1")
         update_data = doc_ref.update.call_args.args[0]
         assert "compendium_synced_at" in update_data
         assert update_data["compendium_batch_id"] == "batch-uuid-abc"
+        assert update_data["compendium_id"] == "rid-1"
+        assert update_data["compendium_url"] == "https://cothesis.ai/library/resources/rid-1"
 
     def test_clears_sync_error_on_success(self):
         mock_db = MagicMock()
@@ -226,7 +244,8 @@ class TestRunSync:
         ]
         with patch("scripts.sync.httpx.post") as mock_post:
             mock_post.return_value.json.return_value = {
-                "success": True, "import_batch_id": "b1", "job_id": "j1"
+                "success": True, "import_batch_id": "b1", "job_id": "j1",
+                "resources": [{"resource_id": "r1"}],
             }
             mock_post.return_value.raise_for_status = MagicMock()
             result = run_sync(

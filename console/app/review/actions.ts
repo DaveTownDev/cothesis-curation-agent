@@ -8,10 +8,19 @@ import {
 import { validatePublishChecklist } from "@/lib/checklist"
 import { reviewNextPath } from "@/lib/review-navigation"
 import type { TaxonomyEdits } from "@/lib/taxonomy"
+import type { BatchSyncResult, ItemSyncResult } from "@/lib/compendium-sync"
+import {
+  syncBatchToCompendium,
+  syncToCompendium,
+  trySyncAfterApprove,
+} from "@/lib/compendium-sync-actions"
+
+export { syncBatchToCompendium, syncToCompendium }
 
 export interface ApproveResult {
   nextPath: string
   undo: { itemId: string; resourceCode: string }
+  sync?: ItemSyncResult
 }
 
 interface EditedDescriptions {
@@ -24,6 +33,7 @@ export interface BulkApproveResult {
   approved: number
   skipped: number
   skippedTitles: string[]
+  sync?: BatchSyncResult
 }
 
 export async function bulkApproveAsDrafted(
@@ -35,6 +45,7 @@ export async function bulkApproveAsDrafted(
   let approved = 0
   let skipped = 0
   const skippedTitles: string[] = []
+  const approvedCodes: string[] = []
 
   for (const itemId of itemIds) {
     const item = await getReviewQueueItem(itemId)
@@ -67,9 +78,14 @@ export async function bulkApproveAsDrafted(
     batch.update(db.collection("review_queue").doc(itemId), { status: "approved" })
     await batch.commit()
     approved++
+    approvedCodes.push(item.resource_code)
   }
 
-  return { approved, skipped, skippedTitles }
+  const sync = approvedCodes.length > 0
+    ? await syncBatchToCompendium(approvedCodes)
+    : undefined
+
+  return { approved, skipped, skippedTitles, sync }
 }
 
 export async function bulkReject(
@@ -151,9 +167,11 @@ export async function approveItem(
   batch.update(queueRef, { status: "approved" })
 
   await batch.commit()
+  const sync = await trySyncAfterApprove(item.resource_code)
   return {
     nextPath: reviewNextPath(nextId, queueQuery),
     undo: { itemId, resourceCode: item.resource_code },
+    sync,
   }
 }
 

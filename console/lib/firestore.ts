@@ -188,6 +188,8 @@ export interface ResourceDoc extends DraftRecord {
   compendium_synced_at?: string | null
   compendium_batch_id?: string | null
   compendium_sync_error?: string | null
+  compendium_id?: string | null
+  compendium_url?: string | null
 }
 
 export interface ReviewQueueFilters {

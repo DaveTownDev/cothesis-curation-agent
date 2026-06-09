@@ -139,6 +139,20 @@ Do not conflate the two layers. The arbiter routes on `relevance_score` and `cla
 - `pipeline_state` — per-resource state machine + agent decisions + provenance.
 - `review_queue` — items routed to humans, with the arbiter's reason and panel result.
 
+### Compendium sync fields (`resources`, post-publish)
+
+Written when the HITL console or `scripts/sync.py` POSTs to Compendium `/api/import/json`.
+
+| Field | Type | Notes |
+|---|---|---|
+| `compendium_synced_at` | datetime \| null | Set on successful import POST |
+| `compendium_batch_id` | string \| null | `import_batch_id` from Compendium response |
+| `compendium_sync_error` | string \| null | Last sync failure message; cleared on success |
+| `compendium_id` | string \| null | Compendium `resource_id` when returned by import API |
+| `compendium_url` | string \| null | Public library URL — from API or constructed from id/slug |
+
+If the import API returns only `import_batch_id` (no per-resource array), sync still succeeds but `compendium_id` / `compendium_url` may be null until Compendium exposes them.
+
 ## State machine
 `discovered -> appraised -> classified -> edited -> reconciled -> qc_panel -> arbiter ->` then routing: `auto_accept -> in_review (publish checklist) -> published` | `review_needed -> (human) -> published|excluded` | `auto_exclude`.
 

@@ -22,6 +22,7 @@ from google.cloud.firestore import Client as FirestoreClient
 from google.cloud.firestore import SERVER_TIMESTAMP
 
 from agents.shared.compendium_bridge import to_compendium_record
+from agents.shared.compendium_sync import ImportBatchResult, ResourceSyncOutcome, parse_import_response
 
 logger = logging.getLogger(__name__)
 
@@ -65,12 +66,19 @@ def mark_synced(
     db: FirestoreClient,
     doc_id: str,
     batch_id: str,
+    outcome: ResourceSyncOutcome | None = None,
 ) -> None:
-    db.collection("resources").document(doc_id).update({
+    update: dict[str, Any] = {
         "compendium_synced_at": SERVER_TIMESTAMP,
         "compendium_batch_id": batch_id,
         "compendium_sync_error": None,
-    })
+    }
+    if outcome:
+        if outcome.compendium_id:
+            update["compendium_id"] = outcome.compendium_id
+        if outcome.compendium_url:
+            update["compendium_url"] = outcome.compendium_url
+    db.collection("resources").document(doc_id).update(update)
 
 
 def mark_sync_error(
@@ -92,10 +100,10 @@ def post_to_compendium(
     compendium_url: str,
     api_key: str,
     timeout: int = 30,
-) -> str:
+) -> ImportBatchResult:
     """
     POST a batch of records to /api/import/json.
-    Returns the import_batch_id from the response.
+    Returns batch id plus per-record compendium_id/url when the API provides them.
     Raises httpx.HTTPStatusError on non-2xx.
     """
     candidates = [to_compendium_record(r) for r in records]
@@ -114,7 +122,7 @@ def post_to_compendium(
         timeout=timeout,
     )
     resp.raise_for_status()
-    return resp.json()["import_batch_id"]
+    return parse_import_response(resp.json(), records, compendium_url)
 
 
 # ---------------------------------------------------------------------------
@@ -150,16 +158,16 @@ def run_sync(
     for i in range(0, len(records), batch_size):
         chunk = records[i : i + batch_size]
         try:
-            batch_id = post_to_compendium(chunk, compendium_url, api_key)
-            result.batch_ids.append(batch_id)
-            for r in chunk:
+            batch = post_to_compendium(chunk, compendium_url, api_key)
+            result.batch_ids.append(batch.import_batch_id)
+            for r, outcome in zip(chunk, batch.outcomes):
                 try:
-                    mark_synced(db, r["_doc_id"], batch_id)
+                    mark_synced(db, r["_doc_id"], batch.import_batch_id, outcome)
                     result.synced += 1
                 except Exception as fs_err:
                     logger.error("sync: Firestore update failed for %s: %s", r.get("_doc_id"), fs_err)
                     result.errors += 1
-            logger.info("sync: batch %s — %d records posted", batch_id, len(chunk))
+            logger.info("sync: batch %s — %d records posted", batch.import_batch_id, len(chunk))
         except Exception as exc:
             logger.error("sync: POST failed for chunk %d-%d: %s", i, i + len(chunk), exc)
             for r in chunk:

@@ -62,6 +62,7 @@ export function ReviewQueueTable({ items, compact, detailQuery }: Props) {
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [modal, setModal] = useState<"approve" | "reject" | null>(null)
   const [rejectReason, setRejectReason] = useState("")
+  const [bulkMessage, setBulkMessage] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
   const hrefFor = (id: string) =>
@@ -95,6 +96,12 @@ export function ReviewQueueTable({ items, compact, detailQuery }: Props) {
       const readyIds = bulkRows.filter((r) => r.canApprove).map((r) => r.id)
       const result = await bulkApproveAsDrafted(readyIds, reviewer)
       if (result.approved > 0) recordSessionStat("approved", result.approved)
+      if (result.sync) {
+        setBulkMessage(
+          `Approved ${result.approved}. Compendium: ${result.sync.synced} synced, `
+          + `${result.sync.failed} failed, ${result.sync.skipped} skipped.`,
+        )
+      }
       setModal(null)
       setSelected(new Set())
       router.refresh()
@@ -114,6 +121,11 @@ export function ReviewQueueTable({ items, compact, detailQuery }: Props) {
 
   return (
     <>
+      {bulkMessage && (
+        <div className="rounded-md border border-[#289642] bg-[#f0faf2] px-4 py-2 text-sm text-[#0E3A27]">
+          {bulkMessage}
+        </div>
+      )}
       {selected.size > 0 && (
         <div className="sticky top-0 z-30 flex items-center justify-between gap-3 rounded-lg border border-[#289642] bg-[#f0faf2] px-4 py-2 text-sm">
           <span className="text-[#0E3A27] font-medium">{selected.size} selected</span>
