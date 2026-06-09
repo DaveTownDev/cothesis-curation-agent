@@ -3,9 +3,9 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-**Ready to merge:** branch `cursor/hackathon-audit-fixes` @ `bbb8ab8+` — hackathon audit fixes + HITL console Phases A–C + E2E smoke harness. **293 pytest**, console lint clean, `bash scripts/e2e_console_smoke.sh` green.
+**Merged to `main` @ `47b6fcb` (2026-06-09).** PR #1 (audit fixes + HITL Phases A–C) + PR #2 (review agents + guard) merged. **293 pytest**, console lint/build clean, `bash scripts/e2e_console_smoke.sh` green.
 
-**After merge (deploy before judging):** redeploy console from `main`, deploy `firestore.rules`, set `CONSOLE_PUBLIC_URL`, `min-instances=1`, re-seed demo (`scripts/seed_demo.py`).
+**Deployed (2026-06-09):** console rev `console-00006-q68` @ https://console-791873451733.us-central1.run.app (`min-instances=1`, `CONSOLE_PUBLIC_URL` set). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.
 
 **Submission (human):** demo video (`docs/DEMO_SCRIPT.md`), Devpost submit, familiarity scores (`docs/SUBMISSION.md` L75–79), judge GitHub access.
 
@@ -58,7 +58,18 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 ## In progress
 - (none)
 
-## Latest verification (2026-06-08)
+## Latest verification (2026-06-09)
+- **main** merged PR #1 + PR #2; working tree clean.
+- **293 pytest** green; gitleaks clean; console lint/build clean; E2E smoke green.
+- **Redeploy + seed:** in progress — see deploy log below.
+
+## Deploy log (2026-06-09)
+- **Seed:** `scripts/seed_demo` → `{'auto_accept': 2, 'review_needed': 10, 'auto_exclude': 0, 'error': 0}` (~7 min)
+- **Console deploy:** `console-00006-q68` via `scripts/deploy_console.sh` (exit 0)
+- **Firestore counts:** pending review_queue=298, published=0
+- **E2E smoke:** passed locally incl. review detail `/review/L07zC93w2ptRKBxXKV2c`
+- **Skipped:** `firebase deploy --only firestore:rules` — Firebase CLI not installed on this machine
+- **Note:** production login uses Secret Manager passcode (`cothesis-demo-2026`), not `console/.env.local`
 - Synced `.env` + `console/.env.local` from main repo worktree (GCP project, Vertex datastore, MCP keys, console passcode).
 - **293 pytest** green (incl. `tests/test_review_navigation.py`).
 - **gitleaks** clean.
@@ -141,3 +152,5 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - Console build: `cd console && npm run build`
 - Tests: `.venv/bin/pytest tests/ -q` (293 passed 2026-06-08)
 - Console E2E: `bash scripts/e2e_console_smoke.sh`
+- Redeploy console: `bash scripts/deploy_console.sh`
+- Demo seed: `GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.seed_demo`

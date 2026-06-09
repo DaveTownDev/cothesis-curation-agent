@@ -66,17 +66,19 @@ echo "$login_headers" | grep -qi "cothesis_session" || fail "login missing sessi
 echo "$login_headers" | grep -qi "dashboard" || fail "login missing dashboard redirect"
 pass "POST /api/auth/login success"
 
+page_has() { grep -qi "$1" <<< "$2"; }
+
 for path in dashboard review resources pipeline; do
   body=$(curl -sf -b "$COOKIE_JAR" "$BASE/$path")
-  echo "$body" | grep -qi "cothesis\|review\|published\|pipeline\|dashboard" || fail "$path returned unexpected body"
+  page_has "cothesis\|review\|published\|pipeline\|dashboard" "$body" || fail "$path returned unexpected body"
   pass "GET /$path authenticated"
 done
 
 review_html=$(curl -sf -b "$COOKIE_JAR" "$BASE/review")
-if echo "$review_html" | grep -q 'href="/review/'; then
-  item_path=$(echo "$review_html" | grep -o 'href="/review/[^"]*"' | head -1 | cut -d'"' -f2)
+if grep -q 'href="/review/' <<< "$review_html"; then
+  item_path=$(grep -o 'href="/review/[^"]*"' <<< "$review_html" | head -1 | cut -d'"' -f2)
   detail=$(curl -sf -b "$COOKIE_JAR" "$BASE$item_path")
-  echo "$detail" | grep -qi "approve\|decision\|description" || fail "review detail missing expected UI"
+  page_has "approve\|decision\|description" "$detail" || fail "review detail missing expected UI"
   pass "GET $item_path review detail"
 else
   echo "  SKIP: no pending review items in queue"
