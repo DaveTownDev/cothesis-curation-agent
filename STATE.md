@@ -9,14 +9,14 @@
 
 **Pushed @ `dbbd801` (2026-06-09):** live taxonomy alignment + QA console quick actions on `origin/main`.
 
-**Deployed (2026-06-09):** console rev `console-00007-l4h` @ https://console-791873451733.us-central1.run.app (`min-instances=1`, `CONSOLE_PUBLIC_URL` set). Live taxonomy: **148** methodologies + **53** specialties (`data/taxonomy/live_*.json`). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.
+**Deployed (2026-06-09):** agent rev `cothesis-agent-00011-fhk` — MCP IAM + `MCP_SERVER_KEY` from `mcp-server-key`, SA `agent-runtime@cothesis-curation-agent.iam.gserviceaccount.com` (config-only; image still Jun 5). **Deployed (2026-06-09):** console rev `console-00007-l4h` @ https://console-791873451733.us-central1.run.app (`min-instances=1`, `CONSOLE_PUBLIC_URL` set). Live taxonomy: **148** methodologies + **53** specialties (`data/taxonomy/live_*.json`). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.
 
 **Submission (human):** demo video (`docs/DEMO_SCRIPT.md`), Devpost submit, familiarity scores (`docs/SUBMISSION.md` L75–79), judge GitHub access.
 
 Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 
 ### Residuals (non-blocking)
-- **Remaining ops:** redeploy agent (`adk deploy cloud_run` / current image); MCP IAM grants for production MCP access.
+- **Remaining ops:** full agent **source redeploy** for live taxonomy Python (`agents/taxonomy.py`, pipeline/tools) — rev `00011-fhk` reuses image built **2026-06-05** (pre-`dbbd801`).
 - Interactive `adk web` path: assembly normalizes out-of-enum types + backfills missing descriptions (`tests/test_interactive_assembly.py`); demo video uses pre-seeded batch data, not live pipeline.
 - Premium enrichment (Altmetric, ISBNdb, etc.): optional keys in `.env.example`; Tier-1 free sources cover MVP article/book paths.
 - Eval rubric judge may score all-pass — read as "no violations".
@@ -67,9 +67,10 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - **main** @ `dbbd801` pushed to `origin/main`; working tree clean.
 - Live taxonomy **148 + 53**; refresh `python -m scripts.fetch_live_taxonomy`.
 - **293 pytest** green; gitleaks clean; console lint/build clean; E2E smoke green.
-- **Still open:** agent redeploy; MCP IAM — see deploy log.
+- **Still open:** agent **source** redeploy for taxonomy Python (see deploy log). MCP IAM + secret mount **done** on `00011-fhk`.
 
 ## Deploy log (2026-06-09)
+- **Agent rev `cothesis-agent-00011-fhk`:** MCP `MCP_SERVER_KEY` + `MCP_SERVER_URL` + `VERTEX_DATASTORE_ID` secrets; runtime SA `agent-runtime@cothesis-curation-agent.iam.gserviceaccount.com`. Same image as `00009`/`00010`: `sha256:899c970a…` built **2026-06-05** — does **not** include taxonomy commit `dbbd801` (2026-06-09).
 - **Seed:** `scripts/seed_demo` → `{'auto_accept': 2, 'review_needed': 10, 'auto_exclude': 0, 'error': 0}` (~7 min)
 - **Console deploy:** `console-00007-l4h` via `scripts/deploy_console.sh` (post-`dbbd801`, exit 0)
 - **Firestore counts:** pending review_queue=298, published=0
