@@ -3,7 +3,7 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-**Compendium console sync (2026-06-09).** HITL console auto-syncs on approve (single + bulk), manual/batch retry on Published page. Firestore fields: `compendium_id`, `compendium_url`, `compendium_synced_at`, `compendium_batch_id`, `compendium_sync_error`. Env: `COMPENDIUM_IMPORT_URL` + `IMPORT_API_KEY` (console deploy script mounts Secret Manager secrets when present).
+**Compendium console sync (2026-06-09).** HITL console auto-syncs on approve (single + bulk), manual/batch retry on Published page. Firestore fields: `compendium_id`, `compendium_url`, `compendium_synced_at`, `compendium_batch_id`, `compendium_sync_error`. Env: `COMPENDIUM_IMPORT_URL` + `IMPORT_API_KEY` (console deploy script mounts Secret Manager secrets when present). Handoff for Compendium dev team: `docs/COMPENDIUM_INTEGRATION.md`.
 
 **Live taxonomy alignment (2026-06-09).** Pipeline + console now use full Compendium methodology (148) and specialty (53) lists from `data/taxonomy/live_*.json`. Refresh: `python -m scripts.fetch_live_taxonomy`. MVP grounding cards unchanged in `data/methodologies/*.md`.
 
