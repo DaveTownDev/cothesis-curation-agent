@@ -12,7 +12,12 @@ Medical trainees must complete mandatory research projects, often with little re
 See `docs/OPERATIONS.md` for GCP setup and `docs/BUILD_PLAN.md` for the build sequence. Quick local loop: `adk web agents/` then interact at the dev UI.
 
 ## Judge access
-The review console is deployed on Cloud Run with a login gate. URL and demo credentials are in the submission. The agent API and MCP server are private; judges interact through the console.
+The review console is deployed on Cloud Run with a login gate:
+
+- **Console:** https://console-791873451733.us-central1.run.app (passcode `cothesis-demo-2026`)
+- **Quick-start:** [`docs/JUDGE_GUIDE.md`](docs/JUDGE_GUIDE.md) · **5-min video script:** [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md)
+
+The agent API and MCP server are private; judges interact through the console and the public Compendium.
 
 ## Evaluation & observability
 ADK eval sets (trajectory + LLM-as-judge + grounding) plus Cloud Trace. See `docs/EVAL.md`. The demo surfaces a live trace of one resource moving through the pipeline, the eval scoreboard, and the review console.

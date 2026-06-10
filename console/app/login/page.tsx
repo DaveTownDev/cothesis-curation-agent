@@ -1,5 +1,5 @@
-import Image from "next/image"
 import { redirect } from "next/navigation"
+import { BrandLogo } from "@/components/BrandLogo"
 import { setAuthCookie } from "@/lib/auth"
 import LoginForm from "./LoginForm"
 
@@ -8,14 +8,7 @@ export default function LoginPage() {
     <div className="flex min-h-[70vh] items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center space-y-3">
-          <Image
-            src="/cothesis_research_light_bg.svg"
-            alt="CoThesis"
-            width={180}
-            height={28}
-            className="mx-auto h-7 w-auto"
-            priority
-          />
+          <BrandLogo size="login" className="mx-auto" />
           <div>
             <p className="hitl-eyebrow">Internal tool</p>
             <h1 className="hitl-page-title mt-1">Curation Console</h1>

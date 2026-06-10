@@ -1,8 +1,8 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { BrandLogo } from "@/components/BrandLogo"
 import { NavBar } from "@/components/NavBar"
 import { SubBarSlot } from "@/components/SubBarContext"
 
@@ -19,14 +19,7 @@ export function AppHeader() {
       <nav className="hitl-nav-top" aria-label="CoThesis navigation">
         <div className="hitl-nav-inner">
           <Link href="/dashboard" className="hitl-brand">
-            <Image
-              src="/cothesis_research_light_bg.svg"
-              alt="CoThesis"
-              width={140}
-              height={22}
-              className="hitl-brand-logo"
-              priority
-            />
+            <BrandLogo />
           </Link>
 
           <NavBar />

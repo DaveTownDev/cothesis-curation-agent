@@ -99,6 +99,31 @@ a {
   display: block;
 }
 
+.hitl-brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  color: var(--bg-forest);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.hitl-brand-mark {
+  display: block;
+  flex-shrink: 0;
+}
+
+.hitl-brand-suffix {
+  letter-spacing: -0.01em;
+}
+
+.hitl-brand-bar {
+  margin-right: 0.35em;
+  font-weight: 300;
+}
+
 .hitl-nav-main-links {
   display: none;
   align-items: center;

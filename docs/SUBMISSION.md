@@ -21,7 +21,7 @@ Two things make the archive genuinely equitable, not just free of charge:
 - **It is findable by people who do not know the jargon.** Alongside a formal description, the agents generate a plain-language layer for every resource: the questions, situations, and goals a research-naive trainee would actually search for. The archive answers a novice's words, not only an expert's. A search that works only if you already know the right term is exactly the barrier we are removing.
 - **A human stays in control of quality.** Drafts are scored by the panel and only the genuinely uncertain ones reach a curator, which keeps the archive trustworthy as it grows.
 
-The demo runs across the four CoThesis MVP methodologies: Narrative Systematic Review, Scoping Review, Retrospective Chart Review, and Clinical Audit. The wider archive covers over 200 methodologies, and the same pipeline generalises across all of them.
+The demo runs across the four CoThesis MVP methodologies: Narrative Systematic Review, Scoping Review, Retrospective Chart Review, and Clinical Audit. The pipeline and console taxonomy are aligned with the live Compendium (**148 methodologies**, **53 specialties**), and the same agents generalise across all of them.
 
 ### Technologies used
 - **Gemini 3.x** (3.1 Pro for routing, 3 Flash for appraisal/editorial, 3.1 Flash-Lite for high-volume structured stages) on **Vertex AI** (global endpoint) for reasoning and quality scoring
@@ -50,8 +50,8 @@ The enrichment agents connect to a wide set of external APIs, selected per resou
 The four MVP methodologies in the demo are article-dominant, so the article enrichment path (PubMed, CrossRef, OpenAlex, Unpaywall, iCite, Altmetric) is exercised most heavily; the other type-specific APIs are wired and configured.
 
 Grounding:
-- **CoThesis taxonomy** (a subset covering the four MVP methodologies and related specialties) plus a sample of our own ingested resource metadata, used as grounding data. CoThesis's own data, used with full rights.
-- **Vertex AI Search datastore** built from that subset, indexing both the formal text and the novice-vocabulary surface.
+- **CoThesis taxonomy** — MVP methodology cards (`data/methodologies/*.md`) plus the full live Compendium lists (**148** methodologies, **53** specialties in `data/taxonomy/live_*.json`) and a sample of ingested resource metadata. CoThesis's own data, used with full rights.
+- **Vertex AI Search datastore** built from that corpus, indexing both the formal text and the novice-vocabulary surface.
 
 ### Findings and learnings
 - The highest-leverage output was not the formal description but the plain-language layer. Generating the words a research-naive trainee would actually type is what made the archive findable for the people it is meant to serve.
@@ -79,7 +79,7 @@ Grounding:
 **[DAVE: set your true level.]** Suggested: 1.
 
 **Describe the readiness of your project for launch.**
-This is a working prototype built for the challenge, and it is the genesis of a real pipeline rather than a throwaway demo. It runs the full enrichment pipeline across the four MVP methodologies, scores drafts through a quality-control panel, and feeds a human review and publish console on Cloud Run. The output is intended to populate the CoThesis Compendium, the free, openly searchable archive that is the public layer of our platform. It is not yet wired into the live archive, and the next step is to point it at the existing queue and run curated batches behind the human review gate. The compute-heavy enrichment is deliberately built on Google Cloud, where it is well suited to run at scale.
+This is a working prototype built for the challenge, and it is the genesis of a real production pipeline rather than a throwaway demo. It runs the full enrichment pipeline across the four MVP methodologies, scores drafts through a quality-control panel, and feeds a human review and publish console on Cloud Run. Approved records sync immediately to the live CoThesis Compendium via the import API; the console also supports catalog edit, republish, and batch catch-up. The taxonomy is aligned with the live archive (148 methodologies, 53 specialties). Background tooling can export and reprocess the existing Compendium catalog through the same deterministic orchestrator. The next step is sustained batch curation behind the human review gate, not wiring — that path is live. Compute-heavy enrichment is deliberately on Google Cloud, where it scales.
 
 **Which specific feature of Agent Platform was most critical to your project's impact, and what is one thing it's currently missing?**
 Most critical: ADK's multi-agent orchestration combined with Vertex AI Search grounding, which together produce grounded, auditable classifications instead of a single opaque enrichment step. Missing: a first-class human-in-the-loop primitive between draft and publish. We built the review-and-approve gate ourselves; a native draft-review-approve step would have removed a meaningful amount of glue code.

@@ -19,7 +19,7 @@ Runtime SA `agent-runtime@$PROJECT.iam.gserviceaccount.com` with only: `roles/ai
 
 ## Deploy (Cloud Run, not Agent Engine)
 - Agent service: `adk deploy cloud_run --project=$GOOGLE_CLOUD_PROJECT --region=us-central1 --with_ui --trace_to_cloud agents/` — answer **N** to allow-unauthenticated; protect with **Cloud Run IAP** (`--iap`), add judges as IAP-secured Web App User. **[DAVE]** enables IAP + adds judge emails.
-- Console: `gcloud run deploy console --source console/ --region=us-central1 --min-instances=0 --update-secrets=CONSOLE_LOGIN_SECRET=console-login:latest` (public + app login).
+- Console: `bash scripts/deploy_console.sh` (or `gcloud run deploy console --source console/ …`) — public + passcode login. **Judge URL:** https://console-791873451733.us-central1.run.app (passcode in Secret Manager `console-login`; demo value `cothesis-demo-2026`). Walkthrough: `docs/JUDGE_GUIDE.md`.
 
 ## Secrets
 `echo -n "VALUE" | gcloud secrets create NAME --data-file=- --replication-policy=automatic`, inject with `--set-secrets=ENV=NAME:latest`. Runtime SA needs `secretAccessor` before deploy. Next.js: keep secrets server-side (NEXT_PUBLIC_* bakes at build).

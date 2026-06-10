@@ -3,7 +3,7 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-**Compendium console sync (2026-06-09).** HITL console auto-syncs on approve (single + bulk), manual/batch retry on Published page. Firestore fields: `compendium_id`, `compendium_url`, `compendium_synced_at`, `compendium_batch_id`, `compendium_sync_error`. Env: `COMPENDIUM_IMPORT_URL` + `IMPORT_API_KEY` (console deploy script mounts Secret Manager secrets when present). Handoff for Compendium dev team: `docs/COMPENDIUM_INTEGRATION.md`.
+**Judge demo ready (2026-06-10).** Console `console-00016-zn7`: BrandLogo (Instrument Sans for “Research Library”; SVG wordmark only). Prior `00015-496`: nav restructure, catalog editor, Published fix, QA shortcuts. Docs: `docs/JUDGE_GUIDE.md`, `docs/DEMO_SCRIPT.md`. Compendium sync on approve — `docs/COMPENDIUM_INTEGRATION.md`.
 
 **Live taxonomy alignment (2026-06-09).** Pipeline + console now use full Compendium methodology (148) and specialty (53) lists from `data/taxonomy/live_*.json`. Refresh: `python -m scripts.fetch_live_taxonomy`. MVP grounding cards unchanged in `data/methodologies/*.md`.
 
@@ -13,7 +13,7 @@
 
 **Deployed (2026-06-09):** agent rev `cothesis-agent-00012-cn8` — fresh source image `sha256:4422e65e…` (built 2026-06-09, includes taxonomy Python post-`dbbd801`); MCP + datastore secrets + SA `agent-runtime@cothesis-curation-agent.iam.gserviceaccount.com`. Prior config-only rev `00011-fhk` (stale Jun 5 image). **Deployed (2026-06-10):** console rev `console-00015-496` @ https://console-791873451733.us-central1.run.app (catalog editor + live reprocess @ `2de0237`; QA shortcuts @ `abe9fcd`; nav restructure @ `90e066f`; compendium sync @ `843a9fa`; `COMPENDIUM_IMPORT_URL` + `IMPORT_API_KEY` from Secret Manager; `min-instances=1`, `CONSOLE_PUBLIC_URL` set). Live taxonomy: **148** methodologies + **53** specialties (`data/taxonomy/live_*.json`). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.
 
-**Submission (human):** demo video (`docs/DEMO_SCRIPT.md`), Devpost submit, familiarity scores (`docs/SUBMISSION.md` L75–79), judge GitHub access.
+**Submission (human):** record demo video (`docs/DEMO_SCRIPT.md`), paste Devpost copy (`docs/SUBMISSION.md` — readiness + taxonomy updated 2026-06-10), familiarity scores (L75–79), grant judge GitHub access. Judge quick-start: `docs/JUDGE_GUIDE.md`.
 
 Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 
@@ -24,7 +24,7 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - Eval rubric judge may score all-pass — read as "no violations".
 
 ## Demo seed (Phase 3)
-- `scripts/seed_demo.py` — runs deterministic run_pipeline on 12 curated real resources. Verified: 12/12 full chain, 10 auto_accept + 2 review_needed, 0 errors. All collections populated (drafts/draft_records/review_queue/pipeline_state = 12 each). Console verified live: all 5 pages render real data, review detail shows 4 inspector tabs + Provenance with model version.
+- `scripts/seed_demo.py` — runs deterministic run_pipeline on 12 curated real resources. Verified: 12/12 full chain, 10 review_needed + 2 auto_accept, 0 errors. All collections populated (drafts/draft_records/review_queue/pipeline_state = 12 each). Console verified live: Dashboard, Review queue, Published, Pipeline, catalog editor; Pipeline Inspector has 5 tabs (Quality, Panel, Classification, Enrichment, Provenance).
 - Re-seed anytime: clear Firestore collections, then `GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.seed_demo`
 - TODO before relying on schedule: rebuild Cloud Run Job `run-batch` from current image (deterministic orchestrator).
 
@@ -153,6 +153,12 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - `.venv/` — Python 3.12 virtualenv (gitignored)
 - `agents/pipeline/__init__.py`, `agents/pipeline/agent.py` — skeleton root agent
 - `.env` — `VERTEX_DATASTORE_ID` set; `GOOGLE_CLOUD_PROJECT=cothesis-curation-agent`
+
+## Judge demo (2026-06-10)
+- **Console:** https://console-791873451733.us-central1.run.app — passcode `cothesis-demo-2026`
+- **Walkthrough:** `docs/DEMO_SCRIPT.md` (5 min video) · `docs/JUDGE_GUIDE.md` (judge self-serve)
+- **Re-seed before recording:** `GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.seed_demo`
+- **Do not** run live pipeline on camera (~45s/resource)
 
 ## Key commands
 - Scaffold: `uvx google-agents-cli setup`
