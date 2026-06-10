@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { requireAuth } from "@/lib/auth"
 import { getReviewQueue } from "@/lib/firestore"
 import {
@@ -5,6 +6,7 @@ import {
   queueQueryString,
 } from "@/lib/queue-filters"
 import { ReviewQueueListSubBar } from "@/components/ReviewQueueListSubBar"
+import { QueueFilters } from "@/components/QueueFilters"
 import { ReviewQueueTable } from "@/components/ReviewQueueTable"
 
 export const metadata = { title: "Review queue — CoThesis" }
@@ -59,6 +61,12 @@ export default async function ReviewQueuePage({
         Select rows for bulk approve/reject. Use <strong>Ready to clear</strong> + bulk approve for
         high-throughput sessions.
       </p>
+
+      <div className="flex justify-end">
+        <Suspense fallback={null}>
+          <QueueFilters />
+        </Suspense>
+      </div>
 
       {error && (
         <div className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">

@@ -8,7 +8,6 @@ import {
 import {
   parseReviewQueueFilters, queueQueryString, reviewDetailHref,
 } from "@/lib/queue-filters"
-import { approveItem, rejectItem, requeueItem } from "@/app/review/actions"
 import { ReviewWorkspace } from "./ReviewWorkspace"
 import { DuplicateHint } from "@/components/DuplicateHint"
 import { ReviewDetailSubBar } from "@/components/ReviewDetailSubBar"
@@ -137,9 +136,6 @@ export default async function ReviewDetailPage({
         nextId={nextId}
         queueQuery={queueQuery}
         gcpProjectId={gcpProjectId}
-        approveAction={approveItem}
-        rejectAction={rejectItem}
-        requeueAction={requeueItem}
       />
     </div>
   )

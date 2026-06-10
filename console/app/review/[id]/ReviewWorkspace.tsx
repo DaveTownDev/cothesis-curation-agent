@@ -23,12 +23,6 @@ import type {
   DraftRecord, PanelResult, PipelineStateDoc, DraftDoc, QaAudit,
 } from "@/lib/firestore"
 
-interface EditedDescriptions {
-  editorial_description: string
-  summary: string
-  editorial_description_plain: string
-}
-
 interface Props {
   itemId: string
   draft: DraftRecord
@@ -42,17 +36,6 @@ interface Props {
   nextId: string | null
   queueQuery: string
   gcpProjectId: string
-  approveAction: (
-    itemId: string, badges: string[], editorialNote: string,
-    reviewerName: string, edited: EditedDescriptions, taxonomy: TaxonomyEdits,
-    nextId: string | null, queueQuery: string,
-  ) => Promise<ApproveResult>
-  rejectAction: (itemId: string, reason: string, nextId: string | null, queueQuery: string) => Promise<{ nextPath: string }>
-  requeueAction: (
-    itemId: string, reason: string, stage: string,
-    nextId: string | null, queueQuery: string,
-    draftPatch?: Record<string, unknown>,
-  ) => Promise<{ nextPath: string }>
 }
 
 function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
@@ -69,7 +52,6 @@ function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
 export function ReviewWorkspace({
   itemId, draft, qaAudit, routingReason, panel, pipelineState, draftDoc,
   prevHref, nextHref, nextId, queueQuery, gcpProjectId,
-  approveAction, rejectAction, requeueAction,
 }: Props) {
   const router = useRouter()
   const actionsRef = useRef<ReviewActionsHandle>(null)
@@ -366,9 +348,6 @@ export function ReviewWorkspace({
               edited={edited}
               nextId={nextId}
               queueQuery={queueQuery}
-              approveAction={approveAction}
-              rejectAction={rejectAction}
-              requeueAction={requeueAction}
               onNavigate={handleNavigate}
             />
           </CardContent>

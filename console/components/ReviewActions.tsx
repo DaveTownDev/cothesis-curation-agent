@@ -9,7 +9,12 @@ import type { TaxonomyEdits } from "@/lib/taxonomy"
 import { REQUEUE_STAGES, formatRequeueReason, type RequeueStage } from "@/lib/requeue"
 import { REJECT_PRESETS } from "@/lib/reject-presets"
 import { recordSessionStat } from "@/lib/session-stats"
-import type { ApproveResult } from "@/app/review/actions"
+import {
+  approveItem,
+  rejectItem,
+  requeueItem,
+  type ApproveResult,
+} from "@/app/review/actions"
 import { CheckCircle, XCircle, AlertCircle, RotateCcw, Pencil } from "lucide-react"
 
 interface EditedDescriptions {
@@ -39,30 +44,6 @@ interface Props {
   edited: EditedDescriptions
   nextId: string | null
   queueQuery: string
-  approveAction: (
-    itemId: string,
-    badges: string[],
-    editorialNote: string,
-    reviewerName: string,
-    edited: EditedDescriptions,
-    taxonomy: TaxonomyEdits,
-    nextId: string | null,
-    queueQuery: string,
-  ) => Promise<ApproveResult>
-  rejectAction: (
-    itemId: string,
-    reason: string,
-    nextId: string | null,
-    queueQuery: string,
-  ) => Promise<{ nextPath: string }>
-  requeueAction: (
-    itemId: string,
-    reason: string,
-    stage: string,
-    nextId: string | null,
-    queueQuery: string,
-    draftPatch?: Record<string, unknown>,
-  ) => Promise<{ nextPath: string }>
   onNavigate: (nextPath: string, undo?: ApproveResult["undo"], sync?: ApproveResult["sync"]) => void
 }
 
@@ -71,8 +52,7 @@ const THRESHOLD_BORDER = (q: number, c: number) => (q >= 60 && q < 80) || (c >= 
 
 export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function ReviewActions({
   itemId, proposedBadges, editorialNote, taxonomy, checklistErrors, qualityScore, aiConfidence,
-  edited, nextId, queueQuery,
-  approveAction, rejectAction, requeueAction, onNavigate,
+  edited, nextId, queueQuery, onNavigate,
 }, ref) {
   const [ratifiedBadges, setRatifiedBadges] = useState<string[]>(proposedBadges.slice(0, 3))
   const [actionError, setActionError] = useState<string | null>(null)
@@ -113,7 +93,7 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
     if (!canApprove || isPending || submitted) return
     startTransition(() => {
       void runAction(
-        () => approveAction(
+        () => approveItem(
           itemId, ratifiedBadges, editorialNote, reviewerName || "console",
           edited, taxonomy, nextId, queueQuery,
         ),
@@ -129,7 +109,7 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
     if (!rejectReason.trim()) return
     startTransition(() => {
       void runAction(
-        () => rejectAction(itemId, rejectReason, nextId, queueQuery),
+        () => rejectItem(itemId, rejectReason, nextId, queueQuery),
         (result) => {
           recordSessionStat("rejected")
           onNavigate(result.nextPath)
@@ -144,7 +124,7 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
     const reason = formatRequeueReason(requeueStage, note)
     startTransition(() => {
       void runAction(
-        () => requeueAction(itemId, reason, requeueStage, nextId, queueQuery),
+        () => requeueItem(itemId, reason, requeueStage, nextId, queueQuery),
         (result) => onNavigate(result.nextPath),
       )
     })
@@ -158,7 +138,7 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
     const reason = formatRequeueReason(stage, note.trim())
     startTransition(() => {
       void runAction(
-        () => requeueAction(itemId, reason, stage, nextId, queueQuery, draftPatch),
+        () => requeueItem(itemId, reason, stage, nextId, queueQuery, draftPatch),
         (result) => onNavigate(result.nextPath),
       )
     })
@@ -169,7 +149,7 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
     if (!trimmed) return
     startTransition(() => {
       void runAction(
-        () => rejectAction(itemId, trimmed, nextId, queueQuery),
+        () => rejectItem(itemId, trimmed, nextId, queueQuery),
         (result) => {
           recordSessionStat("rejected")
           onNavigate(result.nextPath)

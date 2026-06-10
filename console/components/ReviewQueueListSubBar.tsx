@@ -5,7 +5,6 @@ import { Suspense, useEffect } from "react"
 import { Badge } from "@/components/ui/badge"
 import { useSubBar } from "@/components/SubBarContext"
 import { TriagePresets } from "@/components/TriagePresets"
-import { QueueFilters } from "@/components/QueueFilters"
 import type { TriagePreset } from "@/lib/queue-filters"
 import { TRIAGE_PRESETS } from "@/lib/queue-filters"
 
@@ -57,9 +56,6 @@ export function ReviewQueueListSubBar({
             Start reviewing →
           </Link>
         )}
-        <Suspense fallback={null}>
-          <QueueFilters />
-        </Suspense>
       </div>
     )
 
