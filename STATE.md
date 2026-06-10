@@ -3,9 +3,11 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
+**Phase 1 prompt loop (2026-06-11) @ `85b1499` (local, not pushed):** type-aware optional `methodology_codes` (`agents/shared/taxonomy_rules.py`) wired through arbiter, publish checklist (Python + console), `classification.md`, `audit_records.py`; `eval/taxonomy_gold.json` (8 cases); `scripts/taxonomy_audit.py`. Foundation skills fourth taxonomy @ `e5ce6a5`. **Verification:** 63 pytest (taxonomy_rules, publish_checklist, arbiter_routing, taxonomy, taxonomy_audit); console lint/build green. **Console deploy:** blocked — `gcloud auth login` required (non-interactive refresh failed); last known rev **`console-00017-lcd`**.
+
 **Reprocess paused (2026-06-11).** Live reprocess **stopped at 76/1512** (quality issues). Appraisal backfill applied to partial-run queue docs. **Do not** `reset_and_reprocess_live --confirm-reset` or restart full 1512 reprocess without approval.
 
-**Shipped @ `ec7f459` (2026-06-11, local only — not pushed):** subtype taxonomy (`live_subtypes.json`), enrichment queue sync, review-queue appraisal backfill module, console taxonomy/QA UI, pipeline schema fixes. **30 pytest** on touched modules green pre-commit.
+**Shipped @ `85b1499` (2026-06-11, local only — not pushed):** Phase 1 taxonomy audit + type-aware methodology; prior `e5ce6a5` foundation skills; `ec7f459` subtype/enrichment. subtype taxonomy (`live_subtypes.json`), enrichment queue sync, review-queue appraisal backfill module, console taxonomy/QA UI, pipeline schema fixes. **30 pytest** on touched modules green pre-commit.
 
 **Ops (2026-06-11):** console **`console-00017-lcd`** @ https://console-791873451733.us-central1.run.app. Backfill `scripts.backfill_review_queue_appraisal`: **50** `review_queue` docs, **9** `draft_records` (dry-run matched 50/50). Read-only `audit_records` → `/tmp/cothesis_audit.json` (119 scorecards). **`write_qa_audit` skipped** — no `/tmp/cothesis_source_accuracy.json` (LLM source-accuracy layer not run).
 
