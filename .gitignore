@@ -23,6 +23,8 @@ node_modules/
 out/
 # Misc
 *.log
+data/live_resources/export.json
+data/live_resources/reprocess.log
 .DS_Store
 
 # Build artifacts / coverage
