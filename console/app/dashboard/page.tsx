@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { requireAuth } from "@/lib/auth"
 import { getPipelineStats, getSyncStats } from "@/lib/firestore"
 import { PipelineStatsCard } from "@/components/PipelineStatsCard"
@@ -6,8 +5,8 @@ import { SyncStatusCard } from "@/components/SyncStatusCard"
 import { SessionStatsCard } from "@/components/SessionStatsCard"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, ClipboardList } from "lucide-react"
 import { getEvalSummary } from "@/lib/eval-summary"
+import { DashboardSubBar } from "@/components/DashboardSubBar"
 
 export const metadata = { title: "Dashboard — CoThesis" }
 
@@ -42,22 +41,8 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <p className="hitl-eyebrow">Curation pipeline</p>
-          <h1 className="hitl-page-title">Dashboard</h1>
-        </div>
-        {pendingReview > 0 && (
-          <Link
-            href="/review"
-            className="hitl-nav-cta flex items-center gap-2 px-3"
-          >
-            <ClipboardList size={16} />
-            {pendingReview} item{pendingReview !== 1 ? "s" : ""} awaiting review
-            <ArrowRight size={14} />
-          </Link>
-        )}
-      </div>
+      <DashboardSubBar pendingReview={pendingReview} />
+      <h1 className="hitl-page-title">Dashboard</h1>
 
       {firestoreError && (
         <div className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">

@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import Link from "next/link"
 import { requireAuth } from "@/lib/auth"
 import {
   getReviewQueueItem,
@@ -12,8 +11,9 @@ import {
 import { approveItem, rejectItem, requeueItem } from "@/app/review/actions"
 import { ReviewWorkspace } from "./ReviewWorkspace"
 import { DuplicateHint } from "@/components/DuplicateHint"
+import { ReviewDetailSubBar } from "@/components/ReviewDetailSubBar"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, ExternalLink } from "lucide-react"
+import { ExternalLink } from "lucide-react"
 
 const TYPE_LABELS: Record<string, string> = {
   article: "Article", book: "Book", book_chapter: "Book chapter", video: "Video",
@@ -72,19 +72,20 @@ export default async function ReviewDetailPage({
 
   const gcpProjectId = process.env.GOOGLE_CLOUD_PROJECT ?? "cothesis-curation-agent"
 
+  const backHref = queueQuery ? `/review?${queueQuery}` : "/review"
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3">
-        <Link
-          href={queueQuery ? `/review?${queueQuery}` : "/review"}
-          className="flex items-center gap-1 text-sm text-[#6b7280] hover:text-[#0E3A27]"
-        >
-          <ArrowLeft size={14} /> Review queue
-        </Link>
-        {item.routing && <Badge variant="outline" className="text-xs">{item.routing}</Badge>}
-      </div>
+      <ReviewDetailSubBar
+        backHref={backHref}
+        routing={item.routing}
+        position={position}
+        total={total}
+        prevHref={prevHref}
+        nextHref={nextHref}
+      />
 
-      <div className="bg-white rounded-xl border border-[#d4cfc5] px-5 py-4">
+      <div className="hitl-card px-4 py-3">
         <h1 className="font-serif text-2xl font-semibold text-[#0E3A27] leading-tight">
           {draft?.title ?? resourceCode}
         </h1>
@@ -131,8 +132,6 @@ export default async function ReviewDetailPage({
         panel={item.panel_result}
         pipelineState={pipelineState}
         draftDoc={draftDoc}
-        queuePosition={position}
-        queueTotal={total}
         prevHref={prevHref}
         nextHref={nextHref}
         nextId={nextId}

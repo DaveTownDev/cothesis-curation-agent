@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Newsreader, Instrument_Sans } from "next/font/google"
 import { AppHeader } from "@/components/AppHeader"
+import { SubBarProvider } from "@/components/SubBarContext"
 import "./globals.css"
 
 const newsreader = Newsreader({
@@ -30,8 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${newsreader.variable} ${instrumentSans.variable}`}>
       <body className="min-h-screen font-sans antialiased">
-        <AppHeader />
-        <main className="hitl-main">{children}</main>
+        <SubBarProvider>
+          <AppHeader />
+          <main className="hitl-main">{children}</main>
+        </SubBarProvider>
       </body>
     </html>
   )

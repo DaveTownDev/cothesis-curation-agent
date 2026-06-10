@@ -1,13 +1,10 @@
-import { Suspense } from "react"
 import { requireAuth } from "@/lib/auth"
 import { getReviewQueue } from "@/lib/firestore"
 import {
   parseReviewQueueFilters, isCompactView, reviewDetailHref, currentPreset,
   queueQueryString,
 } from "@/lib/queue-filters"
-import { Badge } from "@/components/ui/badge"
-import { QueueFilters } from "@/components/QueueFilters"
-import { TriagePresets } from "@/components/TriagePresets"
+import { ReviewQueueListSubBar } from "@/components/ReviewQueueListSubBar"
 import { ReviewQueueTable } from "@/components/ReviewQueueTable"
 
 export const metadata = { title: "Review queue — CoThesis" }
@@ -47,36 +44,20 @@ export default async function ReviewQueuePage({
   const startHref = items.length > 0 ? reviewDetailHref(items[0].id, sp) : null
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-3 flex-wrap">
-          <div>
-            <p className="hitl-eyebrow">Human review</p>
-            <h1 className="hitl-page-title">Review queue</h1>
-          </div>
-          <Badge variant="secondary">{items.length} pending</Badge>
-          {avgQuality !== null && (
-            <span className="text-xs text-[var(--text-body)]">
-              avg quality: <strong style={{ color: qualityColour(avgQuality) }}>{avgQuality}</strong>
-            </span>
-          )}
-          {startHref && (
-            <a href={startHref} className="text-xs font-medium text-[var(--green-primary)] hover:underline">
-              Start reviewing →
-            </a>
-          )}
-        </div>
-        <Suspense fallback={null}>
-          <QueueFilters />
-        </Suspense>
-      </div>
+    <div className="space-y-4">
+      <ReviewQueueListSubBar
+        itemCount={items.length}
+        avgQuality={avgQuality}
+        avgQualityColor={avgQuality !== null ? qualityColour(avgQuality) : undefined}
+        startHref={startHref}
+        preset={preset}
+      />
 
-      <Suspense fallback={null}>
-        <TriagePresets active={preset} />
-      </Suspense>
+      <h1 className="hitl-page-title">Review queue</h1>
 
-      <p className="text-xs text-[#9ca3af]">
-        Select rows for bulk approve/reject. Use <strong>Ready to clear</strong> + bulk approve for high-throughput sessions.
+      <p className="text-xs text-[var(--text-body)]">
+        Select rows for bulk approve/reject. Use <strong>Ready to clear</strong> + bulk approve for
+        high-throughput sessions.
       </p>
 
       {error && (
@@ -86,8 +67,8 @@ export default async function ReviewQueuePage({
       )}
 
       {!error && items.length === 0 && (
-        <div className="rounded-xl border border-[#d4cfc5] bg-white p-12 text-center space-y-3">
-          <p className="text-[#6b7280]">No items match the current filters.</p>
+        <div className="hitl-card p-12 text-center space-y-3">
+          <p className="text-[var(--text-body)]">No items match the current filters.</p>
         </div>
       )}
 

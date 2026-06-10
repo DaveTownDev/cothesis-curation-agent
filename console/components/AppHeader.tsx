@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { NavBar } from "@/components/NavBar"
+import { SubBarSlot } from "@/components/SubBarContext"
 
 const COMPENDIUM_LIBRARY_URL =
   process.env.NEXT_PUBLIC_COMPENDIUM_URL ??
@@ -26,55 +27,24 @@ export function AppHeader() {
               className="hitl-brand-logo"
               priority
             />
-            <span className="hitl-brand-divider" aria-hidden />
-            <span className="hitl-brand-product">Curation Console</span>
           </Link>
 
-          <div className="hitl-nav-links">
-            <a
-              href={COMPENDIUM_LIBRARY_URL}
-              className="hitl-nav-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Research Library
-            </a>
-            <a
-              href="https://cothesis.ai/features"
-              className="hitl-nav-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Features
-            </a>
-            <a
-              href="https://cothesis.ai/about"
-              className="hitl-nav-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              About
-            </a>
-          </div>
+          <NavBar />
 
           <div className="hitl-nav-actions">
             <a
               href={COMPENDIUM_LIBRARY_URL}
-              className="hitl-nav-ghost hidden sm:inline-flex"
+              className="hitl-nav-cta"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Open Compendium ↗
+              Launch Research Directory
             </a>
           </div>
         </div>
       </nav>
 
-      <nav className="hitl-subbar" aria-label="Console navigation">
-        <div className="hitl-subbar-inner">
-          <NavBar />
-        </div>
-      </nav>
+      <SubBarSlot />
     </header>
   )
 }

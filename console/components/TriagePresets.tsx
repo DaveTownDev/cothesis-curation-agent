@@ -29,10 +29,10 @@ export function TriagePresets({ active }: Props) {
             type="button"
             title={description}
             onClick={() => setPreset(id)}
-            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors border ${
+            className={`rounded-[var(--radius-signature)] px-2 py-0.5 text-[0.6875rem] font-medium transition-colors border ${
               on
-                ? "bg-[#0E3A27] text-white border-[#0E3A27]"
-                : "bg-white text-[#4a6741] border-[#d4cfc5] hover:border-[#289642] hover:text-[#0E3A27]"
+                ? "bg-[var(--bg-forest)] text-white border-[var(--bg-forest)]"
+                : "bg-white text-[var(--text-body)] border-[var(--border-primary)] hover:border-[var(--green-primary)] hover:text-[var(--text-primary)]"
             }`}
           >
             {label}

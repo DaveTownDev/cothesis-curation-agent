@@ -11,7 +11,6 @@ import { PipelineInspector } from "@/components/PipelineInspector"
 import { ReviewActions, type ReviewActionsHandle } from "@/components/ReviewActions"
 import { StickyActionBar } from "@/components/StickyActionBar"
 import { TaxonomyEditor } from "@/components/TaxonomyEditor"
-import { ReviewSessionBar } from "@/components/ReviewSessionBar"
 import { KeyboardHelp } from "@/components/KeyboardHelp"
 import { CompendiumCardPreview } from "@/components/CompendiumCardPreview"
 import { QaAuditBanner } from "@/components/QaAuditBanner"
@@ -38,8 +37,6 @@ interface Props {
   panel: PanelResult | Record<string, unknown>
   pipelineState: PipelineStateDoc | null
   draftDoc: DraftDoc | null
-  queuePosition: number
-  queueTotal: number
   prevHref: string | null
   nextHref: string | null
   nextId: string | null
@@ -71,7 +68,6 @@ function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
 
 export function ReviewWorkspace({
   itemId, draft, qaAudit, routingReason, panel, pipelineState, draftDoc,
-  queuePosition, queueTotal,
   prevHref, nextHref, nextId, queueQuery, gcpProjectId,
   approveAction, rejectAction, requeueAction,
 }: Props) {
@@ -223,6 +219,12 @@ export function ReviewWorkspace({
     return () => window.removeEventListener("keydown", onKeyDown)
   }, [onKeyDown])
 
+  useEffect(() => {
+    const showHelp = () => setHelpOpen(true)
+    window.addEventListener("cothesis-show-shortcuts", showHelp)
+    return () => window.removeEventListener("cothesis-show-shortcuts", showHelp)
+  }, [])
+
   return (
     <>
       {qaAudit && (
@@ -238,14 +240,6 @@ export function ReviewWorkspace({
           onPrefillReject={handleQaPrefillReject}
         />
       )}
-
-      <ReviewSessionBar
-        position={queuePosition}
-        total={queueTotal}
-        prevHref={prevHref}
-        nextHref={nextHref}
-        onShowHelp={() => setHelpOpen(true)}
-      />
 
       <KeyboardHelp open={helpOpen} onClose={() => setHelpOpen(false)} />
 

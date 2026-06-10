@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { requireAuth } from "@/lib/auth"
 import { getPipelineRuns } from "@/lib/firestore"
-import { Badge } from "@/components/ui/badge"
+import { PipelineSubBar } from "@/components/PipelineSubBar"
 
 export const metadata = { title: "Pipeline — CoThesis" }
 
@@ -47,13 +47,8 @@ export default async function PipelinePage({
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-3 flex-wrap">
-        <div>
-          <p className="hitl-eyebrow">Agent pipeline</p>
-          <h1 className="hitl-page-title">Pipeline runs</h1>
-        </div>
-        <Badge variant="secondary">{runs.length} records</Badge>
-      </div>
+      <PipelineSubBar count={runs.length} />
+      <h1 className="hitl-page-title">Pipeline runs</h1>
 
       {error && (
         <div className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">{error}</div>

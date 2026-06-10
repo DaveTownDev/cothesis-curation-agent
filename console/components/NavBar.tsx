@@ -13,7 +13,7 @@ const NAV = [
 export function NavBar() {
   const path = usePathname()
   return (
-    <>
+    <div className="hitl-nav-main-links">
       {NAV.map(({ href, label }) => {
         const active =
           path === href || (href !== "/dashboard" && path.startsWith(href))
@@ -21,12 +21,12 @@ export function NavBar() {
           <Link
             key={href}
             href={href}
-            className={`hitl-subbar-tab${active ? " is-active" : ""}`}
+            className={`hitl-nav-link${active ? " is-active" : ""}`}
           >
             {label}
           </Link>
         )
       })}
-    </>
+    </div>
   )
 }

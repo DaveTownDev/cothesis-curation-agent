@@ -1,8 +1,7 @@
 import { requireAuth } from "@/lib/auth"
 import { getPublishedResources } from "@/lib/firestore"
 import { PublishedResourcesTable } from "@/components/PublishedResourcesTable"
-import { Badge } from "@/components/ui/badge"
-
+import { PublishedSubBar } from "@/components/PublishedSubBar"
 export const metadata = { title: "Published — CoThesis" }
 
 export const revalidate = 0
@@ -35,16 +34,8 @@ export default async function ResourcesPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-3 flex-wrap">
-        <div>
-          <p className="hitl-eyebrow">Compendium sync</p>
-          <h1 className="hitl-page-title">Published</h1>
-        </div>
-        <Badge variant="secondary">{resources.length} resources</Badge>
-        <span className="text-xs text-[var(--text-body)]">
-          {synced} synced to Compendium
-        </span>
-      </div>
+      <PublishedSubBar total={resources.length} synced={synced} />
+      <h1 className="hitl-page-title">Published</h1>
 
       {error && (
         <div className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">{error}</div>
