@@ -9,6 +9,7 @@ import { cloudTraceListUrl, cloudLogsForRunUrl } from "@/lib/gcp-links"
 import type {
   DraftRecord, PanelResult, PipelineStateDoc, DraftDoc, QualityDimension,
 } from "@/lib/firestore"
+import { methodologyLabel, specialtyLabel, thesisStageLabel } from "@/lib/taxonomy"
 
 const TABS = ["Quality", "Panel", "Classification", "Enrichment", "Provenance"] as const
 type Tab = typeof TABS[number]
@@ -22,14 +23,6 @@ const STAGE_KEYS: Array<[string, keyof PipelineStateDoc]> = [
   ["QC Panel", "qc_panel_at"],
   ["Arbiter", "arbiter_decision_at"],
 ]
-
-const METHODOLOGY_LABELS: Record<string, string> = {
-  "SYN-01": "Narrative Systematic Review", "SYN-02": "Scoping Review",
-  "OBS-01": "Retrospective Chart Review", "EVAL-01": "Clinical Audit",
-}
-const STAGE_CODE_LABELS: Record<string, string> = {
-  TH: "Thesis Design", HI: "Health Impact", EV: "Evidence", ST: "Statistics", IN: "Interpretation", SH: "Sharing",
-}
 
 function DimBar({ name, dim }: { name: string; dim: QualityDimension }) {
   const colour = dim.score >= 70 ? "#289642" : dim.score >= 50 ? "#f59e0b" : "#dc2626"
@@ -133,12 +126,12 @@ export function PipelineInspector({ draft, panel, pipelineState, draftDoc, gcpPr
                 <div className="text-xs text-[#6b7280] mt-0.5">quality score</div>
               </div>
               <div className="bg-[#F8F5EE] rounded-lg p-3 text-center">
-                <div className={`text-3xl font-bold ${draft.ai_confidence >= 70 ? "text-[#03848F]" : "text-[#f59e0b]"}`}>
-                  {Math.round(draft.ai_confidence)}
+                <div className={`text-3xl font-bold ${(draft.ai_confidence ?? 0) >= 70 ? "text-[#03848F]" : "text-[#f59e0b]"}`}>
+                  {Math.round(draft.ai_confidence ?? 0)}
                 </div>
                 <div className="text-xs text-[#6b7280] mt-0.5">
                   AI confidence
-                  {draft.ai_confidence < 70 && <span className="text-[#f59e0b] ml-1">⚠ &lt;70</span>}
+                  {(draft.ai_confidence ?? 0) < 70 && <span className="text-[#f59e0b] ml-1">⚠ &lt;70</span>}
                 </div>
               </div>
             </div>
@@ -206,17 +199,17 @@ export function PipelineInspector({ draft, panel, pipelineState, draftDoc, gcpPr
 
             {/* Tags */}
             {[
-              { label: "Methodology codes", codes: draft.methodology_codes, labels: METHODOLOGY_LABELS },
-              { label: "Stage codes", codes: draft.stage_codes, labels: STAGE_CODE_LABELS },
-              { label: "Discipline codes", codes: draft.discipline_codes, labels: {} },
-              { label: "Foundation skills", codes: draft.skill_codes, labels: {} },
-            ].map(({ label, codes, labels }) => codes?.length > 0 && (
+              { label: "Methodologies", codes: draft.methodology_codes, format: methodologyLabel },
+              { label: "Stage codes", codes: draft.stage_codes, format: thesisStageLabel },
+              { label: "Specialties", codes: draft.discipline_codes, format: specialtyLabel },
+              { label: "Foundation skills", codes: draft.skill_codes, format: (c: string) => c },
+            ].map(({ label, codes, format }) => codes?.length > 0 && (
               <div key={label}>
                 <p className="text-xs font-medium text-[#4a6741] uppercase tracking-wide mb-1">{label}</p>
                 <div className="flex flex-wrap gap-1">
                   {codes.map((c) => (
                     <span key={c} className="text-xs bg-[#e8e4dc] text-[#0E3A27] rounded px-2 py-0.5">
-                      {c}{(labels as Record<string, string>)[c] ? ` — ${(labels as Record<string, string>)[c]}` : ""}
+                      {format(c)}
                     </span>
                   ))}
                 </div>

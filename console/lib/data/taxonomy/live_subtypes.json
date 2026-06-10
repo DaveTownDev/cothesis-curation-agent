@@ -1,0 +1,518 @@
+{
+  "source": "https://compendium-web-production.up.railway.app",
+  "fetched_at": "2026-06-10T13:30:36.751448+00:00",
+  "count": 73,
+  "subtypes": [
+    {
+      "code": "editorial",
+      "slug": "editorial",
+      "type_code": "article",
+      "name": "Editorial / Commentary",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/article/editorial"
+    },
+    {
+      "code": "exemplar_study",
+      "slug": "exemplar-study",
+      "type_code": "article",
+      "name": "Published Exemplar Study",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/article/exemplar-study"
+    },
+    {
+      "code": "guideline_article",
+      "slug": "guideline-article",
+      "type_code": "article",
+      "name": "Clinical / Practice Guideline Article",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/article/guideline-article"
+    },
+    {
+      "code": "methodology_comparison",
+      "slug": "methodology-comparison",
+      "type_code": "article",
+      "name": "Methodology Comparison Paper",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/article/methodology-comparison"
+    },
+    {
+      "code": "methodology_paper",
+      "slug": "methodology-paper",
+      "type_code": "article",
+      "name": "Methodology Paper",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/article/methodology-paper"
+    },
+    {
+      "code": "methodology_review",
+      "slug": "methodology-review",
+      "type_code": "article",
+      "name": "Methodology Review Paper",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/article/methodology-review"
+    },
+    {
+      "code": "preprint",
+      "slug": "preprint",
+      "type_code": "article",
+      "name": "Preprint",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/article/preprint"
+    },
+    {
+      "code": "research_article",
+      "slug": "research-article",
+      "type_code": "article",
+      "name": "Research Article",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/article/research-article"
+    },
+    {
+      "code": "review_article",
+      "slug": "review-article",
+      "type_code": "article",
+      "name": "Review Article",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/article/review-article"
+    },
+    {
+      "code": "seminal_paper",
+      "slug": "seminal-paper",
+      "type_code": "article",
+      "name": "Seminal Methodology Paper",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/article/seminal-paper"
+    },
+    {
+      "code": "edited_collection",
+      "slug": "edited-collection",
+      "type_code": "book",
+      "name": "Edited Collection",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/book/edited-collection"
+    },
+    {
+      "code": "handbook",
+      "slug": "handbook",
+      "type_code": "book",
+      "name": "Handbook / Manual",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/book/handbook"
+    },
+    {
+      "code": "monograph",
+      "slug": "monograph",
+      "type_code": "book",
+      "name": "Research Monograph",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/book/monograph"
+    },
+    {
+      "code": "open_textbook",
+      "slug": "open-textbook",
+      "type_code": "book",
+      "name": "Open Access Textbook",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/book/open-textbook"
+    },
+    {
+      "code": "style_guide",
+      "slug": "style-guide",
+      "type_code": "book",
+      "name": "Style &amp; Writing Guide",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/book/style-guide"
+    },
+    {
+      "code": "textbook",
+      "slug": "textbook",
+      "type_code": "book",
+      "name": "Textbook",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/book/textbook"
+    },
+    {
+      "code": "institutional_service",
+      "slug": "institutional-service",
+      "type_code": "community",
+      "name": "Institutional Research Support",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/community/institutional-service"
+    },
+    {
+      "code": "mailing_list",
+      "slug": "mailing-list",
+      "type_code": "community",
+      "name": "Mailing List / Newsletter",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/community/mailing-list"
+    },
+    {
+      "code": "online_community",
+      "slug": "online-community",
+      "type_code": "community",
+      "name": "Online Community / Forum",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/community/online-community"
+    },
+    {
+      "code": "professional_network",
+      "slug": "professional-network",
+      "type_code": "community",
+      "name": "Professional Network / Society",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/community/professional-network"
+    },
+    {
+      "code": "flashcard_set",
+      "slug": "flashcard-set",
+      "type_code": "course",
+      "name": "Flashcard / Study Set",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/course/flashcard-set"
+    },
+    {
+      "code": "free_course",
+      "slug": "free-course",
+      "type_code": "course",
+      "name": "Free Online Course",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/course/free-course"
+    },
+    {
+      "code": "open_courseware",
+      "slug": "open-courseware",
+      "type_code": "course",
+      "name": "Open Courseware",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/course/open-courseware"
+    },
+    {
+      "code": "paid_course",
+      "slug": "paid-course",
+      "type_code": "course",
+      "name": "Paid Course or Workshop",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/course/paid-course"
+    },
+    {
+      "code": "workshop_materials",
+      "slug": "workshop-materials",
+      "type_code": "course",
+      "name": "Workshop / Training Materials",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/course/workshop-materials"
+    },
+    {
+      "code": "open_data_portal",
+      "slug": "open-data-portal",
+      "type_code": "dataset",
+      "name": "Open Data Portal",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/dataset/open-data-portal"
+    },
+    {
+      "code": "research_dataset",
+      "slug": "research-dataset",
+      "type_code": "dataset",
+      "name": "Research Dataset / Database",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/dataset/research-dataset"
+    },
+    {
+      "code": "teaching_dataset",
+      "slug": "teaching-dataset",
+      "type_code": "dataset",
+      "name": "Teaching / Practice Dataset",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/dataset/teaching-dataset"
+    },
+    {
+      "code": "college_grant",
+      "slug": "college-grant",
+      "type_code": "funding",
+      "name": "College / Professional Body Grant",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/funding/college-grant"
+    },
+    {
+      "code": "fellowship",
+      "slug": "fellowship",
+      "type_code": "funding",
+      "name": "Research Fellowship / Scholarship",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/funding/fellowship"
+    },
+    {
+      "code": "government_grant",
+      "slug": "government-grant",
+      "type_code": "funding",
+      "name": "Government / National Grant",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/funding/government-grant"
+    },
+    {
+      "code": "institutional_grant",
+      "slug": "institutional-grant",
+      "type_code": "funding",
+      "name": "University / Hospital Internal Grant",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/funding/institutional-grant"
+    },
+    {
+      "code": "podcast_episode",
+      "slug": "podcast-episode",
+      "type_code": "podcast",
+      "name": "Podcast Episode",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/podcast/podcast-episode"
+    },
+    {
+      "code": "podcast_show",
+      "slug": "podcast-show",
+      "type_code": "podcast",
+      "name": "Podcast Show",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/podcast/podcast-show"
+    },
+    {
+      "code": "appraisal_tool",
+      "slug": "appraisal-tool",
+      "type_code": "reporting_guideline",
+      "name": "Critical Appraisal Tool",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/reporting-guideline/appraisal-tool"
+    },
+    {
+      "code": "guideline_extension",
+      "slug": "guideline-extension",
+      "type_code": "reporting_guideline",
+      "name": "Reporting Guideline Extension",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/reporting-guideline/guideline-extension"
+    },
+    {
+      "code": "primary_guideline",
+      "slug": "primary-guideline",
+      "type_code": "reporting_guideline",
+      "name": "Primary Reporting Guideline",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/reporting-guideline/primary-guideline"
+    },
+    {
+      "code": "ai_research_tool",
+      "slug": "ai-research-tool",
+      "type_code": "software",
+      "name": "AI Research Assistant",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/ai-research-tool"
+    },
+    {
+      "code": "calculator",
+      "slug": "calculator",
+      "type_code": "software",
+      "name": "Sample Size / Power Calculator",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/calculator"
+    },
+    {
+      "code": "coding_resource",
+      "slug": "coding-resource",
+      "type_code": "software",
+      "name": "Clinical Coding Tool",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/coding-resource"
+    },
+    {
+      "code": "data_collection",
+      "slug": "data-collection",
+      "type_code": "software",
+      "name": "Data Collection Platform",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/data-collection"
+    },
+    {
+      "code": "figure_tool",
+      "slug": "figure-tool",
+      "type_code": "software",
+      "name": "Data Visualisation / Figure Tool",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/figure-tool"
+    },
+    {
+      "code": "literature_discovery",
+      "slug": "literature-discovery",
+      "type_code": "software",
+      "name": "Literature Discovery Tool",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/literature-discovery"
+    },
+    {
+      "code": "mobile_app",
+      "slug": "mobile-app",
+      "type_code": "software",
+      "name": "Mobile App",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/mobile-app"
+    },
+    {
+      "code": "project_management",
+      "slug": "project-management",
+      "type_code": "software",
+      "name": "Project Management Tool",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/project-management"
+    },
+    {
+      "code": "qualitative_software",
+      "slug": "qualitative-software",
+      "type_code": "software",
+      "name": "Qualitative Analysis Software",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/qualitative-software"
+    },
+    {
+      "code": "reference_manager",
+      "slug": "reference-manager",
+      "type_code": "software",
+      "name": "Reference Manager",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/reference-manager"
+    },
+    {
+      "code": "registration_platform",
+      "slug": "registration-platform",
+      "type_code": "software",
+      "name": "Protocol Registration Platform",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/registration-platform"
+    },
+    {
+      "code": "statistical_software",
+      "slug": "statistical-software",
+      "type_code": "software",
+      "name": "Statistical Software",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/statistical-software"
+    },
+    {
+      "code": "systematic_review_tool",
+      "slug": "systematic-review-tool",
+      "type_code": "software",
+      "name": "Systematic Review Tool",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/systematic-review-tool"
+    },
+    {
+      "code": "writing_tool",
+      "slug": "writing-tool",
+      "type_code": "software",
+      "name": "Writing &amp; Collaboration Tool",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/software/writing-tool"
+    },
+    {
+      "code": "analysis_plan_template",
+      "slug": "analysis-plan-template",
+      "type_code": "template",
+      "name": "Statistical Analysis Plan Template",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/template/analysis-plan-template"
+    },
+    {
+      "code": "checklist_template",
+      "slug": "checklist-template",
+      "type_code": "template",
+      "name": "Methodology Checklist / Decision Aid",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/template/checklist-template"
+    },
+    {
+      "code": "data_form_template",
+      "slug": "data-form-template",
+      "type_code": "template",
+      "name": "Data Extraction / Collection Form",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/template/data-form-template"
+    },
+    {
+      "code": "ethics_template",
+      "slug": "ethics-template",
+      "type_code": "template",
+      "name": "Ethics Application Template",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/template/ethics-template"
+    },
+    {
+      "code": "protocol_template",
+      "slug": "protocol-template",
+      "type_code": "template",
+      "name": "Research Protocol Template",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/template/protocol-template"
+    },
+    {
+      "code": "video_channel",
+      "slug": "video-channel",
+      "type_code": "video",
+      "name": "Video Channel / Series",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/video/video-channel"
+    },
+    {
+      "code": "video_explainer",
+      "slug": "video-explainer",
+      "type_code": "video",
+      "name": "Explainer / Concept Video",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/video/video-explainer"
+    },
+    {
+      "code": "video_interview",
+      "slug": "video-interview",
+      "type_code": "video",
+      "name": "Interview / Discussion",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/video/video-interview"
+    },
+    {
+      "code": "video_lecture",
+      "slug": "video-lecture",
+      "type_code": "video",
+      "name": "Lecture / Presentation Recording",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/video/video-lecture"
+    },
+    {
+      "code": "video_software_demo",
+      "slug": "video-software-demo",
+      "type_code": "video",
+      "name": "Software Walkthrough",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/video/video-software-demo"
+    },
+    {
+      "code": "video_tutorial",
+      "slug": "video-tutorial",
+      "type_code": "video",
+      "name": "Tutorial / How-To Video",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/video/video-tutorial"
+    },
+    {
+      "code": "cheat_sheet",
+      "slug": "cheat-sheet",
+      "type_code": "visual_reference",
+      "name": "Cheat Sheet / Quick Reference",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/visual-reference/cheat-sheet"
+    },
+    {
+      "code": "flowchart",
+      "slug": "flowchart",
+      "type_code": "visual_reference",
+      "name": "Flowchart / Decision Tree",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/visual-reference/flowchart"
+    },
+    {
+      "code": "infographic",
+      "slug": "infographic",
+      "type_code": "visual_reference",
+      "name": "Infographic",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/visual-reference/infographic"
+    },
+    {
+      "code": "poster",
+      "slug": "poster",
+      "type_code": "visual_reference",
+      "name": "Academic Poster",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/visual-reference/poster"
+    },
+    {
+      "code": "presentation",
+      "slug": "presentation",
+      "type_code": "visual_reference",
+      "name": "Presentation / Slide Deck",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/visual-reference/presentation"
+    },
+    {
+      "code": "blog_site",
+      "slug": "blog-site",
+      "type_code": "web_guide",
+      "name": "Blog / Website (ongoing)",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/web-guide/blog-site"
+    },
+    {
+      "code": "methodology_guide",
+      "slug": "methodology-guide",
+      "type_code": "web_guide",
+      "name": "Institutional Methodology Guide",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/web-guide/methodology-guide"
+    },
+    {
+      "code": "programme_requirements",
+      "slug": "programme-requirements",
+      "type_code": "web_guide",
+      "name": "College Research Requirements",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/web-guide/programme-requirements"
+    },
+    {
+      "code": "tweetorial",
+      "slug": "tweetorial",
+      "type_code": "web_guide",
+      "name": "Tweetorial / Social Thread",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/web-guide/tweetorial"
+    },
+    {
+      "code": "web_article",
+      "slug": "web-article",
+      "type_code": "web_guide",
+      "name": "Blog Post / Web Article",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/web-guide/web-article"
+    },
+    {
+      "code": "worked_example",
+      "slug": "worked-example",
+      "type_code": "web_guide",
+      "name": "Worked Example / Case Study",
+      "url": "https://compendium-web-production.up.railway.app/library/resources/web-guide/worked-example"
+    }
+  ]
+}

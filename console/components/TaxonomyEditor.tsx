@@ -2,8 +2,9 @@
 
 import { useMemo, useState } from "react"
 import {
-  RESOURCE_TYPES, METHODOLOGY_OPTIONS, SPECIALTY_OPTIONS, STAGE_CODES,
-  DIFFICULTY_LEVELS, ACCESS_TYPES, type TaxonomyEdits,
+  RESOURCE_TYPES, METHODOLOGY_OPTIONS, SPECIALTY_OPTIONS, THESIS_STAGE_OPTIONS,
+  DIFFICULTY_LEVELS, ACCESS_TYPES, subtypesForType, methodologyOptionLabel,
+  specialtyOptionLabel, subtypeOptionLabel, thesisStageOptionLabel, type TaxonomyEdits,
 } from "@/lib/taxonomy"
 
 interface Props {
@@ -36,6 +37,11 @@ export function TaxonomyEditor({ value, onChange }: Props) {
     )
   }, [specFilter])
 
+  const subtypeOptions = useMemo(
+    () => subtypesForType(value.resource_type_code),
+    [value.resource_type_code],
+  )
+
   function toggleCode(
     field: "methodology_codes" | "stage_codes" | "discipline_codes",
     code: string,
@@ -57,7 +63,18 @@ export function TaxonomyEditor({ value, onChange }: Props) {
         <select
           className={selectCls}
           value={value.resource_type_code}
-          onChange={(e) => onChange({ ...value, resource_type_code: e.target.value })}
+          onChange={(e) => {
+            const typeCode = e.target.value
+            const validSubtypes = subtypesForType(typeCode)
+            const keepSubtype = validSubtypes.some((s) => s.code === value.resource_subtype_code)
+            onChange({
+              ...value,
+              resource_type_code: typeCode,
+              resource_subtype_code: typeCode === "book_chapter"
+                ? null
+                : keepSubtype ? value.resource_subtype_code : null,
+            })
+          }}
         >
           {RESOURCE_TYPES.map(([code, label]) => (
             <option key={code} value={code}>{label}</option>
@@ -65,9 +82,28 @@ export function TaxonomyEditor({ value, onChange }: Props) {
         </select>
       </label>
 
+      {value.resource_type_code !== "book_chapter" && (
+        <label className="block space-y-1">
+          <span className="text-[#6b7280]">Resource subtype</span>
+          <select
+            className={selectCls}
+            value={value.resource_subtype_code ?? ""}
+            onChange={(e) => onChange({
+              ...value,
+              resource_subtype_code: e.target.value || null,
+            })}
+          >
+            <option value="">— none —</option>
+            {subtypeOptions.map((s) => (
+              <option key={s.code} value={s.code}>{subtypeOptionLabel(s)}</option>
+            ))}
+          </select>
+        </label>
+      )}
+
       <div>
         <span className="text-[#6b7280] block mb-1">
-          Methodology codes ({value.methodology_codes.length} selected)
+          Methodologies ({value.methodology_codes.length} selected)
         </span>
         <input
           type="search"
@@ -84,13 +120,14 @@ export function TaxonomyEditor({ value, onChange }: Props) {
                 <button
                   key={m.code}
                   type="button"
-                  title={m.name}
+                  title={methodologyOptionLabel(m)}
                   onClick={() => toggleCode("methodology_codes", m.code)}
-                  className={`rounded px-1.5 py-0.5 font-mono text-[10px] transition-colors ${
+                  className={`rounded px-1.5 py-0.5 text-[10px] leading-snug text-left transition-colors ${
                     on ? "bg-[#289642] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
                   }`}
                 >
-                  {m.code}
+                  <span className="font-mono">{m.code}</span>
+                  <span className="opacity-80"> — {m.name}</span>
                 </button>
               )
             })}
@@ -100,7 +137,7 @@ export function TaxonomyEditor({ value, onChange }: Props) {
 
       <div>
         <span className="text-[#6b7280] block mb-1">
-          Specialty slugs ({value.discipline_codes.length} selected, max 3)
+          Specialties ({value.discipline_codes.length} selected, max 3)
         </span>
         <input
           type="search"
@@ -117,13 +154,13 @@ export function TaxonomyEditor({ value, onChange }: Props) {
                 <button
                   key={s.slug}
                   type="button"
-                  title={s.name}
+                  title={`${specialtyOptionLabel(s)} (${s.slug})`}
                   onClick={() => toggleCode("discipline_codes", s.slug)}
-                  className={`rounded px-1.5 py-0.5 text-[10px] transition-colors ${
+                  className={`rounded px-1.5 py-0.5 text-[10px] leading-snug text-left transition-colors ${
                     on ? "bg-[#6b4fa0] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
                   }`}
                 >
-                  {s.slug}
+                  {specialtyOptionLabel(s)}
                 </button>
               )
             })}
@@ -134,19 +171,20 @@ export function TaxonomyEditor({ value, onChange }: Props) {
       <div>
         <span className="text-[#6b7280] block mb-1">THESIS stages</span>
         <div className="flex flex-wrap gap-1">
-          {STAGE_CODES.map(([code, label]) => {
-            const on = value.stage_codes.includes(code)
+          {THESIS_STAGE_OPTIONS.map((s) => {
+            const on = value.stage_codes.includes(s.code)
             return (
               <button
-                key={code}
+                key={s.code}
                 type="button"
-                title={label}
-                onClick={() => toggleCode("stage_codes", code)}
-                className={`rounded px-2 py-0.5 font-mono transition-colors ${
+                title={thesisStageOptionLabel(s)}
+                onClick={() => toggleCode("stage_codes", s.code)}
+                className={`rounded px-1.5 py-0.5 text-[10px] leading-snug text-left transition-colors ${
                   on ? "bg-[#03848F] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
                 }`}
               >
-                {code}
+                <span className="font-mono">{s.code}</span>
+                <span className="opacity-80"> — {s.name}</span>
               </button>
             )
           })}

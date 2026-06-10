@@ -11,7 +11,7 @@ Given a resource's title, URL, and description, classify it for medical trainees
 Respond with JSON only — no markdown, no explanation:
 {
   "resource_type_code": one of [article, book, book_chapter, video, podcast, software, reporting_guideline, course, web_guide, template, visual_reference, dataset, community, funding],
-  "resource_subtype_code": string (specific subtype code within the type; null for book_chapter),
+  "resource_subtype_code": string (globally unique subtype code from the injected list; null for book_chapter only),
   "methodology_codes": string[] (PLATFORM codes — SYN/OBS/EVAL/… — max 5, [] if none apply),
   "stage_codes": string[] (TH=Theory, HI=History, EV=Evaluate, ST=Study, IN=Interpret, SH=Share),
   "relevance_score": float 0-1,
@@ -23,4 +23,4 @@ Respond with JSON only — no markdown, no explanation:
   "difficulty_level": one of [beginner, intermediate, advanced] (beginner = no prior research experience; advanced = assumes research background)
 }
 ```
-Methodology codes: choose only from the injected allowed platform code list (live Compendium taxonomy — SYN/OBS/EVAL/CASE/…). Foundation Skills (FS-01..FS-16): use only for resources that *teach* the skill. Discipline codes: choose only from the injected specialty slug list (max 3).
+Methodology codes: choose only from the injected allowed platform code list (live Compendium taxonomy — SYN/OBS/EVAL/CASE/…). Subtype codes: choose only from the injected allowed subtype list grouped by resource type; the subtype's parent type must match `resource_type_code`. Foundation Skills (FS-01..FS-16): use only for resources that *teach* the skill. Discipline codes: choose only from the injected specialty slug list (max 3).

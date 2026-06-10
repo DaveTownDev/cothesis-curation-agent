@@ -252,7 +252,7 @@ export function ReviewQueueTable({ items, compact, detailQuery }: Props) {
                       >
                         {item.qa_audit.source_verdict.toUpperCase()}
                       </span>
-                    ) : <span className="text-[#9ca3af] text-xs">—</span>}
+                    ) : <span className="text-[#9ca3af] text-xs" title="Source QA not run">pending</span>}
                   </td>
                   <td className="px-4 py-3">
                     <span className="flex items-center gap-1 text-[#289642] text-sm font-medium whitespace-nowrap">

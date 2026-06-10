@@ -175,6 +175,7 @@ export interface DraftDoc {
   assessed_at?: string
   quality_score: number
   ai_confidence: number
+  quality_dimensions?: Record<string, QualityDimension>
   trainee_suitability_score?: number | null
   language_detected?: string | null
   strengths?: string[]

@@ -11,7 +11,7 @@ python -m scripts.fetch_live_taxonomy
 COMPENDIUM_BASE_URL=https://compendium-web-production.up.railway.app python -m scripts.fetch_live_taxonomy
 ```
 
-Writes `live_methodologies.json` (platform codes, uppercase) and `live_specialties.json`
-(specialty slugs, lowercase), and copies both to `console/lib/data/taxonomy/` for the
-Next.js bundle. MVP grounding cards remain in `data/methodologies/*.md` for Vertex AI
-Search only.
+Writes `live_methodologies.json` (platform codes, uppercase), `live_specialties.json`
+(specialty slugs, lowercase), and `live_subtypes.json` (subtype codes with parent
+`type_code`), and copies all three to `console/lib/data/taxonomy/` for the Next.js
+bundle. MVP grounding cards remain in `data/methodologies/*.md` for Vertex AI Search only.

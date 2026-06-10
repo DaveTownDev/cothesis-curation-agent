@@ -1,5 +1,7 @@
 "use client"
 
+import { methodologyLabel } from "@/lib/taxonomy"
+
 const BADGE_LABELS: Record<string, string> = {
   editors_choice: "Editor's Choice",
   best_free: "Best Free",
@@ -56,7 +58,7 @@ export function CompendiumCardPreview({
           <div className="flex flex-wrap gap-1">
             {methodologyCodes.map((c) => (
               <span key={c} className="text-[10px] bg-[#e8e4dc] text-[#4a6741] rounded px-1.5 py-0.5">
-                {c}
+                {methodologyLabel(c)}
               </span>
             ))}
           </div>

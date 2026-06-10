@@ -113,6 +113,8 @@ class TestAssembleDraftRecord:
         assert record["editorial_description"] == "A key reporting standard."
         assert record["editorial_description_plain"] == "A checklist for writing up research studies."
         assert record["quality_score"] == 95
+        assert record["ai_confidence"] == 88
+        assert "relevance" in record["quality_dimensions"]
         assert record["methodology_codes"] == ["SYN-01"]
         assert record["editorial_status"] == "proposed"
         assert "type_fields" in record

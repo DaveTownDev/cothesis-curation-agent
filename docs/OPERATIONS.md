@@ -24,6 +24,38 @@ Runtime SA `agent-runtime@$PROJECT.iam.gserviceaccount.com` with only: `roles/ai
 ## Secrets
 `echo -n "VALUE" | gcloud secrets create NAME --data-file=- --replication-policy=automatic`, inject with `--set-secrets=ENV=NAME:latest`. Runtime SA needs `secretAccessor` before deploy. Next.js: keep secrets server-side (NEXT_PUBLIC_* bakes at build).
 
+## Full pipeline reset + live reprocess
+
+Wipe all in-flight pipeline Firestore state and re-run every live Compendium resource through `run_pipeline` with the current taxonomy (`data/taxonomy/live_*.json`).
+
+```bash
+# Preview (no writes):
+GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.reset_and_reprocess_live --dry-run
+
+# Reset + export + reprocess (~45s/resource; run in tmux/background):
+doppler run --project dave-ai-stack --config prd -- \
+  .venv/bin/python -m scripts.reset_and_reprocess_live --confirm-reset \
+  --refresh-taxonomy --export data/live_resources/export.json \
+  2>&1 | tee data/live_resources/reprocess.log
+```
+
+Clears: `drafts`, `draft_records`, `review_queue`, `pipeline_state`, `resources`. Does **not** delete live Compendium rows. Requires `DATABASE_PUBLIC_URL` (Postgres export) and ADC for Firestore + Vertex.
+
+`--reset-only` clears collections without running the pipeline. `--use-cached-export` skips Postgres fetch if `export.json` exists.
+
+**Postgres enrichment queue** (Railway `compendium.enrichment_queue`, used by the Compendium enrichment worker):
+
+```bash
+doppler run --project dave-ai-stack --config prd -- \
+  .venv/bin/python -m scripts.sync_live_to_enrichment_queue --dry-run
+
+doppler run --project dave-ai-stack --config prd -- \
+  .venv/bin/python -m scripts.sync_live_to_enrichment_queue --confirm \
+  --export data/live_resources/export.json
+```
+
+Merges live catalog from Postgres `import_candidates` + Neo4j (public library graph), inserts missing queue rows, resets `complete`/`failed`/`processing` → `pending`, and sets `import_candidates.status = enrichment_queued`.
+
 ## Cost (target: well under $100)
 Model tiering (Gemini 3.x: Flash-Lite for discovery/classification/reconciliation/QC; Flash for appraisal/editorial; Pro only for the arbiter routing decision) is the biggest lever. Scale Cloud Run to zero; keep prompts < 200K tokens (Pro doubles above); Vertex AI Search free tier is 10k queries/month. Note: on the global endpoint, context caching and batch discounts are unavailable, so lean harder on tiering and trimming. The kill-switch covers the runaway-loop tail risk. The /cost-check skill summarises spend.
 

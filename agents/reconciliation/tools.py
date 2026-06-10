@@ -83,6 +83,12 @@ def assemble_draft_record(
         "access_type": classification.access_type,
         # Quality (from Appraisal)
         "quality_score": appraisal.quality_score,
+        "ai_confidence": appraisal.ai_confidence,
+        "quality_dimensions": appraisal.quality_dimensions.to_dict(),
+        "trainee_suitability_score": appraisal.trainee_suitability_score,
+        "language_detected": appraisal.language_detected,
+        "strengths": appraisal.strengths,
+        "limitations": appraisal.limitations,
         "current_ai_assessment_id": None,  # set after Firestore write
         # Routing signals (0-1 scale)
         "relevance_score": classification.relevance_score,

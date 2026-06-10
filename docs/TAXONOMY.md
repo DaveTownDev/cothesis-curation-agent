@@ -1,9 +1,9 @@
 # TAXONOMY — controlled vocabularies
 
-Full canonical taxonomies live on the production Compendium site. **Runtime source of truth for the curation pipeline:** `data/taxonomy/live_methodologies.json` (148 platform codes, refreshed via `python -m scripts.fetch_live_taxonomy`) and `data/taxonomy/live_specialties.json` (53 specialty slugs). Vertex AI Search still grounds on the four MVP methodology cards below; the classifier may assign any live platform code.
+Full canonical taxonomies live on the production Compendium site. **Runtime source of truth for the curation pipeline:** `data/taxonomy/live_methodologies.json` (platform codes), `data/taxonomy/live_specialties.json` (specialty slugs), and `data/taxonomy/live_subtypes.json` (resource subtypes grouped by type). Refresh all three via `python -m scripts.fetch_live_taxonomy` (reads sitemap.xml + page titles). Vertex AI Search still grounds on the four MVP methodology cards below; the classifier may assign any live platform code and any live subtype code.
 
 ## Resource types (14)
-`article, book, book_chapter, video, podcast, software, reporting_guideline, course, web_guide, template, visual_reference, dataset, community, funding`. Each has subtypes (full set in Cowork); `type_fields` is discriminated by the type code (docs/SCHEMA.md, docs/field_maps/).
+`article, book, book_chapter, video, podcast, software, reporting_guideline, course, web_guide, template, visual_reference, dataset, community, funding`. Each type (except `book_chapter`) has subtypes in `live_subtypes.json` — e.g. `seminal_paper`, `textbook`, `statistical_software`, `primary_guideline`. `book_chapter` carries null `resource_subtype_code`. `type_fields` is discriminated by the type code (docs/SCHEMA.md, docs/field_maps/).
 
 ## THESIS stages (6)
 `TH` Theory/question · `HI` History/literature · `EV` Evaluate/planning+ethics · `ST` Study/doing · `IN` Interpret/analysis · `SH` Share/writing+dissemination.

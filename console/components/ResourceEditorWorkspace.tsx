@@ -27,6 +27,7 @@ interface Props {
 function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
   return {
     resource_type_code: draft.resource_type_code ?? "article",
+    resource_subtype_code: draft.resource_subtype_code ?? null,
     methodology_codes: [...(draft.methodology_codes ?? [])],
     discipline_codes: [...(draft.discipline_codes ?? [])],
     stage_codes: [...(draft.stage_codes ?? [])],

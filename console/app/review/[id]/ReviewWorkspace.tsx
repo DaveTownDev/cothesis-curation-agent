@@ -13,7 +13,8 @@ import { StickyActionBar } from "@/components/StickyActionBar"
 import { TaxonomyEditor } from "@/components/TaxonomyEditor"
 import { KeyboardHelp } from "@/components/KeyboardHelp"
 import { CompendiumCardPreview } from "@/components/CompendiumCardPreview"
-import { QaAuditBanner } from "@/components/QaAuditBanner"
+import { QaAuditStatus } from "@/components/QaAuditStatus"
+import { mergeAppraisalFields } from "@/lib/review-draft"
 import type { QaRecommendation } from "@/lib/qa-recommendations"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { validatePublishChecklist } from "@/lib/checklist"
@@ -41,6 +42,7 @@ interface Props {
 function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
   return {
     resource_type_code: draft.resource_type_code ?? "article",
+    resource_subtype_code: draft.resource_subtype_code ?? null,
     methodology_codes: [...(draft.methodology_codes ?? [])],
     discipline_codes: [...(draft.discipline_codes ?? [])],
     stage_codes: [...(draft.stage_codes ?? [])],
@@ -111,6 +113,11 @@ export function ReviewWorkspace({
   const [draftUrl, setDraftUrl] = useState(draft?.url ?? "")
   const [taxonomy, setTaxonomy] = useState<TaxonomyEdits>(() => initialTaxonomy(draft))
 
+  const displayDraft = useMemo(
+    () => mergeAppraisalFields(draft, draftDoc),
+    [draft, draftDoc],
+  )
+
   const edited = useMemo(() => ({
     editorial_description: shortDesc,
     summary: longDesc,
@@ -119,10 +126,10 @@ export function ReviewWorkspace({
   }), [shortDesc, longDesc, plainDesc, draftUrl])
 
   const liveRecord = useMemo(() => ({
-    ...draft,
+    ...displayDraft,
     ...edited,
     ...taxonomy,
-  }), [draft, edited, taxonomy])
+  }), [displayDraft, edited, taxonomy])
 
   const handleQaChangeType = useCallback((code: string) => {
     setTaxonomy((prev) => ({ ...prev, resource_type_code: code }))
@@ -154,7 +161,7 @@ export function ReviewWorkspace({
     [liveRecord],
   )
 
-  const hasStrengths = (draft?.strengths?.length ?? 0) > 0 || (draft?.limitations?.length ?? 0) > 0
+  const hasStrengths = (displayDraft?.strengths?.length ?? 0) > 0 || (displayDraft?.limitations?.length ?? 0) > 0
   const hasAltTitles = (draft?.alternative_titles?.length ?? 0) > 0
   const hasTypeFields = draft?.type_fields && Object.keys(draft.type_fields).length > 0
 
@@ -209,19 +216,17 @@ export function ReviewWorkspace({
 
   return (
     <>
-      {qaAudit && (
-        <QaAuditBanner
-          qaAudit={qaAudit}
-          itemReason={routingReason}
-          currentType={taxonomy.resource_type_code}
-          currentUrl={draftUrl}
-          onChangeType={handleQaChangeType}
-          onFixUrlAndRequeue={handleQaFixUrlAndRequeue}
-          onRequeue={handleQaRequeue}
-          onReject={handleQaReject}
-          onPrefillReject={handleQaPrefillReject}
-        />
-      )}
+      <QaAuditStatus
+        qaAudit={qaAudit}
+        itemReason={routingReason}
+        currentType={taxonomy.resource_type_code}
+        currentUrl={draftUrl}
+        onChangeType={handleQaChangeType}
+        onFixUrlAndRequeue={handleQaFixUrlAndRequeue}
+        onRequeue={handleQaRequeue}
+        onReject={handleQaReject}
+        onPrefillReject={handleQaPrefillReject}
+      />
 
       <KeyboardHelp open={helpOpen} onClose={() => setHelpOpen(false)} />
 
@@ -250,7 +255,7 @@ export function ReviewWorkspace({
             summary={longDesc}
             badges={(draft.proposed_badges ?? []).slice(0, 3)}
             methodologyCodes={taxonomy.methodology_codes}
-            qualityScore={draft.quality_score ?? 0}
+            qualityScore={displayDraft.quality_score ?? 0}
             resourceType={taxonomy.resource_type_code}
           />
 
@@ -267,11 +272,11 @@ export function ReviewWorkspace({
             <Card>
               <CardHeader className="pb-2"><CardTitle className="text-sm">Strengths & limitations</CardTitle></CardHeader>
               <CardContent className="space-y-3">
-                {draft.strengths && draft.strengths.length > 0 && (
+                {displayDraft.strengths && displayDraft.strengths.length > 0 && (
                   <div>
                     <p className="text-xs font-medium text-[#289642] uppercase tracking-wide mb-1">Strengths</p>
                     <ul className="space-y-1">
-                      {draft.strengths.map((s, i) => (
+                      {displayDraft.strengths.map((s, i) => (
                         <li key={i} className="text-sm text-[#0E3A27] flex items-start gap-2">
                           <span className="text-[#289642] mt-0.5">+</span>{s}
                         </li>
@@ -279,11 +284,11 @@ export function ReviewWorkspace({
                     </ul>
                   </div>
                 )}
-                {draft.limitations && draft.limitations.length > 0 && (
+                {displayDraft.limitations && displayDraft.limitations.length > 0 && (
                   <div>
                     <p className="text-xs font-medium text-[#f59e0b] uppercase tracking-wide mb-1">Limitations</p>
                     <ul className="space-y-1">
-                      {draft.limitations.map((l, i) => (
+                      {displayDraft.limitations.map((l, i) => (
                         <li key={i} className="text-sm text-[#0E3A27] flex items-start gap-2">
                           <span className="text-[#f59e0b] mt-0.5">−</span>{l}
                         </li>
@@ -326,7 +331,7 @@ export function ReviewWorkspace({
         </div>
 
         <PipelineInspector
-          draft={{ ...draft, ...taxonomy }}
+          draft={{ ...displayDraft, ...taxonomy }}
           panel={panel}
           pipelineState={pipelineState}
           draftDoc={draftDoc}
@@ -343,8 +348,8 @@ export function ReviewWorkspace({
               editorialNote={editorialNote}
               taxonomy={taxonomy}
               checklistErrors={liveErrors}
-              qualityScore={draft?.quality_score ?? 0}
-              aiConfidence={draft?.ai_confidence ?? 0}
+              qualityScore={displayDraft?.quality_score ?? 0}
+              aiConfidence={displayDraft?.ai_confidence ?? 0}
               edited={edited}
               nextId={nextId}
               queueQuery={queueQuery}

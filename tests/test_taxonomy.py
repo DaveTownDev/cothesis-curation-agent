@@ -8,6 +8,7 @@ from pydantic import ValidationError
 ROOT = Path(__file__).resolve().parents[1]
 METH_PATH = ROOT / "data" / "taxonomy" / "live_methodologies.json"
 SPEC_PATH = ROOT / "data" / "taxonomy" / "live_specialties.json"
+SUB_PATH = ROOT / "data" / "taxonomy" / "live_subtypes.json"
 
 VALID_BASE = {
     "resource_type_code": "article",
@@ -33,11 +34,25 @@ class TestLiveTaxonomyFiles:
         assert len(live) >= 140
 
     def test_loader_matches_json_count(self):
-        from agents.taxonomy import methodology_codes, specialty_slugs
+        from agents.taxonomy import methodology_codes, specialty_slugs, subtype_codes
         meth = json.loads(METH_PATH.read_text())
         spec = json.loads(SPEC_PATH.read_text())
+        sub = json.loads(SUB_PATH.read_text())
         assert len(methodology_codes()) == meth["count"]
         assert len(specialty_slugs()) == spec["count"]
+        assert len(subtype_codes()) == sub["count"]
+
+    def test_subtypes_json_exists_and_covers_user_hierarchy_examples(self):
+        sub = json.loads(SUB_PATH.read_text())
+        codes = {e["code"] for e in sub["subtypes"]}
+        # Representative browse-hierarchy subtypes from Compendium
+        assert "seminal_paper" in codes
+        assert "textbook" in codes
+        assert "statistical_software" in codes
+        assert "primary_guideline" in codes
+        assert "free_course" in codes
+        assert "methodology_guide" in codes
+        assert sub["count"] >= 60
 
 
 class TestClassifierLiveCodeValidation:
@@ -65,3 +80,40 @@ class TestClassifierLiveCodeValidation:
         from agents.shared.schema import ClassificationResult
         with pytest.raises(ValidationError, match="Invalid discipline slug"):
             ClassificationResult(**{**VALID_BASE, "discipline_codes": ["psychiatry"]})
+
+    def test_accepts_live_subtype_for_type(self):
+        from agents.shared.schema import ClassificationResult
+        r = ClassificationResult(**{
+            **VALID_BASE,
+            "resource_subtype_code": "seminal_paper",
+        })
+        assert r.resource_subtype_code == "seminal_paper"
+
+    def test_rejects_unknown_subtype_code(self):
+        from agents.shared.schema import ClassificationResult
+        with pytest.raises(ValidationError, match="Invalid resource_subtype_code"):
+            ClassificationResult(**{**VALID_BASE, "resource_subtype_code": "journal_article"})
+
+    def test_rejects_subtype_type_mismatch(self):
+        from agents.shared.schema import ClassificationResult
+        with pytest.raises(ValidationError, match="belongs to"):
+            ClassificationResult(**{
+                **VALID_BASE,
+                "resource_type_code": "book",
+                "resource_subtype_code": "seminal_paper",
+            })
+
+    def test_book_chapter_requires_null_subtype(self):
+        from agents.shared.schema import ClassificationResult
+        with pytest.raises(ValidationError, match="book_chapter"):
+            ClassificationResult(**{
+                **VALID_BASE,
+                "resource_type_code": "book_chapter",
+                "resource_subtype_code": "textbook",
+            })
+        ok = ClassificationResult(**{
+            **VALID_BASE,
+            "resource_type_code": "book_chapter",
+            "resource_subtype_code": None,
+        })
+        assert ok.resource_subtype_code is None

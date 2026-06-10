@@ -208,6 +208,36 @@ class ClassificationResult(BaseModel):
                 raise ValueError(f"Invalid stage_code {code!r}. Must be one of {sorted(STAGE_CODES)}")
         return codes
 
+    @field_validator("resource_subtype_code")
+    @classmethod
+    def validate_resource_subtype_code(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        from agents.taxonomy import is_valid_subtype_code, normalize_subtype_code
+        norm = normalize_subtype_code(v)
+        if not is_valid_subtype_code(norm):
+            raise ValueError(
+                f"Invalid resource_subtype_code {v!r}. "
+                f"Must be a live subtype code from data/taxonomy/live_subtypes.json."
+            )
+        return norm
+
+    @model_validator(mode="after")
+    def validate_subtype_matches_type(self) -> "ClassificationResult":
+        from agents.taxonomy import subtype_type_for
+        if self.resource_type_code == "book_chapter":
+            if self.resource_subtype_code is not None:
+                raise ValueError("book_chapter resources must have resource_subtype_code null")
+            return self
+        if self.resource_subtype_code is not None:
+            parent = subtype_type_for(self.resource_subtype_code)
+            if parent != self.resource_type_code:
+                raise ValueError(
+                    f"resource_subtype_code {self.resource_subtype_code!r} belongs to "
+                    f"type {parent!r}, not {self.resource_type_code!r}"
+                )
+        return self
+
 
 # ---------------------------------------------------------------------------
 # EditorialOutput (Editorial agent output)

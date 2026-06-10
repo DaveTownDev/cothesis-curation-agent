@@ -53,8 +53,17 @@ class TestClassificationResult:
         """All 14 canonical types must be accepted."""
         from agents.shared.schema import ClassificationResult
         from agents.shared.codes import RESOURCE_TYPES
+        from agents.taxonomy import subtypes_for_type
         for rtype in RESOURCE_TYPES:
-            r = ClassificationResult(**{**VALID_CLASSIFICATION, "resource_type_code": rtype})
+            subtype = None
+            if rtype != "book_chapter":
+                options = subtypes_for_type(rtype)
+                subtype = options[0]["code"] if options else None
+            r = ClassificationResult(**{
+                **VALID_CLASSIFICATION,
+                "resource_type_code": rtype,
+                "resource_subtype_code": subtype,
+            })
             assert r.resource_type_code == rtype
 
     def test_rejects_invalid_stage_code(self):
@@ -87,6 +96,20 @@ class TestClassificationResult:
         from agents.shared.schema import ClassificationResult
         r = ClassificationResult(**{**VALID_CLASSIFICATION, "methodology_codes": []})
         assert r.methodology_codes == []
+
+    def test_rejects_invented_subtype_code(self):
+        from agents.shared.schema import ClassificationResult
+        bad = {**VALID_CLASSIFICATION, "resource_subtype_code": "empirical_research"}
+        with pytest.raises(ValidationError, match="Invalid resource_subtype_code"):
+            ClassificationResult(**bad)
+
+    def test_normalizes_hyphenated_subtype_slug(self):
+        from agents.shared.schema import ClassificationResult
+        r = ClassificationResult(**{
+            **VALID_CLASSIFICATION,
+            "resource_subtype_code": "seminal-paper",
+        })
+        assert r.resource_subtype_code == "seminal_paper"
 
 
 class TestParseClassificationJson:

@@ -165,6 +165,11 @@ def get_discipline_guide() -> str:
     return build_discipline_guide()
 
 
+def get_subtype_guide() -> str:
+    from agents.taxonomy import build_subtype_guide
+    return build_subtype_guide()
+
+
 # Back-compat alias used by deterministic pipeline
 METHODOLOGY_GUIDE = get_methodology_guide()
 

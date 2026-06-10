@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 METHODOLOGIES_PATH = ROOT / "data" / "taxonomy" / "live_methodologies.json"
 SPECIALTIES_PATH = ROOT / "data" / "taxonomy" / "live_specialties.json"
+SUBTYPES_PATH = ROOT / "data" / "taxonomy" / "live_subtypes.json"
 
 # Grounding cards in data/methodologies/*.md — still used by VertexAiSearchTool
 MVP_METHODOLOGY_CODES = frozenset({"SYN-01", "SYN-02", "OBS-01", "EVAL-01"})
@@ -37,6 +38,12 @@ def _load_specialty_doc() -> dict:
 
 
 @lru_cache(maxsize=1)
+def _load_subtype_doc() -> dict:
+    with SUBTYPES_PATH.open(encoding="utf-8") as f:
+        return json.load(f)
+
+
+@lru_cache(maxsize=1)
 def methodology_entries() -> tuple[dict, ...]:
     return tuple(_load_methodology_doc().get("methodologies", []))
 
@@ -44,6 +51,11 @@ def methodology_entries() -> tuple[dict, ...]:
 @lru_cache(maxsize=1)
 def specialty_entries() -> tuple[dict, ...]:
     return tuple(_load_specialty_doc().get("specialties", []))
+
+
+@lru_cache(maxsize=1)
+def subtype_entries() -> tuple[dict, ...]:
+    return tuple(_load_subtype_doc().get("subtypes", []))
 
 
 @lru_cache(maxsize=1)
@@ -57,6 +69,16 @@ def specialty_slugs() -> frozenset[str]:
 
 
 @lru_cache(maxsize=1)
+def subtype_codes() -> frozenset[str]:
+    return frozenset(e["code"] for e in subtype_entries())
+
+
+@lru_cache(maxsize=1)
+def subtype_code_to_type() -> dict[str, str]:
+    return {e["code"]: e["type_code"] for e in subtype_entries()}
+
+
+@lru_cache(maxsize=1)
 def methodology_code_to_name() -> dict[str, str]:
     return {e["code"]: e["name"] for e in methodology_entries()}
 
@@ -64,6 +86,11 @@ def methodology_code_to_name() -> dict[str, str]:
 @lru_cache(maxsize=1)
 def specialty_slug_to_name() -> dict[str, str]:
     return {e["slug"]: html.unescape(e["name"]) for e in specialty_entries()}
+
+
+@lru_cache(maxsize=1)
+def subtype_code_to_name() -> dict[str, str]:
+    return {e["code"]: html.unescape(e["name"]) for e in subtype_entries()}
 
 
 def normalize_methodology_code(code: str) -> str:
@@ -83,6 +110,22 @@ def is_valid_discipline_slug(slug: str) -> bool:
     return normalize_discipline_slug(slug) in specialty_slugs()
 
 
+def normalize_subtype_code(code: str) -> str:
+    return code.strip().lower().replace("-", "_")
+
+
+def is_valid_subtype_code(code: str) -> bool:
+    return normalize_subtype_code(code) in subtype_codes()
+
+
+def subtype_type_for(code: str) -> str | None:
+    return subtype_code_to_type().get(normalize_subtype_code(code))
+
+
+def subtypes_for_type(type_code: str) -> tuple[dict, ...]:
+    return tuple(e for e in subtype_entries() if e["type_code"] == type_code)
+
+
 def build_methodology_guide() -> str:
     """Compact allowed-code list + MVP disambiguation for classification prompts."""
     lines = [MVP_DISAMBIGUATION, "", "Allowed platform methodology codes (choose from this list only):"]
@@ -97,4 +140,25 @@ def build_discipline_guide() -> str:
     for entry in specialty_entries():
         name = html.unescape(entry["name"])
         lines.append(f"- {entry['slug']}: {name}")
+    return "\n".join(lines)
+
+
+def build_subtype_guide() -> str:
+    """Compact subtype code list grouped by resource type for classification prompts."""
+    from agents.shared.codes import RESOURCE_TYPES
+
+    lines = [
+        "Allowed resource_subtype_code values (globally unique snake_case codes).",
+        "Set null for book_chapter (no subtypes). For all other types, pick the best match.",
+        "",
+    ]
+    for type_code in sorted(RESOURCE_TYPES):
+        if type_code == "book_chapter":
+            lines.append(f"## {type_code}: (no subtypes — use null)")
+            continue
+        entries = subtypes_for_type(type_code)
+        lines.append(f"## {type_code}:")
+        for entry in entries:
+            name = html.unescape(entry["name"])
+            lines.append(f"- {entry['code']}: {name}")
     return "\n".join(lines)

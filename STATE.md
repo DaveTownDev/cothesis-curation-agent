@@ -3,7 +3,21 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-**Judge demo ready (2026-06-10).** Console `console-00016-zn7`: BrandLogo (Instrument Sans for “Research Library”; SVG wordmark only). Prior `00015-496`: nav restructure, catalog editor, Published fix, QA shortcuts. Docs: `docs/JUDGE_GUIDE.md`, `docs/DEMO_SCRIPT.md`. Compendium sync on approve — `docs/COMPENDIUM_INTEGRATION.md`.
+**Reprocess paused + fixes in flight (2026-06-10).** Live reprocess **stopped at 76/1512** (quality issues). Firestore holds ~74 pipeline_state · ~69 review_queue from partial run. **Do not** `reset_and_reprocess_live --confirm-reset` again without approval.
+
+**Fixes (local, uncommitted):**
+- `ai_confidence` now copied in `assemble_draft_record` ([pipeline quality investigation](ba9c7095-9525-42bd-a97a-6a71a65b6991)) — backfill 74 records from `drafts` before trusting console %
+- **73 live subtypes** fetched + validated + console picker ([subtype coverage](8eb6c9b1-be37-49ed-a5fb-e2daf0c189b2)) — `python -m scripts.fetch_live_taxonomy`
+- `scripts/sync_live_to_enrichment_queue` — 1,512 rows in Railway `enrichment_queue`
+- `scripts/reset_and_reprocess_live` + `agents/shared/firestore_reset.py`
+
+**QA / HITL fixes (local):** `qa_audit` is post-pipeline only (`write_qa_audit.py`); console merges `drafts` for confidence + shows "Source QA audit not run". Backfill: `python -m scripts.backfill_review_queue_appraisal` then audit + `write_qa_audit`. See [missing QA fix](0272db5d-af8d-4a13-bd19-3b2ab6b39bce).
+
+**Taxonomy pickers (local):** methodology/specialty/subtype + thesis stage labels in console — [methodology](92df0431-7c5e-4f9c-b405-004cd6bde557), [thesis](a2cd71c7-9016-4fc9-9686-ae7919870f18). **~40 files uncommitted** — commit + `deploy_console.sh` before judging.
+
+**Resume pipeline:** only after deploy + backfill: `reprocess_live_resources --skip-existing` (not another full reset).
+
+**Judge demo ready.** Console `console-00016-zn7`. Docs: `docs/JUDGE_GUIDE.md`, `docs/DEMO_SCRIPT.md`.
 
 **Live taxonomy alignment (2026-06-09).** Pipeline + console now use full Compendium methodology (148) and specialty (53) lists from `data/taxonomy/live_*.json`. Refresh: `python -m scripts.fetch_live_taxonomy`. MVP grounding cards unchanged in `data/methodologies/*.md`.
 

@@ -119,6 +119,19 @@ class TestFullPipelineFlow:
         )
         assert 0 <= record["quality_score"] <= 100
 
+    def test_ai_confidence_is_0_to_100(self):
+        from agents.reconciliation.tools import assemble_draft_record
+        record = assemble_draft_record(
+            resource_code="prisma-2020",
+            title="PRISMA 2020 Statement",
+            url="https://doi.org/10.1136/bmj.n71",
+            classification=_make_classification(),
+            editorial=_make_editorial(),
+            appraisal=_make_appraisal(),
+        )
+        assert 0 <= record["ai_confidence"] <= 100
+        assert record["ai_confidence"] == _make_appraisal().ai_confidence
+
     def test_requires_human_review_false_for_high_quality(self):
         from agents.reconciliation.tools import assemble_draft_record
         record = assemble_draft_record(
