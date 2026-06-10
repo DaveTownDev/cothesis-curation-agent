@@ -245,3 +245,33 @@ export async function postToCompendium(
   const data = (await resp.json()) as Record<string, unknown>
   return parseImportResponse(data, records, config.baseUrl)
 }
+
+/** Hide/show a live Compendium resource (requires Compendium curation API). */
+export async function setCompendiumVisibility(
+  config: CompendiumConfig,
+  resourceId: string,
+  visible: boolean,
+): Promise<{ ok: boolean; error?: string }> {
+  const url = `${config.baseUrl.replace(/\/$/, "")}/api/curation/resource-visibility`
+  try {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${config.apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ resource_id: resourceId, is_active: visible }),
+      signal: AbortSignal.timeout(15_000),
+    })
+    if (resp.status === 404) {
+      return { ok: false, error: "Compendium visibility API is not deployed yet" }
+    }
+    if (!resp.ok) {
+      const body = await resp.text().catch(() => "")
+      return { ok: false, error: `Compendium visibility HTTP ${resp.status}${body ? `: ${body.slice(0, 120)}` : ""}` }
+    }
+    return { ok: true }
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : String(err) }
+  }
+}

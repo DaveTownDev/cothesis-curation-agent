@@ -227,6 +227,11 @@ export function PublishedResourcesTable({ resources }: { resources: PublishedRow
                         {pending && syncing === r.resource_code ? "Syncing…" : "Sync"}
                       </Button>
                     )}
+                    <Button size="sm" variant="outline" className="text-xs h-7" asChild>
+                      <Link href={`/pipeline/${encodeURIComponent(r.resource_code)}`}>
+                        Edit
+                      </Link>
+                    </Button>
                     <Button
                       size="sm"
                       variant="outline"

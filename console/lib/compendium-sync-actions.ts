@@ -24,13 +24,41 @@ function syncUpdate(outcome: ResourceSyncOutcome, batchId: string): Record<strin
   return update
 }
 
-async function loadPublishedResource(resourceCode: string): Promise<(ResourceDoc & { _doc_id: string }) | null> {
+async function loadPublishedResource(
+  resourceCode: string,
+  opts: { allowArchived?: boolean } = {},
+): Promise<(ResourceDoc & { _doc_id: string }) | null> {
   const db = getFirestoreDb()
   const snap = await db.collection("resources").doc(resourceCode).get()
   if (!snap.exists) return null
   const data = snap.data() as ResourceDoc
-  if (data.editorial_status !== "published") return null
-  return { ...data, _doc_id: snap.id }
+  const status = data.editorial_status
+  if (status === "published") return { ...data, _doc_id: snap.id }
+  if (opts.allowArchived && status === "archived") return { ...data, _doc_id: snap.id }
+  return null
+}
+
+async function postResourceToCompendium(
+  record: ResourceDoc & { _doc_id: string },
+  config: NonNullable<ReturnType<typeof getCompendiumConfig>>,
+): Promise<ItemSyncResult> {
+  const db = getFirestoreDb()
+  const code = record.resource_code ?? record._doc_id
+  try {
+    const batch = await postToCompendium([record as CompendiumRecordInput], config)
+    const outcome = batch.outcomes[0] ?? { compendium_id: null, compendium_url: null }
+    await db.collection("resources").doc(record._doc_id).update(syncUpdate(outcome, batch.import_batch_id))
+    return {
+      resource_code: code,
+      ok: true,
+      compendium_id: outcome.compendium_id,
+      compendium_url: outcome.compendium_url,
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    await db.collection("resources").doc(record._doc_id).update({ compendium_sync_error: message })
+    return { resource_code: code, ok: false, error: message }
+  }
 }
 
 export async function syncToCompendium(resourceCode: string): Promise<ItemSyncResult> {
@@ -57,22 +85,23 @@ export async function syncToCompendium(resourceCode: string): Promise<ItemSyncRe
     }
   }
 
-  const db = getFirestoreDb()
-  try {
-    const batch = await postToCompendium([record as CompendiumRecordInput], config)
-    const outcome = batch.outcomes[0] ?? { compendium_id: null, compendium_url: null }
-    await db.collection("resources").doc(record._doc_id).update(syncUpdate(outcome, batch.import_batch_id))
+  return postResourceToCompendium(record, config)
+}
+
+export async function forceSyncToCompendium(resourceCode: string): Promise<ItemSyncResult> {
+  const config = getCompendiumConfig()
+  if (!config) {
     return {
       resource_code: resourceCode,
-      ok: true,
-      compendium_id: outcome.compendium_id,
-      compendium_url: outcome.compendium_url,
+      ok: false,
+      error: "Compendium sync not configured (COMPENDIUM_IMPORT_URL + IMPORT_API_KEY)",
     }
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    await db.collection("resources").doc(record._doc_id).update({ compendium_sync_error: message })
-    return { resource_code: resourceCode, ok: false, error: message }
   }
+  const record = await loadPublishedResource(resourceCode)
+  if (!record) {
+    return { resource_code: resourceCode, ok: false, error: "Published resource not found" }
+  }
+  return postResourceToCompendium(record, config)
 }
 
 export async function syncBatchToCompendium(resourceCodes: string[]): Promise<BatchSyncResult> {

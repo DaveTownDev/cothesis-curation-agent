@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { requireAuth } from "@/lib/auth"
 import {
   getReviewQueueItem,
@@ -46,13 +46,16 @@ export default async function ReviewDetailPage({
   await requireAuth()
   const { id } = await params
   const sp = await searchParams
+  const queueQuery = queueQueryString(sp)
 
   const item = await getReviewQueueItem(id)
   if (!item) notFound()
+  if (item.status === "requeued") {
+    redirect(queueQuery ? `/review?${queueQuery}` : "/review")
+  }
 
   const draft = item.draft_record
   const resourceCode = item.resource_code || draft?.resource_code || ""
-  const queueQuery = queueQueryString(sp)
   const filters = parseReviewQueueFilters(sp)
   const queueItems = await getReviewQueue(filters)
   const ids = queueItems.map((i) => i.id)

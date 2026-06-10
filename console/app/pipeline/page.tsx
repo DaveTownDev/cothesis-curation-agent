@@ -109,14 +109,12 @@ export default async function PipelinePage({
                     </td>
                     <td className="px-4 py-3 text-xs text-[#6b7280] whitespace-nowrap">{fmtDate(run.updated_at)}</td>
                     <td className="px-4 py-3">
-                      {routing === "review_needed" && (
-                        <Link
-                          href="/review"
-                          className="text-xs text-[#289642] font-medium hover:underline whitespace-nowrap"
-                        >
-                          View queue
-                        </Link>
-                      )}
+                      <Link
+                        href={`/pipeline/${encodeURIComponent(run.resource_code)}`}
+                        className="text-xs text-[var(--green-primary)] font-medium hover:underline whitespace-nowrap"
+                      >
+                        View / edit
+                      </Link>
                     </td>
                   </tr>
                 )

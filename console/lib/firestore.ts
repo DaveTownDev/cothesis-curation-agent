@@ -142,6 +142,7 @@ export interface ReviewQueueItem {
   rejected_reason?: string
   requeue_reason?: string
   requeue_stage?: string
+  requeued_at?: string
   qa_audit?: QaAudit
 }
 
@@ -296,6 +297,36 @@ export async function getReviewQueueItem(id: string): Promise<ReviewQueueItem | 
   return { id: doc.id, ...doc.data() } as ReviewQueueItem
 }
 
+// ── Firestore value helpers ──────────────────────────────────────────────────
+
+/** Coerce Firestore Timestamp / Date / ISO string to ms for sorting. */
+function sortableTime(value: unknown): number {
+  if (value == null || value === "") return 0
+  if (typeof value === "string") {
+    const t = new Date(value).getTime()
+    return Number.isNaN(t) ? 0 : t
+  }
+  if (typeof value === "number") return value
+  if (value instanceof Date) return value.getTime()
+  if (typeof value === "object") {
+    const v = value as { toDate?: () => Date; toMillis?: () => number; _seconds?: number }
+    if (typeof v.toDate === "function") return v.toDate().getTime()
+    if (typeof v.toMillis === "function") return v.toMillis()
+    if (typeof v._seconds === "number") return v._seconds * 1000
+  }
+  return 0
+}
+
+function compareTimeDesc(a: unknown, b: unknown): number {
+  return sortableTime(b) - sortableTime(a)
+}
+
+/** Serialize Firestore timestamp fields for client components / JSON. */
+export function serializeFirestoreDate(value: unknown): string | undefined {
+  const ms = sortableTime(value)
+  return ms > 0 ? new Date(ms).toISOString() : undefined
+}
+
 // ── Pipeline state queries ───────────────────────────────────────────────────
 
 export async function getPipelineState(
@@ -325,7 +356,7 @@ export async function getPipelineRuns(opts: {
       .limit(opts.limit ?? 200)
       .get()
     const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as PipelineStateDoc))
-    docs.sort((a, b) => (b.updated_at ?? "").localeCompare(a.updated_at ?? ""))
+    docs.sort((a, b) => compareTimeDesc(a.updated_at, b.updated_at))
     return docs
   }
   // No filter → single-field orderBy uses the automatic index
@@ -350,7 +381,7 @@ export async function getDraftAssessment(
     .get()
   if (snap.empty) return null
   const docs = snap.docs.map((d) => d.data() as DraftDoc)
-  docs.sort((a, b) => (b.assessed_at ?? "").localeCompare(a.assessed_at ?? ""))
+  docs.sort((a, b) => compareTimeDesc(a.assessed_at, b.assessed_at))
   return docs[0]
 }
 
@@ -364,9 +395,116 @@ export async function getPublishedResources(limit = 200): Promise<ResourceDoc[]>
     .where("editorial_status", "==", "published")
     .limit(limit)
     .get()
-  const docs = snap.docs.map((d) => ({ ...d.data() } as ResourceDoc))
-  docs.sort((a, b) => (b.editorial_reviewed_at ?? "").localeCompare(a.editorial_reviewed_at ?? ""))
+  const docs = snap.docs.map((d) => ({
+    resource_code: d.id,
+    ...d.data(),
+  } as ResourceDoc))
+  docs.sort((a, b) => compareTimeDesc(a.editorial_reviewed_at, b.editorial_reviewed_at))
   return docs
+}
+
+export async function getResourceRecord(resourceCode: string): Promise<ResourceDoc | null> {
+  const db = getFirestoreDb()
+  const snap = await db.collection("resources").doc(resourceCode).get()
+  if (!snap.exists) return null
+  return { resource_code: resourceCode, ...snap.data() } as ResourceDoc
+}
+
+export async function getDraftRecordDoc(resourceCode: string): Promise<DraftRecord | null> {
+  const db = getFirestoreDb()
+  const snap = await db.collection("draft_records").doc(resourceCode).get()
+  if (!snap.exists) return null
+  return { resource_code: resourceCode, ...snap.data() } as DraftRecord
+}
+
+export type EditableResourceSource = "published" | "archived" | "draft" | "queue"
+
+export interface EditableResource {
+  resource_code: string
+  draft: DraftRecord
+  source: EditableResourceSource
+  editorial_status: string
+  queue_item_id?: string
+}
+
+export async function getEditableResource(resourceCode: string): Promise<EditableResource | null> {
+  const db = getFirestoreDb()
+  const resource = await getResourceRecord(resourceCode)
+  if (resource?.title) {
+    const status = resource.editorial_status ?? "proposed"
+    const source: EditableResourceSource =
+      status === "published" ? "published" : status === "archived" ? "archived" : "draft"
+    return { resource_code: resourceCode, draft: resource as unknown as DraftRecord, source, editorial_status: status }
+  }
+
+  const draftRecord = await getDraftRecordDoc(resourceCode)
+  if (draftRecord?.title) {
+    return {
+      resource_code: resourceCode,
+      draft: draftRecord,
+      source: "draft",
+      editorial_status: draftRecord.editorial_status ?? "proposed",
+    }
+  }
+
+  for (const status of ["pending", "approved", "rejected"] as const) {
+    const queueSnap = await db
+      .collection("review_queue")
+      .where("resource_code", "==", resourceCode)
+      .where("status", "==", status)
+      .limit(1)
+      .get()
+    if (!queueSnap.empty) {
+      const doc = queueSnap.docs[0]!
+      const data = doc.data()
+      const draft = data.draft_record as DraftRecord | undefined
+      if (draft?.title) {
+        return {
+          resource_code: resourceCode,
+          draft: { ...draft, resource_code: resourceCode },
+          source: status === "pending" ? "queue" : "draft",
+          editorial_status: status === "approved" ? "published" : "proposed",
+          queue_item_id: status === "pending" ? doc.id : undefined,
+        }
+      }
+    }
+  }
+
+  const pipeline = await getPipelineState(resourceCode)
+  if (pipeline?.classification_result) {
+    const cr = pipeline.classification_result
+    const minimal = {
+      resource_code: resourceCode,
+      title: resourceCode.replace(/-/g, " "),
+      url: "",
+      resource_type_code: cr.resource_type_code ?? "article",
+      resource_subtype_code: cr.resource_subtype_code ?? null,
+      editorial_description: "",
+      editorial_description_plain: "",
+      summary: "",
+      methodology_codes: [...(cr.methodology_codes ?? [])],
+      discipline_codes: [...(cr.discipline_codes ?? [])],
+      stage_codes: [...(cr.stage_codes ?? [])],
+      skill_codes: [...(cr.skill_codes ?? [])],
+      difficulty_level: cr.difficulty_level ?? "intermediate",
+      access_type: cr.access_type ?? "free",
+      quality_score: 0,
+      ai_confidence: 0,
+      relevance_score: cr.relevance_score ?? 0,
+      classification_confidence: cr.classification_confidence ?? 0,
+      proposed_badges: [],
+      requires_human_review: true,
+      editorial_status: "proposed",
+    } as DraftRecord
+    return {
+      resource_code: resourceCode,
+      draft: minimal,
+      source: "draft",
+      editorial_status: "proposed",
+    }
+  }
+
+  return null
 }
 
 function queueAgeLabel(isoString: string, nowMs: number): string {

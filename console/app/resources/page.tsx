@@ -1,5 +1,5 @@
 import { requireAuth } from "@/lib/auth"
-import { getPublishedResources } from "@/lib/firestore"
+import { getPublishedResources, serializeFirestoreDate } from "@/lib/firestore"
 import { PublishedResourcesTable } from "@/components/PublishedResourcesTable"
 import { PublishedSubBar } from "@/components/PublishedSubBar"
 export const metadata = { title: "Published — CoThesis" }
@@ -26,7 +26,7 @@ export default async function ResourcesPage() {
     resource_type_code: r.resource_type_code,
     quality_score: r.quality_score,
     editorial_reviewed_by: r.editorial_reviewed_by,
-    editorial_reviewed_at: r.editorial_reviewed_at,
+    editorial_reviewed_at: serializeFirestoreDate(r.editorial_reviewed_at),
     compendium_synced_at: r.compendium_synced_at,
     compendium_sync_error: r.compendium_sync_error,
     compendium_url: r.compendium_url,

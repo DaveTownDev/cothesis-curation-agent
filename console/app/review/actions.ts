@@ -210,10 +210,10 @@ export async function requeueItem(
   const db = getFirestoreDb()
   const queueRef = db.collection("review_queue").doc(itemId)
   const updates: Record<string, unknown> = {
-    status: "pending",
+    status: "requeued",
     requeue_reason: reason,
     requeue_stage: stage,
-    queued_at: new Date().toISOString(),
+    requeued_at: new Date().toISOString(),
   }
   if (draftPatch && Object.keys(draftPatch).length > 0) {
     const item = await getReviewQueueItem(itemId)
