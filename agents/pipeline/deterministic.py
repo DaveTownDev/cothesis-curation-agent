@@ -209,6 +209,7 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         run_badge_check, evaluate_dimension, aggregate_panel_results,
     )
     from agents.arbiter.tools import compute_routing_decision, compute_panel_agreement
+    from agents.shared.taxonomy_rules import methodology_required_for_type
     from agents.shared.hitl import write_review_queue_item
     from agents.shared.firestore_utils import get_firestore_collection
     from agents.shared.schema import ClassificationResult, EditorialOutput, AIAssessmentDraft
@@ -414,6 +415,7 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         panel_agreement=panel_agreement,
         skip_reason=classification.skip_reason,
         has_methodology=bool(classification.methodology_codes),
+        methodology_required=methodology_required_for_type(classification.resource_type_code),
     )
     routing = decision["routing"]
     reason = decision["reason"]

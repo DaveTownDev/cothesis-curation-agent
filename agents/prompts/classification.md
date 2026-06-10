@@ -25,3 +25,5 @@ Respond with JSON only — no markdown, no explanation:
 }
 ```
 Methodology codes: choose only from the injected allowed platform code list (live Compendium taxonomy — SYN/OBS/EVAL/CASE/…). Subtype codes: choose only from the injected allowed subtype list grouped by resource type; the subtype's parent type must match `resource_type_code`. Foundation skill codes: choose only from the injected allowed FS code list; use only for resources that *teach* the skill. Discipline codes: choose only from the injected specialty slug list (max 3).
+
+**Methodology by resource type:** `methodology_codes` may be `[]` when no platform methodology genuinely applies — especially for `software`, `community`, `funding`, `dataset`, `template`, and `visual_reference`. For `article`, `book`, `video`, `podcast`, `course`, `web_guide`, and `reporting_guideline`, assign at least one platform code when the resource is methodology-specific; use `[]` only for genuinely cross-cutting or non-methods resources (e.g. generic writing skills). Never force-fit SYN/OBS/EVAL when the source is not about a research method.

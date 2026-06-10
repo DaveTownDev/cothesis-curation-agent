@@ -14,6 +14,7 @@ from __future__ import annotations
 
 from agents.shared.codes import LEGACY_METHODOLOGY_PREFIXES
 from agents.taxonomy import is_valid_methodology_code, normalize_methodology_code
+from agents.shared.taxonomy_rules import methodology_required_for_type
 
 
 def validate_publish_checklist(record: dict) -> list[str]:
@@ -27,11 +28,12 @@ def validate_publish_checklist(record: dict) -> list[str]:
     if not record.get("editorial_description", "").strip():
         errors.append("editorial_description is missing or empty")
 
-    # 2. ≥1 platform methodology_code
+    # 2. ≥1 platform methodology_code (type-aware — optional for software/community/etc.)
     codes = record.get("methodology_codes", [])
-    if not codes:
+    type_code = record.get("resource_type_code")
+    if methodology_required_for_type(type_code) and not codes:
         errors.append("methodology_codes: ≥1 platform code required (SYN-/OBS-/EVAL-…)")
-    else:
+    elif codes:
         for code in codes:
             for legacy in LEGACY_METHODOLOGY_PREFIXES:
                 if code.startswith(legacy):

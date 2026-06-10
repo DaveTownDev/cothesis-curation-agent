@@ -17,6 +17,7 @@ from collections import Counter
 
 import httpx
 
+from agents.shared.taxonomy_rules import methodology_required_for_type
 from agents.shared.codes import (
     RESOURCE_TYPES, STAGE_CODES, ACCESS_TYPES, DIFFICULTY_LEVELS,
     CANONICAL_BADGES, PLAIN_JARGON_TERMS,
@@ -68,7 +69,7 @@ def audit_record(dr: dict) -> dict:
     bad_mc = [c for c in mc if not PLATFORM_CODE.match(c)]
     if bad_mc:
         fail("methodology_codes", f"non-platform codes: {bad_mc}")
-    if not mc:
+    if not mc and methodology_required_for_type(rt):
         warn("methodology_codes", "no methodology codes")
     bad_badges = [b for b in (dr.get("proposed_badges") or []) if b not in CANONICAL_BADGES]
     if bad_badges:

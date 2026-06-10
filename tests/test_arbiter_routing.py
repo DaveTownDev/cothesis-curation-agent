@@ -245,3 +245,19 @@ class TestHITLQueueWrite:
         assert "queued_at" in written
         assert "status" in written
         assert written["status"] == "pending"
+
+
+    def test_auto_accept_optional_type_without_methodology(self):
+        """Optional types skip the empty-methodology review gate."""
+        from agents.arbiter.tools import compute_routing_decision
+        decision = compute_routing_decision(
+            relevance_score=0.9,
+            classification_confidence=0.85,
+            quality_score=88,
+            ai_confidence=82,
+            panel_agreement=0.85,
+            skip_reason=None,
+            has_methodology=False,
+            methodology_required=False,
+        )
+        assert decision["routing"] == "auto_accept"

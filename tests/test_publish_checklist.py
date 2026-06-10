@@ -103,3 +103,14 @@ class TestPublishChecklist:
         record = _make_valid_record(methodology_codes=["CASE-01"])
         errors = validate_publish_checklist(record)
         assert errors == []
+
+
+    def test_optional_type_empty_methodology_passes(self):
+        """Software/community/funding may publish without methodology codes."""
+        from agents.shared.checklist import validate_publish_checklist
+        record = _make_valid_record(
+            resource_type_code="software",
+            methodology_codes=[],
+        )
+        errors = validate_publish_checklist(record)
+        assert not any("methodology" in e for e in errors)

@@ -159,7 +159,7 @@ If the import API returns only `import_batch_id` (no per-resource array), sync s
 `editorial_status` full enum: `proposed | in_review | published | archived | deprecated`.
 
 ## Publish checklist (required for `published`)
-editorial_description present · ≥1 methodology_code (platform) · quality_score present · link verified · human-ratified (editorial_reviewed_by + editorial_reviewed_at set on Resource.editorial).
+editorial_description present · ≥1 methodology_code (platform) when required for `resource_type_code` (optional for software/community/funding/dataset/template/visual_reference) · quality_score present · link verified · human-ratified (editorial_reviewed_by + editorial_reviewed_at set on Resource.editorial).
 
 ## Per-type fields
 The full golden-record field set per resource type lives in `docs/field_maps/field_mapping_<type>_complete.md`. `type_fields` is discriminated by `resource_type_code` (the 14 types in docs/TAXONOMY.md). MVP is all 14 types; the four MVP methodologies are article-dominant but every type's path is built.

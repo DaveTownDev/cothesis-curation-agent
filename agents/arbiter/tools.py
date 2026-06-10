@@ -40,6 +40,7 @@ def compute_routing_decision(
     panel_agreement: float,
     skip_reason: Optional[str],
     has_methodology: bool = True,
+    methodology_required: bool = True,
 ) -> dict:
     """
     Compute the arbiter's routing decision.
@@ -50,8 +51,8 @@ def compute_routing_decision(
       review_needed — borderline on any signal; human must decide
       auto_exclude  — skip_reason set, very low relevance, or very low quality
 
-    has_methodology=False (classifier assigned no methodology code) never
-    auto-accepts — a human decides scope/fit.
+    When methodology_required=True, empty methodology_codes never auto-accepts.
+    Optional types (software, community, funding, …) skip this gate.
     """
     composite = _compute_composite_score(
         relevance_score, classification_confidence, quality_score,
@@ -67,7 +68,7 @@ def compute_routing_decision(
         }
 
     # 1b. No methodology assigned → human decides (never silent auto-accept)
-    if not has_methodology and quality_score >= QUALITY_EXCLUDE:
+    if methodology_required and not has_methodology and quality_score >= QUALITY_EXCLUDE:
         return {
             "routing": "review_needed",
             "composite_score": composite,

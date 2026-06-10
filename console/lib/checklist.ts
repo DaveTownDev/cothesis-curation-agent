@@ -5,6 +5,21 @@ import { METHODOLOGY_CODES, SPECIALTY_OPTIONS } from "@/lib/taxonomy"
 
 const LEGACY_METHODOLOGY_PREFIXES = ["RS-", "OD-", "EI-", "QI-"] as const
 const LIVE_METHODOLOGY_CODES = new Set(METHODOLOGY_CODES)
+
+const METHODOLOGY_OPTIONAL_TYPES = new Set([
+  "software",
+  "community",
+  "funding",
+  "dataset",
+  "template",
+  "visual_reference",
+])
+
+function methodologyRequiredForType(resourceType: string | undefined): boolean {
+  if (!resourceType) return true
+  return !METHODOLOGY_OPTIONAL_TYPES.has(resourceType)
+}
+
 const LIVE_SPECIALTY_SLUGS = new Set(SPECIALTY_OPTIONS.map((s) => s.slug))
 
 function normalizeMethodologyCode(code: string): string {
@@ -32,14 +47,15 @@ export function validatePublishChecklist(
     errors.push({ field: "editorial_description", message: "Editorial description is required" })
   }
 
-  // 2. ≥1 live platform methodology code
+  // 2. ≥1 live platform methodology code (type-aware)
   const codes = (record.methodology_codes as string[] | undefined) || []
-  if (codes.length === 0) {
+  const typeCode = record.resource_type_code as string | undefined
+  if (methodologyRequiredForType(typeCode) && codes.length === 0) {
     errors.push({
       field: "methodology_codes",
       message: "At least one platform methodology code required",
     })
-  } else {
+  } else if (codes.length > 0) {
     for (const code of codes) {
       for (const legacy of LEGACY_METHODOLOGY_PREFIXES) {
         if (code.startsWith(legacy)) {

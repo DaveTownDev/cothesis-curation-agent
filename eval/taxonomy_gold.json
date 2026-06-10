@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "description": "Hand-labeled taxonomy expectations for Phase 1 audit (not ADK evalset format).",
+  "cases": [
+    {
+      "resource_code": "gold-prisma-2020",
+      "notes": "Reporting guideline \u2014 systematic review methods",
+      "expected": {
+        "resource_type_code": "reporting_guideline",
+        "resource_subtype_code": "primary_guideline",
+        "methodology_codes": [
+          "SYN-01"
+        ],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-covidence",
+      "notes": "SR software \u2014 methodology optional",
+      "expected": {
+        "resource_type_code": "software",
+        "resource_subtype_code": "project_management",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-03"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-reddit-rstats",
+      "notes": "Community forum \u2014 no methodology tag",
+      "expected": {
+        "resource_type_code": "community",
+        "methodology_codes": [],
+        "skill_codes": [],
+        "resource_subtype_code": "online_community"
+      }
+    },
+    {
+      "resource_code": "gold-nih-grant-template",
+      "notes": "Funding opportunity \u2014 optional methodology",
+      "expected": {
+        "resource_type_code": "funding",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-16"
+        ],
+        "resource_subtype_code": "government_grant"
+      }
+    },
+    {
+      "resource_code": "gold-strobe-paper",
+      "notes": "Observational methods article",
+      "expected": {
+        "resource_type_code": "article",
+        "resource_subtype_code": "methodology_paper",
+        "methodology_codes": [
+          "OBS-01"
+        ],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-pubmed",
+      "notes": "Research database \u2014 dataset type, optional methodology",
+      "expected": {
+        "resource_type_code": "dataset",
+        "resource_subtype_code": "open_data_portal",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-02"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-cochrane-handbook",
+      "notes": "Methods web guide \u2014 should carry SYN",
+      "expected": {
+        "resource_type_code": "web_guide",
+        "methodology_codes": [
+          "SYN-01"
+        ],
+        "skill_codes": [
+          "FS-03",
+          "FS-04"
+        ],
+        "resource_subtype_code": "methodology_guide"
+      }
+    },
+    {
+      "resource_code": "gold-prisma-flow-diagram",
+      "notes": "Template asset \u2014 optional methodology",
+      "expected": {
+        "resource_type_code": "template",
+        "methodology_codes": [],
+        "skill_codes": [],
+        "resource_subtype_code": "checklist_template"
+      }
+    }
+  ]
+}
