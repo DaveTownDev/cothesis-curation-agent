@@ -5,6 +5,7 @@ from agents.shared.compendium_sync import (
     build_compendium_public_url,
     extract_public_url,
     extract_resource_id,
+    needs_compendium_resync,
     parse_import_response,
 )
 
@@ -32,7 +33,7 @@ class TestBuildCompendiumPublicUrl:
             "https://cothesis.ai",
             resource_id="550e8400-e29b-41d4-a716-446655440000",
         )
-        assert url == "https://cothesis.ai/library/resources/550e8400-e29b-41d4-a716-446655440000"
+        assert url == "https://cothesis.ai/library/resource/550e8400-e29b-41d4-a716-446655440000"
 
     def test_from_slug_and_subtype(self):
         url = build_compendium_public_url(
@@ -60,8 +61,26 @@ class TestExtractPublicUrl:
     def test_builds_from_resource_id(self):
         item = {"resource_id": "abc-123"}
         assert extract_public_url(item, "https://cothesis.ai", RECORD) == (
-            "https://cothesis.ai/library/resources/abc-123"
+            "https://cothesis.ai/library/resource/abc-123"
         )
+
+
+class TestNeedsCompendiumResync:
+    def test_never_synced(self):
+        assert needs_compendium_resync({"editorial_status": "published"}) is True
+
+    def test_synced_without_url(self):
+        assert needs_compendium_resync({
+            "compendium_synced_at": "2026-06-09T00:00:00Z",
+            "compendium_batch_id": "batch-1",
+        }) is True
+
+    def test_fully_synced(self):
+        assert needs_compendium_resync({
+            "compendium_synced_at": "2026-06-09T00:00:00Z",
+            "compendium_id": "uuid-1",
+            "compendium_url": "https://cothesis.ai/library/resource/uuid-1",
+        }) is False
 
 
 class TestParseImportResponse:
@@ -107,4 +126,4 @@ class TestParseImportResponse:
         )
         assert result.import_batch_id == "batch-3"
         assert result.outcomes[0].compendium_id == "rid-9"
-        assert result.outcomes[0].compendium_url == "https://cothesis.ai/library/resources/rid-9"
+        assert result.outcomes[0].compendium_url == "https://cothesis.ai/library/resource/rid-9"

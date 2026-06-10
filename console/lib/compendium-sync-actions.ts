@@ -3,6 +3,7 @@
 import { FieldValue, getFirestoreDb, type ResourceDoc } from "@/lib/firestore"
 import {
   getCompendiumConfig,
+  needsCompendiumResync,
   postToCompendium,
   type BatchSyncResult,
   type CompendiumRecordInput,
@@ -46,7 +47,7 @@ export async function syncToCompendium(resourceCode: string): Promise<ItemSyncRe
   if (!record) {
     return { resource_code: resourceCode, ok: false, error: "Published resource not found" }
   }
-  if (record.compendium_synced_at && !record.compendium_sync_error) {
+  if (!needsCompendiumResync(record)) {
     return {
       resource_code: resourceCode,
       ok: true,
@@ -104,7 +105,7 @@ export async function syncBatchToCompendium(resourceCodes: string[]): Promise<Ba
       results.push({ resource_code: code, ok: false, error: "Published resource not found" })
       continue
     }
-    if (record.compendium_synced_at && !record.compendium_sync_error) {
+    if (!needsCompendiumResync(record)) {
       skipped++
       results.push({
         resource_code: code,

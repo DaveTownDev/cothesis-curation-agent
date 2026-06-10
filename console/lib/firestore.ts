@@ -394,7 +394,9 @@ export async function getSyncStats(): Promise<{
   ])
 
   const resources = resourcesSnap.docs.map((d) => d.data())
-  const synced = resources.filter((r) => r.compendium_synced_at).length
+  const synced = resources.filter(
+    (r) => r.compendium_synced_at && r.compendium_id && r.compendium_url && !r.compendium_sync_error,
+  ).length
   const total = resources.length
 
   let oldest_pending_at: string | null = null

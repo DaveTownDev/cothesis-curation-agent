@@ -126,6 +126,19 @@ function subtypePathSegment(subtype: string | null, resourceType: string | null)
   return "resources"
 }
 
+/** True when a published resource should POST to Compendium (or re-sync for id/url). */
+export function needsCompendiumResync(record: {
+  compendium_synced_at?: string | null
+  compendium_sync_error?: string | null
+  compendium_id?: string | null
+  compendium_url?: string | null
+}): boolean {
+  if (record.compendium_sync_error) return true
+  if (!record.compendium_synced_at) return true
+  if (!record.compendium_id || !record.compendium_url) return true
+  return false
+}
+
 export function buildCompendiumPublicUrl(
   baseUrl: string,
   opts: {
@@ -136,7 +149,7 @@ export function buildCompendiumPublicUrl(
   },
 ): string | null {
   const root = baseUrl.replace(/\/$/, "")
-  if (opts.resource_id) return `${root}/library/resources/${opts.resource_id}`
+  if (opts.resource_id) return `${root}/library/resource/${opts.resource_id}`
   if (opts.slug) {
     const segment = subtypePathSegment(opts.subtype_slug ?? null, opts.resource_type_code ?? null)
     return `${root}/library/${segment}/${opts.slug}`

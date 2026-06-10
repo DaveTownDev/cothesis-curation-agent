@@ -38,9 +38,9 @@ export function CompendiumSyncBadge({
 
   if (syncedAt) {
     return (
-      <span className="flex items-center gap-1 text-xs text-[#289642]">
-        <CheckCircle size={12} />
-        Synced
+      <span className="flex items-center gap-1 text-xs text-[#f59e0b]" title="Synced without Compendium URL — retry sync">
+        <Clock size={12} />
+        {compact ? "Re-sync" : "Synced — retry for URL"}
       </span>
     )
   }

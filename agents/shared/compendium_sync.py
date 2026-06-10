@@ -43,6 +43,17 @@ def _subtype_path_segment(subtype: str | None, resource_type: str | None) -> str
     return "resources"
 
 
+def needs_compendium_resync(data: dict[str, Any]) -> bool:
+    """True when a published resource should POST to Compendium again."""
+    if data.get("compendium_sync_error"):
+        return True
+    if not data.get("compendium_synced_at"):
+        return True
+    if not data.get("compendium_id") or not data.get("compendium_url"):
+        return True
+    return False
+
+
 def build_compendium_public_url(
     base_url: str,
     *,
@@ -54,7 +65,8 @@ def build_compendium_public_url(
     """Construct a Compendium library URL when the import API omits one."""
     root = base_url.rstrip("/")
     if resource_id:
-        return f"{root}/library/resources/{resource_id}"
+        # Live Compendium pages: /library/resource/{uuid} (singular)
+        return f"{root}/library/resource/{resource_id}"
     if slug:
         segment = _subtype_path_segment(subtype_slug, resource_type_code)
         return f"{root}/library/{segment}/{slug}"

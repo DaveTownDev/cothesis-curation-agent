@@ -3,7 +3,7 @@
 **Audience:** Compendium engineering team  
 **From:** CoThesis Curation Agent (GCP / ADK pipeline + HITL console)  
 **Date:** 2026-06-09  
-**Status:** Live sync verified (HTTP 200); per-resource `resource_id` / `public_url` not yet returned by import API
+**Status:** Compendium integration response received (2026-06-09) — see [`docs/COMPENDIUM_RESPONSE.md`](COMPENDIUM_RESPONSE.md). Per-resource `resource_id` / `public_url` now returned by Compendium; **re-sync** 39 legacy batch-only records to populate Firestore `compendium_id` / `compendium_url`.
 
 ---
 
@@ -206,9 +206,11 @@ We accept **HTTP 2xx** with a JSON body. Parsed fields:
 
 **URL construction fallback** (when API omits absolute URL):
 
-1. If `resource_id` present → `{base}/library/resources/{resource_id}`
+1. If `resource_id` present → `{base}/library/resource/{resource_id}` (singular — live Compendium URL shape)
 2. Else if `slug` present → `{base}/library/{subtype-segment}/{slug}` where subtype segment uses `_` → `-` (e.g. `reporting_guideline` → `reporting-guideline`)
 3. Else → `compendium_url` stored as `null`
+
+Prefer absolute `public_url` / `compendium_url` from the API response (Compendium returns these synchronously as of 2026-06-09).
 
 **Batch-only response:** If the API returns only `{ "import_batch_id": "...", "success": true }` with no per-resource array, we still mark sync success (`compendium_synced_at` set) but `compendium_id` / `compendium_url` remain null.
 
@@ -450,7 +452,7 @@ Console revision **`console-00010-5rt`** deployed with `COMPENDIUM_IMPORT_URL` +
 
 **Total live sync:** 39 records across 4 batches (1 single + 38 unique bulk), all HTTP 200.
 
-**Known gap — batch-only API response:** The import API returned `import_batch_id` but **no per-resource array** (`resources` / `accepted` / etc.). Firestore records were marked synced (`compendium_synced_at`, `compendium_batch_id` set) but **`compendium_id` and `compendium_url` remain null** on affected docs. Console Published page shows "Marked synced (awaiting Compendium URL)" until Compendium returns per-resource IDs/URLs (see §7.1).
+**Known gap — resolved on Compendium side (2026-06-09):** Early live syncs (table below) used the **old** batch-only API — Firestore has `compendium_synced_at` but **`compendium_id` / `compendium_url` are null**. Compendium now returns per-resource IDs/URLs; **re-sync** from the Published page or `python -m scripts.sync_to_compendium`. Agent code treats missing id/url as needing re-sync.
 
 **Traceability for Compendium team:** Use the batch IDs above to locate imports in the parse → dedup → classify → accept queue. The single-record batch (`f7e8e345-…`) is a good end-to-end trace case (SYN-02 scoping review article).
 
@@ -460,6 +462,7 @@ Console revision **`console-00010-5rt`** deployed with `COMPENDIUM_IMPORT_URL` +
 
 | Concern | File |
 |---|---|
+| Compendium response (inbound) | `docs/COMPENDIUM_RESPONSE.md` |
 | Field mapping (Python) | `agents/shared/compendium_bridge.py` |
 | Response parsing (Python) | `agents/shared/compendium_sync.py` |
 | Firestore sync runner (Python) | `scripts/sync.py`, `scripts/sync_to_compendium.py` |

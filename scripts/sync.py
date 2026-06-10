@@ -22,7 +22,12 @@ from google.cloud.firestore import Client as FirestoreClient
 from google.cloud.firestore import SERVER_TIMESTAMP
 
 from agents.shared.compendium_bridge import to_compendium_record
-from agents.shared.compendium_sync import ImportBatchResult, ResourceSyncOutcome, parse_import_response
+from agents.shared.compendium_sync import (
+    ImportBatchResult,
+    ResourceSyncOutcome,
+    needs_compendium_resync,
+    parse_import_response,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -44,9 +49,9 @@ def fetch_unsynced_records(
     limit: int = 0,
 ) -> list[dict[str, Any]]:
     """
-    Return published resources that have not yet been synced to the Compendium.
-    Filters on editorial_status == 'published'; compendium_synced_at absence
-    is checked client-side (Firestore can't filter on missing fields directly).
+    Return published resources that need Compendium sync or re-sync (missing id/url).
+    Filters on editorial_status == 'published'; resync eligibility is checked
+    client-side (Firestore can't filter on missing fields directly).
     Pass limit > 0 to cap the result set.
     """
     col = db.collection("resources")
@@ -56,7 +61,7 @@ def fetch_unsynced_records(
     records = []
     for doc in query.stream():
         data = doc.to_dict()
-        if not data.get("compendium_synced_at"):
+        if needs_compendium_resync(data):
             data["_doc_id"] = doc.id
             records.append(data)
     return records

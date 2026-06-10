@@ -85,6 +85,35 @@ class TestFetchUnsyncedRecords:
         assert records[0]["_doc_id"] == "doc1"
         assert records[1]["_doc_id"] == "doc2"
 
+    def test_excludes_fully_synced_records(self):
+        mock_db = MagicMock()
+        col = mock_db.collection.return_value
+        query = col.where.return_value
+        query.stream.return_value = [
+            _make_fs_doc({
+                **ALREADY_SYNCED,
+                "compendium_id": "uuid-1",
+                "compendium_url": "https://cothesis.ai/library/resource/uuid-1",
+            }, "doc-synced"),
+        ]
+        records = fetch_unsynced_records(mock_db)
+        assert records == []
+
+    def test_includes_synced_records_missing_id_or_url(self):
+        mock_db = MagicMock()
+        col = mock_db.collection.return_value
+        query = col.where.return_value
+        query.stream.return_value = [
+            _make_fs_doc({
+                **APPROVED_RECORD_1,
+                "compendium_synced_at": "2026-06-09T00:00:00Z",
+                "compendium_batch_id": "old-batch",
+            }, "doc-resync"),
+        ]
+        records = fetch_unsynced_records(mock_db)
+        assert len(records) == 1
+        assert records[0]["_doc_id"] == "doc-resync"
+
     def test_queries_published_status(self):
         mock_db = MagicMock()
         col = mock_db.collection.return_value

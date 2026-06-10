@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { reopenForReview, syncBatchToCompendium, syncToCompendium } from "@/app/review/actions"
 import { CompendiumSyncBadge } from "@/components/CompendiumSyncBadge"
+import { needsCompendiumResync } from "@/lib/compendium-sync"
 import { recordSessionStat } from "@/lib/session-stats"
 import { RotateCcw, Upload } from "lucide-react"
 
@@ -46,7 +47,7 @@ function fmtDate(v?: string): string {
 }
 
 function needsSync(r: PublishedRow): boolean {
-  return !r.compendium_synced_at || Boolean(r.compendium_sync_error)
+  return needsCompendiumResync(r)
 }
 
 export function PublishedResourcesTable({ resources }: { resources: PublishedRow[] }) {
