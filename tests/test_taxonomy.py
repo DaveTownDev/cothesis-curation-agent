@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 METH_PATH = ROOT / "data" / "taxonomy" / "live_methodologies.json"
 SPEC_PATH = ROOT / "data" / "taxonomy" / "live_specialties.json"
 SUB_PATH = ROOT / "data" / "taxonomy" / "live_subtypes.json"
+SKILL_PATH = ROOT / "data" / "taxonomy" / "live_skills.json"
 
 VALID_BASE = {
     "resource_type_code": "article",
@@ -34,13 +35,22 @@ class TestLiveTaxonomyFiles:
         assert len(live) >= 140
 
     def test_loader_matches_json_count(self):
-        from agents.taxonomy import methodology_codes, specialty_slugs, subtype_codes
+        from agents.taxonomy import methodology_codes, specialty_slugs, subtype_codes, skill_codes
         meth = json.loads(METH_PATH.read_text())
         spec = json.loads(SPEC_PATH.read_text())
         sub = json.loads(SUB_PATH.read_text())
+        skill = json.loads(SKILL_PATH.read_text())
         assert len(methodology_codes()) == meth["count"]
         assert len(specialty_slugs()) == spec["count"]
         assert len(subtype_codes()) == sub["count"]
+        assert len(skill_codes()) == skill["count"]
+
+    def test_skills_json_has_sixteen_canonical_codes(self):
+        skill = json.loads(SKILL_PATH.read_text())
+        codes = {e["code"] for e in skill["skills"]}
+        assert skill["count"] == 16
+        assert codes == {f"FS-{i:02d}" for i in range(1, 17)}
+        assert "literature-searching" in {e["slug"] for e in skill["skills"]}
 
     def test_subtypes_json_exists_and_covers_user_hierarchy_examples(self):
         sub = json.loads(SUB_PATH.read_text())
@@ -53,6 +63,12 @@ class TestLiveTaxonomyFiles:
         assert "free_course" in codes
         assert "methodology_guide" in codes
         assert sub["count"] >= 60
+
+    def test_build_skill_guide_lists_all_codes(self):
+        from agents.taxonomy import build_skill_guide, skill_codes
+        guide = build_skill_guide()
+        for code in sorted(skill_codes()):
+            assert code in guide
 
 
 class TestClassifierLiveCodeValidation:
@@ -117,3 +133,18 @@ class TestClassifierLiveCodeValidation:
             "resource_subtype_code": None,
         })
         assert ok.resource_subtype_code is None
+
+    def test_accepts_live_skill_code(self):
+        from agents.shared.schema import ClassificationResult
+        r = ClassificationResult(**{**VALID_BASE, "skill_codes": ["FS-02"]})
+        assert r.skill_codes == ["FS-02"]
+
+    def test_normalizes_skill_code_padding(self):
+        from agents.shared.schema import ClassificationResult
+        r = ClassificationResult(**{**VALID_BASE, "skill_codes": ["fs-2"]})
+        assert r.skill_codes == ["FS-02"]
+
+    def test_rejects_unknown_skill_code(self):
+        from agents.shared.schema import ClassificationResult
+        with pytest.raises(ValidationError, match="Invalid skill code"):
+            ClassificationResult(**{**VALID_BASE, "skill_codes": ["FS-99"]})

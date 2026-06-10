@@ -29,6 +29,7 @@ function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
     resource_type_code: draft.resource_type_code ?? "article",
     resource_subtype_code: draft.resource_subtype_code ?? null,
     methodology_codes: [...(draft.methodology_codes ?? [])],
+    skill_codes: [...(draft.skill_codes ?? [])],
     discipline_codes: [...(draft.discipline_codes ?? [])],
     stage_codes: [...(draft.stage_codes ?? [])],
     difficulty_level: draft.difficulty_level ?? "intermediate",

@@ -213,7 +213,8 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
     from agents.shared.firestore_utils import get_firestore_collection
     from agents.shared.schema import ClassificationResult, EditorialOutput, AIAssessmentDraft
     from agents.shared.codes import (
-        METHODOLOGY_GUIDE, get_discipline_guide, get_subtype_guide, REPORTING_GUIDELINE_GUIDE,
+        METHODOLOGY_GUIDE, get_discipline_guide, get_subtype_guide, get_skill_guide,
+        REPORTING_GUIDELINE_GUIDE,
         CONTENT_FORMAT_MAP, content_format_for, time_to_consume_for,
     )
     from agents.shared.source_check import verify_source
@@ -314,6 +315,8 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         + get_discipline_guide()
         + "\n\n## Resource subtypes\n"
         + get_subtype_guide()
+        + "\n\n## Foundation skills\n"
+        + get_skill_guide()
         + "\n\n## Resource type\nThe source was ingested as type '" + orig_type + "'. "
         "Treat this as a prior for resource_type_code, but OVERRIDE it when the metadata "
         "contradicts it — never default to 'article' for databases, registries, books, "

@@ -208,6 +208,21 @@ class ClassificationResult(BaseModel):
                 raise ValueError(f"Invalid stage_code {code!r}. Must be one of {sorted(STAGE_CODES)}")
         return codes
 
+    @field_validator("skill_codes")
+    @classmethod
+    def validate_skill_codes(cls, codes: list[str]) -> list[str]:
+        from agents.taxonomy import is_valid_skill_code, normalize_skill_code
+        normalized: list[str] = []
+        for code in codes:
+            norm = normalize_skill_code(code)
+            if not is_valid_skill_code(norm):
+                raise ValueError(
+                    f"Invalid skill code {code!r}. "
+                    f"Must be a foundation skill code from data/taxonomy/live_skills.json."
+                )
+            normalized.append(norm)
+        return normalized
+
     @field_validator("resource_subtype_code")
     @classmethod
     def validate_resource_subtype_code(cls, v: Optional[str]) -> Optional[str]:

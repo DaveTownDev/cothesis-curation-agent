@@ -2,6 +2,7 @@
 import liveMethodologies from "@/lib/data/taxonomy/live_methodologies.json"
 import liveSpecialties from "@/lib/data/taxonomy/live_specialties.json"
 import liveSubtypes from "@/lib/data/taxonomy/live_subtypes.json"
+import liveSkills from "@/lib/data/taxonomy/live_skills.json"
 
 export const RESOURCE_TYPES = [
   ["article", "Article"],
@@ -44,6 +45,12 @@ export const SUBTYPE_OPTIONS: SubtypeOption[] = liveSubtypes.subtypes.map(
 export function subtypesForType(typeCode: string): SubtypeOption[] {
   return SUBTYPE_OPTIONS.filter((s) => s.type_code === typeCode)
 }
+
+export type SkillOption = { code: string; name: string; slug: string }
+
+export const SKILL_OPTIONS: SkillOption[] = liveSkills.skills.map(
+  (s) => ({ code: s.code, name: s.name, slug: s.slug }),
+)
 
 /** Display label for code + human name (dropdowns, chips, filters). */
 export function taxonomyCodeNameLabel(code: string, name: string): string {
@@ -96,6 +103,15 @@ export function thesisStageLabel(code: string): string {
   return s ? thesisStageOptionLabel(s) : code
 }
 
+export function skillOptionLabel(s: SkillOption): string {
+  return taxonomyCodeNameLabel(s.code, s.name)
+}
+
+export function skillLabel(code: string): string {
+  const s = SKILL_OPTIONS.find((o) => o.code === code)
+  return s ? skillOptionLabel(s) : code
+}
+
 export const DIFFICULTY_LEVELS = ["beginner", "intermediate", "advanced"] as const
 
 export const ACCESS_TYPES = [
@@ -106,6 +122,7 @@ export interface TaxonomyEdits {
   resource_type_code: string
   resource_subtype_code: string | null
   methodology_codes: string[]
+  skill_codes: string[]
   discipline_codes: string[]
   stage_codes: string[]
   difficulty_level: string

@@ -9,7 +9,7 @@ import { cloudTraceListUrl, cloudLogsForRunUrl } from "@/lib/gcp-links"
 import type {
   DraftRecord, PanelResult, PipelineStateDoc, DraftDoc, QualityDimension,
 } from "@/lib/firestore"
-import { methodologyLabel, specialtyLabel, thesisStageLabel } from "@/lib/taxonomy"
+import { methodologyLabel, skillLabel, specialtyLabel, thesisStageLabel } from "@/lib/taxonomy"
 
 const TABS = ["Quality", "Panel", "Classification", "Enrichment", "Provenance"] as const
 type Tab = typeof TABS[number]
@@ -202,7 +202,7 @@ export function PipelineInspector({ draft, panel, pipelineState, draftDoc, gcpPr
               { label: "Methodologies", codes: draft.methodology_codes, format: methodologyLabel },
               { label: "Stage codes", codes: draft.stage_codes, format: thesisStageLabel },
               { label: "Specialties", codes: draft.discipline_codes, format: specialtyLabel },
-              { label: "Foundation skills", codes: draft.skill_codes, format: (c: string) => c },
+              { label: "Foundation skills", codes: draft.skill_codes, format: skillLabel },
             ].map(({ label, codes, format }) => codes?.length > 0 && (
               <div key={label}>
                 <p className="text-xs font-medium text-[#4a6741] uppercase tracking-wide mb-1">{label}</p>

@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from "react"
 import {
-  RESOURCE_TYPES, METHODOLOGY_OPTIONS, SPECIALTY_OPTIONS, THESIS_STAGE_OPTIONS,
+  RESOURCE_TYPES, METHODOLOGY_OPTIONS, SPECIALTY_OPTIONS, SKILL_OPTIONS, THESIS_STAGE_OPTIONS,
   DIFFICULTY_LEVELS, ACCESS_TYPES, subtypesForType, methodologyOptionLabel,
-  specialtyOptionLabel, subtypeOptionLabel, thesisStageOptionLabel, type TaxonomyEdits,
+  specialtyOptionLabel, skillOptionLabel, subtypeOptionLabel, thesisStageOptionLabel, type TaxonomyEdits,
 } from "@/lib/taxonomy"
 
 interface Props {
@@ -43,7 +43,7 @@ export function TaxonomyEditor({ value, onChange }: Props) {
   )
 
   function toggleCode(
-    field: "methodology_codes" | "stage_codes" | "discipline_codes",
+    field: "methodology_codes" | "skill_codes" | "stage_codes" | "discipline_codes",
     code: string,
   ) {
     const set = new Set(value[field])
@@ -128,6 +128,33 @@ export function TaxonomyEditor({ value, onChange }: Props) {
                 >
                   <span className="font-mono">{m.code}</span>
                   <span className="opacity-80"> — {m.name}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <span className="text-[#6b7280] block mb-1">
+          Foundation skills ({value.skill_codes.length} selected)
+        </span>
+        <div className={scrollCls}>
+          <div className="flex flex-wrap gap-1">
+            {SKILL_OPTIONS.map((s) => {
+              const on = value.skill_codes.includes(s.code)
+              return (
+                <button
+                  key={s.code}
+                  type="button"
+                  title={skillOptionLabel(s)}
+                  onClick={() => toggleCode("skill_codes", s.code)}
+                  className={`rounded px-1.5 py-0.5 text-[10px] leading-snug text-left transition-colors ${
+                    on ? "bg-[#c45c26] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
+                  }`}
+                >
+                  <span className="font-mono">{s.code}</span>
+                  <span className="opacity-80"> — {s.name}</span>
                 </button>
               )
             })}

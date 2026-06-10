@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Fetch methodology, specialty, and resource-subtype taxonomies from the live Compendium site.
+"""Fetch methodology, specialty, subtype, and foundation-skill taxonomies from the live Compendium site.
 
-Reads sitemap.xml for slugs, scrapes display names from page titles.
+Reads sitemap.xml for slugs, scrapes display names from page titles (skills use canonical names).
 Writes versioned JSON to data/taxonomy/ (runtime source of truth for pipeline + console).
 
 Usage:
@@ -26,7 +26,28 @@ DEFAULT_BASE = "https://compendium-web-production.up.railway.app"
 METH_RE = re.compile(r"library/methodology/([a-z0-9-]+)")
 SPEC_RE = re.compile(r"library/specialty/([a-z0-9-]+)")
 SUBTYPE_RE = re.compile(r"library/resources/([a-z0-9-]+)/([a-z0-9-]+)")
+SKILL_RE = re.compile(r"library/skills/([a-z0-9-]+)")
 TITLE_RE = re.compile(r"<title>([^<]+)</title>", re.IGNORECASE)
+
+# Canonical FS-01..FS-16 — slug join key from live sitemap; names from docs/TAXONOMY.md
+CANONICAL_SKILLS: tuple[tuple[str, str, str], ...] = (
+    ("FS-01", "project-management", "Project Management"),
+    ("FS-02", "literature-searching", "Literature Searching"),
+    ("FS-03", "literature-synthesis", "Literature Synthesis"),
+    ("FS-04", "critical-appraisal", "Critical Appraisal"),
+    ("FS-05", "research-ethics", "Research Ethics"),
+    ("FS-06", "quantitative-methods", "Quantitative Methods"),
+    ("FS-07", "qualitative-methods", "Qualitative Methods"),
+    ("FS-08", "mixed-methods", "Mixed Methods"),
+    ("FS-09", "statistical-literacy", "Statistical Literacy"),
+    ("FS-10", "data-management", "Data Management"),
+    ("FS-11", "research-software", "Research Software"),
+    ("FS-12", "academic-writing", "Academic Writing"),
+    ("FS-13", "research-presentation", "Research Presentation"),
+    ("FS-14", "research-dissemination", "Research Dissemination"),
+    ("FS-15", "supervision-and-mentoring", "Supervision & Mentoring"),
+    ("FS-16", "grant-writing", "Grant Writing"),
+)
 
 # Sitemap type path segments → canonical resource_type_code
 TYPE_SLUG_TO_CODE: dict[str, str] = {
@@ -63,7 +84,7 @@ def _subtype_slug_to_code(slug: str) -> str:
     return slug.replace("-", "_")
 
 
-def fetch_taxonomy(base_url: str) -> tuple[dict, dict, dict]:
+def fetch_taxonomy(base_url: str) -> tuple[dict, dict, dict, dict]:
     base = base_url.rstrip("/")
     sitemap = _fetch(f"{base}/sitemap.xml")
     meth_slugs = sorted(set(METH_RE.findall(sitemap)))
@@ -139,33 +160,64 @@ def fetch_taxonomy(base_url: str) -> tuple[dict, dict, dict]:
         "count": len(subtypes),
         "subtypes": subtypes,
     }
-    return meth_doc, spec_doc, subtype_doc
+
+    sitemap_skill_slugs = set(SKILL_RE.findall(sitemap))
+    canonical_by_slug = {slug: (code, name) for code, slug, name in CANONICAL_SKILLS}
+    missing = sorted(canonical_by_slug.keys() - sitemap_skill_slugs)
+    extra = sorted(sitemap_skill_slugs - canonical_by_slug.keys())
+    if missing:
+        print(f"warn: sitemap missing skill slugs: {missing}", file=sys.stderr)
+    if extra:
+        print(f"warn: sitemap has unknown skill slugs: {extra}", file=sys.stderr)
+
+    skills = []
+    for code, slug, name in CANONICAL_SKILLS:
+        url = f"{base}/library/skills/{slug}"
+        skills.append({
+            "code": code,
+            "slug": slug,
+            "name": name,
+            "url": url,
+        })
+
+    skill_doc = {
+        "source": base,
+        "fetched_at": fetched_at,
+        "count": len(skills),
+        "skills": skills,
+    }
+    return meth_doc, spec_doc, subtype_doc, skill_doc
 
 
 def main() -> int:
     base = os.environ.get("COMPENDIUM_BASE_URL", DEFAULT_BASE)
-    meth_doc, spec_doc, subtype_doc = fetch_taxonomy(base)
+    meth_doc, spec_doc, subtype_doc, skill_doc = fetch_taxonomy(base)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     meth_path = OUT_DIR / "live_methodologies.json"
     spec_path = OUT_DIR / "live_specialties.json"
     subtype_path = OUT_DIR / "live_subtypes.json"
+    skill_path = OUT_DIR / "live_skills.json"
     meth_text = json.dumps(meth_doc, indent=2, ensure_ascii=False) + "\n"
     spec_text = json.dumps(spec_doc, indent=2, ensure_ascii=False) + "\n"
     subtype_text = json.dumps(subtype_doc, indent=2, ensure_ascii=False) + "\n"
+    skill_text = json.dumps(skill_doc, indent=2, ensure_ascii=False) + "\n"
     meth_path.write_text(meth_text)
     spec_path.write_text(spec_text)
     subtype_path.write_text(subtype_text)
+    skill_path.write_text(skill_text)
 
     console_dir = ROOT / "console" / "lib" / "data" / "taxonomy"
     console_dir.mkdir(parents=True, exist_ok=True)
     (console_dir / "live_methodologies.json").write_text(meth_text)
     (console_dir / "live_specialties.json").write_text(spec_text)
     (console_dir / "live_subtypes.json").write_text(subtype_text)
+    (console_dir / "live_skills.json").write_text(skill_text)
 
     print(f"Wrote {meth_doc['count']} methodologies → {meth_path.relative_to(ROOT)}")
     print(f"Wrote {spec_doc['count']} specialties → {spec_path.relative_to(ROOT)}")
     print(f"Wrote {subtype_doc['count']} subtypes → {subtype_path.relative_to(ROOT)}")
+    print(f"Wrote {skill_doc['count']} foundation skills → {skill_path.relative_to(ROOT)}")
     print(f"Copied JSON → {console_dir.relative_to(ROOT)}")
     return 0
 

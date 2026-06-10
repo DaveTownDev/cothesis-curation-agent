@@ -111,6 +111,25 @@ class TestClassificationResult:
         })
         assert r.resource_subtype_code == "seminal_paper"
 
+    def test_accepts_foundation_skill_codes(self):
+        from agents.shared.schema import ClassificationResult
+        r = ClassificationResult(**{
+            **VALID_CLASSIFICATION,
+            "skill_codes": ["FS-02", "FS-04"],
+        })
+        assert r.skill_codes == ["FS-02", "FS-04"]
+
+    def test_rejects_invented_skill_code(self):
+        from agents.shared.schema import ClassificationResult
+        bad = {**VALID_CLASSIFICATION, "skill_codes": ["FS-99"]}
+        with pytest.raises(ValidationError, match="Invalid skill code"):
+            ClassificationResult(**bad)
+
+    def test_empty_skill_codes_allowed(self):
+        from agents.shared.schema import ClassificationResult
+        r = ClassificationResult(**{**VALID_CLASSIFICATION, "skill_codes": []})
+        assert r.skill_codes == []
+
 
 class TestParseClassificationJson:
 

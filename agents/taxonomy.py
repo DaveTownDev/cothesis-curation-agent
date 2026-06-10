@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 METHODOLOGIES_PATH = ROOT / "data" / "taxonomy" / "live_methodologies.json"
 SPECIALTIES_PATH = ROOT / "data" / "taxonomy" / "live_specialties.json"
 SUBTYPES_PATH = ROOT / "data" / "taxonomy" / "live_subtypes.json"
+SKILLS_PATH = ROOT / "data" / "taxonomy" / "live_skills.json"
 
 # Grounding cards in data/methodologies/*.md — still used by VertexAiSearchTool
 MVP_METHODOLOGY_CODES = frozenset({"SYN-01", "SYN-02", "OBS-01", "EVAL-01"})
@@ -44,6 +45,12 @@ def _load_subtype_doc() -> dict:
 
 
 @lru_cache(maxsize=1)
+def _load_skill_doc() -> dict:
+    with SKILLS_PATH.open(encoding="utf-8") as f:
+        return json.load(f)
+
+
+@lru_cache(maxsize=1)
 def methodology_entries() -> tuple[dict, ...]:
     return tuple(_load_methodology_doc().get("methodologies", []))
 
@@ -59,6 +66,11 @@ def subtype_entries() -> tuple[dict, ...]:
 
 
 @lru_cache(maxsize=1)
+def skill_entries() -> tuple[dict, ...]:
+    return tuple(_load_skill_doc().get("skills", []))
+
+
+@lru_cache(maxsize=1)
 def methodology_codes() -> frozenset[str]:
     return frozenset(e["code"] for e in methodology_entries())
 
@@ -71,6 +83,11 @@ def specialty_slugs() -> frozenset[str]:
 @lru_cache(maxsize=1)
 def subtype_codes() -> frozenset[str]:
     return frozenset(e["code"] for e in subtype_entries())
+
+
+@lru_cache(maxsize=1)
+def skill_codes() -> frozenset[str]:
+    return frozenset(e["code"] for e in skill_entries())
 
 
 @lru_cache(maxsize=1)
@@ -91,6 +108,11 @@ def specialty_slug_to_name() -> dict[str, str]:
 @lru_cache(maxsize=1)
 def subtype_code_to_name() -> dict[str, str]:
     return {e["code"]: html.unescape(e["name"]) for e in subtype_entries()}
+
+
+@lru_cache(maxsize=1)
+def skill_code_to_name() -> dict[str, str]:
+    return {e["code"]: html.unescape(e["name"]) for e in skill_entries()}
 
 
 def normalize_methodology_code(code: str) -> str:
@@ -122,6 +144,19 @@ def subtype_type_for(code: str) -> str | None:
     return subtype_code_to_type().get(normalize_subtype_code(code))
 
 
+def normalize_skill_code(code: str) -> str:
+    raw = code.strip().upper()
+    if raw.startswith("FS-"):
+        num = raw[3:].lstrip("0") or "0"
+        if num.isdigit():
+            return f"FS-{int(num):02d}"
+    return raw
+
+
+def is_valid_skill_code(code: str) -> bool:
+    return normalize_skill_code(code) in skill_codes()
+
+
 def subtypes_for_type(type_code: str) -> tuple[dict, ...]:
     return tuple(e for e in subtype_entries() if e["type_code"] == type_code)
 
@@ -140,6 +175,20 @@ def build_discipline_guide() -> str:
     for entry in specialty_entries():
         name = html.unescape(entry["name"])
         lines.append(f"- {entry['slug']}: {name}")
+    return "\n".join(lines)
+
+
+SKILL_RULE = (
+    "Foundation Skills (skill_codes): assign ONLY when the resource *teaches* the skill "
+    "(not merely uses it). Use [] when none apply."
+)
+
+
+def build_skill_guide() -> str:
+    """Compact foundation-skill code list for classification prompts."""
+    lines = [SKILL_RULE, "", "Allowed foundation skill codes (choose from this list only):"]
+    for entry in skill_entries():
+        lines.append(f"- {entry['code']}: {entry['name']}")
     return "\n".join(lines)
 
 

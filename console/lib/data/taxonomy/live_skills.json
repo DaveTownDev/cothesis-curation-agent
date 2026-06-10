@@ -1,0 +1,103 @@
+{
+  "source": "https://compendium-web-production.up.railway.app",
+  "fetched_at": "2026-06-10T23:40:06.215618+00:00",
+  "count": 16,
+  "skills": [
+    {
+      "code": "FS-01",
+      "slug": "project-management",
+      "name": "Project Management",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/project-management"
+    },
+    {
+      "code": "FS-02",
+      "slug": "literature-searching",
+      "name": "Literature Searching",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/literature-searching"
+    },
+    {
+      "code": "FS-03",
+      "slug": "literature-synthesis",
+      "name": "Literature Synthesis",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/literature-synthesis"
+    },
+    {
+      "code": "FS-04",
+      "slug": "critical-appraisal",
+      "name": "Critical Appraisal",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/critical-appraisal"
+    },
+    {
+      "code": "FS-05",
+      "slug": "research-ethics",
+      "name": "Research Ethics",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/research-ethics"
+    },
+    {
+      "code": "FS-06",
+      "slug": "quantitative-methods",
+      "name": "Quantitative Methods",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/quantitative-methods"
+    },
+    {
+      "code": "FS-07",
+      "slug": "qualitative-methods",
+      "name": "Qualitative Methods",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/qualitative-methods"
+    },
+    {
+      "code": "FS-08",
+      "slug": "mixed-methods",
+      "name": "Mixed Methods",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/mixed-methods"
+    },
+    {
+      "code": "FS-09",
+      "slug": "statistical-literacy",
+      "name": "Statistical Literacy",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/statistical-literacy"
+    },
+    {
+      "code": "FS-10",
+      "slug": "data-management",
+      "name": "Data Management",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/data-management"
+    },
+    {
+      "code": "FS-11",
+      "slug": "research-software",
+      "name": "Research Software",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/research-software"
+    },
+    {
+      "code": "FS-12",
+      "slug": "academic-writing",
+      "name": "Academic Writing",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/academic-writing"
+    },
+    {
+      "code": "FS-13",
+      "slug": "research-presentation",
+      "name": "Research Presentation",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/research-presentation"
+    },
+    {
+      "code": "FS-14",
+      "slug": "research-dissemination",
+      "name": "Research Dissemination",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/research-dissemination"
+    },
+    {
+      "code": "FS-15",
+      "slug": "supervision-and-mentoring",
+      "name": "Supervision & Mentoring",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/supervision-and-mentoring"
+    },
+    {
+      "code": "FS-16",
+      "slug": "grant-writing",
+      "name": "Grant Writing",
+      "url": "https://compendium-web-production.up.railway.app/library/skills/grant-writing"
+    }
+  ]
+}
