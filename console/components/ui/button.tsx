@@ -4,26 +4,26 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[var(--radius-signature)] text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-[#289642] text-white hover:bg-[#1f7834] focus-visible:ring-[#289642]",
+          "bg-[var(--green-primary)] text-white hover:bg-[var(--green-hover)] focus-visible:ring-[var(--green-primary)]",
         destructive:
-          "bg-[#dc2626] text-white hover:bg-[#b91c1c] focus-visible:ring-[#dc2626]",
+          "bg-[var(--color-destructive)] text-white hover:bg-[#b91c1c] focus-visible:ring-[var(--color-destructive)]",
         outline:
-          "border border-[#d4cfc5] bg-white hover:bg-[#F8F5EE] text-[#0E3A27]",
+          "border border-[var(--border-primary)] bg-white hover:bg-[var(--surface-hover)] text-[var(--text-primary)]",
         secondary:
-          "bg-[#e8e4dc] text-[#0E3A27] hover:bg-[#d4cfc5]",
-        ghost: "hover:bg-[#e8e4dc] text-[#0E3A27]",
-        link: "text-[#289642] underline-offset-4 hover:underline",
+          "bg-[var(--surface-hover)] text-[var(--text-primary)] hover:bg-[var(--border-primary)]",
+        ghost: "hover:bg-[var(--surface-hover)] text-[var(--text-primary)]",
+        link: "text-[var(--green-primary)] underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "h-9 px-3.5 py-2 text-sm",
+        sm: "h-8 rounded-[var(--radius-signature)] px-2.5 text-xs",
+        lg: "h-10 rounded-[var(--radius-signature)] px-6",
+        icon: "h-9 w-9",
       },
     },
     defaultVariants: {

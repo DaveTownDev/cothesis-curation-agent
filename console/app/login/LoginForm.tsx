@@ -9,13 +9,12 @@ function LoginFormInner() {
   const error = params.get("error")
 
   return (
-    <form
-      action="/api/auth/login"
-      method="POST"
-      className="rounded-xl border border-[#d4cfc5] bg-white p-8 shadow-sm space-y-5"
-    >
+    <form action="/api/auth/login" method="POST" className="space-y-4">
       <div>
-        <label htmlFor="passcode" className="block text-sm font-medium text-[#0E3A27] mb-1.5">
+        <label
+          htmlFor="passcode"
+          className="mb-1 block text-xs font-medium text-[var(--text-primary)]"
+        >
           Access passcode
         </label>
         <input
@@ -24,17 +23,21 @@ function LoginFormInner() {
           type="password"
           autoComplete="current-password"
           required
-          className="w-full rounded-md border border-[#d4cfc5] px-3 py-2 text-sm text-[#0E3A27] placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#289642]"
+          className="w-full rounded-[var(--radius-signature)] border border-[var(--border-primary)] bg-white px-3 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-body)] focus:outline-none focus:ring-2 focus:ring-[var(--green-primary)]"
           placeholder="Enter your passcode"
         />
       </div>
       {error === "locked" && (
-        <p className="text-sm text-[#dc2626]">Too many attempts — try again in 15 minutes.</p>
+        <p className="text-xs text-[var(--color-destructive)]">
+          Too many attempts — try again in 15 minutes.
+        </p>
       )}
       {error && error !== "locked" && (
-        <p className="text-sm text-[#dc2626]">Incorrect passcode — please try again.</p>
+        <p className="text-xs text-[var(--color-destructive)]">
+          Incorrect passcode — please try again.
+        </p>
       )}
-      <Button type="submit" className="w-full">
+      <Button type="submit" className="w-full" size="default">
         Sign in
       </Button>
     </form>

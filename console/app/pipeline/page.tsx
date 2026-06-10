@@ -47,8 +47,11 @@ export default async function PipelinePage({
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <h1 className="font-serif text-3xl font-semibold text-[#0E3A27]">Pipeline runs</h1>
+      <div className="flex items-center gap-3 flex-wrap">
+        <div>
+          <p className="hitl-eyebrow">Agent pipeline</p>
+          <h1 className="hitl-page-title">Pipeline runs</h1>
+        </div>
         <Badge variant="secondary">{runs.length} records</Badge>
       </div>
 

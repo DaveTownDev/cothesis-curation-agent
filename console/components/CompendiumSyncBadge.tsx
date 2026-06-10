@@ -26,7 +26,7 @@ export function CompendiumSyncBadge({
         href={compendiumUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-1 text-xs text-[#03848F] hover:underline"
+        className="flex items-center gap-1 text-xs text-[var(--color-teal-accent)] hover:underline"
         onClick={(e) => e.stopPropagation()}
       >
         <CheckCircle size={12} />

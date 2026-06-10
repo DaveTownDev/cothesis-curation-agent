@@ -50,15 +50,18 @@ export default async function ReviewQueuePage({
     <div className="space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3 flex-wrap">
-          <h1 className="font-serif text-3xl font-semibold text-[#0E3A27]">Review queue</h1>
+          <div>
+            <p className="hitl-eyebrow">Human review</p>
+            <h1 className="hitl-page-title">Review queue</h1>
+          </div>
           <Badge variant="secondary">{items.length} pending</Badge>
           {avgQuality !== null && (
-            <span className="text-sm text-[#6b7280]">
+            <span className="text-xs text-[var(--text-body)]">
               avg quality: <strong style={{ color: qualityColour(avgQuality) }}>{avgQuality}</strong>
             </span>
           )}
           {startHref && (
-            <a href={startHref} className="text-sm font-medium text-[#289642] hover:underline">
+            <a href={startHref} className="text-xs font-medium text-[var(--green-primary)] hover:underline">
               Start reviewing →
             </a>
           )}

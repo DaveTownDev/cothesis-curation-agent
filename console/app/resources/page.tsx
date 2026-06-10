@@ -35,10 +35,13 @@ export default async function ResourcesPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <h1 className="font-serif text-3xl font-semibold text-[#0E3A27]">Published</h1>
+      <div className="flex items-center gap-3 flex-wrap">
+        <div>
+          <p className="hitl-eyebrow">Compendium sync</p>
+          <h1 className="hitl-page-title">Published</h1>
+        </div>
         <Badge variant="secondary">{resources.length} resources</Badge>
-        <span className="text-sm text-[#6b7280]">
+        <span className="text-xs text-[var(--text-body)]">
           {synced} synced to Compendium
         </span>
       </div>

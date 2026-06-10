@@ -41,13 +41,16 @@ export default async function DashboardPage() {
       : null
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="font-serif text-3xl font-semibold text-[#0E3A27]">Dashboard</h1>
+    <div className="space-y-5">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="hitl-eyebrow">Curation pipeline</p>
+          <h1 className="hitl-page-title">Dashboard</h1>
+        </div>
         {pendingReview > 0 && (
           <Link
             href="/review"
-            className="flex items-center gap-2 rounded-lg bg-[#289642] px-4 py-2 text-sm text-white hover:bg-[#1f7834] transition-colors"
+            className="hitl-nav-cta flex items-center gap-2 px-3"
           >
             <ClipboardList size={16} />
             {pendingReview} item{pendingReview !== 1 ? "s" : ""} awaiting review

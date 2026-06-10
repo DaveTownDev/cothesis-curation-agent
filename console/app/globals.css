@@ -1,16 +1,48 @@
 @import "tailwindcss";
 
+/* CoThesis brand tokens — aligned with compendium-web globals.css */
+:root {
+  --bg-cream: #faf7f4;
+  --bg-forest: #0e3a27;
+  --bg-navy: #0d2b36;
+  --green-primary: #289642;
+  --green-light: #4aba64;
+  --green-hover: #1e7a32;
+  --green-muted: #8aab97;
+  --green-tint: #eaf2ed;
+  --text-primary: #1a1510;
+  --text-body: #7e7167;
+  --text-heading-alt: #2d2518;
+  --text-on-dark: #faf7f4;
+  --text-on-dark-70: rgba(250, 247, 244, 0.7);
+  --surface-white: #ffffff;
+  --surface-hover: #f5f0eb;
+  --border-primary: #e8e0d8;
+  --border-card: rgba(232, 224, 216, 0.4);
+  --radius-signature: 6px;
+  --shadow-card:
+    0 1px 3px rgba(45, 37, 24, 0.04),
+    0 4px 16px rgba(45, 37, 24, 0.06);
+
+  /* HITL density — tighter than public Compendium */
+  --hitl-page-py: 1.25rem;
+  --hitl-page-px: 1rem;
+  --hitl-card-p: 1rem;
+  --hitl-card-gap: 0.75rem;
+  --hitl-subbar-h: 2.25rem;
+}
+
 @theme inline {
-  --color-background: #F8F5EE;
-  --color-foreground: #0E3A27;
-  --color-forest-green: #0E3A27;
-  --color-primary-green: #289642;
-  --color-teal-accent: #03848F;
-  --color-cream: #F8F5EE;
-  --color-muted: #e8e4dc;
-  --color-muted-foreground: #6b7280;
-  --color-border: #d4cfc5;
-  --color-card: #ffffff;
+  --color-background: var(--bg-cream);
+  --color-foreground: var(--text-primary);
+  --color-forest-green: var(--bg-forest);
+  --color-primary-green: var(--green-primary);
+  --color-teal-accent: #03848f;
+  --color-cream: var(--bg-cream);
+  --color-muted: var(--surface-hover);
+  --color-muted-foreground: var(--text-body);
+  --color-border: var(--border-primary);
+  --color-card: var(--surface-white);
   --color-destructive: #dc2626;
 
   --font-sans: var(--font-instrument-sans), system-ui, sans-serif;
@@ -18,7 +50,212 @@
 }
 
 body {
-  background: var(--color-cream);
-  color: var(--color-foreground);
+  background: var(--bg-cream);
+  color: var(--text-primary);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── App chrome (mirrors compendium .cmp-nav / .cmp-subbar, compact) ── */
+
+.hitl-nav-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.hitl-nav-top {
+  background: rgba(250, 247, 244, 0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-card);
+}
+
+.hitl-nav-inner {
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: 3.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.hitl-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-shrink: 0;
+}
+
+.hitl-brand-logo {
+  height: 1.375rem;
+  width: auto;
+  display: block;
+}
+
+.hitl-brand-divider {
+  width: 1px;
+  height: 1.125rem;
+  background: var(--border-primary);
+}
+
+.hitl-brand-product {
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  color: var(--text-heading-alt);
+  white-space: nowrap;
+}
+
+.hitl-nav-links {
+  display: none;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.8125rem;
+  color: var(--text-body);
+}
+
+@media (min-width: 768px) {
+  .hitl-nav-links {
+    display: flex;
+  }
+}
+
+.hitl-nav-link {
+  padding: 0.25rem 0;
+  transition: color 150ms;
+}
+
+.hitl-nav-link:hover {
+  color: var(--text-primary);
+}
+
+.hitl-nav-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hitl-nav-cta {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  padding: 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: var(--radius-signature);
+  background: var(--green-primary);
+  color: #fff;
+  transition: background 150ms;
+  white-space: nowrap;
+}
+
+.hitl-nav-cta:hover {
+  background: var(--green-hover);
+}
+
+.hitl-nav-ghost {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  padding: 0 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-body);
+  border-radius: var(--radius-signature);
+  transition: background 150ms, color 150ms;
+}
+
+.hitl-nav-ghost:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.hitl-subbar {
+  background: var(--surface-white);
+  border-bottom: 1px solid var(--border-card);
+}
+
+.hitl-subbar-inner {
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: var(--hitl-subbar-h);
+  display: flex;
+  align-items: stretch;
+}
+
+.hitl-subbar-tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-body);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 120ms, border-color 120ms, background 120ms;
+  white-space: nowrap;
+}
+
+.hitl-subbar-tab:first-child {
+  padding-left: 0;
+}
+
+.hitl-subbar-tab:hover {
+  color: var(--text-primary);
+  background: var(--surface-hover);
+}
+
+.hitl-subbar-tab.is-active {
+  color: var(--text-primary);
+  font-weight: 500;
+  border-bottom-color: var(--green-primary);
+  background: rgba(40, 150, 66, 0.04);
+}
+
+/* ── Page utilities ── */
+
+.hitl-main {
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: var(--hitl-page-py) var(--hitl-page-px);
+}
+
+.hitl-page-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-heading-alt);
+  line-height: 1.2;
+}
+
+.hitl-page-subtitle {
+  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--text-body);
+  line-height: 1.5;
+}
+
+.hitl-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green-primary);
+}
+
+.hitl-card {
+  border-radius: var(--radius-signature);
+  border: 1px solid var(--border-primary);
+  background: var(--surface-white);
+  box-shadow: var(--shadow-card);
 }
