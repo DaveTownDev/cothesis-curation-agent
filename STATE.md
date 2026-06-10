@@ -3,21 +3,15 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-**Reprocess paused + fixes in flight (2026-06-10).** Live reprocess **stopped at 76/1512** (quality issues). Firestore holds ~74 pipeline_state · ~69 review_queue from partial run. **Do not** `reset_and_reprocess_live --confirm-reset` again without approval.
+**Reprocess paused (2026-06-11).** Live reprocess **stopped at 76/1512** (quality issues). Appraisal backfill applied to partial-run queue docs. **Do not** `reset_and_reprocess_live --confirm-reset` or restart full 1512 reprocess without approval.
 
-**Fixes (local, uncommitted):**
-- `ai_confidence` now copied in `assemble_draft_record` ([pipeline quality investigation](ba9c7095-9525-42bd-a97a-6a71a65b6991)) — backfill 74 records from `drafts` before trusting console %
-- **73 live subtypes** fetched + validated + console picker ([subtype coverage](8eb6c9b1-be37-49ed-a5fb-e2daf0c189b2)) — `python -m scripts.fetch_live_taxonomy`
-- `scripts/sync_live_to_enrichment_queue` — 1,512 rows in Railway `enrichment_queue`
-- `scripts/reset_and_reprocess_live` + `agents/shared/firestore_reset.py`
+**Shipped @ `ec7f459` (2026-06-11, local only — not pushed):** subtype taxonomy (`live_subtypes.json`), enrichment queue sync, review-queue appraisal backfill module, console taxonomy/QA UI, pipeline schema fixes. **30 pytest** on touched modules green pre-commit.
 
-**QA / HITL fixes (local):** `qa_audit` is post-pipeline only (`write_qa_audit.py`); console merges `drafts` for confidence + shows "Source QA audit not run". Backfill: `python -m scripts.backfill_review_queue_appraisal` then audit + `write_qa_audit`. See [missing QA fix](0272db5d-af8d-4a13-bd19-3b2ab6b39bce).
+**Ops (2026-06-11):** console **`console-00017-lcd`** @ https://console-791873451733.us-central1.run.app. Backfill `scripts.backfill_review_queue_appraisal`: **50** `review_queue` docs, **9** `draft_records` (dry-run matched 50/50). Read-only `audit_records` → `/tmp/cothesis_audit.json` (119 scorecards). **`write_qa_audit` skipped** — no `/tmp/cothesis_source_accuracy.json` (LLM source-accuracy layer not run).
 
-**Taxonomy pickers (local):** methodology/specialty/subtype + thesis stage labels in console — [methodology](92df0431-7c5e-4f9c-b405-004cd6bde557), [thesis](a2cd71c7-9016-4fc9-9686-ae7919870f18). **~40 files uncommitted** — commit + `deploy_console.sh` before judging.
+**Resume pipeline (when approved):** `reprocess_live_resources --skip-existing` (not another full reset).
 
-**Resume pipeline:** only after deploy + backfill: `reprocess_live_resources --skip-existing` (not another full reset).
-
-**Judge demo ready.** Console `console-00016-zn7`. Docs: `docs/JUDGE_GUIDE.md`, `docs/DEMO_SCRIPT.md`.
+**Judge demo ready.** Docs: `docs/JUDGE_GUIDE.md`, `docs/DEMO_SCRIPT.md`.
 
 **Live taxonomy alignment (2026-06-09).** Pipeline + console now use full Compendium methodology (148) and specialty (53) lists from `data/taxonomy/live_*.json`. Refresh: `python -m scripts.fetch_live_taxonomy`. MVP grounding cards unchanged in `data/methodologies/*.md`.
 
@@ -25,7 +19,7 @@
 
 **Pushed @ `dbbd801` (2026-06-09):** live taxonomy alignment + QA console quick actions on `origin/main`.
 
-**Deployed (2026-06-09):** agent rev `cothesis-agent-00012-cn8` — fresh source image `sha256:4422e65e…` (built 2026-06-09, includes taxonomy Python post-`dbbd801`); MCP + datastore secrets + SA `agent-runtime@cothesis-curation-agent.iam.gserviceaccount.com`. Prior config-only rev `00011-fhk` (stale Jun 5 image). **Deployed (2026-06-10):** console rev `console-00015-496` @ https://console-791873451733.us-central1.run.app (catalog editor + live reprocess @ `2de0237`; QA shortcuts @ `abe9fcd`; nav restructure @ `90e066f`; compendium sync @ `843a9fa`; `COMPENDIUM_IMPORT_URL` + `IMPORT_API_KEY` from Secret Manager; `min-instances=1`, `CONSOLE_PUBLIC_URL` set). Live taxonomy: **148** methodologies + **53** specialties (`data/taxonomy/live_*.json`). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.
+**Deployed (2026-06-09):** agent rev `cothesis-agent-00012-cn8` — fresh source image `sha256:4422e65e…` (built 2026-06-09, includes taxonomy Python post-`dbbd801`); MCP + datastore secrets + SA `agent-runtime@cothesis-curation-agent.iam.gserviceaccount.com`. Prior config-only rev `00011-fhk` (stale Jun 5 image). **Deployed (2026-06-11):** console rev `console-00017-lcd` @ https://console-791873451733.us-central1.run.app (subtype taxonomy + QA/backfill @ `ec7f459`). **Deployed (2026-06-10):** console rev `console-00015-496` @ https://console-791873451733.us-central1.run.app (catalog editor + live reprocess @ `2de0237`; QA shortcuts @ `abe9fcd`; nav restructure @ `90e066f`; compendium sync @ `843a9fa`; `COMPENDIUM_IMPORT_URL` + `IMPORT_API_KEY` from Secret Manager; `min-instances=1`, `CONSOLE_PUBLIC_URL` set). Live taxonomy: **148** methodologies + **53** specialties (`data/taxonomy/live_*.json`). Demo re-seeded: 2 auto_accept + 10 review_needed, 0 errors.
 
 **Submission (human):** record demo video (`docs/DEMO_SCRIPT.md`), paste Devpost copy (`docs/SUBMISSION.md` — readiness + taxonomy updated 2026-06-10), familiarity scores (L75–79), grant judge GitHub access. Judge quick-start: `docs/JUDGE_GUIDE.md`.
 
