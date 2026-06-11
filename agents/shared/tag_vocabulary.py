@@ -233,6 +233,8 @@ def _format_node_line(taxonomy: str, node: dict[str, Any]) -> str:
     extra = ""
     if taxonomy == "thesis":
         bits: list[str] = []
+        if node.get("synonyms"):
+            bits.append(f"synonyms: {', '.join(_cap_terms(list(node['synonyms'])))}")
         if node.get("deliverables"):
             bits.append(f"deliverables: {node['deliverables']}")
         if node.get("search_terms"):
@@ -252,7 +254,15 @@ def _section_header(taxonomy: str) -> tuple[str, str]:
 
 
 def build_methodology_guide() -> str:
-    lines = [_section_header("methodology")[1], "", "Allowed methodology codes (leaf only):"]
+    from agents.taxonomy import MVP_DISAMBIGUATION
+
+    lines = [
+        _section_header("methodology")[1],
+        "",
+        MVP_DISAMBIGUATION,
+        "",
+        "Allowed methodology codes (leaf only):",
+    ]
     for node in _taxonomy_nodes()["methodology"]:
         if node.get("level") == "methodology":
             lines.append(_format_node_line("methodology", node))
@@ -293,7 +303,7 @@ def build_thesis_guide() -> str:
     lines = [
         "Allowed stage_codes — phases (TH, HI, EV, ST, IN, SH) and stages (e.g. IN-02, EV-03).",
         "Tag finest stage when confident; use phase only when resource spans a whole phase.",
-        "Match on deliverables and search_terms, not canonical stage names.",
+        "Match on deliverables, search_terms, and synonyms — not canonical stage names.",
         "",
     ]
     for node in _taxonomy_nodes()["thesis"]:

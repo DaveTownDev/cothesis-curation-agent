@@ -20,10 +20,10 @@ Return ONLY a single JSON object (no prose, no fences):
     // Articles ONLY — add this 7th dimension; omit entirely for all other resource types:
     // "ebm_level": {"score": number, "weight": number, "reasoning": string}
   },
-  "methodology_codes": string[],           // live platform codes (data/taxonomy/live_methodologies.json); max 5
-  "thesis_stage_signals": string[],        // TH | HI | EV | ST | IN | SH
+  "methodology_codes": string[],           // vocabulary LEAF methodology codes (SYN-04, OBS-11, …); max 5; [] if none — stored as relevance_to_methodology_codes
+  "thesis_stage_signals": string[],        // thesis phase/stage codes (TH, HI, EV-03, IN-02, …); [] if unclear
   "difficulty_level": string,              // beginner | intermediate | advanced
-  "relevance_to_discipline_codes": string[], // live specialty slugs (data/taxonomy/live_specialties.json); max 3
+  "relevance_to_discipline_codes": string[], // specialty CODES (PSYCH, CARDIO, …); max 3; [] if broadly applicable
   "proposed_badges": string[],             // max 3 from: editors_choice, best_free, best_beginners, best_time_poor, essential, expert_pick
   "ai_subtype_signal": string,             // AI-inferred subtype (distinct from resource_subtype_code FK)
   "ai_confidence": number,                 // 0-100; <70 forces requires_human_review=true regardless of quality_score
@@ -35,6 +35,16 @@ Return ONLY a single JSON object (no prose, no fences):
 }
 ```
 Temperature 0. Editorial descriptions (editorial_description, summary, editorial_description_plain) are produced by the Editorial agent — do not emit them here.
+
+## Taxonomy signals (appraisal vs classification)
+**Classification owns primary taxonomy** on the draft record (`methodology_codes`, `discipline_codes`, `stage_codes`, `skill_codes`). Your optional enrichment fields are **relevance signals only** — they inform scoring and HITL review but do not replace classification.
+
+- **`methodology_codes`** (→ `relevance_to_methodology_codes`): emit vocabulary **leaf** methodology codes when the resource is clearly about a specific research method; use `[]` when not methodology-specific or uncertain. Do not emit parent categories (e.g. `SYN`, `OBS`).
+- **`relevance_to_discipline_codes`**: emit canonical **specialty codes** (PSYCH, CARDIO), not URL slugs; max 3; omit (`[]`) when the resource applies across specialties.
+- **`thesis_stage_signals`**: emit phase codes (TH, HI, …) or stage codes (EV-03, IN-02) when the resource clearly supports that thesis phase/stage; `[]` when cross-cutting or unclear.
+- **Omit rather than guess** — empty arrays are correct when uncertain.
+
+Allowed codes: same vocabulary as classification (`data/taxonomy/tag_vocabulary.json`).
 
 ## Grounding rule (anti-hallucination — audit 2026-06-06)
 Base every score and every line of `reasoning` ONLY on the supplied title and

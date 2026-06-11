@@ -157,7 +157,7 @@ PLAIN_JARGON_TERMS = [
 
 
 # ---------------------------------------------------------------------------
-# Methodology grounding — full live platform code list from data/taxonomy/*.json.
+# Methodology grounding — vocabulary leaf codes from data/taxonomy/tag_vocabulary.json.
 # MVP disambiguation text retained for the four grounding-card methodologies.
 # ---------------------------------------------------------------------------
 

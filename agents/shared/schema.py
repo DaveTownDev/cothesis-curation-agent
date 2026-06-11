@@ -234,7 +234,7 @@ class ClassificationResult(BaseModel):
             if not is_valid_skill_code(norm):
                 raise ValueError(
                     f"Invalid skill code {code!r}. "
-                    f"Must be a foundation skill code from data/taxonomy/live_skills.json."
+                    f"Must be a foundation skill code from data/taxonomy/tag_vocabulary.json."
                 )
             normalized.append(norm)
         return normalized

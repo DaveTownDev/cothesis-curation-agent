@@ -3,6 +3,8 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
+**Taxonomy prompt alignment (2026-06-12):** Appraisal, refine_classification, orchestrator, and guide builders aligned to `tag_vocabulary.json` authority; MVP disambiguation wired into methodology guide; thesis synonyms in guide output. **Verification:** 66 pytest (`test_tag_vocabulary`, `test_taxonomy`, `test_refine_classification`).
+
 **Prompt improvement loop — close-out shipped (2026-06-12 @ `957fbdb`):** Fresh **20/20** `adk eval` baseline (`response_match_score` **0.174**, `rubric_pass_rate` **0.99**); **30** gold cases (5 HITL + 5 synthetic + 20 seed); gap-review fixes (Firestore `eval_gold_cases`, `domain_codes`, composite indexes, vocabulary-aligned console taxonomy). **Verification:** **455 pytest**; console lint/build; **production e2e smoke green** (auth, routes, HITL eval buttons, real dashboard eval card). **Deployed:** agent **`cothesis-agent-00014-k26`**; console **`console-00023-67t`**; batch Jobs **`run-batch`** + **`sync-to-compendium`** image refreshed; Scheduler **`benchmark-weekly`** (Sun 21:00 UTC → `run-benchmark --check-regression`). **Pushed** `origin/main` @ `957fbdb`.
 
 **Integration-verify prompt improvement loop (2026-06-11):** Fixed `eval-summary.json` schema drift — `console/lib/eval-summary.ts` normalizes benchmark output (`response_match_score`, nested `thresholds`) for dashboard; taxonomy reprocess tests aligned to vocabulary codes (`CARDIO`, `PSYCH`).

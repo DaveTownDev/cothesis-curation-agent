@@ -19,6 +19,14 @@ CLASSIFICATION_OK = {
 
 
 class TestRefineClassification:
+    def test_build_prompt_uses_unified_vocabulary_guide(self):
+        from scripts.refine_classification import _build_classification_prompt
+
+        prompt = _build_classification_prompt("article")
+        assert "Canonical tagging rules" in prompt
+        assert "Allowed specialty codes" in prompt
+        assert "discipline slugs" not in prompt.lower()
+
     def test_dry_run_does_not_write(self):
         from scripts.refine_classification import refine_classification_for_resource
 

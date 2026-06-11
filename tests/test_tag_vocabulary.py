@@ -112,3 +112,19 @@ class TestGuideBuilders:
         assert "Allowed methodology codes" in guide
         assert "Allowed specialty codes" in guide
         assert "THESIS phases and stages" in guide or "thesis" in guide.lower()
+
+    def test_methodology_guide_includes_match_terms_and_synonym(self):
+        guide = tv.build_methodology_guide()
+        assert "[match:" in guide
+        assert "Systematic review" in guide
+
+    def test_methodology_guide_includes_mvp_disambiguation(self):
+        from agents.taxonomy import MVP_DISAMBIGUATION
+
+        guide = tv.build_methodology_guide()
+        assert MVP_DISAMBIGUATION.splitlines()[0] in guide
+
+    def test_subtype_guide_includes_match_terms(self):
+        guide = tv.build_subtype_guide()
+        assert "[match:" in guide
+        assert "seminal paper" in guide

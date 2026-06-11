@@ -41,24 +41,12 @@ def _now() -> str:
 
 def _build_classification_prompt(orig_type: str) -> str:
     from agents.pipeline.deterministic import _load_prompt
-    from agents.shared.codes import (
-        METHODOLOGY_GUIDE,
-        REPORTING_GUIDELINE_GUIDE,
-        get_discipline_guide,
-        get_skill_guide,
-        get_subtype_guide,
-    )
+    from agents.shared.codes import REPORTING_GUIDELINE_GUIDE, get_classification_vocabulary_guide
 
     return (
         _load_prompt("classification")
-        + "\n\n## Methodology grounding (assign the best match or [] — do NOT force-fit)\n"
-        + METHODOLOGY_GUIDE
-        + "\n\n## Specialty / discipline slugs\n"
-        + get_discipline_guide()
-        + "\n\n## Resource subtypes\n"
-        + get_subtype_guide()
-        + "\n\n## Foundation skills\n"
-        + get_skill_guide()
+        + "\n\n"
+        + get_classification_vocabulary_guide()
         + "\n\n## Resource type\nThe source was ingested as type '" + orig_type + "'. "
         "Treat this as a prior for resource_type_code, but OVERRIDE it when the metadata "
         "contradicts it — never default to 'article' for databases, registries, books, "
