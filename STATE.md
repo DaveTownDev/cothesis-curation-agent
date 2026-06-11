@@ -3,7 +3,7 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-**Prompt improvement loop — close-out complete (2026-06-11):** Fresh **20/20** `adk eval` baseline (`response_match_score` **0.174**, `rubric_pass_rate` **0.99**); `taxonomy_audit --score-gold` **42/42**; benchmark runner fixes (venv `adk` path, `--config_file_path`, evalset JSON parser, auto `baseline.json` write); `validate_taxonomy_draft` moved to `agents/shared/taxonomy_rules.py` (fixes `adk eval` import). **Verification:** **455 pytest**; console lint/build; **e2e smoke green**. **Deployed:** Jobs **`run-benchmark`** + **`prompt-lab-run`** images refreshed; Firestore `prompt_proposals` composite index deployed. Prior: console **`console-00021-5p2`** @ `b5c39e9`. **Human:** weekly benchmark Scheduler; push uncommitted close-out; agent image redeploy; demo re-seed skipped.
+**Prompt improvement loop — close-out shipped (2026-06-12 @ `baccc79`):** Fresh **20/20** `adk eval` baseline (`response_match_score` **0.174**, `rubric_pass_rate` **0.99**); **30** gold cases (5 HITL + 5 synthetic + 20 seed); gap-review fixes (Firestore `eval_gold_cases`, `domain_codes`, composite indexes, vocabulary-aligned console taxonomy). **Verification:** **455 pytest**; console lint/build; **e2e smoke green**. **Deployed:** agent **`cothesis-agent-00014-k26`**; batch Jobs **`run-batch`** + **`sync-to-compendium`** image refreshed; Scheduler **`benchmark-weekly`** (Sun 21:00 UTC → `run-benchmark --check-regression`). Console **`console-00021-5p2`** unchanged. **Pushed** `origin/main` @ `baccc79`.
 
 **Integration-verify prompt improvement loop (2026-06-11):** Fixed `eval-summary.json` schema drift — `console/lib/eval-summary.ts` normalizes benchmark output (`response_match_score`, nested `thresholds`) for dashboard; taxonomy reprocess tests aligned to vocabulary codes (`CARDIO`, `PSYCH`).
 
@@ -27,7 +27,7 @@
 
 **QA queue routing @ `36ab6c1` (2026-06-11, pushed `origin/main`):** `auto_accept` no longer writes `review_queue`; console QA triage uses `console/lib/qa-issues.ts` (data-quality, URL, source-accuracy). **Verification:** 16 pytest (`test_qa_issues`, `test_deterministic_pipeline`).
 
-**Deployed (2026-06-11 @ `b5c39e9`):** console **`console-00021-5p2`** @ https://console-791873451733.us-central1.run.app (WS-B `/prompt-lab` + HITL eval loop); Jobs **`run-benchmark`** + **`prompt-lab-run`** (us-central1); Firestore indexes from `firestore.indexes.json`. Prior: console `00020-wqs`; agent **`cothesis-agent-00013-sd4`** (`adk deploy cloud_run` from `agents/` — see `docs/OPERATIONS.md`).
+**Deployed (2026-06-12 @ `baccc79`):** agent **`cothesis-agent-00014-k26`** @ https://cothesis-agent-791873451733.us-central1.run.app (403 unauth); console **`console-00021-5p2`** @ https://console-791873451733.us-central1.run.app; Jobs **`run-benchmark`**, **`prompt-lab-run`**, **`run-batch`**, **`sync-to-compendium`**; Scheduler **`benchmark-weekly`** (Sun 21:00 UTC). Prior agent: `00013-sd4`.
 
 **Ops (2026-06-11):** `scripts.write_qa_audit` → **119** `review_queue` docs updated (data-quality/URL only; no `/tmp/cothesis_source_accuracy.json`).
 
@@ -95,7 +95,7 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - [x] `research_database` resolved: subtype of `dataset` (v2.2) — 14-type enum unchanged
 
 ## In progress
-- (none — prompt loop close-out verified; commit close-out diff when ready)
+- (none — close-out committed, pushed, and deployed @ `baccc79`)
 
 ## Latest verification (2026-06-11 — prompt loop close-out)
 - `.venv/bin/pytest tests/ -q` — **455 passed**, 1 warning (`SequentialAgent` deprecation in prompt_lab)
@@ -107,12 +107,14 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - `bash scripts/e2e_console_smoke.sh` — **green** (review detail SKIP — no pending items)
 - `.venv/bin/pytest tests/test_sync_to_compendium.py tests/test_compendium_bridge.py -q` — **35 passed**
 
-## Deploy (2026-06-11 — prompt loop close-out)
-- `bash scripts/deploy_benchmark_job.sh` — Cloud Build **SUCCESS**; `run-benchmark` Job **updated**
-- `bash scripts/deploy_prompt_lab_job.sh` — Cloud Build **SUCCESS**; `prompt-lab-run` Job **updated** (`PROMPT_LAB_MAX_CASES=10`)
-- `firebase deploy --only firestore:indexes --project cothesis-curation-agent` — **complete** (dropped unnecessary single-field indexes)
-- **Skipped:** `bash scripts/deploy_console.sh` — already on `console-00021-5p2`; script uses `--allow-unauthenticated` (human-gated per CLAUDE.md)
-- **Skipped:** `scripts.seed_demo` — ~7 min Firestore mutation; reprocess paused at 76/1512
+## Deploy (2026-06-12 — close-out @ `baccc79`)
+- `git push origin main` — **SUCCESS** (`77faab8..baccc79`)
+- `.venv/bin/adk deploy cloud_run` from `agents/` — agent **`cothesis-agent-00014-k26`** (--no-allow-unauthenticated; SA + secrets preserved; curl **403**)
+- `bash scripts/deploy_batch_job.sh` — Cloud Build **SUCCESS**; **`run-batch`** + **`sync-to-compendium`** Jobs **updated**
+- Cloud Scheduler **`benchmark-weekly`** — **created** (Sun 21:00 UTC; OIDC `agent-runtime@`; body `run-benchmark --check-regression`)
+- Prior (2026-06-11): `deploy_benchmark_job.sh`, `deploy_prompt_lab_job.sh`, Firestore indexes — **complete**
+- **Skipped:** `bash scripts/deploy_console.sh` — already on `console-00021-5p2`; human-gated
+- **Skipped:** `scripts.seed_demo` — reprocess paused at 76/1512
 
 ## Latest verification (2026-06-11 — integration-verify)
 - `.venv/bin/pytest tests/ -q` — **454 passed**, 1 warning (`SequentialAgent` deprecation in prompt_lab)
@@ -168,10 +170,8 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - Login passcode (dev): `cothesis-demo` (set in `console/.env.local`)
 
 ## Blockers / waiting on human
-- **Push:** commit + push close-out diff (benchmark parser, `--score-gold`, taxonomy_rules move, baseline JSON)
-- **Benchmark Scheduler:** `gcloud run jobs execute run-benchmark --region us-central1 --project cothesis-curation-agent --args=--check-regression` — wire to weekly Cloud Scheduler (human)
-- **Agent redeploy:** `adk deploy cloud_run` from `agents/` to pick up `validate_taxonomy_draft` import fix in production image
 - **Reprocess paused:** live reprocess stopped at 76/1512 — do not restart without approval
+- **Console redeploy (optional):** `bash scripts/deploy_console.sh` — human-gated (`--allow-unauthenticated`)
 
 ## Decisions needing the human
 - (none open)
