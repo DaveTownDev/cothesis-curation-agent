@@ -109,6 +109,23 @@ Local run (after WS-A lands):
 GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.run_benchmark --check-regression
 ```
 
+**Dashboard refresh (no Vertex creds):** `python -m scripts.run_benchmark --skip-adk` updates `console/data/eval-summary.json` with a real pytest section.
+
+**ADK baseline capture** (requires ADC / Vertex on the machine running the command):
+
+```bash
+GOOGLE_CLOUD_PROJECT=cothesis-curation-agent GOOGLE_CLOUD_LOCATION=global \
+  .venv/bin/python -m scripts.run_benchmark --skip-pytest
+```
+
+**HITL gold cases on Cloud Run** write to Firestore `eval_gold_cases`. Export before aggregate/adk eval:
+
+```bash
+python -m scripts.export_gold_from_firestore
+python -m scripts.aggregate_gold_set
+# or: python -m scripts.aggregate_gold_set --from-firestore
+```
+
 **CI** — `.github/workflows/benchmark.yml` (WS-A) triggers on `eval/**`, `agents/prompts/**`, `scripts/run_benchmark.py`. **Weekly Scheduler** — separate from daily `run-batch` @ 20:00 UTC; human deploy via `bash scripts/deploy_benchmark_job.sh` (see below).
 
 ### Prompt-improvement deploy sequence

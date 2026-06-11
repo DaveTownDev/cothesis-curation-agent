@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from "react"
 import {
-  RESOURCE_TYPES, METHODOLOGY_OPTIONS, SPECIALTY_OPTIONS, SKILL_OPTIONS, THESIS_STAGE_OPTIONS,
-  DIFFICULTY_LEVELS, ACCESS_TYPES, subtypesForType, methodologyOptionLabel,
-  specialtyOptionLabel, skillOptionLabel, subtypeOptionLabel, thesisStageOptionLabel, type TaxonomyEdits,
+  RESOURCE_TYPES, METHODOLOGY_OPTIONS, SPECIALTY_OPTIONS, DOMAIN_OPTIONS, SKILL_OPTIONS,
+  THESIS_STAGE_OPTIONS, DIFFICULTY_LEVELS, ACCESS_TYPES, subtypesForType, methodologyOptionLabel,
+  specialtyOptionLabel, domainOptionLabel, skillOptionLabel, subtypeOptionLabel,
+  thesisStageOptionLabel, type TaxonomyEdits,
 } from "@/lib/taxonomy"
 
 interface Props {
@@ -43,7 +44,7 @@ export function TaxonomyEditor({ value, onChange }: Props) {
   )
 
   function toggleCode(
-    field: "methodology_codes" | "skill_codes" | "stage_codes" | "discipline_codes",
+    field: "methodology_codes" | "skill_codes" | "stage_codes" | "discipline_codes" | "domain_codes",
     code: string,
   ) {
     const set = new Set(value[field])
@@ -188,6 +189,33 @@ export function TaxonomyEditor({ value, onChange }: Props) {
                   }`}
                 >
                   {specialtyOptionLabel(s)}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <span className="text-[#6b7280] block mb-1">
+          Cross-specialty domains ({value.domain_codes.length} selected)
+        </span>
+        <div className={scrollCls}>
+          <div className="flex flex-wrap gap-1">
+            {DOMAIN_OPTIONS.map((d) => {
+              const on = value.domain_codes.includes(d.code)
+              return (
+                <button
+                  key={d.code}
+                  type="button"
+                  title={domainOptionLabel(d)}
+                  onClick={() => toggleCode("domain_codes", d.code)}
+                  className={`rounded px-1.5 py-0.5 text-[10px] leading-snug text-left transition-colors ${
+                    on ? "bg-[#0E3A27] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
+                  }`}
+                >
+                  <span className="font-mono">{d.code}</span>
+                  <span className="opacity-80"> — {d.name}</span>
                 </button>
               )
             })}

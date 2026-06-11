@@ -15,7 +15,7 @@ VALID_CLASSIFICATION = {
     "classification_confidence": 0.9,
     "access_type": "open_access",
     "skip_reason": None,
-    "discipline_codes": ["adult-psychiatry"],
+    "discipline_codes": ["PSYCH"],
     "difficulty_level": "intermediate",
 }
 

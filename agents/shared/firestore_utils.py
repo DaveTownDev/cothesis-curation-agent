@@ -15,6 +15,7 @@ COLLECTION_RESOURCES = "resources"
 COLLECTION_PIPELINE_STATE = "pipeline_state"
 COLLECTION_REVIEW_QUEUE = "review_queue"
 COLLECTION_EVAL_FAILURE_BUCKET = "eval_failure_bucket"
+COLLECTION_EVAL_GOLD_CASES = "eval_gold_cases"
 COLLECTION_PROMPT_PROPOSALS = "prompt_proposals"
 COLLECTION_PROMPT_LAB_RUNS = "prompt_lab_runs"
 

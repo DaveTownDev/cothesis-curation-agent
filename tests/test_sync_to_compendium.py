@@ -167,6 +167,11 @@ class TestPostToCompendium:
         body = call_kwargs.kwargs.get("json") or call_kwargs.args[1] if len(call_kwargs.args) > 1 else call_kwargs.kwargs["json"]
         assert body["source_tool"] == "claude"
         assert len(body["resources"]) == 2
+        for resource in body["resources"]:
+            assert "tags" in resource
+            assert isinstance(resource["tags"], list)
+            assert len(resource["tags"]) >= 1
+            assert resource["tags"][0]["taxonomy"] == "methodology"
 
     def test_uses_bearer_auth(self):
         with patch("scripts.sync.httpx.post") as mock_post:

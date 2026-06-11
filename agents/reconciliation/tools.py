@@ -11,6 +11,7 @@ import logging
 import os
 from typing import Optional
 
+from agents.shared.compendium_bridge import draft_record_to_vocabulary_tags
 from agents.shared.schema import (
     AIAssessmentDraft,
     ClassificationResult,
@@ -64,7 +65,7 @@ def assemble_draft_record(
     Sets editorial_status: 'proposed'. type_fields is empty for MVP;
     populated downstream from field_mapping_*.md.
     """
-    return {
+    record = {
         # Identity
         "resource_code": resource_code,
         "title": title,
@@ -78,6 +79,7 @@ def assemble_draft_record(
         # Classification signals
         "methodology_codes": classification.methodology_codes,
         "discipline_codes": classification.discipline_codes,
+        "domain_codes": classification.domain_codes,
         "stage_codes": classification.stage_codes,
         "difficulty_level": editorial.difficulty_level or classification.difficulty_level,
         "access_type": classification.access_type,
@@ -107,6 +109,8 @@ def assemble_draft_record(
         "editorial_status": "proposed",
         "requires_human_review": appraisal.requires_human_review,
     }
+    record["tags"] = draft_record_to_vocabulary_tags(record)
+    return record
 
 
 def fetch_existing_titles() -> list[dict]:

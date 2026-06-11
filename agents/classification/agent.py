@@ -24,6 +24,10 @@ try:
 except FileNotFoundError:
     _prompt_text = "Classification agent — see agents/prompts/classification.md"
 
+from agents.shared.codes import get_classification_vocabulary_guide
+
+_prompt_text = _prompt_text + "\n\n" + get_classification_vocabulary_guide()
+
 
 def validate_classification(classification_json: str) -> dict:
     """

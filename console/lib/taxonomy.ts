@@ -1,5 +1,4 @@
-/** Curator-editable taxonomy options — vocabulary is code authority; live scrape for on-site subset. */
-import liveMethodologies from "@/lib/data/taxonomy/live_methodologies.json"
+/** Curator-editable taxonomy options — vocabulary is code authority; live scrape for subtypes/skills. */
 import tagVocabulary from "@/lib/data/taxonomy/tag_vocabulary.json"
 import liveSubtypes from "@/lib/data/taxonomy/live_subtypes.json"
 import liveSkills from "@/lib/data/taxonomy/live_skills.json"
@@ -23,9 +22,18 @@ export const RESOURCE_TYPES = [
 
 export type MethodologyOption = { code: string; name: string; slug: string }
 
-export const METHODOLOGY_OPTIONS: MethodologyOption[] = liveMethodologies.methodologies.map(
-  (m) => ({ code: m.code, name: m.name, slug: m.slug }),
+type VocabMethodologyNode = { code: string; level: string; name: string; slug?: string }
+
+/** Vocabulary leaf methodology codes (140) — canonical for classification/publish gates. */
+export const METHODOLOGY_OPTIONS: MethodologyOption[] = (
+  tagVocabulary.taxonomies.methodology.nodes as VocabMethodologyNode[]
 )
+  .filter((n) => n.level === "methodology")
+  .map((m) => ({
+    code: m.code,
+    name: m.name.replace(/&amp;/g, "&"),
+    slug: m.slug ?? m.code.toLowerCase(),
+  }))
 
 /** @deprecated use METHODOLOGY_OPTIONS — kept for simple code-only consumers */
 export const METHODOLOGY_CODES = METHODOLOGY_OPTIONS.map((m) => m.code)
@@ -37,6 +45,20 @@ type VocabSpecialtyNode = {
   level: string
   name: string
   slug?: string
+}
+
+export type DomainOption = { code: string; name: string }
+
+type VocabDomainNode = { code: string; level: string; name: string }
+
+export const DOMAIN_OPTIONS: DomainOption[] = (
+  tagVocabulary.taxonomies.cross_specialty_domain.nodes as VocabDomainNode[]
+)
+  .filter((n) => n.level === "domain")
+  .map((n) => ({ code: n.code, name: n.name.replace(/&amp;/g, "&") }))
+
+export function domainOptionLabel(d: DomainOption): string {
+  return taxonomyCodeNameLabel(d.code, d.name)
 }
 
 export const SPECIALTY_OPTIONS: SpecialtyOption[] = (
@@ -137,6 +159,7 @@ export interface TaxonomyEdits {
   methodology_codes: string[]
   skill_codes: string[]
   discipline_codes: string[]
+  domain_codes: string[]
   stage_codes: string[]
   difficulty_level: string
   access_type: string

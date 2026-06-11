@@ -281,6 +281,10 @@ export interface AddToGoldSetResult {
   aggregate_note?: string
 }
 
+function isLocalDev(): boolean {
+  return !process.env.K_SERVICE
+}
+
 export async function addToGoldSet(
   itemId: string,
   edited: EditedDescriptions,
@@ -288,20 +292,36 @@ export async function addToGoldSet(
   failureMode?: string | null,
 ): Promise<AddToGoldSetResult> {
   const { json, eval_id } = await exportEvalCaseJson(itemId, edited, taxonomy, failureMode)
-  const dir = casesDir()
-  await mkdir(dir, { recursive: true })
-  const casePath = path.join(dir, `${eval_id}.json`)
-  await writeFile(casePath, json, "utf-8")
+  const caseDoc = JSON.parse(json) as Record<string, unknown>
 
+  const db = getFirestoreDb()
+  await db.collection("eval_gold_cases").doc(eval_id).set({
+    ...caseDoc,
+    updated_at: FieldValue.serverTimestamp(),
+  })
+
+  let casePath = `eval_gold_cases/${eval_id}`
   let aggregated = false
   let aggregateNote: string | undefined
-  try {
-    const root = repoRoot()
-    const python = path.join(root, ".venv", "bin", "python")
-    await execFileAsync(python, ["-m", "scripts.aggregate_gold_set"], { cwd: root })
-    aggregated = true
-  } catch {
-    aggregateNote = "Case file written; run python -m scripts.aggregate_gold_set locally to refresh gold_set.json"
+
+  if (isLocalDev()) {
+    const dir = casesDir()
+    await mkdir(dir, { recursive: true })
+    const localPath = path.join(dir, `${eval_id}.json`)
+    await writeFile(localPath, json, "utf-8")
+    casePath = localPath
+    try {
+      const root = repoRoot()
+      const python = path.join(root, ".venv", "bin", "python")
+      await execFileAsync(python, ["-m", "scripts.aggregate_gold_set"], { cwd: root })
+      aggregated = true
+    } catch {
+      aggregateNote =
+        "Case written to eval/cases; run python -m scripts.aggregate_gold_set to refresh gold_set.json"
+    }
+  } else {
+    aggregateNote =
+      "Case stored in Firestore eval_gold_cases; run python -m scripts.export_gold_from_firestore && aggregate locally"
   }
 
   return {

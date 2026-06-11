@@ -1,0 +1,81 @@
+{
+  "eval_id": "synthetic_template_audit_008",
+  "source": {
+    "resource_code": "synthetic_template_audit_008",
+    "origin": "synthetic",
+    "prompt_versions": {
+      "appraisal": "appraisal@1.0.0",
+      "classification": "classification@1.0.0",
+      "discovery": "discovery@1.0.0",
+      "editorial": "editorial@1.0.0",
+      "reconciliation": "reconciliation@1.0.0",
+      "qc_panel": "qc_panel@1.0.0",
+      "arbiter": "arbiter@1.0.0"
+    }
+  },
+  "expected_classification": {
+    "resource_type_code": "template",
+    "resource_subtype_code": "audit_tool",
+    "methodology_codes": [
+      "EVAL-01"
+    ],
+    "skill_codes": [
+      "FS-05"
+    ],
+    "stage_codes": [
+      "EV-02"
+    ],
+    "discipline_codes": [
+      "SURG"
+    ],
+    "tags": [],
+    "domain_codes": [
+      "QUALIMPROVE"
+    ]
+  },
+  "conversation": [
+    {
+      "user_content": {
+        "parts": [
+          {
+            "text": "Curate one template resource titled \"Clinical audit template\". URL: https://example.org/audit. Focus methodologies: EVAL-01.",
+            "role": null
+          }
+        ]
+      },
+      "final_response": {
+        "parts": [
+          {
+            "text": "Processed template \"Clinical audit template\". Quality score 80, AI confidence 76. Methodology codes: EVAL-01. Thesis stages: EV-02. Draft record created with editorial_status=proposed.",
+            "role": null
+          }
+        ]
+      },
+      "rubrics": [
+        {
+          "rubric_id": "r0"
+        },
+        {
+          "rubric_id": "r1"
+        },
+        {
+          "rubric_id": "r2"
+        },
+        {
+          "rubric_id": "r3"
+        },
+        {
+          "rubric_id": "r4"
+        }
+      ]
+    }
+  ],
+  "conversation_scenario": null,
+  "session_input": null,
+  "creation_timestamp": 0.0,
+  "rubrics": null,
+  "final_session_state": {
+    "resource_code": "synthetic_template_audit_008",
+    "pipeline_run_id": null
+  }
+}

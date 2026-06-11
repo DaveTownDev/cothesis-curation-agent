@@ -1,0 +1,78 @@
+{
+  "eval_id": "synthetic_software_rct_007",
+  "source": {
+    "resource_code": "synthetic_software_rct_007",
+    "origin": "synthetic",
+    "prompt_versions": {
+      "appraisal": "appraisal@1.0.0",
+      "classification": "classification@1.0.0",
+      "discovery": "discovery@1.0.0",
+      "editorial": "editorial@1.0.0",
+      "reconciliation": "reconciliation@1.0.0",
+      "qc_panel": "qc_panel@1.0.0",
+      "arbiter": "arbiter@1.0.0"
+    }
+  },
+  "expected_classification": {
+    "resource_type_code": "software",
+    "resource_subtype_code": "analysis_tool",
+    "methodology_codes": [
+      "EVAL-02"
+    ],
+    "skill_codes": [
+      "FS-12"
+    ],
+    "stage_codes": [
+      "EV-02"
+    ],
+    "discipline_codes": [
+      "GENMED"
+    ],
+    "tags": []
+  },
+  "conversation": [
+    {
+      "user_content": {
+        "parts": [
+          {
+            "text": "Curate one software resource titled \"RCT randomisation tool\". URL: https://example.org/rct. Focus methodologies: EVAL-02.",
+            "role": null
+          }
+        ]
+      },
+      "final_response": {
+        "parts": [
+          {
+            "text": "Processed software \"RCT randomisation tool\". Quality score 78, AI confidence 74. Methodology codes: EVAL-02. Thesis stages: EV-02. Draft record created with editorial_status=proposed.",
+            "role": null
+          }
+        ]
+      },
+      "rubrics": [
+        {
+          "rubric_id": "r0"
+        },
+        {
+          "rubric_id": "r1"
+        },
+        {
+          "rubric_id": "r2"
+        },
+        {
+          "rubric_id": "r3"
+        },
+        {
+          "rubric_id": "r4"
+        }
+      ]
+    }
+  ],
+  "conversation_scenario": null,
+  "session_input": null,
+  "creation_timestamp": 0.0,
+  "rubrics": null,
+  "final_session_state": {
+    "resource_code": "synthetic_software_rct_007",
+    "pipeline_run_id": null
+  }
+}

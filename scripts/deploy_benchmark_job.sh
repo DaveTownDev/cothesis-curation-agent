@@ -28,8 +28,22 @@ done
 echo "Building $IMG ..."
 gcloud builds submit --config cloudbuild.benchmark.yaml --substitutions=_IMAGE="$IMG" --project="$PROJECT" .
 
-echo "Updating job $JOB -> $IMG"
-gcloud run jobs update "$JOB" --image "$IMG" --region "$REGION" --project "$PROJECT"
+SA="${RUNTIME_SA:-agent-runtime@cothesis-curation-agent.iam.gserviceaccount.com}"
+
+if gcloud run jobs describe "$JOB" --region "$REGION" --project "$PROJECT" &>/dev/null; then
+  echo "Updating job $JOB -> $IMG"
+  gcloud run jobs update "$JOB" --image "$IMG" --region "$REGION" --project "$PROJECT"
+else
+  echo "Creating job $JOB -> $IMG"
+  gcloud run jobs create "$JOB" \
+    --image "$IMG" \
+    --region "$REGION" \
+    --project "$PROJECT" \
+    --service-account "$SA" \
+    --task-timeout 3600 \
+    --max-retries 1 \
+    --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT,GOOGLE_CLOUD_LOCATION=global"
+fi
 
 echo "Done. Smoke test with:"
 echo "  gcloud run jobs execute $JOB --region $REGION --project $PROJECT --args=--check-regression"

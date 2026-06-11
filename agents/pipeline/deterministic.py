@@ -325,7 +325,16 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         {"resource": resource_input, "metadata": metadata, "type_hint": orig_type},
         MODEL_FLASH_LITE,
     )
-    classification = parse_classification_json(cls_raw) if cls_raw else None
+    classification = None
+    if cls_raw:
+        try:
+            classification = parse_classification_json(cls_raw)
+        except Exception as exc:
+            from pydantic import ValidationError
+            if isinstance(exc, ValidationError):
+                logger.warning("Classification validation failed for %s: %s", rc, exc)
+            else:
+                raise
     if classification is None:
         classification = ClassificationResult(
             resource_type_code=orig_type,

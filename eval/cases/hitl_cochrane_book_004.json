@@ -1,0 +1,80 @@
+{
+  "eval_id": "hitl_cochrane_book_004",
+  "source": {
+    "resource_code": "hitl_cochrane_book_004",
+    "origin": "hitl",
+    "prompt_versions": {
+      "appraisal": "appraisal@1.0.0",
+      "classification": "classification@1.0.0",
+      "discovery": "discovery@1.0.0",
+      "editorial": "editorial@1.0.0",
+      "reconciliation": "reconciliation@1.0.0",
+      "qc_panel": "qc_panel@1.0.0",
+      "arbiter": "arbiter@1.0.0"
+    }
+  },
+  "expected_classification": {
+    "resource_type_code": "book",
+    "resource_subtype_code": "handbook",
+    "methodology_codes": [
+      "SYN-01"
+    ],
+    "skill_codes": [
+      "FS-07"
+    ],
+    "stage_codes": [
+      "EV-01",
+      "EV-02"
+    ],
+    "discipline_codes": [],
+    "tags": [],
+    "domain_codes": [
+      "EBM"
+    ]
+  },
+  "conversation": [
+    {
+      "user_content": {
+        "parts": [
+          {
+            "text": "Curate one book resource titled \"Cochrane Handbook\". URL: https://example.org/cochrane. Focus methodologies: SYN-01.",
+            "role": null
+          }
+        ]
+      },
+      "final_response": {
+        "parts": [
+          {
+            "text": "Processed book \"Cochrane Handbook\". Quality score 96, AI confidence 94. Methodology codes: SYN-01. Thesis stages: EV-01, EV-02. Draft record created with editorial_status=proposed.",
+            "role": null
+          }
+        ]
+      },
+      "rubrics": [
+        {
+          "rubric_id": "r0"
+        },
+        {
+          "rubric_id": "r1"
+        },
+        {
+          "rubric_id": "r2"
+        },
+        {
+          "rubric_id": "r3"
+        },
+        {
+          "rubric_id": "r4"
+        }
+      ]
+    }
+  ],
+  "conversation_scenario": null,
+  "session_input": null,
+  "creation_timestamp": 0.0,
+  "rubrics": null,
+  "final_session_state": {
+    "resource_code": "hitl_cochrane_book_004",
+    "pipeline_run_id": null
+  }
+}

@@ -23,12 +23,28 @@ fi
 echo "Building $IMG ..."
 gcloud builds submit --config cloudbuild.prompt-lab.yaml --substitutions=_IMAGE="$IMG" --project="$PROJECT" .
 
-echo "Updating job $JOB -> $IMG (PROMPT_LAB_MAX_CASES=$MAX_CASES)"
-gcloud run jobs update "$JOB" \
-  --image "$IMG" \
-  --region "$REGION" \
-  --project "$PROJECT" \
-  --set-env-vars "PROMPT_LAB_MAX_CASES=$MAX_CASES"
+SA="${RUNTIME_SA:-agent-runtime@cothesis-curation-agent.iam.gserviceaccount.com}"
+
+if gcloud run jobs describe "$JOB" --region "$REGION" --project "$PROJECT" &>/dev/null; then
+  echo "Updating job $JOB -> $IMG (PROMPT_LAB_MAX_CASES=$MAX_CASES)"
+  gcloud run jobs update "$JOB" \
+    --image "$IMG" \
+    --region "$REGION" \
+    --project "$PROJECT" \
+    --set-env-vars "PROMPT_LAB_MAX_CASES=$MAX_CASES"
+else
+  echo "Creating job $JOB -> $IMG (PROMPT_LAB_MAX_CASES=$MAX_CASES)"
+  gcloud run jobs create "$JOB" \
+    --image "$IMG" \
+    --region "$REGION" \
+    --project "$PROJECT" \
+    --service-account "$SA" \
+    --task-timeout 3600 \
+    --max-retries 1 \
+    --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT,GOOGLE_CLOUD_LOCATION=global,PROMPT_LAB_MAX_CASES=$MAX_CASES" \
+    --command python \
+    --args=-m,scripts.prompt_eval_loop
+fi
 
 echo "Done. Smoke test with:"
 echo "  gcloud run jobs execute $JOB --region $REGION --project $PROJECT"

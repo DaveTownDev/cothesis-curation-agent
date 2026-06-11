@@ -1,0 +1,80 @@
+{
+  "eval_id": "hitl_squire_domain_003",
+  "source": {
+    "resource_code": "hitl_squire_domain_003",
+    "origin": "hitl",
+    "prompt_versions": {
+      "appraisal": "appraisal@1.0.0",
+      "classification": "classification@1.0.0",
+      "discovery": "discovery@1.0.0",
+      "editorial": "editorial@1.0.0",
+      "reconciliation": "reconciliation@1.0.0",
+      "qc_panel": "qc_panel@1.0.0",
+      "arbiter": "arbiter@1.0.0"
+    },
+    "failure_mode": "domain not tagged"
+  },
+  "expected_classification": {
+    "resource_type_code": "reporting_guideline",
+    "resource_subtype_code": "primary_guideline",
+    "methodology_codes": [
+      "EVAL-01"
+    ],
+    "skill_codes": [
+      "FS-08"
+    ],
+    "stage_codes": [
+      "EV-03"
+    ],
+    "discipline_codes": [],
+    "tags": [],
+    "domain_codes": [
+      "QUALIMPROVE"
+    ]
+  },
+  "conversation": [
+    {
+      "user_content": {
+        "parts": [
+          {
+            "text": "Curate one reporting_guideline resource titled \"SQUIRE 2.0\". URL: https://example.org/squire. Focus methodologies: EVAL-01.",
+            "role": null
+          }
+        ]
+      },
+      "final_response": {
+        "parts": [
+          {
+            "text": "Processed reporting_guideline \"SQUIRE 2.0\". Quality score 90, AI confidence 85. Methodology codes: EVAL-01. Thesis stages: EV-03. Draft record created with editorial_status=proposed.",
+            "role": null
+          }
+        ]
+      },
+      "rubrics": [
+        {
+          "rubric_id": "r0"
+        },
+        {
+          "rubric_id": "r1"
+        },
+        {
+          "rubric_id": "r2"
+        },
+        {
+          "rubric_id": "r3"
+        },
+        {
+          "rubric_id": "r4"
+        }
+      ]
+    }
+  ],
+  "conversation_scenario": null,
+  "session_input": null,
+  "creation_timestamp": 0.0,
+  "rubrics": null,
+  "final_session_state": {
+    "resource_code": "hitl_squire_domain_003",
+    "pipeline_run_id": null
+  }
+}

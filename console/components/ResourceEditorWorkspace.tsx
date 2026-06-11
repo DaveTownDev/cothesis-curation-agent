@@ -31,6 +31,7 @@ function initialTaxonomy(draft: DraftRecord): TaxonomyEdits {
     methodology_codes: [...(draft.methodology_codes ?? [])],
     skill_codes: [...(draft.skill_codes ?? [])],
     discipline_codes: [...(draft.discipline_codes ?? [])],
+    domain_codes: [...(draft.domain_codes ?? [])],
     stage_codes: [...(draft.stage_codes ?? [])],
     difficulty_level: draft.difficulty_level ?? "intermediate",
     access_type: draft.access_type ?? "free",

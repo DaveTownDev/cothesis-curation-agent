@@ -18,7 +18,7 @@ class TestEvalExport:
             "methodology_codes": ["SYN-01"],
             "stage_codes": ["HI"],
             "discipline_codes": ["GENMED"],
-            "skill_codes": ["literature_search"],
+            "skill_codes": ["FS-02"],
             "quality_score": 88,
             "ai_confidence": 82,
             "editorial_status": "proposed",

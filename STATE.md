@@ -3,7 +3,9 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-**Integration-verify prompt improvement loop (2026-06-11):** Fixed `eval-summary.json` schema drift — `console/lib/eval-summary.ts` normalizes benchmark output (`response_match_score`, nested `thresholds`) for dashboard; taxonomy reprocess tests aligned to vocabulary codes (`CARDIO`, `PSYCH`). **Verification:** **454 pytest passed**; console lint/build clean; **e2e smoke green**. **Not done:** console redeploy with WS-B; prompt-lab Job deploy; fresh `adk eval` baseline capture.
+**Prompt improvement loop — close-out complete (2026-06-11):** Fresh **20/20** `adk eval` baseline (`response_match_score` **0.174**, `rubric_pass_rate` **0.99**); `taxonomy_audit --score-gold` **42/42**; benchmark runner fixes (venv `adk` path, `--config_file_path`, evalset JSON parser, auto `baseline.json` write); `validate_taxonomy_draft` moved to `agents/shared/taxonomy_rules.py` (fixes `adk eval` import). **Verification:** **455 pytest**; console lint/build; **e2e smoke green**. **Deployed:** Jobs **`run-benchmark`** + **`prompt-lab-run`** images refreshed; Firestore `prompt_proposals` composite index deployed. Prior: console **`console-00021-5p2`** @ `b5c39e9`. **Human:** weekly benchmark Scheduler; push uncommitted close-out; agent image redeploy; demo re-seed skipped.
+
+**Integration-verify prompt improvement loop (2026-06-11):** Fixed `eval-summary.json` schema drift — `console/lib/eval-summary.ts` normalizes benchmark output (`response_match_score`, nested `thresholds`) for dashboard; taxonomy reprocess tests aligned to vocabulary codes (`CARDIO`, `PSYCH`).
 
 **WS-B HITL console eval loop (2026-06-11):** Copy eval case, Add to gold set, Flag taxonomy error, Send to prompt lab on review detail; `eval_failure_bucket` writes; QA classification requeue → failure bucket; `/prompt-lab` page with diff viewer + approve/reject (PR instructions only). **Not done:** console redeploy with WS-B.
 
@@ -13,7 +15,7 @@
 
 **Modified (WS-D):** `agents/prompt_lab/` (new), `agents/prompts/prompt_lab_*.md` (new), `scripts/prompt_eval_loop.py` (new), `Dockerfile.prompt-lab` (new), `cloudbuild.prompt-lab.yaml` (new), `scripts/deploy_prompt_lab_job.sh` (new), `tests/test_prompt_lab_agents.py` (new), `tests/test_prompt_lab_cycle.py` (new).
 
-**WS-A eval infrastructure (2026-06-11):** 20 seed cases in `eval/cases/*.json` (`source.origin: seed`); aggregate → `eval/gold_set.json`; `eval/taxonomy_gold.json` **42** cases (vocabulary-validated via `eval/vocab.py`); `scripts/run_benchmark.py` + `eval/baseline.json`; **P2-08 complete** — CI `.github/workflows/benchmark.yml` (PR on `eval/**`, `agents/prompts/**`, `scripts/run_benchmark.py`); benchmark Job image `cloudbuild.benchmark.yaml` + `Dockerfile.benchmark` wired to `scripts/deploy_benchmark_job.sh`. **Verification:** `.venv/bin/pytest tests/test_run_benchmark.py -q` — **5 passed** (2026-06-11). **Not done:** fresh `adk eval` baseline capture; weekly Scheduler deploy (`deploy_benchmark_job.sh` **[DAVE] human-gated**).
+**WS-A eval infrastructure (2026-06-11):** 20 seed cases in `eval/cases/*.json` (`source.origin: seed`); aggregate → `eval/gold_set.json`; `eval/taxonomy_gold.json` **42** cases; `scripts/run_benchmark.py` + fresh `eval/baseline.json` (**20/20**, 2026-06-11); `taxonomy_audit --score-gold`; CI `.github/workflows/benchmark.yml`; benchmark Job deployed. **Verification:** `test_run_benchmark.py` **6 passed**; full adk eval green.
 
 **Modified (WS-A):** `eval/cases/*.json` (20), `eval/schemas/gold_case.schema.json`, `eval/cases/README.md`, `eval/vocab.py`, `eval/taxonomy_gold.json`, `eval/baseline.json`, `eval/gold_set.json` (regenerated), `scripts/aggregate_gold_set.py`, `scripts/run_benchmark.py`, `.github/workflows/benchmark.yml`, `cloudbuild.benchmark.yaml`, `Dockerfile.benchmark`, `scripts/deploy_benchmark_job.sh`, `tests/test_aggregate_gold.py`, `tests/test_taxonomy_gold.py`, `tests/test_run_benchmark.py`.
 
@@ -25,7 +27,7 @@
 
 **QA queue routing @ `36ab6c1` (2026-06-11, pushed `origin/main`):** `auto_accept` no longer writes `review_queue`; console QA triage uses `console/lib/qa-issues.ts` (data-quality, URL, source-accuracy). **Verification:** 16 pytest (`test_qa_issues`, `test_deterministic_pipeline`).
 
-**Deployed (2026-06-11):** console **`console-00020-wqs`**; agent **`cothesis-agent-00013-sd4`** (`adk deploy cloud_run` from `agents/`, no dedicated script — see `docs/OPERATIONS.md`).
+**Deployed (2026-06-11 @ `b5c39e9`):** console **`console-00021-5p2`** @ https://console-791873451733.us-central1.run.app (WS-B `/prompt-lab` + HITL eval loop); Jobs **`run-benchmark`** + **`prompt-lab-run`** (us-central1); Firestore indexes from `firestore.indexes.json`. Prior: console `00020-wqs`; agent **`cothesis-agent-00013-sd4`** (`adk deploy cloud_run` from `agents/` — see `docs/OPERATIONS.md`).
 
 **Ops (2026-06-11):** `scripts.write_qa_audit` → **119** `review_queue` docs updated (data-quality/URL only; no `/tmp/cothesis_source_accuracy.json`).
 
@@ -93,7 +95,24 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - [x] `research_database` resolved: subtype of `dataset` (v2.2) — 14-type enum unchanged
 
 ## In progress
-- (none — integration-verify green; next: console redeploy, prompt-lab Job deploy, `adk eval` baseline capture)
+- (none — prompt loop close-out verified; commit close-out diff when ready)
+
+## Latest verification (2026-06-11 — prompt loop close-out)
+- `.venv/bin/pytest tests/ -q` — **455 passed**, 1 warning (`SequentialAgent` deprecation in prompt_lab)
+- `.venv/bin/python -m scripts.run_benchmark --skip-pytest` — **exit 0** (~21 min); **20/20** cases; `response_match_score` **0.174**; `rubric_pass_rate` **0.99**; updated `eval/baseline.json` + `console/data/eval-summary.json`
+- `.venv/bin/python -m scripts.taxonomy_audit --score-gold` — **42/42** pass_rate **1.0**
+- `.venv/bin/python -m scripts.source_accuracy_audit --fixture eval/fixtures/source_accuracy_sample.json` — 2 records (`fail`: 1, `warn`: 1)
+- `GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.write_qa_audit --source-layer /tmp/cothesis_source_accuracy.json` — **169** docs (fixture codes not in queue → no source verdict merge)
+- `cd console && npm run lint && npm run build` — **clean**
+- `bash scripts/e2e_console_smoke.sh` — **green** (review detail SKIP — no pending items)
+- `.venv/bin/pytest tests/test_sync_to_compendium.py tests/test_compendium_bridge.py -q` — **35 passed**
+
+## Deploy (2026-06-11 — prompt loop close-out)
+- `bash scripts/deploy_benchmark_job.sh` — Cloud Build **SUCCESS**; `run-benchmark` Job **updated**
+- `bash scripts/deploy_prompt_lab_job.sh` — Cloud Build **SUCCESS**; `prompt-lab-run` Job **updated** (`PROMPT_LAB_MAX_CASES=10`)
+- `firebase deploy --only firestore:indexes --project cothesis-curation-agent` — **complete** (dropped unnecessary single-field indexes)
+- **Skipped:** `bash scripts/deploy_console.sh` — already on `console-00021-5p2`; script uses `--allow-unauthenticated` (human-gated per CLAUDE.md)
+- **Skipped:** `scripts.seed_demo` — ~7 min Firestore mutation; reprocess paused at 76/1512
 
 ## Latest verification (2026-06-11 — integration-verify)
 - `.venv/bin/pytest tests/ -q` — **454 passed**, 1 warning (`SequentialAgent` deprecation in prompt_lab)
@@ -149,8 +168,10 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - Login passcode (dev): `cothesis-demo` (set in `console/.env.local`)
 
 ## Blockers / waiting on human
-- **E2E smoke:** fix `console/lib/eval-summary.ts` to read new `run_benchmark.py` summary shape (or restore legacy fields in `console/data/eval-summary.json`) so `/dashboard` stops 500ing in smoke
-- **Baseline capture:** `eval/baseline.json` is a placeholder from the 2026-06-08 eval run; re-capture with `.venv/bin/python -m scripts.run_benchmark --skip-pytest` when `adk` is available locally
+- **Push:** commit + push close-out diff (benchmark parser, `--score-gold`, taxonomy_rules move, baseline JSON)
+- **Benchmark Scheduler:** `gcloud run jobs execute run-benchmark --region us-central1 --project cothesis-curation-agent --args=--check-regression` — wire to weekly Cloud Scheduler (human)
+- **Agent redeploy:** `adk deploy cloud_run` from `agents/` to pick up `validate_taxonomy_draft` import fix in production image
+- **Reprocess paused:** live reprocess stopped at 76/1512 — do not restart without approval
 
 ## Decisions needing the human
 - (none open)
@@ -166,6 +187,17 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 ## Deployed URLs
 - **Agent:** https://cothesis-agent-791873451733.us-central1.run.app (private, 403 unauth — IAP TODO for judges)
 - **Console:** https://console-791873451733.us-central1.run.app (public, passcode: `cothesis-demo-2026`)
+
+## Modified files this session (prompt loop close-out)
+- `scripts/run_benchmark.py` — venv `adk` resolution, `--config_file_path`, ADK 2.x evalset JSON parser, `write_baseline()`
+- `scripts/taxonomy_audit.py` — `--score-gold` flag; import `validate_taxonomy_draft` from shared
+- `agents/shared/taxonomy_rules.py` — `validate_taxonomy_draft()` (moved from scripts; fixes adk eval import)
+- `agents/qc_panel/tools.py` — import from `agents.shared.taxonomy_rules`
+- `scripts/deploy_benchmark_job.sh`, `scripts/deploy_prompt_lab_job.sh` — create-or-update Job
+- `firestore.indexes.json` — drop unnecessary single-field indexes
+- `eval/baseline.json`, `console/data/eval-summary.json` — fresh 20/20 capture
+- `eval/fixtures/source_accuracy_sample.json` — fixture for offline source-accuracy audit (new)
+- `tests/test_run_benchmark.py`, `tests/test_taxonomy_audit.py` — parser + import updates
 
 ## Modified files this session (WS-B)
 - `console/lib/eval-export.ts` — build ADK gold cases from HITL review data (new)
@@ -261,8 +293,9 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 
 ## Key commands (WS-A)
 - Aggregate gold set: `.venv/bin/python -m scripts.aggregate_gold_set`
-- Benchmark: `.venv/bin/python -m scripts.run_benchmark`
+- Benchmark (full): `.venv/bin/python -m scripts.run_benchmark` or `--skip-pytest` for adk-only
 - Regression gate: `.venv/bin/python -m scripts.run_benchmark --check-regression`
+- Taxonomy gold score: `.venv/bin/python -m scripts.taxonomy_audit --score-gold`
 - WS-A gate: `.venv/bin/pytest tests/test_aggregate_gold.py tests/test_taxonomy_gold.py tests/test_run_benchmark.py -q`
 
 ## Key commands (WS-A)

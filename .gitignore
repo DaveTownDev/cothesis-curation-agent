@@ -25,6 +25,7 @@ out/
 *.log
 data/live_resources/export.json
 data/live_resources/reprocess.log
+eval/_benchmark_subset.json
 .DS_Store
 
 # Build artifacts / coverage

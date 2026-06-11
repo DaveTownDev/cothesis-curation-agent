@@ -24,6 +24,7 @@ import { CheckCircle, XCircle, AlertCircle, RotateCcw, Pencil, Copy, Star, Flag,
 const TAXONOMY_FLAG_FIELDS = [
   { value: "methodology_codes", label: "Methodology codes" },
   { value: "discipline_codes", label: "Specialty codes" },
+  { value: "domain_codes", label: "Cross-specialty domains" },
   { value: "stage_codes", label: "Thesis stages" },
   { value: "resource_type_code", label: "Resource type" },
   { value: "resource_subtype_code", label: "Subtype" },

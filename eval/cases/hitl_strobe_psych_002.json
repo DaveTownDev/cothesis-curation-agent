@@ -1,0 +1,79 @@
+{
+  "eval_id": "hitl_strobe_psych_002",
+  "source": {
+    "resource_code": "hitl_strobe_psych_002",
+    "origin": "hitl",
+    "prompt_versions": {
+      "appraisal": "appraisal@1.0.0",
+      "classification": "classification@1.0.0",
+      "discovery": "discovery@1.0.0",
+      "editorial": "editorial@1.0.0",
+      "reconciliation": "reconciliation@1.0.0",
+      "qc_panel": "qc_panel@1.0.0",
+      "arbiter": "arbiter@1.0.0"
+    },
+    "failure_mode": "missed PSYCH specialty"
+  },
+  "expected_classification": {
+    "resource_type_code": "article",
+    "resource_subtype_code": "methodology_review",
+    "methodology_codes": [
+      "OBS-01"
+    ],
+    "skill_codes": [
+      "FS-05"
+    ],
+    "stage_codes": [
+      "HI-02"
+    ],
+    "discipline_codes": [
+      "PSYCH"
+    ],
+    "tags": []
+  },
+  "conversation": [
+    {
+      "user_content": {
+        "parts": [
+          {
+            "text": "Curate one article resource titled \"STROBE psychiatry chart review\". URL: https://example.org/strobe. Focus methodologies: OBS-01.",
+            "role": null
+          }
+        ]
+      },
+      "final_response": {
+        "parts": [
+          {
+            "text": "Processed article \"STROBE psychiatry chart review\". Quality score 84, AI confidence 79. Methodology codes: OBS-01. Thesis stages: HI-02. Draft record created with editorial_status=proposed.",
+            "role": null
+          }
+        ]
+      },
+      "rubrics": [
+        {
+          "rubric_id": "r0"
+        },
+        {
+          "rubric_id": "r1"
+        },
+        {
+          "rubric_id": "r2"
+        },
+        {
+          "rubric_id": "r3"
+        },
+        {
+          "rubric_id": "r4"
+        }
+      ]
+    }
+  ],
+  "conversation_scenario": null,
+  "session_input": null,
+  "creation_timestamp": 0.0,
+  "rubrics": null,
+  "final_session_state": {
+    "resource_code": "hitl_strobe_psych_002",
+    "pipeline_run_id": null
+  }
+}

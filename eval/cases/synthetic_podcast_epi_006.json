@@ -1,0 +1,79 @@
+{
+  "eval_id": "synthetic_podcast_epi_006",
+  "source": {
+    "resource_code": "synthetic_podcast_epi_006",
+    "origin": "synthetic",
+    "prompt_versions": {
+      "appraisal": "appraisal@1.0.0",
+      "classification": "classification@1.0.0",
+      "discovery": "discovery@1.0.0",
+      "editorial": "editorial@1.0.0",
+      "reconciliation": "reconciliation@1.0.0",
+      "qc_panel": "qc_panel@1.0.0",
+      "arbiter": "arbiter@1.0.0"
+    }
+  },
+  "expected_classification": {
+    "resource_type_code": "podcast",
+    "resource_subtype_code": "lecture",
+    "methodology_codes": [
+      "OBS-02"
+    ],
+    "skill_codes": [],
+    "stage_codes": [
+      "HI-01"
+    ],
+    "discipline_codes": [
+      "PUBLHLTH"
+    ],
+    "tags": [],
+    "domain_codes": [
+      "EPI"
+    ]
+  },
+  "conversation": [
+    {
+      "user_content": {
+        "parts": [
+          {
+            "text": "Curate one podcast resource titled \"Epidemiology methods podcast\". URL: https://example.org/pod. Focus methodologies: OBS-02.",
+            "role": null
+          }
+        ]
+      },
+      "final_response": {
+        "parts": [
+          {
+            "text": "Processed podcast \"Epidemiology methods podcast\". Quality score 72, AI confidence 68. Methodology codes: OBS-02. Thesis stages: HI-01. Draft record created with editorial_status=proposed.",
+            "role": null
+          }
+        ]
+      },
+      "rubrics": [
+        {
+          "rubric_id": "r0"
+        },
+        {
+          "rubric_id": "r1"
+        },
+        {
+          "rubric_id": "r2"
+        },
+        {
+          "rubric_id": "r3"
+        },
+        {
+          "rubric_id": "r4"
+        }
+      ]
+    }
+  ],
+  "conversation_scenario": null,
+  "session_input": null,
+  "creation_timestamp": 0.0,
+  "rubrics": null,
+  "final_session_state": {
+    "resource_code": "synthetic_podcast_epi_006",
+    "pipeline_run_id": null
+  }
+}

@@ -29,6 +29,8 @@ def _adk_executable() -> str:
         if candidate.is_file():
             return str(candidate)
     return "adk"
+
+
 GOLD_SET = ROOT / "eval" / "gold_set.json"
 BASELINE_PATH = ROOT / "eval" / "baseline.json"
 SUMMARY_PATH = ROOT / "console" / "data" / "eval-summary.json"
@@ -45,8 +47,46 @@ def run_pytest(quiet: bool = True) -> tuple[int, int | None]:
     return proc.returncode, count
 
 
+def _metrics_from_eval_result(path: Path) -> dict:
+    """Aggregate scores from ADK 2.x evalset_result JSON."""
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    cases = doc.get("eval_case_results") or []
+    rms_scores: list[float] = []
+    rubric_scores: list[float] = []
+    per_rubric: dict[str, list[float]] = {}
+    passed = sum(1 for case in cases if case.get("final_eval_status") == 1)
+    for case in cases:
+        for metric in case.get("overall_eval_metric_results") or []:
+            name = metric.get("metric_name") or ""
+            score = metric.get("score")
+            if score is None:
+                continue
+            val = float(score)
+            if name == "response_match_score":
+                rms_scores.append(val)
+            elif name == "rubric_based_final_response_quality_v1":
+                rubric_scores.append(val)
+                for rubric in (metric.get("details") or {}).get("rubric_scores") or []:
+                    rid = rubric.get("rubric_id")
+                    rs = rubric.get("score")
+                    if rid and rs is not None:
+                        per_rubric.setdefault(rid, []).append(float(rs))
+    total = len(cases)
+    return {
+        "response_match_score": round(sum(rms_scores) / len(rms_scores), 4) if rms_scores else None,
+        "rubric_pass_rate": round(sum(rubric_scores) / len(rubric_scores), 4) if rubric_scores else None,
+        "cases_passed": passed,
+        "cases_total": total,
+        "per_rubric": {
+            rid: round(sum(scores) / len(scores), 4)
+            for rid, scores in per_rubric.items()
+        },
+        "eval_result_path": str(path),
+    }
+
+
 def parse_adk_eval_output(stdout: str, stderr: str) -> dict:
-    """Best-effort parse of adk eval stdout for summary metrics."""
+    """Best-effort parse of adk eval stdout/stderr for summary metrics."""
     text = stdout + "\n" + stderr
     metrics: dict = {
         "response_match_score": None,
@@ -59,6 +99,8 @@ def parse_adk_eval_output(stdout: str, stderr: str) -> dict:
         (r"response_match_score[:\s]+([0-9.]+)", "response_match_score"),
         (r"rubric.*?([0-9.]+)\s*/\s*1", "rubric_pass_rate"),
         (r"(\d+)\s*/\s*(\d+)\s+pass", "cases_fraction"),
+        (r"Tests passed:\s*(\d+)", "tests_passed"),
+        (r"Tests failed:\s*(\d+)", "tests_failed"),
     ):
         m = re.search(pattern, text, re.IGNORECASE)
         if not m:
@@ -66,8 +108,23 @@ def parse_adk_eval_output(stdout: str, stderr: str) -> dict:
         if key == "cases_fraction":
             metrics["cases_passed"] = int(m.group(1))
             metrics["cases_total"] = int(m.group(2))
+        elif key == "tests_passed":
+            metrics["cases_passed"] = int(m.group(1))
+        elif key == "tests_failed":
+            failed = int(m.group(1))
+            if metrics.get("cases_passed") is not None:
+                metrics["cases_total"] = metrics["cases_passed"] + failed
         else:
             metrics[key] = float(m.group(1))
+
+    result_match = re.search(
+        r"Writing eval result to file:\s*(.+\.evalset_result\.json)",
+        stderr,
+    )
+    if result_match:
+        result_path = Path(result_match.group(1).strip())
+        if result_path.is_file():
+            metrics.update(_metrics_from_eval_result(result_path))
     return metrics
 
 
@@ -176,6 +233,24 @@ def write_summary(summary: dict, path: Path | None = None) -> None:
     out.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
 
 
+def write_baseline(summary: dict, adk_metrics: dict | None, path: Path = BASELINE_PATH) -> None:
+    """Persist regression gate baseline after a green adk eval run."""
+    if not adk_metrics or adk_metrics.get("exit_code", 1) != 0:
+        return
+    if summary.get("cases_passed") is None:
+        return
+    baseline = {
+        "captured_at": summary.get("updated_at"),
+        "note": "Captured by scripts.run_benchmark after green adk eval",
+        "response_match_score": summary.get("response_match_score"),
+        "rubric_pass_rate": summary.get("rubric_pass_rate"),
+        "cases_passed": summary.get("cases_passed"),
+        "cases_total": summary.get("cases_total"),
+        "per_rubric": adk_metrics.get("per_rubric") or {},
+    }
+    path.write_text(json.dumps(baseline, indent=2) + "\n", encoding="utf-8")
+
+
 def run_benchmark(
     *,
     skip_pytest: bool = False,
@@ -209,6 +284,8 @@ def run_benchmark(
         adk_metrics=adk_metrics,
     )
     write_summary(summary)
+    if not skip_adk and adk_metrics and adk_rc == 0:
+        write_baseline(summary, adk_metrics)
 
     exit_code = 0
     if not skip_adk and adk_metrics:

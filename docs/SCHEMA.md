@@ -23,7 +23,8 @@
 | `editorial_note` | string \| null | **Optional "Editor's note"** — human-authored rationale ("why this matters"); required for `featured` status only; never AI-written |
 | `quality_score` | number | **0-100** (denormalised snapshot from current AIAssessment) |
 | `methodology_codes` | string[] | **platform** codes (SYN/OBS/EVAL…); max 5 |
-| `discipline_codes` | string[] | ProfessionalDiscipline slugs; max 3 (was: `specialty_tags`) |
+| `discipline_codes` | string[] | Vocabulary **specialty codes** (e.g. `CARDIO`, `PSYCH`); max 3 (was: `specialty_tags`) |
+| `domain_codes` | string[] | Optional cross-specialty domain codes (e.g. `DIGHEALTH`, `EBM`); max 3 |
 | `stage_codes` | string[] | THESIS: TH/HI/EV/ST/IN/SH (was: `thesis_stages`) |
 | `skill_codes` | string[] | Foundation Skills FS-01..FS-16 |
 | `difficulty_level` | string | beginner / intermediate / advanced |
@@ -139,6 +140,7 @@ Do not conflate the two layers. The arbiter routes on `relevance_score` and `cla
 - `pipeline_state` — per-resource state machine + agent decisions + provenance.
 - `review_queue` — items routed to humans, with the arbiter's reason and panel result.
 - `eval_failure_bucket` — structured HITL / QA failures for the offline prompt lab (see below).
+- `eval_gold_cases` — HITL-captured ADK gold eval cases (`eval_id` doc key); export via `scripts/export_gold_from_firestore.py`.
 - `prompt_proposals` — proposed prompt diffs awaiting human PR merge (see below).
 - `prompt_lab_runs` — audit trail for `prompt-lab-run` Cloud Run Job executions (see below).
 
@@ -159,7 +161,7 @@ HITL-captured taxonomy / classification failures. **Append-only** from the conso
 | `review_queue_id` | string \| null | Optional Firestore doc id on `review_queue` |
 | `consumed_by_lab_run_id` | string \| null | Set when a prompt-lab Job picks up this record |
 
-**Indexes:** `created_at` DESC (`firestore.indexes.json`).
+**Indexes:** composite `consumed_by_lab_run_id` ASC + `created_at` DESC for pending-failure queries (`firestore.indexes.json`).
 
 ### `prompt_proposals`
 

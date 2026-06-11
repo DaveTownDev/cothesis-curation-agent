@@ -54,7 +54,7 @@ class TestAggregateGoldSet:
         with pytest.raises(ValueError, match="missing source"):
             write_gold_set(tmp_path / "out.json", cases_dir)
 
-    def test_repo_seed_cases_aggregate_to_twenty(self):
+    def test_repo_cases_aggregate_to_thirty_with_hitl(self):
         cases_dir = ROOT / "eval" / "cases"
         if not cases_dir.is_dir() or not list(cases_dir.glob("*.json")):
             pytest.skip("seed cases not migrated yet")
@@ -63,9 +63,10 @@ class TestAggregateGoldSet:
 
         paths = sorted(cases_dir.glob("*.json"))
         doc = aggregate_cases(paths)
-        assert len(doc["eval_cases"]) == 20
-        origins = {
+        assert len(doc["eval_cases"]) >= 30
+        origins = [
             json.loads(p.read_text(encoding="utf-8"))["source"]["origin"]
             for p in paths
-        }
-        assert origins == {"seed"}
+        ]
+        assert set(origins) >= {"seed", "hitl", "synthetic"}
+        assert sum(1 for o in origins if o == "hitl") >= 5

@@ -504,6 +504,246 @@
       "final_session_state": {}
     },
     {
+      "eval_id": "hitl_cochrane_book_004",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Curate one book resource titled \"Cochrane Handbook\". URL: https://example.org/cochrane. Focus methodologies: SYN-01.",
+                "role": null
+              }
+            ]
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Processed book \"Cochrane Handbook\". Quality score 96, AI confidence 94. Methodology codes: SYN-01. Thesis stages: EV-01, EV-02. Draft record created with editorial_status=proposed.",
+                "role": null
+              }
+            ]
+          },
+          "rubrics": [
+            {
+              "rubric_id": "r0"
+            },
+            {
+              "rubric_id": "r1"
+            },
+            {
+              "rubric_id": "r2"
+            },
+            {
+              "rubric_id": "r3"
+            },
+            {
+              "rubric_id": "r4"
+            }
+          ]
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": null,
+      "final_session_state": {
+        "resource_code": "hitl_cochrane_book_004",
+        "pipeline_run_id": null
+      }
+    },
+    {
+      "eval_id": "hitl_prisma_fix_001",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Curate one reporting_guideline resource titled \"PRISMA 2020\". URL: https://doi.org/10.1136/bmj.n71. Focus methodologies: SYN-04.",
+                "role": null
+              }
+            ]
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Processed reporting_guideline \"PRISMA 2020\". Quality score 92, AI confidence 88. Methodology codes: SYN-04. Thesis stages: SH-01. Draft record created with editorial_status=proposed.",
+                "role": null
+              }
+            ]
+          },
+          "rubrics": [
+            {
+              "rubric_id": "r0"
+            },
+            {
+              "rubric_id": "r1"
+            },
+            {
+              "rubric_id": "r2"
+            },
+            {
+              "rubric_id": "r3"
+            },
+            {
+              "rubric_id": "r4"
+            }
+          ]
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": null,
+      "final_session_state": {
+        "resource_code": "hitl_prisma_fix_001",
+        "pipeline_run_id": null
+      }
+    },
+    {
+      "eval_id": "hitl_record_dataset_005",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Curate one reporting_guideline resource titled \"RECORD statement\". URL: https://example.org/record. Focus methodologies: OBS-01.",
+                "role": null
+              }
+            ]
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Processed reporting_guideline \"RECORD statement\". Quality score 87, AI confidence 81. Methodology codes: OBS-01. Thesis stages: EV-03. Draft record created with editorial_status=proposed.",
+                "role": null
+              }
+            ]
+          },
+          "rubrics": [
+            {
+              "rubric_id": "r0"
+            },
+            {
+              "rubric_id": "r1"
+            },
+            {
+              "rubric_id": "r2"
+            },
+            {
+              "rubric_id": "r3"
+            },
+            {
+              "rubric_id": "r4"
+            }
+          ]
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": null,
+      "final_session_state": {
+        "resource_code": "hitl_record_dataset_005",
+        "pipeline_run_id": null
+      }
+    },
+    {
+      "eval_id": "hitl_squire_domain_003",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Curate one reporting_guideline resource titled \"SQUIRE 2.0\". URL: https://example.org/squire. Focus methodologies: EVAL-01.",
+                "role": null
+              }
+            ]
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Processed reporting_guideline \"SQUIRE 2.0\". Quality score 90, AI confidence 85. Methodology codes: EVAL-01. Thesis stages: EV-03. Draft record created with editorial_status=proposed.",
+                "role": null
+              }
+            ]
+          },
+          "rubrics": [
+            {
+              "rubric_id": "r0"
+            },
+            {
+              "rubric_id": "r1"
+            },
+            {
+              "rubric_id": "r2"
+            },
+            {
+              "rubric_id": "r3"
+            },
+            {
+              "rubric_id": "r4"
+            }
+          ]
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": null,
+      "final_session_state": {
+        "resource_code": "hitl_squire_domain_003",
+        "pipeline_run_id": null
+      }
+    },
+    {
+      "eval_id": "hitl_strobe_psych_002",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Curate one article resource titled \"STROBE psychiatry chart review\". URL: https://example.org/strobe. Focus methodologies: OBS-01.",
+                "role": null
+              }
+            ]
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Processed article \"STROBE psychiatry chart review\". Quality score 84, AI confidence 79. Methodology codes: OBS-01. Thesis stages: HI-02. Draft record created with editorial_status=proposed.",
+                "role": null
+              }
+            ]
+          },
+          "rubrics": [
+            {
+              "rubric_id": "r0"
+            },
+            {
+              "rubric_id": "r1"
+            },
+            {
+              "rubric_id": "r2"
+            },
+            {
+              "rubric_id": "r3"
+            },
+            {
+              "rubric_id": "r4"
+            }
+          ]
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": null,
+      "final_session_state": {
+        "resource_code": "hitl_strobe_psych_002",
+        "pipeline_run_id": null
+      }
+    },
+    {
       "eval_id": "obs01_article_011",
       "conversation": [
         {
@@ -2002,6 +2242,246 @@
       "creation_timestamp": 0.0,
       "rubrics": null,
       "final_session_state": {}
+    },
+    {
+      "eval_id": "synthetic_funding_grant_010",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Curate one funding resource titled \"NHMRC project grant guide\". URL: https://example.org/grant. Focus methodologies: none specified.",
+                "role": null
+              }
+            ]
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Processed funding \"NHMRC project grant guide\". Quality score 70, AI confidence 65. Methodology codes: none. Thesis stages: TH-01. Draft record created with editorial_status=proposed.",
+                "role": null
+              }
+            ]
+          },
+          "rubrics": [
+            {
+              "rubric_id": "r0"
+            },
+            {
+              "rubric_id": "r1"
+            },
+            {
+              "rubric_id": "r2"
+            },
+            {
+              "rubric_id": "r3"
+            },
+            {
+              "rubric_id": "r4"
+            }
+          ]
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": null,
+      "final_session_state": {
+        "resource_code": "synthetic_funding_grant_010",
+        "pipeline_run_id": null
+      }
+    },
+    {
+      "eval_id": "synthetic_podcast_epi_006",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Curate one podcast resource titled \"Epidemiology methods podcast\". URL: https://example.org/pod. Focus methodologies: OBS-02.",
+                "role": null
+              }
+            ]
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Processed podcast \"Epidemiology methods podcast\". Quality score 72, AI confidence 68. Methodology codes: OBS-02. Thesis stages: HI-01. Draft record created with editorial_status=proposed.",
+                "role": null
+              }
+            ]
+          },
+          "rubrics": [
+            {
+              "rubric_id": "r0"
+            },
+            {
+              "rubric_id": "r1"
+            },
+            {
+              "rubric_id": "r2"
+            },
+            {
+              "rubric_id": "r3"
+            },
+            {
+              "rubric_id": "r4"
+            }
+          ]
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": null,
+      "final_session_state": {
+        "resource_code": "synthetic_podcast_epi_006",
+        "pipeline_run_id": null
+      }
+    },
+    {
+      "eval_id": "synthetic_software_rct_007",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Curate one software resource titled \"RCT randomisation tool\". URL: https://example.org/rct. Focus methodologies: EVAL-02.",
+                "role": null
+              }
+            ]
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Processed software \"RCT randomisation tool\". Quality score 78, AI confidence 74. Methodology codes: EVAL-02. Thesis stages: EV-02. Draft record created with editorial_status=proposed.",
+                "role": null
+              }
+            ]
+          },
+          "rubrics": [
+            {
+              "rubric_id": "r0"
+            },
+            {
+              "rubric_id": "r1"
+            },
+            {
+              "rubric_id": "r2"
+            },
+            {
+              "rubric_id": "r3"
+            },
+            {
+              "rubric_id": "r4"
+            }
+          ]
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": null,
+      "final_session_state": {
+        "resource_code": "synthetic_software_rct_007",
+        "pipeline_run_id": null
+      }
+    },
+    {
+      "eval_id": "synthetic_template_audit_008",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Curate one template resource titled \"Clinical audit template\". URL: https://example.org/audit. Focus methodologies: EVAL-01.",
+                "role": null
+              }
+            ]
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Processed template \"Clinical audit template\". Quality score 80, AI confidence 76. Methodology codes: EVAL-01. Thesis stages: EV-02. Draft record created with editorial_status=proposed.",
+                "role": null
+              }
+            ]
+          },
+          "rubrics": [
+            {
+              "rubric_id": "r0"
+            },
+            {
+              "rubric_id": "r1"
+            },
+            {
+              "rubric_id": "r2"
+            },
+            {
+              "rubric_id": "r3"
+            },
+            {
+              "rubric_id": "r4"
+            }
+          ]
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": null,
+      "final_session_state": {
+        "resource_code": "synthetic_template_audit_008",
+        "pipeline_run_id": null
+      }
+    },
+    {
+      "eval_id": "synthetic_video_methods_009",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Curate one video resource titled \"Qualitative methods lecture\". URL: https://example.org/qual. Focus methodologies: OBS-03.",
+                "role": null
+              }
+            ]
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Processed video \"Qualitative methods lecture\". Quality score 75, AI confidence 70. Methodology codes: OBS-03. Thesis stages: HI-02. Draft record created with editorial_status=proposed.",
+                "role": null
+              }
+            ]
+          },
+          "rubrics": [
+            {
+              "rubric_id": "r0"
+            },
+            {
+              "rubric_id": "r1"
+            },
+            {
+              "rubric_id": "r2"
+            },
+            {
+              "rubric_id": "r3"
+            },
+            {
+              "rubric_id": "r4"
+            }
+          ]
+        }
+      ],
+      "conversation_scenario": null,
+      "session_input": null,
+      "creation_timestamp": 0.0,
+      "rubrics": null,
+      "final_session_state": {
+        "resource_code": "synthetic_video_methods_009",
+        "pipeline_run_id": null
+      }
     }
   ],
   "creation_timestamp": 0.0

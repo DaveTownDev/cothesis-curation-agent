@@ -3,6 +3,9 @@ Prompt lab root — ADK SequentialAgent for offline prompt improvement.
 
 Run locally: adk web agents/prompt_lab
 Job entrypoint: python -m scripts.prompt_eval_loop
+
+Note: ADK 2.x deprecates SequentialAgent in favour of explicit orchestration;
+keep SequentialAgent here until Context7 documents a drop-in migration path.
 """
 from __future__ import annotations
 

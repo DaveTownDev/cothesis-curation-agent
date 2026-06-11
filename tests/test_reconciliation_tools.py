@@ -78,7 +78,7 @@ class TestAssembleDraftRecord:
             classification_confidence=0.9,
             access_type="open_access",
             skip_reason=None,
-            discipline_codes=["adult-psychiatry"],
+            discipline_codes=["PSYCH"],
             difficulty_level="intermediate",
         )
         editorial = EditorialOutput(
@@ -116,6 +116,9 @@ class TestAssembleDraftRecord:
         assert record["ai_confidence"] == 88
         assert "relevance" in record["quality_dimensions"]
         assert record["methodology_codes"] == ["SYN-01"]
+        assert record["discipline_codes"] == ["PSYCH"]
+        assert record.get("domain_codes") == []
+        assert isinstance(record.get("tags"), list)
         assert record["editorial_status"] == "proposed"
         assert "type_fields" in record
 

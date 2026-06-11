@@ -84,6 +84,7 @@ export interface DraftRecord {
   editorial_note?: string | null
   methodology_codes: string[]
   discipline_codes: string[]
+  domain_codes?: string[]
   stage_codes: string[]
   difficulty_level: string
   access_type: string

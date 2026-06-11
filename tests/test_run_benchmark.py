@@ -56,6 +56,32 @@ class TestRunBenchmark:
         assert summary["unit_tests"] == 42
         assert summary["cases_passed"] == 20
 
+    def test_parse_adk_eval_output_from_eval_result_json(self):
+        from scripts.run_benchmark import _metrics_from_eval_result, parse_adk_eval_output
+
+        result_path = (
+            ROOT
+            / "agents"
+            / "pipeline"
+            / ".adk"
+            / "eval_history"
+            / "pipeline_cothesis_pipeline_gold_1781192495.3983831.evalset_result.json"
+        )
+        if not result_path.is_file():
+            pytest.skip("no local adk eval history")
+
+        direct = _metrics_from_eval_result(result_path)
+        assert direct["cases_total"] == 2
+        assert direct["cases_passed"] == 2
+        assert direct["response_match_score"] is not None
+        assert direct["rubric_pass_rate"] is not None
+
+        stderr = f"Writing eval result to file: {result_path}\n"
+        stdout = "Eval Run Summary\ncothesis_pipeline_gold:\n  Tests passed: 2\n  Tests failed: 0\n"
+        parsed = parse_adk_eval_output(stdout, stderr)
+        assert parsed["cases_passed"] == 2
+        assert parsed["cases_total"] == 2
+
     @patch("scripts.run_benchmark.subprocess.run")
     def test_run_adk_eval_invokes_cli(self, mock_run):
         mock_run.return_value = MagicMock(

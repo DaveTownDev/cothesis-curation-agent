@@ -1,0 +1,77 @@
+{
+  "eval_id": "synthetic_funding_grant_010",
+  "source": {
+    "resource_code": "synthetic_funding_grant_010",
+    "origin": "synthetic",
+    "prompt_versions": {
+      "appraisal": "appraisal@1.0.0",
+      "classification": "classification@1.0.0",
+      "discovery": "discovery@1.0.0",
+      "editorial": "editorial@1.0.0",
+      "reconciliation": "reconciliation@1.0.0",
+      "qc_panel": "qc_panel@1.0.0",
+      "arbiter": "arbiter@1.0.0"
+    }
+  },
+  "expected_classification": {
+    "resource_type_code": "funding",
+    "resource_subtype_code": "grant_scheme",
+    "methodology_codes": [],
+    "skill_codes": [
+      "FS-01"
+    ],
+    "stage_codes": [
+      "TH-01"
+    ],
+    "discipline_codes": [],
+    "tags": [],
+    "domain_codes": [
+      "HEALTHECON"
+    ]
+  },
+  "conversation": [
+    {
+      "user_content": {
+        "parts": [
+          {
+            "text": "Curate one funding resource titled \"NHMRC project grant guide\". URL: https://example.org/grant. Focus methodologies: none specified.",
+            "role": null
+          }
+        ]
+      },
+      "final_response": {
+        "parts": [
+          {
+            "text": "Processed funding \"NHMRC project grant guide\". Quality score 70, AI confidence 65. Methodology codes: none. Thesis stages: TH-01. Draft record created with editorial_status=proposed.",
+            "role": null
+          }
+        ]
+      },
+      "rubrics": [
+        {
+          "rubric_id": "r0"
+        },
+        {
+          "rubric_id": "r1"
+        },
+        {
+          "rubric_id": "r2"
+        },
+        {
+          "rubric_id": "r3"
+        },
+        {
+          "rubric_id": "r4"
+        }
+      ]
+    }
+  ],
+  "conversation_scenario": null,
+  "session_input": null,
+  "creation_timestamp": 0.0,
+  "rubrics": null,
+  "final_session_state": {
+    "resource_code": "synthetic_funding_grant_010",
+    "pipeline_run_id": null
+  }
+}

@@ -6,6 +6,7 @@ monolith. Cases are sorted deterministically by eval_id.
 
   python -m scripts.aggregate_gold_set
   python -m scripts.aggregate_gold_set --cases-dir eval/cases --out eval/gold_set.json
+  python -m scripts.aggregate_gold_set --from-firestore
 """
 from __future__ import annotations
 
@@ -70,7 +71,17 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Aggregate eval/cases into eval/gold_set.json")
     parser.add_argument("--cases-dir", type=Path, default=CASES_DIR)
     parser.add_argument("--out", type=Path, default=OUT_PATH)
+    parser.add_argument(
+        "--from-firestore",
+        action="store_true",
+        help="Export eval_gold_cases from Firestore to --cases-dir first",
+    )
     args = parser.parse_args()
+
+    if args.from_firestore:
+        from scripts.export_gold_from_firestore import export_cases
+
+        export_cases(args.cases_dir)
 
     doc = write_gold_set(args.out, args.cases_dir)
     n = len(doc["eval_cases"])

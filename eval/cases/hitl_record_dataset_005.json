@@ -1,0 +1,80 @@
+{
+  "eval_id": "hitl_record_dataset_005",
+  "source": {
+    "resource_code": "hitl_record_dataset_005",
+    "origin": "hitl",
+    "prompt_versions": {
+      "appraisal": "appraisal@1.0.0",
+      "classification": "classification@1.0.0",
+      "discovery": "discovery@1.0.0",
+      "editorial": "editorial@1.0.0",
+      "reconciliation": "reconciliation@1.0.0",
+      "qc_panel": "qc_panel@1.0.0",
+      "arbiter": "arbiter@1.0.0"
+    },
+    "failure_mode": "routine data guideline"
+  },
+  "expected_classification": {
+    "resource_type_code": "reporting_guideline",
+    "resource_subtype_code": "primary_guideline",
+    "methodology_codes": [
+      "OBS-01"
+    ],
+    "skill_codes": [
+      "FS-13"
+    ],
+    "stage_codes": [
+      "EV-03"
+    ],
+    "discipline_codes": [],
+    "tags": [],
+    "domain_codes": [
+      "DIGHEALTH"
+    ]
+  },
+  "conversation": [
+    {
+      "user_content": {
+        "parts": [
+          {
+            "text": "Curate one reporting_guideline resource titled \"RECORD statement\". URL: https://example.org/record. Focus methodologies: OBS-01.",
+            "role": null
+          }
+        ]
+      },
+      "final_response": {
+        "parts": [
+          {
+            "text": "Processed reporting_guideline \"RECORD statement\". Quality score 87, AI confidence 81. Methodology codes: OBS-01. Thesis stages: EV-03. Draft record created with editorial_status=proposed.",
+            "role": null
+          }
+        ]
+      },
+      "rubrics": [
+        {
+          "rubric_id": "r0"
+        },
+        {
+          "rubric_id": "r1"
+        },
+        {
+          "rubric_id": "r2"
+        },
+        {
+          "rubric_id": "r3"
+        },
+        {
+          "rubric_id": "r4"
+        }
+      ]
+    }
+  ],
+  "conversation_scenario": null,
+  "session_input": null,
+  "creation_timestamp": 0.0,
+  "rubrics": null,
+  "final_session_state": {
+    "resource_code": "hitl_record_dataset_005",
+    "pipeline_run_id": null
+  }
+}
