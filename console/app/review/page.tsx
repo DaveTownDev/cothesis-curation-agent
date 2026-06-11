@@ -77,6 +77,13 @@ export default async function ReviewQueuePage({
       {!error && items.length === 0 && (
         <div className="hitl-card p-12 text-center space-y-3">
           <p className="text-[var(--text-body)]">No items match the current filters.</p>
+          {preset === "qa_issues" && (
+            <p className="text-xs text-[var(--text-body)] max-w-lg mx-auto">
+              The QA issues preset needs <code className="text-[10px]">qa_audit</code> on queue docs.
+              Run <code className="text-[10px]">scripts.audit_records</code> then{" "}
+              <code className="text-[10px]">scripts.write_qa_audit</code> (source-accuracy JSON optional).
+            </p>
+          )}
         </div>
       )}
 

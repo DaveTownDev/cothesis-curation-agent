@@ -30,18 +30,30 @@ export function QaAuditBanner({
 }: Props) {
   const recommendations = parseQaRecommendations(qaAudit, itemReason, currentType, currentUrl)
   const verdict = qaAudit.source_verdict
+  const dataQuality = qaAudit.data_quality
+  const bannerTone =
+    verdict === "fail" || dataQuality === "fail" || qaAudit.url_status === "dead"
+      ? "fail"
+      : verdict === "warn" || dataQuality === "warn" || qaAudit.url_status === "unreachable"
+        ? "warn"
+        : "pass"
 
   return (
     <div
       className="rounded-md border px-3 py-2 text-xs"
       style={{
-        backgroundColor: verdict === "fail" ? "#fef2f2" : verdict === "warn" ? "#fffbeb" : "#f0fdf4",
-        borderColor: verdict === "fail" ? "#fecaca" : verdict === "warn" ? "#fde68a" : "#bbf7d0",
+        backgroundColor: bannerTone === "fail" ? "#fef2f2" : bannerTone === "warn" ? "#fffbeb" : "#f0fdf4",
+        borderColor: bannerTone === "fail" ? "#fecaca" : bannerTone === "warn" ? "#fde68a" : "#bbf7d0",
       }}
     >
       <div className="font-semibold text-[#0E3A27]">
-        QA audit: source {verdict ?? "—"} · link {qaAudit.url_status ?? "—"}
+        QA audit: source {verdict ?? "—"} · data {dataQuality ?? "—"} · link {qaAudit.url_status ?? "—"}
       </div>
+      {(qaAudit.dq_issues?.length ?? 0) > 0 && (
+        <ul className="mt-1 list-disc list-inside text-[#4a5568]">
+          {qaAudit.dq_issues!.slice(0, 6).map((issue, i) => <li key={i}>{issue}</li>)}
+        </ul>
+      )}
       {qaAudit.source_notes && <p className="mt-1 text-[#4a5568]">{qaAudit.source_notes}</p>}
       {(qaAudit.hallucinations?.length ?? 0) > 0 && (
         <ul className="mt-1 list-disc list-inside text-red-700">

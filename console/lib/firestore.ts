@@ -1,5 +1,6 @@
 import { initializeApp, getApps, cert, type App } from "firebase-admin/app"
 import { getFirestore, type Firestore, FieldValue } from "firebase-admin/firestore"
+import { hasQaIssues, qaAttentionRank } from "@/lib/qa-issues"
 
 let app: App
 let db: Firestore
@@ -220,6 +221,8 @@ export async function getReviewQueue(
   let items = snap.docs
     .map((d) => ({ id: d.id, ...d.data() } as ReviewQueueItem))
     .filter((i) => i.status === "pending")
+    // Human review queue — auto_accept is recorded in pipeline_state only.
+    .filter((i) => i.routing !== "auto_accept")
 
   // Client-side sort + filters (no composite Firestore index required)
   const dateSort = filters.sortBy === "oldest" ? "asc" : "desc"
@@ -253,10 +256,7 @@ export async function getReviewQueue(
   }
 
   if (filters.preset === "qa_issues") {
-    items = items.filter((i) => {
-      const v = i.qa_audit?.source_verdict
-      return v === "fail" || v === "warn"
-    })
+    items = items.filter((i) => hasQaIssues(i.qa_audit))
   } else if (filters.preset === "low_confidence") {
     items = items.filter((i) => {
       const d = i.draft_record
@@ -276,9 +276,8 @@ export async function getReviewQueue(
   }
 
   if (filters.sortBy === "attention") {
-    const qaRank = (v?: string) => (v === "fail" ? 0 : v === "warn" ? 1 : 2)
     items.sort((a, b) => {
-      const qa = qaRank(a.qa_audit?.source_verdict) - qaRank(b.qa_audit?.source_verdict)
+      const qa = qaAttentionRank(a.qa_audit) - qaAttentionRank(b.qa_audit)
       if (qa !== 0) return qa
       const conf =
         (a.draft_record?.classification_confidence ?? 1) -

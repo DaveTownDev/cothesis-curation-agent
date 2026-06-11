@@ -90,12 +90,9 @@ class TestHappyPath:
             out = run_pipeline(RESOURCE, pipeline_run_id="run-1")
         assert out["routing"] == "auto_accept"
         assert out["resource_code"].startswith("a-guide-to-the-retrospective-chart-review")
-        # Draft written, queue item written (auto_accept still queues for ratification)
+        # Draft written; auto_accept does not enter the human review queue.
         assert len(mocked["drafts"]) == 1
-        assert len(mocked["queue"]) == 1
-        assert mocked["queue"][0]["routing"] == "auto_accept"
-        # Queue item carries the full assembled record
-        assert mocked["queue"][0]["draft_record"]["title"] == RESOURCE["title"]
+        assert len(mocked["queue"]) == 0
 
     def test_pipeline_state_written_each_stage(self, mocked):
         from agents.pipeline.deterministic import run_pipeline

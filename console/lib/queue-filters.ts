@@ -1,10 +1,11 @@
 import type { ReviewQueueFilters, ReviewQueueItem } from "@/lib/firestore"
+import { hasQaIssues } from "@/lib/qa-issues"
 
 export type TriagePreset = "all" | "qa_issues" | "low_confidence" | "ready_to_clear"
 
 export const TRIAGE_PRESETS: { id: TriagePreset; label: string; description: string }[] = [
   { id: "all", label: "All pending", description: "Full queue with current filters" },
-  { id: "qa_issues", label: "QA issues", description: "Source audit fail or warn" },
+  { id: "qa_issues", label: "QA issues", description: "Data-quality fail/warn, dead link, or source-accuracy fail/warn" },
   { id: "low_confidence", label: "Low confidence", description: "Classification or AI confidence below threshold" },
   { id: "ready_to_clear", label: "Ready to clear", description: "QA pass, quality ≥ 80, confidence ≥ 70" },
 ]
@@ -29,10 +30,7 @@ export function parseReviewQueueFilters(
 export function applyTriagePreset(items: ReviewQueueItem[], preset?: string): ReviewQueueItem[] {
   if (!preset || preset === "all") return items
   if (preset === "qa_issues") {
-    return items.filter((i) => {
-      const v = i.qa_audit?.source_verdict
-      return v === "fail" || v === "warn"
-    })
+    return items.filter((i) => hasQaIssues(i.qa_audit))
   }
   if (preset === "low_confidence") {
     return items.filter((i) => {

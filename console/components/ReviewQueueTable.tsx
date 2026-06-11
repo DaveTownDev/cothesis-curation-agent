@@ -3,6 +3,7 @@
 import { useMemo, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import type { ReviewQueueItem } from "@/lib/firestore"
+import { qaDisplayVerdict } from "@/lib/qa-issues"
 import { validatePublishChecklist } from "@/lib/checklist"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -236,20 +237,37 @@ export function ReviewQueueTable({ items, compact, detailQuery }: Props) {
                     ) : <span className="text-[#6b7280]">—</span>}
                   </td>
                   <td className="px-4 py-3">
-                    {item.qa_audit?.source_verdict ? (
-                      <span
-                        className="text-[10px] font-semibold rounded px-1.5 py-0.5"
-                        style={{
-                          backgroundColor: item.qa_audit.source_verdict === "pass" ? "#28964220"
-                            : item.qa_audit.source_verdict === "warn" ? "#f59e0b20" : "#dc262620",
-                          color: item.qa_audit.source_verdict === "pass" ? "#289642"
-                            : item.qa_audit.source_verdict === "warn" ? "#b45309" : "#dc2626",
-                        }}
-                        title={item.qa_audit.source_notes ?? ""}
-                      >
-                        {item.qa_audit.source_verdict.toUpperCase()}
-                      </span>
-                    ) : <span className="text-[#9ca3af] text-xs" title="Source QA not run">pending</span>}
+                    {(() => {
+                      const verdict = qaDisplayVerdict(item.qa_audit)
+                      if (verdict === "pending") {
+                        return (
+                          <span className="text-[#9ca3af] text-xs" title="Run scripts.write_qa_audit after audit_records">
+                            pending
+                          </span>
+                        )
+                      }
+                      const qa = item.qa_audit
+                      const title = [
+                        qa?.source_verdict ? `source: ${qa.source_verdict}` : null,
+                        qa?.data_quality ? `data: ${qa.data_quality}` : null,
+                        qa?.url_status ? `url: ${qa.url_status}` : null,
+                        qa?.source_notes,
+                      ].filter(Boolean).join(" · ")
+                      return (
+                        <span
+                          className="text-[10px] font-semibold rounded px-1.5 py-0.5"
+                          style={{
+                            backgroundColor: verdict === "pass" ? "#28964220"
+                              : verdict === "warn" ? "#f59e0b20" : "#dc262620",
+                            color: verdict === "pass" ? "#289642"
+                              : verdict === "warn" ? "#b45309" : "#dc2626",
+                          }}
+                          title={title}
+                        >
+                          {verdict.toUpperCase()}
+                        </span>
+                      )
+                    })()}
                   </td>
                   <td className="px-4 py-3">
                     <span className="flex items-center gap-1 text-[#289642] text-sm font-medium whitespace-nowrap">

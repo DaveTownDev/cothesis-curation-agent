@@ -1,8 +1,10 @@
 """
 Human-in-the-loop helpers.
 
-When the arbiter routes review_needed, the pipeline writes to the
-Firestore `review_queue` collection and stops for that resource.
+When the arbiter routes review_needed (or dead-source / appraisal-error
+short-circuits), the pipeline writes to the Firestore `review_queue`
+collection. auto_accept and auto_exclude outcomes are recorded in
+pipeline_state only — they do not enter the human review queue.
 The human console (Day 5) reads from review_queue, approves/rejects,
 and writes back to `resources`.
 """

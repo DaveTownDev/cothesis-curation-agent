@@ -430,17 +430,6 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
             )
         except Exception as exc:
             logger.warning("review_queue write failed for %s: %s", rc, exc)
-    elif routing == "auto_accept":
-        # Auto-accepted still requires human ratification before publish; queue it
-        # flagged as auto_accept so the console shows it (no silent publishing).
-        try:
-            write_review_queue_item(
-                resource_code=rc, routing=routing,
-                reason=f"AUTO-ACCEPT (sampling audit): {reason}",
-                panel_result=panel_result, draft_record=record,
-            )
-        except Exception as exc:
-            logger.warning("auto_accept queue write failed for %s: %s", rc, exc)
-    # auto_exclude: no queue write; pipeline_state records the outcome.
+    # auto_accept / auto_exclude: no review_queue write — outcome lives in pipeline_state.
 
     return _finish(routing, reason, composite, {"outcome_detail": record})

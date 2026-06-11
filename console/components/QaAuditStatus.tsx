@@ -37,11 +37,11 @@ export function QaAuditStatus(props: Props) {
 
   return (
     <div className="rounded-md border border-dashed border-[#d4cfc5] bg-[#F8F5EE] px-3 py-2 text-xs text-[#4a5568]">
-      <span className="font-semibold text-[#0E3A27]">Source QA audit not run.</span>
-      {" "}Pipeline QC scores are in the Panel tab (right column). Post-batch source-accuracy
-      review writes <code className="text-[10px]">qa_audit</code> via{" "}
-      <code className="text-[10px]">scripts.write_qa_audit</code> after{" "}
-      <code className="text-[10px]">scripts.audit_records</code>.
+      <span className="font-semibold text-[#0E3A27]">QA audit not on this queue item yet.</span>
+      {" "}Pipeline QC scores are in the Panel tab. Run{" "}
+      <code className="text-[10px]">scripts.audit_records</code> then{" "}
+      <code className="text-[10px]">scripts.write_qa_audit</code> to populate{" "}
+      <code className="text-[10px]">qa_audit</code> (data-quality + URL; source-accuracy JSON optional).
     </div>
   )
 }
