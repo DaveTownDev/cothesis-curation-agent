@@ -106,7 +106,7 @@ export async function publishResource(
     { merge: true },
   )
 
-  return forceSyncToCompendium(resourceCode)
+  return { resource_code: resourceCode, ok: true }
 }
 
 export async function unpublishResource(resourceCode: string): Promise<{
@@ -160,7 +160,7 @@ export async function republishResource(resourceCode: string): Promise<ItemSyncR
     await setCompendiumVisibility(config, compendiumId, true)
   }
 
-  return forceSyncToCompendium(resourceCode)
+  return { resource_code: resourceCode, ok: true }
 }
 
 export async function pushResourceToCompendium(resourceCode: string): Promise<ItemSyncResult> {

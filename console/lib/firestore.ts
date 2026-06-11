@@ -411,6 +411,42 @@ export async function getResourceRecord(resourceCode: string): Promise<ResourceD
   return { resource_code: resourceCode, ...snap.data() } as ResourceDoc
 }
 
+export interface ResourceLiveStatus {
+  editorial_status?: string
+  compendium_synced_at?: string | null
+  compendium_sync_error?: string | null
+  compendium_url?: string | null
+  compendium_id?: string | null
+}
+
+export async function getResourceLiveStatusMap(
+  resourceCodes: string[],
+): Promise<Record<string, ResourceLiveStatus>> {
+  const db = getFirestoreDb()
+  const unique = [...new Set(resourceCodes.filter(Boolean))]
+  const map: Record<string, ResourceLiveStatus> = {}
+  const CHUNK = 100
+
+  for (let i = 0; i < unique.length; i += CHUNK) {
+    const chunk = unique.slice(i, i + CHUNK)
+    const refs = chunk.map((code) => db.collection("resources").doc(code))
+    const snaps = await db.getAll(...refs)
+    for (const snap of snaps) {
+      if (!snap.exists) continue
+      const data = snap.data()!
+      map[snap.id] = {
+        editorial_status: data.editorial_status as string | undefined,
+        compendium_synced_at: data.compendium_synced_at as string | null | undefined,
+        compendium_sync_error: data.compendium_sync_error as string | null | undefined,
+        compendium_url: data.compendium_url as string | null | undefined,
+        compendium_id: data.compendium_id as string | null | undefined,
+      }
+    }
+  }
+
+  return map
+}
+
 export async function getDraftRecordDoc(resourceCode: string): Promise<DraftRecord | null> {
   const db = getFirestoreDb()
   const snap = await db.collection("draft_records").doc(resourceCode).get()

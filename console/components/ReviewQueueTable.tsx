@@ -96,11 +96,8 @@ export function ReviewQueueTable({ items, compact, detailQuery }: Props) {
       const readyIds = bulkRows.filter((r) => r.canApprove).map((r) => r.id)
       const result = await bulkApproveAsDrafted(readyIds, reviewer)
       if (result.approved > 0) recordSessionStat("approved", result.approved)
-      if (result.sync) {
-        setBulkMessage(
-          `Approved ${result.approved}. Compendium: ${result.sync.synced} synced, `
-          + `${result.sync.failed} failed, ${result.sync.skipped} skipped.`,
-        )
+      if (result.approved > 0) {
+        setBulkMessage(`Approved ${result.approved}${result.skipped > 0 ? `, skipped ${result.skipped}` : ""}. Push to live from Pipeline or Published.`)
       }
       setModal(null)
       setSelected(new Set())

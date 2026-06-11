@@ -152,7 +152,7 @@ export function PublishedResourcesTable({ resources }: { resources: PublishedRow
               disabled={pending || unsyncedSelected.length === 0}
             >
               <Upload size={12} />
-              Sync to Compendium ({unsyncedSelected.length})
+              Push to live ({unsyncedSelected.length})
             </Button>
           </div>
         </div>
@@ -224,7 +224,7 @@ export function PublishedResourcesTable({ resources }: { resources: PublishedRow
                         onClick={() => handleSyncOne(r.resource_code)}
                       >
                         <Upload size={12} />
-                        {pending && syncing === r.resource_code ? "Syncing…" : "Sync"}
+                        {pending && syncing === r.resource_code ? "Pushing…" : "Push to live"}
                       </Button>
                     )}
                     <Button size="sm" variant="outline" className="text-xs h-7" asChild>
@@ -250,8 +250,8 @@ export function PublishedResourcesTable({ resources }: { resources: PublishedRow
         </table>
       </div>
       <p className="text-xs text-[#6b7280]">
-        Approve in the review queue auto-syncs to Compendium when credentials are configured.
-        Use Sync here to retry failures or backfill older publishes.
+        Approve in the review queue publishes to Firestore only.
+        Use Push to live here when you are ready to sync to Compendium.
         {" "}
         <Link href="/review" className="text-[#03848F] hover:underline">Go to queue</Link>
       </p>

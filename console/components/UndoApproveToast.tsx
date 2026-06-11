@@ -10,13 +10,10 @@ interface Props {
   onUndo: () => void
   onDismiss: () => void
   isUndoing: boolean
-  compendiumUrl?: string | null
-  syncError?: string | null
 }
 
 export function UndoApproveToast({
   visible, resourceTitle, secondsLeft, onUndo, onDismiss, isUndoing,
-  compendiumUrl, syncError,
 }: Props) {
   if (!visible) return null
   return (
@@ -25,21 +22,7 @@ export function UndoApproveToast({
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-[#0E3A27] truncate">Published</p>
           <p className="text-xs text-[#6b7280] truncate">{resourceTitle}</p>
-          {compendiumUrl && (
-            <a
-              href={compendiumUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-[#03848F] hover:underline mt-0.5 inline-block"
-            >
-              Open in Compendium →
-            </a>
-          )}
-          {syncError && !compendiumUrl && (
-            <p className="text-xs text-amber-700 mt-0.5 line-clamp-2" title={syncError}>
-              Compendium sync pending — retry from Published
-            </p>
-          )}
+          <p className="text-xs text-[#6b7280] mt-0.5">Push to live from Pipeline or Published when ready.</p>
         </div>
         <Button size="sm" variant="outline" onClick={onUndo} disabled={isUndoing} className="shrink-0 text-xs">
           <RotateCcw size={12} /> Undo

@@ -85,8 +85,8 @@ export function ResourceEditorActions({
       const result = await publishResource(
         resourceCode, edited, taxonomy, editorialNote, ratifiedBadges, reviewerName, queueItemId,
       )
-      if (!result.ok) throw new Error(result.error ?? "Publish sync failed")
-      setMessage(result.compendium_url ? "Published and synced to Compendium" : "Published (sync pending URL)")
+      if (!result.ok) throw new Error(result.error ?? "Publish failed")
+      setMessage("Published — push to live when ready")
     })
   }
 
@@ -104,8 +104,8 @@ export function ResourceEditorActions({
   function handleRepublish() {
     run(async () => {
       const result = await republishResource(resourceCode)
-      if (!result.ok) throw new Error(result.error ?? "Republish sync failed")
-      setMessage(result.compendium_url ? "Live again on Compendium" : "Republished (sync pending URL)")
+      if (!result.ok) throw new Error(result.error ?? "Republish failed")
+      setMessage("Republished — push to live when ready")
     })
   }
 
@@ -156,14 +156,14 @@ export function ResourceEditorActions({
 
         {!isPublished && !isArchived && (
           <Button size="sm" disabled={!canPublish || pending} onClick={handlePublish}>
-            <CheckCircle size={14} /> Publish & sync
+            <CheckCircle size={14} /> Publish
           </Button>
         )}
 
         {isPublished && (
           <>
             <Button size="sm" variant="outline" disabled={pending} onClick={handlePush}>
-              <Upload size={14} /> Push changes to live site
+              <Upload size={14} /> Push to live
             </Button>
             <Button size="sm" variant="outline" disabled={pending} onClick={handleUnpublish} className="text-red-600 border-red-200">
               <EyeOff size={14} /> Unpublish (hide on site)
@@ -173,7 +173,7 @@ export function ResourceEditorActions({
 
         {isArchived && (
           <Button size="sm" disabled={!canPublish || pending} onClick={handleRepublish}>
-            <RotateCcw size={14} /> Republish to live site
+            <RotateCcw size={14} /> Republish
           </Button>
         )}
       </div>

@@ -62,7 +62,6 @@ export function ReviewWorkspace({
   const [undoPending, setUndoPending] = useState<{
     undo: ApproveResult["undo"]
     nextPath: string
-    sync?: ApproveResult["sync"]
   } | null>(null)
   const [isUndoing, startUndo] = useTransition()
 
@@ -79,10 +78,9 @@ export function ReviewWorkspace({
   const handleNavigate = useCallback((
     nextPath: string,
     undo?: ApproveResult["undo"],
-    sync?: ApproveResult["sync"],
   ) => {
     if (undo) {
-      setUndoPending({ undo, nextPath, sync })
+      setUndoPending({ undo, nextPath })
     } else {
       router.push(nextPath)
     }
@@ -382,8 +380,6 @@ export function ReviewWorkspace({
               onUndo={handleUndo}
               onDismiss={() => finishNavigate(undoPending.nextPath)}
               isUndoing={isUndoing}
-              compendiumUrl={undoPending.sync?.compendium_url}
-              syncError={undoPending.sync?.error}
             />
           )}
         </UndoCountdown>
