@@ -3,6 +3,8 @@
  * and agents/shared/compendium_sync.py.
  */
 
+import tagVocabulary from "@/lib/data/taxonomy/tag_vocabulary.json"
+
 export interface CompendiumConfig {
   baseUrl: string
   apiKey: string
@@ -34,6 +36,12 @@ export interface ImportBatchResult {
   outcomes: ResourceSyncOutcome[]
 }
 
+export interface VocabularyTag {
+  taxonomy: string
+  code: string
+  confidence: number
+}
+
 export interface CompendiumRecordInput {
   resource_code?: string
   title?: string
@@ -44,6 +52,10 @@ export interface CompendiumRecordInput {
   editorial_description_plain?: string | null
   methodology_codes?: string[]
   discipline_codes?: string[]
+  stage_codes?: string[]
+  skill_codes?: string[]
+  domain_codes?: string[]
+  classification_confidence?: number
   access_type?: string
   doi?: string | null
   isbn?: string | null
@@ -65,6 +77,74 @@ const ACCESS_TYPE_MAP: Record<string, string> = {
   institutional: "institutional",
 }
 
+const LEAF_METHODOLOGY = /^[A-Z]{2,6}-\d{2}$/
+
+const methodologyLeafCodes = new Set(
+  (tagVocabulary.taxonomies.methodology.nodes as Array<{ code: string; level: string }>)
+    .filter((n) => n.level === "methodology")
+    .map((n) => n.code),
+)
+
+function defaultConfidence(resource: CompendiumRecordInput): number {
+  const raw = resource.classification_confidence
+  if (typeof raw === "number" && !Number.isNaN(raw)) {
+    return Math.max(0, Math.min(1, raw))
+  }
+  return 0.85
+}
+
+function tag(taxonomy: string, code: string, confidence: number): VocabularyTag {
+  return { taxonomy, code, confidence }
+}
+
+export function draftRecordToVocabularyTags(resource: CompendiumRecordInput): VocabularyTag[] {
+  const conf = defaultConfidence(resource)
+  const tags: VocabularyTag[] = []
+
+  const subtype = resource.resource_subtype_code
+  const rtype = resource.resource_type_code
+  if (rtype === "book_chapter") {
+    tags.push(tag("resource_type", "chapter", conf))
+  } else if (subtype) {
+    tags.push(tag("resource_type", subtype, conf))
+  }
+
+  for (const code of resource.methodology_codes ?? []) {
+    const norm = code.trim().toUpperCase()
+    if (methodologyLeafCodes.has(norm)) {
+      tags.push(tag("methodology", norm, conf))
+    }
+  }
+
+  for (const code of resource.discipline_codes ?? []) {
+    const norm = code.trim().toUpperCase()
+    if (norm) tags.push(tag("specialty", norm, conf))
+  }
+
+  for (const code of resource.stage_codes ?? []) {
+    const norm = code.trim().toUpperCase()
+    if (norm) tags.push(tag("thesis", norm, conf))
+  }
+
+  for (const code of resource.skill_codes ?? []) {
+    const norm = code.trim().toUpperCase()
+    if (norm) tags.push(tag("foundation_skill", norm, conf))
+  }
+
+  for (const code of resource.domain_codes ?? []) {
+    const norm = code.trim().toUpperCase()
+    if (norm) tags.push(tag("cross_specialty_domain", norm, conf))
+  }
+
+  return tags
+}
+
+export function hasTrustedPathMethodology(resource: CompendiumRecordInput): boolean {
+  return draftRecordToVocabularyTags(resource).some(
+    (t) => t.taxonomy === "methodology" && LEAF_METHODOLOGY.test(t.code),
+  )
+}
+
 export function getCompendiumConfig(): CompendiumConfig | null {
   const baseUrl =
     process.env.COMPENDIUM_IMPORT_URL?.trim() ||
@@ -75,25 +155,21 @@ export function getCompendiumConfig(): CompendiumConfig | null {
   return { baseUrl, apiKey }
 }
 
-function normalizeDisciplineSlug(slug: string): string {
-  return slug.trim().toLowerCase()
-}
-
 export function toCompendiumRecord(resource: CompendiumRecordInput): Record<string, unknown> {
   const out: Record<string, unknown> = {
     title: resource.title,
     url: resource.url,
-    resource_type: resource.resource_type_code,
-    description: resource.editorial_description,
+    editorial_description: resource.editorial_description,
     source_tool: "claude",
-    subtype: resource.resource_subtype_code ?? null,
-    methodology_tags: resource.methodology_codes ?? [],
-    specialty_tags: (resource.discipline_codes ?? []).map(normalizeDisciplineSlug),
+    tags: draftRecordToVocabularyTags(resource),
     access_type: ACCESS_TYPE_MAP[resource.access_type ?? "free"] ?? "free",
     doi: resource.doi ?? null,
     isbn: resource.isbn ?? null,
     pmid: resource.pmid ?? null,
-    discovery_context: resource.editorial_description_plain ?? null,
+  }
+
+  if (resource.editorial_description_plain) {
+    out.editorial_description_long = resource.editorial_description_plain
   }
 
   for (const field of ["authors", "publisher", "journal_name", "platform", "year", "language"] as const) {

@@ -152,6 +152,7 @@ class ClassificationResult(BaseModel):
     access_type: str
     skip_reason: Optional[str] = None
     discipline_codes: list[str] = Field(default_factory=list)
+    domain_codes: list[str] = Field(default_factory=list)
     difficulty_level: Optional[str] = None
 
     @field_validator("resource_type_code")
@@ -179,7 +180,7 @@ class ClassificationResult(BaseModel):
             if not is_valid_methodology_code(norm):
                 raise ValueError(
                     f"Invalid methodology code {code!r}. "
-                    f"Must be a live platform code from data/taxonomy/live_methodologies.json."
+                    f"Must be a vocabulary leaf methodology code from data/taxonomy/tag_vocabulary.json."
                 )
             normalized.append(norm)
         return normalized
@@ -187,14 +188,29 @@ class ClassificationResult(BaseModel):
     @field_validator("discipline_codes")
     @classmethod
     def validate_discipline_codes(cls, codes: list[str]) -> list[str]:
-        from agents.taxonomy import is_valid_discipline_slug, normalize_discipline_slug
+        from agents.shared.tag_vocabulary import normalize_specialty_code
         normalized: list[str] = []
-        for slug in codes:
-            norm = normalize_discipline_slug(slug)
-            if not is_valid_discipline_slug(norm):
+        for raw in codes:
+            norm = normalize_specialty_code(raw)
+            if not norm:
                 raise ValueError(
-                    f"Invalid discipline slug {slug!r}. "
-                    f"Must be a live specialty slug from data/taxonomy/live_specialties.json."
+                    f"Invalid specialty code {raw!r}. "
+                    f"Must be a vocabulary specialty code or slug from data/taxonomy/tag_vocabulary.json."
+                )
+            normalized.append(norm)
+        return normalized
+
+    @field_validator("domain_codes")
+    @classmethod
+    def validate_domain_codes(cls, codes: list[str]) -> list[str]:
+        from agents.shared.tag_vocabulary import is_valid_domain_code
+        normalized: list[str] = []
+        for code in codes:
+            norm = code.strip().upper()
+            if not is_valid_domain_code(norm):
+                raise ValueError(
+                    f"Invalid domain code {code!r}. "
+                    f"Must be a cross_specialty_domain code from data/taxonomy/tag_vocabulary.json."
                 )
             normalized.append(norm)
         return normalized
@@ -233,7 +249,7 @@ class ClassificationResult(BaseModel):
         if not is_valid_subtype_code(norm):
             raise ValueError(
                 f"Invalid resource_subtype_code {v!r}. "
-                f"Must be a live subtype code from data/taxonomy/live_subtypes.json."
+                f"Must be a vocabulary subtype code from data/taxonomy/tag_vocabulary.json."
             )
         return norm
 
@@ -243,6 +259,8 @@ class ClassificationResult(BaseModel):
         if self.resource_type_code == "book_chapter":
             if self.resource_subtype_code is not None:
                 raise ValueError("book_chapter resources must have resource_subtype_code null")
+            return self
+        if self.resource_type_code == "book" and self.resource_subtype_code == "chapter":
             return self
         if self.resource_subtype_code is not None:
             parent = subtype_type_for(self.resource_subtype_code)

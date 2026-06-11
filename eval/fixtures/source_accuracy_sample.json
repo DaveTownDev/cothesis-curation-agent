@@ -1,0 +1,30 @@
+[
+  {
+    "resource_code": "syn01-article-001",
+    "draft_record": {
+      "resource_code": "syn01-article-001",
+      "title": "PRISMA 2020 statement",
+      "url": "https://doi.org/10.1136/bmj.n71",
+      "resource_type_code": "article",
+      "resource_subtype_code": "reporting_guideline",
+      "methodology_codes": ["SYN-01"],
+      "editorial_description": "Updated systematic review reporting guideline.",
+      "summary": "Checklist for transparent systematic reviews.",
+      "editorial_description_plain": "A checklist for clear literature review reporting."
+    }
+  },
+  {
+    "resource_code": "obs01-software-001",
+    "draft_record": {
+      "resource_code": "obs01-software-001",
+      "title": "Covidence",
+      "url": "https://www.covidence.org",
+      "resource_type_code": "software",
+      "resource_subtype_code": "project_management",
+      "methodology_codes": [],
+      "editorial_description": "Systematic review screening and data extraction tool.",
+      "summary": "Web platform for collaborative review workflows.",
+      "editorial_description_plain": "Online tool to organise literature screening."
+    }
+  }
+]

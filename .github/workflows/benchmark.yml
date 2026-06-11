@@ -1,0 +1,45 @@
+name: Benchmark
+
+on:
+  pull_request:
+    paths:
+      - "eval/**"
+      - "agents/prompts/**"
+      - "scripts/run_benchmark.py"
+      - "scripts/aggregate_gold_set.py"
+      - "tests/test_run_benchmark.py"
+      - "tests/test_aggregate_gold.py"
+      - "tests/test_taxonomy_gold.py"
+  push:
+    branches: [main]
+    paths:
+      - "eval/**"
+      - "agents/prompts/**"
+      - "scripts/run_benchmark.py"
+
+jobs:
+  benchmark-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install "google-adk>=2.1.0,<2.2.0" -r agents/requirements.txt
+          pip install pytest jsonschema
+
+      - name: Aggregate gold set
+        run: python -m scripts.aggregate_gold_set
+
+      - name: WS-A eval unit tests
+        run: |
+          pytest tests/test_aggregate_gold.py tests/test_taxonomy_gold.py tests/test_run_benchmark.py -q
+
+      - name: Benchmark runner (pytest + subset, skip adk in CI)
+        run: python -m scripts.run_benchmark --skip-adk --subset 8

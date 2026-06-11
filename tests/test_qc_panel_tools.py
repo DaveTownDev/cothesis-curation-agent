@@ -31,3 +31,31 @@ def test_empty_results_safe():
     out = aggregate_panel_results([])
     assert out["panel_agreement"] == 0.0
     assert out["overall_pass"] is False
+
+
+def test_taxonomy_qc_check_passes_valid_draft():
+    from agents.qc_panel.tools import run_taxonomy_qc_check
+
+    out = run_taxonomy_qc_check({
+        "resource_type_code": "software",
+        "resource_subtype_code": "project_management",
+        "methodology_codes": [],
+        "skill_codes": ["FS-03"],
+    })
+    assert out["dimension"] == "taxonomy_check"
+    assert out["pass"] is True
+    assert out["score"] == 100.0
+
+
+def test_taxonomy_qc_check_fails_invalid_subtype():
+    from agents.qc_panel.tools import run_taxonomy_qc_check
+
+    out = run_taxonomy_qc_check({
+        "resource_type_code": "article",
+        "resource_subtype_code": "project_management",
+        "methodology_codes": ["SYN-01"],
+    })
+    assert out["dimension"] == "taxonomy_check"
+    assert out["pass"] is False
+    assert out["score"] == 0.0
+    assert "resource_subtype_code" in out["reasoning"]

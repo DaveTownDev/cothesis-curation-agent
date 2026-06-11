@@ -1,0 +1,15 @@
+{
+  "captured_at": "2026-06-08T00:00:00Z",
+  "note": "Placeholder baseline from last verified green eval run (19/20 cases). Re-capture with: python -m scripts.run_benchmark --skip-pytest",
+  "response_match_score": 0.12,
+  "rubric_pass_rate": 0.6,
+  "cases_passed": 19,
+  "cases_total": 20,
+  "per_rubric": {
+    "type_methodology_correct": 1.0,
+    "description_grounded": 1.0,
+    "plain_language_clear": 1.0,
+    "structured_completeness": 1.0,
+    "routing_justified": 1.0
+  }
+}

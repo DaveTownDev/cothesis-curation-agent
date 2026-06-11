@@ -18,6 +18,7 @@ import re
 from typing import Any
 
 from agents.shared.codes import PLAIN_JARGON_TERMS, CANONICAL_BADGES
+from agents.shared.taxonomy_rules import validate_taxonomy_draft
 
 
 def _as_float(value: Any, default: float = 0.0) -> float:
@@ -129,6 +130,36 @@ def run_plain_jargon_check(editorial_description_plain: str) -> dict:
         "plain_jargon_check",
         score=100.0,
         reasoning="Plain field is jargon-free.",
+    )
+
+
+def run_taxonomy_qc_check(draft: dict) -> dict:
+    """
+    Deterministic taxonomy validation on a draft record.
+    Uses validate_taxonomy_draft() (live vocab + type-aware rules).
+    """
+    issues = validate_taxonomy_draft(draft or {})
+    fails = [i for i in issues if i.get("sev") == "fail"]
+    warns = [i for i in issues if i.get("sev") == "warn"]
+
+    if fails:
+        detail = "; ".join(f"{i['field']}: {i['msg']}" for i in fails[:5])
+        return evaluate_dimension(
+            "taxonomy_check",
+            score=0.0,
+            reasoning=f"Taxonomy validation failed ({len(fails)}): {detail}",
+        )
+    if warns:
+        detail = "; ".join(f"{i['field']}: {i['msg']}" for i in warns[:5])
+        return evaluate_dimension(
+            "taxonomy_check",
+            score=70.0,
+            reasoning=f"Taxonomy warnings ({len(warns)}): {detail}",
+        )
+    return evaluate_dimension(
+        "taxonomy_check",
+        score=100.0,
+        reasoning="Taxonomy codes valid for resource type.",
     )
 
 

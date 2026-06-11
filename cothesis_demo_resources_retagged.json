@@ -1,0 +1,303 @@
+{
+  "_meta": {
+    "purpose": "Reference answer key: the 14 demo Compendium resources re-tagged under the canonical vocabulary. For the ingestion agent to self-check against. Every code validated to exist in cothesis_tag_vocabulary.json.",
+    "note": "Demonstrates restraint (tag purpose not mentions), brand-name\u2192subtype resolution, phase-vs-stage thesis tagging, and specialty-only-when-specific."
+  },
+  "resources": [
+    {
+      "resource_id": "demo-article-001",
+      "tags": [
+        {
+          "taxonomy": "methodology",
+          "code": "QUAL-01",
+          "confidence": 0.98
+        },
+        {
+          "taxonomy": "resource_type",
+          "code": "research_article",
+          "confidence": 0.9
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "IN-02",
+          "confidence": 0.9
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-book-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "textbook",
+          "confidence": 0.95
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "TH",
+          "confidence": 0.6
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "EV",
+          "confidence": 0.6
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-chapter-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "chapter",
+          "confidence": 0.9
+        },
+        {
+          "taxonomy": "methodology",
+          "code": "SYN-04",
+          "confidence": 0.8
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "TH-01",
+          "confidence": 0.6
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-video-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "video_explainer",
+          "confidence": 0.95
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "IN-01",
+          "confidence": 0.85
+        },
+        {
+          "taxonomy": "foundation_skill",
+          "code": "FS-09",
+          "confidence": 0.8
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-podcast-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "podcast_show",
+          "confidence": 0.95
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-software-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "statistical_software",
+          "confidence": 0.98
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "IN-02",
+          "confidence": 0.85
+        },
+        {
+          "taxonomy": "foundation_skill",
+          "code": "FS-09",
+          "confidence": 0.7
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-guideline-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "primary_guideline",
+          "confidence": 0.98
+        },
+        {
+          "taxonomy": "methodology",
+          "code": "SYN-04",
+          "confidence": 0.85
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "SH-01",
+          "confidence": 0.95
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-course-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "free_course",
+          "confidence": 0.95
+        },
+        {
+          "taxonomy": "methodology",
+          "code": "EXP",
+          "confidence": 0.6
+        },
+        {
+          "taxonomy": "foundation_skill",
+          "code": "FS-04",
+          "confidence": 0.7
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "EV",
+          "confidence": 0.7
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-webguide-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "methodology_guide",
+          "confidence": 0.95
+        },
+        {
+          "taxonomy": "methodology",
+          "code": "SYN-04",
+          "confidence": 0.9
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "HI",
+          "confidence": 0.8
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "EV",
+          "confidence": 0.8
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "SH",
+          "confidence": 0.8
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-template-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "protocol_template",
+          "confidence": 0.95
+        },
+        {
+          "taxonomy": "methodology",
+          "code": "EXP",
+          "confidence": 0.75
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "EV-04",
+          "confidence": 0.85
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-visual-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "flowchart",
+          "confidence": 0.95
+        },
+        {
+          "taxonomy": "methodology",
+          "code": "SYN-04",
+          "confidence": 0.8
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "HI-02",
+          "confidence": 0.7
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "SH-01",
+          "confidence": 0.7
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-dataset-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "teaching_dataset",
+          "confidence": 0.95
+        },
+        {
+          "taxonomy": "methodology",
+          "code": "OBS-12",
+          "confidence": 0.8
+        },
+        {
+          "taxonomy": "specialty",
+          "code": "ICU",
+          "confidence": 0.85
+        },
+        {
+          "taxonomy": "cross_specialty_domain",
+          "code": "DIGHEALTH",
+          "confidence": 0.7
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "IN-02",
+          "confidence": 0.6
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-community-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "online_community",
+          "confidence": 0.95
+        },
+        {
+          "taxonomy": "foundation_skill",
+          "code": "FS-09",
+          "confidence": 0.75
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "IN-02",
+          "confidence": 0.5
+        }
+      ]
+    },
+    {
+      "resource_id": "demo-funding-001",
+      "tags": [
+        {
+          "taxonomy": "resource_type",
+          "code": "government_grant",
+          "confidence": 0.95
+        },
+        {
+          "taxonomy": "thesis",
+          "code": "EV-05",
+          "confidence": 0.55
+        }
+      ]
+    }
+  ]
+}

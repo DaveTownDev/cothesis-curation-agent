@@ -1,0 +1,14 @@
+# Prompt lab image for the Cloud Run Job `prompt-lab-run`.
+# Runs scripts.prompt_eval_loop (failure bucket → prompt_proposals).
+FROM python:3.12-slim
+
+WORKDIR /app
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+ENV PROMPT_LAB_MAX_CASES=10
+
+COPY agents/requirements.txt /app/agents/requirements.txt
+RUN pip install --no-cache-dir "google-adk>=2.1.0,<2.2.0" -r /app/agents/requirements.txt
+
+COPY . /app
+
+ENTRYPOINT ["python", "-m", "scripts.prompt_eval_loop"]

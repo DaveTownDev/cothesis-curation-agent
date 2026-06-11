@@ -92,6 +92,7 @@ class TestHappyPath:
         assert out["resource_code"].startswith("a-guide-to-the-retrospective-chart-review")
         # Draft written; auto_accept does not enter the human review queue.
         assert len(mocked["drafts"]) == 1
+        assert mocked["drafts"][0].assessment_prompt_version == "appraisal@1.0.0"
         assert len(mocked["queue"]) == 0
 
     def test_pipeline_state_written_each_stage(self, mocked):

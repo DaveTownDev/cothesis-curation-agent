@@ -224,7 +224,11 @@ function addRejectRecommendations(
   }
 }
 
-/** Derive one-click QA recommendations from audit fields and routing reason. */
+/**
+ * Derive one-click QA recommendations from audit fields and routing reason.
+ * Classification requeues (via ReviewActions / QaQuickActions) also append
+ * eval_failure_bucket records server-side in requeueItem (origin: qa_requeue).
+ */
 export function parseQaRecommendations(
   qa: QaAudit | undefined,
   itemReason?: string,

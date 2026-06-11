@@ -1,3 +1,4 @@
+<!-- prompt-version: arbiter@1.0.0 -->
 # Arbiter agent prompt
 
 Rebuild on Gemini (Pro). Inputs: the Classification output (`relevance_score` + `classification_confidence`, both 0-1) and the QC panel result. Route on the 0-1 signals ONLY — do NOT route on `ai_confidence` (0-100 quality signal, separate layer). Produce a composite judgement and a routing decision via the gate (docs/ARCHITECTURE.md):

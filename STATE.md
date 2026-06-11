@@ -3,6 +3,26 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
+**Integration-verify prompt improvement loop (2026-06-11):** Fixed `eval-summary.json` schema drift — `console/lib/eval-summary.ts` normalizes benchmark output (`response_match_score`, nested `thresholds`) for dashboard; taxonomy reprocess tests aligned to vocabulary codes (`CARDIO`, `PSYCH`). **Verification:** **454 pytest passed**; console lint/build clean; **e2e smoke green**. **Not done:** console redeploy with WS-B; prompt-lab Job deploy; fresh `adk eval` baseline capture.
+
+**WS-B HITL console eval loop (2026-06-11):** Copy eval case, Add to gold set, Flag taxonomy error, Send to prompt lab on review detail; `eval_failure_bucket` writes; QA classification requeue → failure bucket; `/prompt-lab` page with diff viewer + approve/reject (PR instructions only). **Not done:** console redeploy with WS-B.
+
+**Modified (WS-B):** `console/lib/eval-export.ts`, `console/lib/failure-bucket.ts`, `console/lib/firestore.ts`, `console/app/review/actions.ts`, `console/components/ReviewActions.tsx`, `console/app/prompt-lab/`, `console/components/PromptProposalCard.tsx`, `console/components/NavBar.tsx`, `eval/build_gold_case.py`, `tests/test_eval_export.py`, `scripts/e2e_console_smoke.sh`.
+
+**WS-D prompt lab (2026-06-11):** `agents/prompt_lab/` SequentialAgent team (analyst → editor → eval_arbiter); `scripts/prompt_eval_loop.py` Job runner; `Dockerfile.prompt-lab` + `cloudbuild.prompt-lab.yaml` + `scripts/deploy_prompt_lab_job.sh`; `PROMPT_LAB_MAX_CASES=10`; proposals write to `prompt_proposals` only (never auto-write `agents/prompts/`). **Verification:** 19 pytest (`test_prompt_lab_agents`, `test_prompt_lab_cycle`). **Not done:** GCP deploy (`deploy_prompt_lab_job.sh` human-gated); live ADK agent run; end-to-end cycle with console approve.
+
+**Modified (WS-D):** `agents/prompt_lab/` (new), `agents/prompts/prompt_lab_*.md` (new), `scripts/prompt_eval_loop.py` (new), `Dockerfile.prompt-lab` (new), `cloudbuild.prompt-lab.yaml` (new), `scripts/deploy_prompt_lab_job.sh` (new), `tests/test_prompt_lab_agents.py` (new), `tests/test_prompt_lab_cycle.py` (new).
+
+**WS-A eval infrastructure (2026-06-11):** 20 seed cases in `eval/cases/*.json` (`source.origin: seed`); aggregate → `eval/gold_set.json`; `eval/taxonomy_gold.json` **42** cases (vocabulary-validated via `eval/vocab.py`); `scripts/run_benchmark.py` + `eval/baseline.json`; **P2-08 complete** — CI `.github/workflows/benchmark.yml` (PR on `eval/**`, `agents/prompts/**`, `scripts/run_benchmark.py`); benchmark Job image `cloudbuild.benchmark.yaml` + `Dockerfile.benchmark` wired to `scripts/deploy_benchmark_job.sh`. **Verification:** `.venv/bin/pytest tests/test_run_benchmark.py -q` — **5 passed** (2026-06-11). **Not done:** fresh `adk eval` baseline capture; weekly Scheduler deploy (`deploy_benchmark_job.sh` **[DAVE] human-gated**).
+
+**Modified (WS-A):** `eval/cases/*.json` (20), `eval/schemas/gold_case.schema.json`, `eval/cases/README.md`, `eval/vocab.py`, `eval/taxonomy_gold.json`, `eval/baseline.json`, `eval/gold_set.json` (regenerated), `scripts/aggregate_gold_set.py`, `scripts/run_benchmark.py`, `.github/workflows/benchmark.yml`, `cloudbuild.benchmark.yaml`, `Dockerfile.benchmark`, `scripts/deploy_benchmark_job.sh`, `tests/test_aggregate_gold.py`, `tests/test_taxonomy_gold.py`, `tests/test_run_benchmark.py`.
+
+**WS-V0/V1 vocabulary alignment (2026-06-11):** Canonical `data/taxonomy/tag_vocabulary.json` + `demo_resources_retagged.json`; `agents/shared/tag_vocabulary.py` (sole code authority); validators/prompt/bridge switched to vocabulary-native `tags[]` push; `docs/INGESTION_AGENT_HANDOVER.md` copied from comp_build. **Verification:** 76 pytest (`test_tag_vocabulary`, `test_taxonomy`, `test_compendium_bridge`). **Not done:** full suite, console build, demo re-seed, 1512 reprocess, WS-V2 HITL pickers.
+
+**Modified (WS-V):** `agents/shared/tag_vocabulary.py` (new), `agents/taxonomy.py`, `agents/shared/codes.py`, `agents/shared/schema.py`, `agents/shared/compendium_bridge.py`, `agents/pipeline/deterministic.py`, `agents/prompts/classification.md`, `console/lib/compendium-sync.ts`, `console/lib/taxonomy.ts`, `console/lib/checklist.ts`, `console/components/TaxonomyEditor.tsx`, `data/taxonomy/tag_vocabulary.json`, `data/taxonomy/demo_resources_retagged.json`, `console/lib/data/taxonomy/tag_vocabulary.json`, `docs/INGESTION_AGENT_HANDOVER.md`, `tests/test_tag_vocabulary.py` (new), `tests/test_taxonomy.py`, `tests/test_compendium_bridge.py`.
+
+**WS-C pipeline/QC (2026-06-11):** `prompt_versions.py` + `assessment_prompt_version` stamping; QC `run_taxonomy_qc_check` in deterministic + interactive paths; `scripts/source_accuracy_audit.py` + `scripts/refine_classification.py`. **Verification:** 23 pytest (`test_prompt_versions`, `test_deterministic_pipeline`, `test_qc_panel_tools`, `test_refine_classification`).
+
 **QA queue routing @ `36ab6c1` (2026-06-11, pushed `origin/main`):** `auto_accept` no longer writes `review_queue`; console QA triage uses `console/lib/qa-issues.ts` (data-quality, URL, source-accuracy). **Verification:** 16 pytest (`test_qa_issues`, `test_deterministic_pipeline`).
 
 **Deployed (2026-06-11):** console **`console-00020-wqs`**; agent **`cothesis-agent-00013-sd4`** (`adk deploy cloud_run` from `agents/`, no dedicated script — see `docs/OPERATIONS.md`).
@@ -73,7 +93,25 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - [x] `research_database` resolved: subtype of `dataset` (v2.2) — 14-type enum unchanged
 
 ## In progress
-- (none)
+- (none — integration-verify green; next: console redeploy, prompt-lab Job deploy, `adk eval` baseline capture)
+
+## Latest verification (2026-06-11 — integration-verify)
+- `.venv/bin/pytest tests/ -q` — **454 passed**, 1 warning (`SequentialAgent` deprecation in prompt_lab)
+- `cd console && npm run lint && npm run build` — **clean** (Next.js 16.2.7; routes incl. `/prompt-lab`, `/dashboard`)
+- `bash scripts/e2e_console_smoke.sh` — **green** (`/dashboard` authenticated OK; review detail SKIP — no pending items)
+
+## Latest verification (2026-06-11 — WS-B)
+- `.venv/bin/pytest tests/test_eval_export.py -q` — **3 passed**
+- `cd console && npm run lint && npm run build` — **clean** (`/prompt-lab` route present)
+
+## Latest verification (2026-06-11 — WS-A)
+- `.venv/bin/pytest tests/test_aggregate_gold.py tests/test_taxonomy_gold.py tests/test_run_benchmark.py -q` — **18 passed**
+
+## Latest verification (2026-06-11 — WS-C)
+- `.venv/bin/pytest tests/test_prompt_versions.py tests/test_deterministic_pipeline.py tests/test_qc_panel_tools.py tests/test_refine_classification.py -q` — **23 passed**
+
+## Latest verification (2026-06-11 — WS-E)
+- `tests/test_firestore_schemas.py` — **7 passed**
 
 ## Latest verification (2026-06-09)
 - Compendium console sync: **322 pytest** green; console lint/build green.
@@ -111,7 +149,8 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - Login passcode (dev): `cothesis-demo` (set in `console/.env.local`)
 
 ## Blockers / waiting on human
-- (none — Day 1 complete)
+- **E2E smoke:** fix `console/lib/eval-summary.ts` to read new `run_benchmark.py` summary shape (or restore legacy fields in `console/data/eval-summary.json`) so `/dashboard` stops 500ing in smoke
+- **Baseline capture:** `eval/baseline.json` is a placeholder from the 2026-06-08 eval run; re-capture with `.venv/bin/python -m scripts.run_benchmark --skip-pytest` when `adk` is available locally
 
 ## Decisions needing the human
 - (none open)
@@ -127,6 +166,56 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 ## Deployed URLs
 - **Agent:** https://cothesis-agent-791873451733.us-central1.run.app (private, 403 unauth — IAP TODO for judges)
 - **Console:** https://console-791873451733.us-central1.run.app (public, passcode: `cothesis-demo-2026`)
+
+## Modified files this session (WS-B)
+- `console/lib/eval-export.ts` — build ADK gold cases from HITL review data (new)
+- `console/lib/failure-bucket.ts` — `eval_failure_bucket` Firestore writes (new)
+- `console/lib/firestore.ts` — `EvalFailureBucketDoc`, `PromptProposalDoc`, `PromptLabRunDoc` + queries
+- `console/app/review/actions.ts` — export/add gold set, flag, send to lab; requeue → failure bucket
+- `console/components/ReviewActions.tsx` — eval & prompt-lab action row
+- `console/app/prompt-lab/page.tsx`, `console/app/prompt-lab/actions.ts` — proposal list + approve/reject (new)
+- `console/components/PromptProposalCard.tsx` — diff viewer (new)
+- `console/components/NavBar.tsx` — Prompt lab nav link
+- `console/lib/qa-recommendations.ts` — doc re QA requeue → failure bucket
+- `eval/build_gold_case.py` — Python mirror for pytest (new)
+- `tests/test_eval_export.py` — gold case contract + aggregate round-trip (new)
+- `scripts/e2e_console_smoke.sh` — `/prompt-lab` route + eval action buttons on review detail
+
+## Modified files this session (WS-A)
+- `eval/cases/*.json` — 20 seed cases migrated from monolith (`source.origin: seed`)
+- `eval/gold_set.json` — regenerated via aggregate
+- `eval/taxonomy_gold.json` — expanded to 42 vocabulary-validated cases
+- `eval/baseline.json` — regression gate placeholder
+- `eval/schemas/gold_case.schema.json`, `eval/cases/README.md`, `eval/vocab.py` — eval validation layer
+- `scripts/aggregate_gold_set.py`, `scripts/run_benchmark.py` — aggregate + benchmark runner
+- `.github/workflows/benchmark.yml` — PR/push CI gate (pytest + benchmark --skip-adk)
+- `cloudbuild.benchmark.yaml`, `Dockerfile.benchmark` — benchmark Job image; `deploy_benchmark_job.sh` submits via `_IMAGE` substitution
+- `scripts/deploy_benchmark_job.sh` — rebuild image + update `run-benchmark` Job (human-gated)
+- `tests/test_aggregate_gold.py`, `tests/test_taxonomy_gold.py`, `tests/test_run_benchmark.py` — WS-A unit tests
+
+## Modified files this session (WS-C)
+- `agents/shared/prompt_versions.py` — new registry
+- `agents/prompts/*.md` — `<!-- prompt-version: … -->` comments (7 files)
+- `agents/appraisal/tools.py` — `assessment_prompt_version` on parse
+- `agents/qc_panel/tools.py` — `run_taxonomy_qc_check`
+- `agents/qc_panel/agent.py` — taxonomy check in `run_deterministic_checks`
+- `agents/pipeline/deterministic.py` — version stamp path + QC taxonomy wiring only
+- `scripts/source_accuracy_audit.py` — `/tmp/cothesis_source_accuracy.json`
+- `scripts/refine_classification.py` — classification replay CLI
+- `docs/OPERATIONS.md` — source-accuracy cadence + refine_classification
+- `agents/prompts/qc_panel.md` — taxonomy_check documented
+- `tests/test_prompt_versions.py`, `tests/test_refine_classification.py` — new
+- `tests/test_deterministic_pipeline.py`, `tests/test_qc_panel_tools.py` — extended
+
+## Modified files this session (WS-E P3-01 / P2-09)
+- `docs/SCHEMA.md` — `eval_failure_bucket`, `prompt_proposals`, `prompt_lab_runs` collection defs
+- `firestore.indexes.json` — indexes for failure bucket `created_at` DESC, proposals `status`
+- `agents/shared/firestore_schemas.py` — Pydantic models + Firestore serializers (new)
+- `agents/shared/firestore_utils.py` — collection name constants
+- `docs/OPERATIONS.md` — prompt improvement loop, human merge workflow, benchmark runner, deploy sequence
+- `docs/PROMPT_IMPROVEMENT_LOOP.md` — cross-link to OPERATIONS.md
+- `scripts/deploy_benchmark_job.sh` — benchmark Job deploy skeleton (human-gated)
+- `tests/test_firestore_schemas.py` — unit tests for new models (new)
 
 ## Modified files this session (Phase C)
 - `console/app/review/actions.ts` — approve/reject/requeue return `nextPath`; `undoApprove`, `reopenForReview`
@@ -169,6 +258,23 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - **Walkthrough:** `docs/DEMO_SCRIPT.md` (5 min video) · `docs/JUDGE_GUIDE.md` (judge self-serve)
 - **Re-seed before recording:** `GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.seed_demo`
 - **Do not** run live pipeline on camera (~45s/resource)
+
+## Key commands (WS-A)
+- Aggregate gold set: `.venv/bin/python -m scripts.aggregate_gold_set`
+- Benchmark: `.venv/bin/python -m scripts.run_benchmark`
+- Regression gate: `.venv/bin/python -m scripts.run_benchmark --check-regression`
+- WS-A gate: `.venv/bin/pytest tests/test_aggregate_gold.py tests/test_taxonomy_gold.py tests/test_run_benchmark.py -q`
+
+## Key commands (WS-A)
+- Aggregate gold: `python -m scripts.aggregate_gold_set`
+- Benchmark gate: `python -m scripts.run_benchmark --check-regression`
+- WS-A unit gate: `.venv/bin/pytest tests/test_aggregate_gold.py tests/test_taxonomy_gold.py tests/test_run_benchmark.py -q`
+
+## Key commands (WS-C)
+- Prompt versions: `.venv/bin/pytest tests/test_prompt_versions.py -q`
+- Source-accuracy layer: `python -m scripts.source_accuracy_audit` then `python -m scripts.write_qa_audit`
+- Classification replay: `python -m scripts.refine_classification {resource_code} [--dry-run]`
+- WS-C gate: `.venv/bin/pytest tests/test_prompt_versions.py tests/test_deterministic_pipeline.py tests/test_qc_panel_tools.py tests/test_refine_classification.py -q`
 
 ## Key commands
 - Scaffold: `uvx google-agents-cli setup`

@@ -73,11 +73,13 @@ export default async function DashboardPage() {
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               <div className="text-center">
                 <p className="text-2xl font-bold text-[#289642]">
-                  {evalSummary.tool_trajectory_avg.toFixed(2)}
+                  {evalSummary.response_match_score.toFixed(2)}
                 </p>
-                <p className="text-xs text-[#6b7280]">tool_trajectory_avg</p>
+                <p className="text-xs text-[#6b7280]">response_match_score</p>
                 <Badge variant="default" className="mt-1 text-xs">
-                  {evalSummary.tool_trajectory_avg >= evalSummary.tool_trajectory_threshold ? "Target met" : "Below target"}
+                  {evalSummary.response_match_score >= evalSummary.response_match_threshold
+                    ? "Target met"
+                    : "Below target"}
                 </Badge>
               </div>
               <div className="text-center">

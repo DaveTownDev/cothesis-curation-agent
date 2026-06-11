@@ -1,0 +1,12 @@
+# Builds the benchmark image (Dockerfile.benchmark) for the run-benchmark job.
+# Invoked by scripts/deploy_benchmark_job.sh:
+#   gcloud builds submit --config cloudbuild.benchmark.yaml --substitutions=_IMAGE=<img> .
+substitutions:
+  _IMAGE: us-central1-docker.pkg.dev/cothesis-curation-agent/cloud-run-source-deploy/cothesis-benchmark:latest
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "Dockerfile.benchmark", "-t", "${_IMAGE}", "."]
+images:
+  - "${_IMAGE}"
+options:
+  logging: CLOUD_LOGGING_ONLY

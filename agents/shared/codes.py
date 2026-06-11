@@ -71,7 +71,13 @@ def normalize_stage_code(value) -> str | None:
         return v
     return STAGE_CODE_ALIASES.get(str(value).strip().lower().replace("-", "_").replace(" ", "_"))
 
-STAGE_CODES = frozenset({"TH", "HI", "EV", "ST", "IN", "SH"})
+
+def _thesis_codes() -> frozenset[str]:
+    from agents.shared.tag_vocabulary import thesis_codes
+    return thesis_codes()
+
+
+STAGE_CODES = _thesis_codes()
 
 ACCESS_TYPES = frozenset({"free", "freemium", "paid", "subscription", "institutional", "open_access"})
 
@@ -154,6 +160,11 @@ PLAIN_JARGON_TERMS = [
 # Methodology grounding — full live platform code list from data/taxonomy/*.json.
 # MVP disambiguation text retained for the four grounding-card methodologies.
 # ---------------------------------------------------------------------------
+
+def get_classification_vocabulary_guide() -> str:
+    from agents.shared.tag_vocabulary import build_classification_vocabulary_guide
+    return build_classification_vocabulary_guide()
+
 
 def get_methodology_guide() -> str:
     from agents.taxonomy import build_methodology_guide

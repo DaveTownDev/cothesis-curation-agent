@@ -1,6 +1,6 @@
-/** Curator-editable taxonomy options — synced from data/taxonomy/*.json. */
+/** Curator-editable taxonomy options — vocabulary is code authority; live scrape for on-site subset. */
 import liveMethodologies from "@/lib/data/taxonomy/live_methodologies.json"
-import liveSpecialties from "@/lib/data/taxonomy/live_specialties.json"
+import tagVocabulary from "@/lib/data/taxonomy/tag_vocabulary.json"
 import liveSubtypes from "@/lib/data/taxonomy/live_subtypes.json"
 import liveSkills from "@/lib/data/taxonomy/live_skills.json"
 
@@ -30,11 +30,24 @@ export const METHODOLOGY_OPTIONS: MethodologyOption[] = liveMethodologies.method
 /** @deprecated use METHODOLOGY_OPTIONS — kept for simple code-only consumers */
 export const METHODOLOGY_CODES = METHODOLOGY_OPTIONS.map((m) => m.code)
 
-export type SpecialtyOption = { slug: string; name: string }
+export type SpecialtyOption = { code: string; slug: string; name: string }
 
-export const SPECIALTY_OPTIONS: SpecialtyOption[] = liveSpecialties.specialties.map(
-  (s) => ({ slug: s.slug, name: s.name.replace(/&amp;/g, "&") }),
+type VocabSpecialtyNode = {
+  code: string
+  level: string
+  name: string
+  slug?: string
+}
+
+export const SPECIALTY_OPTIONS: SpecialtyOption[] = (
+  tagVocabulary.taxonomies.specialty.nodes as VocabSpecialtyNode[]
 )
+  .filter((n) => n.level === "specialty")
+  .map((n) => ({
+    code: n.code,
+    slug: n.slug ?? n.code.toLowerCase(),
+    name: n.name.replace(/&amp;/g, "&"),
+  }))
 
 export type SubtypeOption = { code: string; name: string; type_code: string }
 
@@ -67,29 +80,29 @@ export function methodologyLabel(code: string): string {
 }
 
 export function specialtyOptionLabel(s: SpecialtyOption): string {
-  return s.name
+  return taxonomyCodeNameLabel(s.code, s.name)
 }
 
-export function specialtyLabel(slug: string): string {
-  const s = SPECIALTY_OPTIONS.find((o) => o.slug === slug)
-  return s ? specialtyOptionLabel(s) : slug
+export function specialtyLabel(codeOrSlug: string): string {
+  const key = codeOrSlug.trim()
+  const byCode = SPECIALTY_OPTIONS.find((o) => o.code === key.toUpperCase())
+  if (byCode) return specialtyOptionLabel(byCode)
+  const bySlug = SPECIALTY_OPTIONS.find((o) => o.slug === key.toLowerCase())
+  return bySlug ? specialtyOptionLabel(bySlug) : key
 }
 
 export function subtypeOptionLabel(s: SubtypeOption): string {
   return taxonomyCodeNameLabel(s.code, s.name)
 }
 
-/** THESIS phase codes — names from cothesis_thesis_stages.json / docs/TAXONOMY.md */
-export type ThesisStageOption = { code: string; name: string }
+/** THESIS phases + stages — from canonical tag_vocabulary.json */
+export type ThesisStageOption = { code: string; name: string; level: string }
 
-export const THESIS_STAGE_OPTIONS: ThesisStageOption[] = [
-  { code: "TH", name: "Theory" },
-  { code: "HI", name: "History" },
-  { code: "EV", name: "Evaluate" },
-  { code: "ST", name: "Study" },
-  { code: "IN", name: "Interpret" },
-  { code: "SH", name: "Share" },
-]
+type VocabThesisNode = { code: string; level: string; name: string }
+
+export const THESIS_STAGE_OPTIONS: ThesisStageOption[] = (
+  tagVocabulary.taxonomies.thesis.nodes as VocabThesisNode[]
+).map((n) => ({ code: n.code, name: n.name, level: n.level }))
 
 /** @deprecated use THESIS_STAGE_OPTIONS — kept for tuple consumers */
 export const STAGE_CODES = THESIS_STAGE_OPTIONS.map((s) => [s.code, s.name] as const)

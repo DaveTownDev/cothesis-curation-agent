@@ -206,7 +206,7 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
     )
     from agents.qc_panel.tools import (
         run_ai_pattern_scan, run_voice_review, run_plain_jargon_check,
-        run_badge_check, evaluate_dimension, aggregate_panel_results,
+        run_badge_check, run_taxonomy_qc_check, evaluate_dimension, aggregate_panel_results,
     )
     from agents.arbiter.tools import compute_routing_decision, compute_panel_agreement
     from agents.shared.taxonomy_rules import methodology_required_for_type
@@ -214,7 +214,6 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
     from agents.shared.firestore_utils import get_firestore_collection
     from agents.shared.schema import ClassificationResult, EditorialOutput, AIAssessmentDraft
     from agents.shared.codes import (
-        METHODOLOGY_GUIDE, get_discipline_guide, get_subtype_guide, get_skill_guide,
         REPORTING_GUIDELINE_GUIDE,
         CONTENT_FORMAT_MAP, content_format_for, time_to_consume_for,
     )
@@ -308,16 +307,12 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
     _write_state(state, stage="appraisal", run_id=run_id)
 
     # ── Stage 2: Classification (grounded; respects the source's real type) ─
+    from agents.shared.codes import get_classification_vocabulary_guide
+
     cls_prompt = (
         _load_prompt("classification")
-        + "\n\n## Methodology grounding (assign the best match or [] — do NOT force-fit)\n"
-        + METHODOLOGY_GUIDE
-        + "\n\n## Specialty / discipline slugs\n"
-        + get_discipline_guide()
-        + "\n\n## Resource subtypes\n"
-        + get_subtype_guide()
-        + "\n\n## Foundation skills\n"
-        + get_skill_guide()
+        + "\n\n"
+        + get_classification_vocabulary_guide()
         + "\n\n## Resource type\nThe source was ingested as type '" + orig_type + "'. "
         "Treat this as a prior for resource_type_code, but OVERRIDE it when the metadata "
         "contradicts it — never default to 'article' for databases, registries, books, "
@@ -399,6 +394,7 @@ def run_pipeline(resource_input: dict, pipeline_run_id: str = "") -> dict:
         run_voice_review(record["editorial_description"], record.get("summary", ""), record["editorial_description_plain"]),
         run_plain_jargon_check(record["editorial_description_plain"]),
         run_badge_check(record.get("proposed_badges", [])),
+        run_taxonomy_qc_check(record),
     ]
     for dim_name, dim in (draft.quality_dimensions.to_dict().items() if draft.quality_dimensions else []):
         panel_results.append(evaluate_dimension(dim_name, dim.get("score", 70), dim.get("reasoning", "")))

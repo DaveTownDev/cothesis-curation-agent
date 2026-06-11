@@ -176,13 +176,13 @@ export function TaxonomyEditor({ value, onChange }: Props) {
         <div className={scrollCls}>
           <div className="flex flex-wrap gap-1">
             {filteredSpec.map((s) => {
-              const on = value.discipline_codes.includes(s.slug)
+              const on = value.discipline_codes.includes(s.code)
               return (
                 <button
-                  key={s.slug}
+                  key={s.code}
                   type="button"
                   title={`${specialtyOptionLabel(s)} (${s.slug})`}
-                  onClick={() => toggleCode("discipline_codes", s.slug)}
+                  onClick={() => toggleCode("discipline_codes", s.code)}
                   className={`rounded px-1.5 py-0.5 text-[10px] leading-snug text-left transition-colors ${
                     on ? "bg-[#6b4fa0] text-white" : "bg-[#e8e4dc] text-[#4a6741] hover:bg-[#d4cfc5]"
                   }`}

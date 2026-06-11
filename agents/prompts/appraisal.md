@@ -1,3 +1,4 @@
+<!-- prompt-version: appraisal@1.0.0 -->
 # Appraisal agent prompt
 
 Rebuild on Gemini. **Deterministic-and-API-first:** consume OpenAlex/PubMed/Semantic Scholar metadata and (for articles) RobotReviewer/URSE/MedJEx signals BEFORE scoring with the LLM. Apply the per-type rubric (docs/AGENTS_SPEC.md → Appraisal).

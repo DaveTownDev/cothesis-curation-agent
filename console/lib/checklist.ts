@@ -20,14 +20,20 @@ function methodologyRequiredForType(resourceType: string | undefined): boolean {
   return !METHODOLOGY_OPTIONAL_TYPES.has(resourceType)
 }
 
-const LIVE_SPECIALTY_SLUGS = new Set(SPECIALTY_OPTIONS.map((s) => s.slug))
+const VOCAB_SPECIALTY_CODES = new Set(SPECIALTY_OPTIONS.map((s) => s.code))
 
 function normalizeMethodologyCode(code: string): string {
   return code.trim().toUpperCase()
 }
 
-function normalizeDisciplineSlug(slug: string): string {
-  return slug.trim().toLowerCase()
+function normalizeSpecialtyCode(value: string): string | null {
+  const raw = value.trim()
+  if (!raw) return null
+  const upper = raw.toUpperCase()
+  if (VOCAB_SPECIALTY_CODES.has(upper)) return upper
+  const slug = raw.toLowerCase()
+  const match = SPECIALTY_OPTIONS.find((s) => s.slug === slug)
+  return match?.code ?? null
 }
 
 export interface ChecklistError {
@@ -75,15 +81,15 @@ export function validatePublishChecklist(
     }
   }
 
-  // 2b. discipline_codes — validate slugs when present (optional field)
+  // 2b. discipline_codes — validate specialty codes when present (optional field)
   const disciplines = record.discipline_codes as string[] | undefined
   if (disciplines && disciplines.length > 0) {
-    for (const slug of disciplines) {
-      const norm = normalizeDisciplineSlug(slug)
-      if (!LIVE_SPECIALTY_SLUGS.has(norm)) {
+    for (const raw of disciplines) {
+      const norm = normalizeSpecialtyCode(raw)
+      if (!norm) {
         errors.push({
           field: "discipline_codes",
-          message: `Invalid discipline slug '${slug}' (not in live Compendium taxonomy)`,
+          message: `Invalid specialty code '${raw}' (not in vocabulary)`,
         })
       }
     }

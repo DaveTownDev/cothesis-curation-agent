@@ -13,9 +13,23 @@ import {
   approveItem,
   rejectItem,
   requeueItem,
+  exportEvalCaseJson,
+  addToGoldSet,
+  flagTaxonomyError,
+  sendToPromptLab,
   type ApproveResult,
 } from "@/app/review/actions"
-import { CheckCircle, XCircle, AlertCircle, RotateCcw, Pencil } from "lucide-react"
+import { CheckCircle, XCircle, AlertCircle, RotateCcw, Pencil, Copy, Star, Flag, FlaskConical } from "lucide-react"
+
+const TAXONOMY_FLAG_FIELDS = [
+  { value: "methodology_codes", label: "Methodology codes" },
+  { value: "discipline_codes", label: "Specialty codes" },
+  { value: "stage_codes", label: "Thesis stages" },
+  { value: "resource_type_code", label: "Resource type" },
+  { value: "resource_subtype_code", label: "Subtype" },
+  { value: "skill_codes", label: "Foundation skills" },
+  { value: "classification", label: "Classification (general)" },
+] as const
 
 interface EditedDescriptions {
   editorial_description: string
@@ -68,6 +82,11 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
   const [requeueReason, setRequeueReason] = useState("")
   const [requeueStage, setRequeueStage] = useState<RequeueStage>("classification")
   const [isPending, startTransition] = useTransition()
+  const [evalMessage, setEvalMessage] = useState<string | null>(null)
+  const [flagging, setFlagging] = useState(false)
+  const [sendingToLab, setSendingToLab] = useState(false)
+  const [flagField, setFlagField] = useState<string>(TAXONOMY_FLAG_FIELDS[0].value)
+  const [flagLabel, setFlagLabel] = useState("")
 
   const canApprove = checklistErrors.length === 0
 
@@ -158,6 +177,83 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
     })
   }
 
+  async function runSideEffect<T>(
+    action: () => Promise<T>,
+    onSuccess: (result: T) => void | Promise<void>,
+  ) {
+    setActionError(null)
+    try {
+      const result = await action()
+      await onSuccess(result)
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Action failed — try again")
+    }
+  }
+
+  function handleCopyEvalCase() {
+    setEvalMessage(null)
+    startTransition(() => {
+      void runSideEffect(
+        () => exportEvalCaseJson(itemId, edited, taxonomy),
+        async (result) => {
+          try {
+            await navigator.clipboard.writeText(result.json)
+            setEvalMessage(`Copied eval case ${result.eval_id} to clipboard`)
+          } catch {
+            setEvalMessage(`Eval case ready (${result.eval_id}) — clipboard blocked; use Add to gold set`)
+          }
+        },
+      )
+    })
+  }
+
+  function handleAddToGoldSet() {
+    setEvalMessage(null)
+    startTransition(() => {
+      void runSideEffect(
+        () => addToGoldSet(itemId, edited, taxonomy),
+        (result) => {
+          const agg = result.aggregated
+            ? "gold_set.json regenerated"
+            : result.aggregate_note ?? "case file written"
+          setEvalMessage(`Added ${result.eval_id} → eval/cases/${result.eval_id}.json (${agg})`)
+        },
+      )
+    })
+  }
+
+  function handleFlagTaxonomy() {
+    const label = flagLabel.trim()
+    if (!label) return
+    setEvalMessage(null)
+    startTransition(() => {
+      void runSideEffect(
+        () => flagTaxonomyError(itemId, flagField, label),
+        (result) => {
+          setFlagging(false)
+          setFlagLabel("")
+          setEvalMessage(`Flagged taxonomy error (${result.failure_id})`)
+        },
+      )
+    })
+  }
+
+  function handleSendToLab() {
+    const label = flagLabel.trim()
+    if (!label) return
+    setEvalMessage(null)
+    startTransition(() => {
+      void runSideEffect(
+        () => sendToPromptLab(itemId, flagField, label),
+        (result) => {
+          setSendingToLab(false)
+          setFlagLabel("")
+          setEvalMessage(`Queued for prompt lab (${result.failure_id})`)
+        },
+      )
+    })
+  }
+
   useImperativeHandle(ref, () => ({
     approve: handleApprove,
     openReject: () => { setRejecting(true); setRequeueing(false) },
@@ -243,7 +339,13 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
         </div>
       )}
 
-      {!rejecting && !requeueing && (
+      {evalMessage && (
+        <div className="rounded-md border border-[#289642]/30 bg-green-50 px-3 py-2 text-xs text-[#0E3A27]">
+          {evalMessage}
+        </div>
+      )}
+
+      {!rejecting && !requeueing && !flagging && !sendingToLab && (
         <div className="space-y-2">
           <Button
             data-action="approve"
@@ -260,6 +362,97 @@ export const ReviewActions = forwardRef<ReviewActionsHandle, Props>(function Rev
             </Button>
             <Button variant="outline" onClick={() => setRejecting(true)} disabled={isPending} className="flex-1 text-xs text-red-600 border-red-200 hover:bg-red-50">
               <XCircle size={12} /> Reject (r)
+            </Button>
+          </div>
+          <div className="pt-2 border-t border-[#d4cfc5] space-y-2">
+            <p className="text-[10px] uppercase tracking-wide text-[#6b7280] font-semibold">
+              Eval & prompt lab
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                data-action="copy-eval-case"
+                disabled={isPending}
+                className="text-xs"
+                onClick={handleCopyEvalCase}
+              >
+                <Copy size={12} /> Copy eval case
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                data-action="add-to-gold-set"
+                disabled={isPending}
+                className="text-xs"
+                onClick={handleAddToGoldSet}
+              >
+                <Star size={12} /> Add to gold set
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                data-action="flag-taxonomy-error"
+                disabled={isPending}
+                className="text-xs"
+                onClick={() => { setFlagging(true); setSendingToLab(false) }}
+              >
+                <Flag size={12} /> Flag taxonomy error
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                data-action="send-to-prompt-lab"
+                disabled={isPending}
+                className="text-xs"
+                onClick={() => { setSendingToLab(true); setFlagging(false) }}
+              >
+                <FlaskConical size={12} /> Send to prompt lab
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {(flagging || sendingToLab) && (
+        <div className="space-y-2 rounded-md border border-[#d4cfc5] p-3">
+          <h3 className="text-xs font-semibold text-[#0E3A27]">
+            {sendingToLab ? "Send to prompt lab" : "Flag taxonomy error"}
+          </h3>
+          <label className="block text-xs text-[#6b7280]">
+            Field
+            <select
+              className="mt-1 w-full h-8 rounded border border-[#d4cfc5] bg-white px-2 text-[#0E3A27] text-xs"
+              value={flagField}
+              onChange={(e) => setFlagField(e.target.value)}
+            >
+              {TAXONOMY_FLAG_FIELDS.map((f) => (
+                <option key={f.value} value={f.value}>{f.label}</option>
+              ))}
+            </select>
+          </label>
+          <Textarea
+            placeholder="Describe the taxonomy error for the prompt lab analyst…"
+            value={flagLabel}
+            onChange={(e) => setFlagLabel(e.target.value)}
+            rows={2}
+            className="text-xs"
+          />
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              data-action={sendingToLab ? "confirm-send-to-lab" : "confirm-flag-taxonomy"}
+              disabled={!flagLabel.trim() || isPending}
+              onClick={sendingToLab ? handleSendToLab : handleFlagTaxonomy}
+            >
+              {isPending ? "Saving…" : sendingToLab ? "Queue for lab" : "Flag error"}
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => { setFlagging(false); setSendingToLab(false); setFlagLabel("") }}
+            >
+              Cancel
             </Button>
           </div>
         </div>

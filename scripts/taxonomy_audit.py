@@ -21,68 +21,12 @@ ROOT = Path(__file__).resolve().parents[1]
 GOLD_PATH = ROOT / "eval" / "taxonomy_gold.json"
 OUT_DEFAULT = "/tmp/cothesis_taxonomy_audit.json"
 
-from agents.shared.codes import RESOURCE_TYPES
-from agents.shared.taxonomy_rules import methodology_required_for_type
-from agents.taxonomy import (
-    is_valid_methodology_code,
-    is_valid_skill_code,
-    is_valid_subtype_code,
-    normalize_methodology_code,
-    normalize_skill_code,
-    normalize_subtype_code,
-    subtype_type_for,
-)
+from agents.shared.taxonomy_rules import validate_taxonomy_draft
 
 
 def load_gold_cases(path: Path = GOLD_PATH) -> dict[str, dict]:
     doc = json.loads(path.read_text(encoding="utf-8"))
     return {c["resource_code"]: c.get("expected", {}) for c in doc.get("cases", [])}
-
-
-def validate_taxonomy_draft(dr: dict) -> list[dict]:
-    """Return issue dicts {sev, field, msg} for one draft_record."""
-    issues: list[dict] = []
-
-    def warn(field: str, msg: str) -> None:
-        issues.append({"sev": "warn", "field": field, "msg": msg})
-
-    def fail(field: str, msg: str) -> None:
-        issues.append({"sev": "fail", "field": field, "msg": msg})
-
-    rt = dr.get("resource_type_code")
-    if rt and rt not in RESOURCE_TYPES:
-        fail("resource_type_code", f"unknown type: {rt}")
-
-    sub = dr.get("resource_subtype_code")
-    if sub is not None and sub != "":
-        norm_sub = normalize_subtype_code(sub)
-        if not is_valid_subtype_code(norm_sub):
-            fail("resource_subtype_code", f"unknown subtype: {sub}")
-        elif rt and subtype_type_for(norm_sub) != rt:
-            fail(
-                "resource_subtype_code",
-                f"subtype {norm_sub} parent type {subtype_type_for(norm_sub)!r} != {rt!r}",
-            )
-    elif rt == "book_chapter" and sub is None:
-        pass
-    elif rt and rt != "book_chapter" and not sub:
-        warn("resource_subtype_code", "missing subtype for non-book_chapter type")
-
-    mc = dr.get("methodology_codes") or []
-    for code in mc:
-        norm = normalize_methodology_code(code)
-        if not is_valid_methodology_code(norm):
-            fail("methodology_codes", f"unknown platform code: {code}")
-    if methodology_required_for_type(rt) and not mc:
-        warn("methodology_codes", "empty but required for this resource type")
-
-    skills = dr.get("skill_codes") or []
-    for code in skills:
-        norm = normalize_skill_code(code)
-        if not is_valid_skill_code(norm):
-            fail("skill_codes", f"unknown foundation skill: {code}")
-
-    return issues
 
 
 def score_against_gold(dr: dict, gold_expected: dict) -> list[dict]:
@@ -133,6 +77,32 @@ def audit_records_from_firestore(project: str) -> list[dict]:
     return items
 
 
+def score_gold_cases(path: Path = GOLD_PATH) -> dict:
+    """Validate hand-labeled expected blocks in taxonomy_gold.json."""
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    cases = doc.get("cases", [])
+    results = []
+    for case in cases:
+        rc = case.get("resource_code", "unknown")
+        expected = case.get("expected") or {}
+        issues = validate_taxonomy_draft(expected)
+        fails = [i for i in issues if i["sev"] == "fail"]
+        results.append({
+            "resource_code": rc,
+            "pass": len(fails) == 0,
+            "issues": issues,
+        })
+    passed = sum(1 for r in results if r["pass"])
+    total = len(results)
+    return {
+        "gold_path": str(path),
+        "cases_total": total,
+        "cases_passed": passed,
+        "pass_rate": round(passed / total, 4) if total else 0.0,
+        "failures": [r for r in results if not r["pass"]],
+    }
+
+
 def run_audit(items: list[dict], gold: dict[str, dict]) -> dict:
     results = []
     for it in items:
@@ -169,7 +139,23 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Taxonomy audit over review_queue drafts")
     parser.add_argument("--fixture", type=Path, help="JSON list of {resource_code, draft} objects")
     parser.add_argument("--out", type=Path, default=Path(OUT_DEFAULT))
+    parser.add_argument(
+        "--score-gold",
+        action="store_true",
+        help="Validate eval/taxonomy_gold.json expected blocks; report pass rate",
+    )
     args = parser.parse_args()
+
+    if args.score_gold:
+        report = score_gold_cases()
+        args.out.write_text(json.dumps(report, indent=2), encoding="utf-8")
+        print(json.dumps({
+            "cases_total": report["cases_total"],
+            "cases_passed": report["cases_passed"],
+            "pass_rate": report["pass_rate"],
+        }, indent=2))
+        print(f"\nFull report -> {args.out}")
+        return 0 if report["cases_passed"] == report["cases_total"] else 1
 
     gold = load_gold_cases()
     if args.fixture:

@@ -56,6 +56,75 @@ doppler run --project dave-ai-stack --config prd -- \
 
 Merges live catalog from Postgres `import_candidates` + Neo4j (public library graph), inserts missing queue rows, resets `complete`/`failed`/`processing` → `pending`, and sets `import_candidates.status = enrichment_queued`.
 
+## Prompt improvement loop
+
+Full architecture, HITL integration points, and phase roadmap: **[docs/PROMPT_IMPROVEMENT_LOOP.md](PROMPT_IMPROVEMENT_LOOP.md)**. Build task tracker: `docs/PROMPT_IMPROVEMENT_BUILD_PLAN.md`. Firestore shapes: `docs/SCHEMA.md` (`eval_failure_bucket`, `prompt_proposals`, `prompt_lab_runs`).
+
+### Human merge workflow (prompt changes)
+
+Prompt lab and console **never** auto-write `agents/prompts/`. Every production prompt change follows this gate:
+
+1. **Propose offline** — `prompt-lab-run` Job (or local `adk web` prompt lab) writes a `prompt_proposals` doc with `unified_diff` + `eval_delta`. HITL flags land in `eval_failure_bucket` first.
+2. **Review in console** — `/prompt-lab` lists `pending` proposals; approve = merge instructions only; reject = `status=rejected` (no file write).
+3. **Human PR** — Curator applies the diff in git, bumps the prompt registry (`agents/shared/prompt_versions.py`), and adds a version comment at the top of the edited `agents/prompts/*.md` file.
+4. **Regression gate** — `.venv/bin/pytest tests/ -q` then `python -m scripts.run_benchmark --check-regression` (see Benchmark runner below). Do **not** weaken `eval/eval_config.json` thresholds.
+5. **Version stamp** — Ensure `assessment_prompt_version` / per-agent registry strings match the merged prompt files before deploy.
+6. **Deploy** — Follow deploy sequence below; capture a fresh `eval/baseline.json` only after a green full benchmark on `main`.
+
+**Gold cases from HITL** — "Add to gold set" writes `eval/cases/{resource_code}.json`; run `python -m scripts.aggregate_gold_set` before benchmark. Gold and prompt changes land via **PR only**.
+
+### Source-accuracy QA layer
+
+Deterministic comparison of `review_queue.draft_record` against live URLs/DOIs. Run after batch processing or before QA triage (weekly or ad hoc — not on every `run-batch`):
+
+```bash
+# Data-quality + URL liveness (layer 1):
+GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.audit_records
+
+# Source-accuracy heuristics (layer 2) -> /tmp/cothesis_source_accuracy.json:
+GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.source_accuracy_audit
+
+# Merge both into review_queue.qa_audit for console QA column:
+GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.write_qa_audit
+```
+
+Filter the review queue by `qa_audit.source_verdict == "fail"` for worst-first triage. **Classification replay** (one resource, no full pipeline): `python -m scripts.refine_classification {resource_code} [--dry-run]`.
+
+### Benchmark runner
+
+`scripts/run_benchmark.py` (WS-A) runs, in order:
+
+1. `pytest -q`
+2. `adk eval` against `eval/gold_set.json` + `eval/eval_config.json`
+3. Writes `console/data/eval-summary.json` for the dashboard band
+
+Flags:
+
+- `--check-regression` — compare scores to `eval/baseline.json`; exit 1 on regression (CI + weekly Scheduler).
+- `--subset N` — cap cases for prompt-lab replays (cost guard).
+
+Local run (after WS-A lands):
+
+```bash
+GOOGLE_CLOUD_PROJECT=cothesis-curation-agent .venv/bin/python -m scripts.run_benchmark --check-regression
+```
+
+**CI** — `.github/workflows/benchmark.yml` (WS-A) triggers on `eval/**`, `agents/prompts/**`, `scripts/run_benchmark.py`. **Weekly Scheduler** — separate from daily `run-batch` @ 20:00 UTC; human deploy via `bash scripts/deploy_benchmark_job.sh` (see below).
+
+### Prompt-improvement deploy sequence
+
+**[DAVE]** — human-gated; run only after WS merges are green on `main`. Do not run `gcloud` deploy scripts from automation without approval.
+
+1. **Firestore indexes** — `firebase deploy --only firestore:indexes` (requires Firebase CLI; includes `eval_failure_bucket` + `prompt_proposals` indexes in `firestore.indexes.json`).
+2. **Agent** — `adk deploy cloud_run` from `agents/` (prompt version constants ship with image); record revision in `STATE.md`.
+3. **Batch image** — `bash scripts/deploy_batch_job.sh` (deterministic orchestrator unchanged).
+4. **Benchmark Job** — `bash scripts/deploy_benchmark_job.sh` + weekly Cloud Scheduler → `run-benchmark` Job.
+5. **Prompt lab Job** — `bash scripts/deploy_prompt_lab_job.sh` (WS-D; separate image).
+6. **Console** — `bash scripts/deploy_console.sh` (gold export + `/prompt-lab` when WS-B ships).
+7. **Post-deploy** — bump `prompt_versions` registry if prompts changed; `python -m scripts.run_benchmark --check-regression`; refresh `eval/baseline.json` on intentional prompt bump.
+
+**Cost guards (prompt lab):** `PROMPT_LAB_MAX_CASES=10` default; Flash-Lite for classification replays; Pro only for editorial rubric judge. Monthly: review `eval_failure_bucket` volume and tune max cases. Kill-switch per Day 0 guardrails above.
+
 ## Cost (target: well under $100)
 Model tiering (Gemini 3.x: Flash-Lite for discovery/classification/reconciliation/QC; Flash for appraisal/editorial; Pro only for the arbiter routing decision) is the biggest lever. Scale Cloud Run to zero; keep prompts < 200K tokens (Pro doubles above); Vertex AI Search free tier is 10k queries/month. Note: on the global endpoint, context caching and batch discounts are unavailable, so lean harder on tiering and trimming. The kill-switch covers the runaway-loop tail risk. The /cost-check skill summarises spend.
 

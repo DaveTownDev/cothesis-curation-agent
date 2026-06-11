@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class TestValidateTaxonomyDraft:
     def test_optional_type_empty_methodology_warns_not_fail(self):
-        from scripts.taxonomy_audit import validate_taxonomy_draft
+        from agents.shared.taxonomy_rules import validate_taxonomy_draft
         issues = validate_taxonomy_draft({
             "resource_type_code": "software",
             "resource_subtype_code": "project_management",
@@ -19,7 +19,7 @@ class TestValidateTaxonomyDraft:
         assert not any(i["field"] == "methodology_codes" for i in issues)
 
     def test_article_empty_methodology_warns(self):
-        from scripts.taxonomy_audit import validate_taxonomy_draft
+        from agents.shared.taxonomy_rules import validate_taxonomy_draft
         issues = validate_taxonomy_draft({
             "resource_type_code": "article",
             "resource_subtype_code": "methodology_paper",
@@ -31,7 +31,7 @@ class TestValidateTaxonomyDraft:
         )
 
     def test_subtype_parent_mismatch_fails(self):
-        from scripts.taxonomy_audit import validate_taxonomy_draft
+        from agents.shared.taxonomy_rules import validate_taxonomy_draft
         issues = validate_taxonomy_draft({
             "resource_type_code": "article",
             "resource_subtype_code": "project_management",

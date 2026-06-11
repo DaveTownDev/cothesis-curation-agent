@@ -205,6 +205,63 @@ export interface ReviewQueueFilters {
   limit?: number
 }
 
+// ── Prompt improvement loop collections (docs/SCHEMA.md P3-01) ───────────────
+
+export type FailureOrigin = "hitl_flag" | "qa_requeue" | "send_to_lab" | "benchmark"
+
+export interface EvalFailureBucketDoc {
+  resource_code: string
+  agent: string
+  field: string
+  human_label: string
+  prompt_version: string
+  created_at: string
+  origin: FailureOrigin
+  pipeline_run_id?: string | null
+  review_queue_id?: string | null
+  consumed_by_lab_run_id?: string | null
+}
+
+export type ProposalStatus = "pending" | "approved" | "rejected" | "merged"
+
+export interface EvalDelta {
+  baseline_path?: string
+  subset_cases?: number
+  passed?: boolean
+  rubric_scores?: Record<string, number>
+  response_match_score?: number | null
+  notes?: string
+}
+
+export interface PromptProposalDoc {
+  id: string
+  status: ProposalStatus
+  target_prompt_file: string
+  unified_diff: string
+  rationale: string
+  failure_bucket_ids: string[]
+  eval_delta?: EvalDelta | null
+  lab_run_id?: string | null
+  created_at: string
+  reviewed_at?: string | null
+  reviewed_by?: string | null
+  review_notes?: string | null
+}
+
+export type LabRunStatus = "running" | "succeeded" | "failed" | "cancelled"
+
+export interface PromptLabRunDoc {
+  id: string
+  status: LabRunStatus
+  started_at: string
+  completed_at?: string | null
+  failure_bucket_ids: string[]
+  max_cases: number
+  proposal_ids: string[]
+  model_version?: string | null
+  error?: string | null
+}
+
 // ── Review queue queries ─────────────────────────────────────────────────────
 
 export async function getReviewQueue(
@@ -597,6 +654,53 @@ export async function getSyncStats(): Promise<{
     oldest_age_label,
     queue_stale,
   }
+}
+
+// ── Prompt lab queries ───────────────────────────────────────────────────────
+
+export async function getPromptProposals(
+  status?: ProposalStatus,
+  limit = 50,
+): Promise<PromptProposalDoc[]> {
+  const db = getFirestoreDb()
+  let query = db.collection("prompt_proposals") as FirebaseFirestore.Query
+  if (status) {
+    query = query.where("status", "==", status)
+  }
+  const snap = await query.limit(limit).get()
+  const docs = snap.docs.map((d) => ({
+    id: d.id,
+    ...d.data(),
+    created_at: serializeFirestoreDate(d.data().created_at) ?? String(d.data().created_at ?? ""),
+    reviewed_at: serializeFirestoreDate(d.data().reviewed_at) ?? null,
+  })) as PromptProposalDoc[]
+  docs.sort((a, b) => sortableTime(b.created_at) - sortableTime(a.created_at))
+  return docs
+}
+
+export async function getPromptProposal(id: string): Promise<PromptProposalDoc | null> {
+  const db = getFirestoreDb()
+  const snap = await db.collection("prompt_proposals").doc(id).get()
+  if (!snap.exists) return null
+  const data = snap.data()!
+  return {
+    id: snap.id,
+    ...data,
+    created_at: serializeFirestoreDate(data.created_at) ?? String(data.created_at ?? ""),
+    reviewed_at: serializeFirestoreDate(data.reviewed_at) ?? null,
+  } as PromptProposalDoc
+}
+
+export async function getRecentEvalFailures(limit = 20): Promise<Array<EvalFailureBucketDoc & { id: string }>> {
+  const db = getFirestoreDb()
+  const snap = await db.collection("eval_failure_bucket").limit(limit).get()
+  const docs = snap.docs.map((d) => ({
+    id: d.id,
+    ...d.data(),
+    created_at: serializeFirestoreDate(d.data().created_at) ?? String(d.data().created_at ?? ""),
+  })) as Array<EvalFailureBucketDoc & { id: string }>
+  docs.sort((a, b) => sortableTime(b.created_at) - sortableTime(a.created_at))
+  return docs
 }
 
 // ── Dashboard stats ──────────────────────────────────────────────────────────

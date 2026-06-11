@@ -25,6 +25,7 @@ from agents.qc_panel.tools import (
     run_voice_review,
     run_plain_jargon_check,
     run_badge_check,
+    run_taxonomy_qc_check,
     aggregate_panel_results,
 )
 
@@ -65,6 +66,7 @@ def run_deterministic_checks(draft_record_json: str) -> dict:
     results.append(run_voice_review(editorial, summary, plain))
     results.append(run_plain_jargon_check(plain))
     results.append(run_badge_check(badges))
+    results.append(run_taxonomy_qc_check(record))
 
     return aggregate_panel_results(results)
 

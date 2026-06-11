@@ -8,6 +8,7 @@ const NAV = [
   { href: "/review", label: "Review queue" },
   { href: "/resources", label: "Published" },
   { href: "/pipeline", label: "Pipeline" },
+  { href: "/prompt-lab", label: "Prompt lab" },
 ]
 
 export function NavBar() {

@@ -1,10 +1,12 @@
-"""Live Compendium taxonomy loader — data/taxonomy/*.json is runtime source of truth."""
+"""Live Compendium taxonomy loader — vocabulary is validation authority; live scrape for on-site badges."""
 from __future__ import annotations
 
 import html
 import json
 from functools import lru_cache
 from pathlib import Path
+
+from agents.shared import tag_vocabulary
 
 ROOT = Path(__file__).resolve().parents[1]
 METHODOLOGIES_PATH = ROOT / "data" / "taxonomy" / "live_methodologies.json"
@@ -72,7 +74,7 @@ def skill_entries() -> tuple[dict, ...]:
 
 @lru_cache(maxsize=1)
 def methodology_codes() -> frozenset[str]:
-    return frozenset(e["code"] for e in methodology_entries())
+    return tag_vocabulary.methodology_leaf_codes()
 
 
 @lru_cache(maxsize=1)
@@ -82,22 +84,23 @@ def specialty_slugs() -> frozenset[str]:
 
 @lru_cache(maxsize=1)
 def subtype_codes() -> frozenset[str]:
-    return frozenset(e["code"] for e in subtype_entries())
+    return tag_vocabulary.subtype_codes()
 
 
 @lru_cache(maxsize=1)
 def skill_codes() -> frozenset[str]:
-    return frozenset(e["code"] for e in skill_entries())
+    return tag_vocabulary.skill_codes()
 
 
 @lru_cache(maxsize=1)
 def subtype_code_to_type() -> dict[str, str]:
-    return {e["code"]: e["type_code"] for e in subtype_entries()}
+    return tag_vocabulary.subtype_parent_map()
 
 
 @lru_cache(maxsize=1)
 def methodology_code_to_name() -> dict[str, str]:
-    return {e["code"]: e["name"] for e in methodology_entries()}
+    nodes = tag_vocabulary._nodes_by_taxonomy_level()["methodology"]
+    return {code: html.unescape(str(n.get("name", ""))) for code, n in nodes.items()}
 
 
 @lru_cache(maxsize=1)
@@ -107,75 +110,78 @@ def specialty_slug_to_name() -> dict[str, str]:
 
 @lru_cache(maxsize=1)
 def subtype_code_to_name() -> dict[str, str]:
-    return {e["code"]: html.unescape(e["name"]) for e in subtype_entries()}
+    nodes = tag_vocabulary._nodes_by_taxonomy_level()["resource_type"]
+    return {
+        code: html.unescape(str(n.get("name", "")))
+        for code, n in nodes.items()
+        if n.get("level") == "subtype"
+    }
 
 
 @lru_cache(maxsize=1)
 def skill_code_to_name() -> dict[str, str]:
-    return {e["code"]: html.unescape(e["name"]) for e in skill_entries()}
+    nodes = tag_vocabulary._nodes_by_taxonomy_level()["foundation_skill"]
+    return {code: html.unescape(str(n.get("name", ""))) for code, n in nodes.items()}
 
 
 def normalize_methodology_code(code: str) -> str:
-    """Platform codes are uppercase (SYN-01). Slugs from the site are lowercase."""
-    return code.strip().upper()
+    return tag_vocabulary.normalize_methodology_code(code)
 
 
 def normalize_discipline_slug(slug: str) -> str:
-    return slug.strip().lower()
+    """Legacy name — normalizes to canonical specialty code for storage."""
+    code = tag_vocabulary.normalize_specialty_code(slug)
+    return code if code else slug.strip().lower()
 
 
 def is_valid_methodology_code(code: str) -> bool:
-    return normalize_methodology_code(code) in methodology_codes()
+    return tag_vocabulary.is_valid_methodology_leaf(code)
 
 
 def is_valid_discipline_slug(slug: str) -> bool:
-    return normalize_discipline_slug(slug) in specialty_slugs()
+    return tag_vocabulary.is_valid_specialty_code(slug)
+
+
+def is_valid_specialty(code: str) -> bool:
+    return tag_vocabulary.is_valid_specialty_code(code)
 
 
 def normalize_subtype_code(code: str) -> str:
-    return code.strip().lower().replace("-", "_")
+    return tag_vocabulary.normalize_subtype_code(code)
 
 
 def is_valid_subtype_code(code: str) -> bool:
-    return normalize_subtype_code(code) in subtype_codes()
+    return tag_vocabulary.is_valid_subtype_code(code)
 
 
 def subtype_type_for(code: str) -> str | None:
-    return subtype_code_to_type().get(normalize_subtype_code(code))
+    return tag_vocabulary.subtype_parent(code)
 
 
 def normalize_skill_code(code: str) -> str:
-    raw = code.strip().upper()
-    if raw.startswith("FS-"):
-        num = raw[3:].lstrip("0") or "0"
-        if num.isdigit():
-            return f"FS-{int(num):02d}"
-    return raw
+    return tag_vocabulary.normalize_skill_code(code)
 
 
 def is_valid_skill_code(code: str) -> bool:
-    return normalize_skill_code(code) in skill_codes()
+    return tag_vocabulary.is_valid_skill_code(code)
 
 
 def subtypes_for_type(type_code: str) -> tuple[dict, ...]:
-    return tuple(e for e in subtype_entries() if e["type_code"] == type_code)
+    parent = type_code.strip().lower()
+    nodes = tag_vocabulary._taxonomy_nodes()["resource_type"]
+    return tuple(
+        {"code": n["code"], "name": n.get("name", ""), "type_code": n.get("parent")}
+        for n in nodes
+        if n.get("level") == "subtype" and n.get("parent") == parent
+    )
 
 
 def build_methodology_guide() -> str:
-    """Compact allowed-code list + MVP disambiguation for classification prompts."""
-    lines = [MVP_DISAMBIGUATION, "", "Allowed platform methodology codes (choose from this list only):"]
-    for entry in methodology_entries():
-        lines.append(f"- {entry['code']}: {entry['name']}")
-    return "\n".join(lines)
+    return tag_vocabulary.build_methodology_guide()
 
 
 def build_discipline_guide() -> str:
-    """Compact specialty slug list for classification prompts."""
-    lines = ["Allowed discipline_codes (specialty slugs, max 3; omit if broadly applicable):"]
-    for entry in specialty_entries():
-        name = html.unescape(entry["name"])
-        lines.append(f"- {entry['slug']}: {name}")
-    return "\n".join(lines)
+    return tag_vocabulary.build_specialty_guide()
 
 
 SKILL_RULE = (
@@ -185,29 +191,12 @@ SKILL_RULE = (
 
 
 def build_skill_guide() -> str:
-    """Compact foundation-skill code list for classification prompts."""
-    lines = [SKILL_RULE, "", "Allowed foundation skill codes (choose from this list only):"]
-    for entry in skill_entries():
-        lines.append(f"- {entry['code']}: {entry['name']}")
-    return "\n".join(lines)
+    return tag_vocabulary.build_skill_guide()
 
 
 def build_subtype_guide() -> str:
-    """Compact subtype code list grouped by resource type for classification prompts."""
-    from agents.shared.codes import RESOURCE_TYPES
+    return tag_vocabulary.build_subtype_guide()
 
-    lines = [
-        "Allowed resource_subtype_code values (globally unique snake_case codes).",
-        "Set null for book_chapter (no subtypes). For all other types, pick the best match.",
-        "",
-    ]
-    for type_code in sorted(RESOURCE_TYPES):
-        if type_code == "book_chapter":
-            lines.append(f"## {type_code}: (no subtypes — use null)")
-            continue
-        entries = subtypes_for_type(type_code)
-        lines.append(f"## {type_code}:")
-        for entry in entries:
-            name = html.unescape(entry["name"])
-            lines.append(f"- {entry['code']}: {name}")
-    return "\n".join(lines)
+
+def build_classification_vocabulary_guide() -> str:
+    return tag_vocabulary.build_classification_vocabulary_guide()

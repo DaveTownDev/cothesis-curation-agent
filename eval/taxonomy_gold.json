@@ -1,17 +1,315 @@
 {
-  "version": 1,
-  "description": "Hand-labeled taxonomy expectations for Phase 1 audit (not ADK evalset format).",
+  "version": 2,
+  "description": "Hand-labeled taxonomy expectations for Phase 1 audit (not ADK evalset format). Validated against data/taxonomy/tag_vocabulary.json via eval/vocab.py.",
   "cases": [
     {
-      "resource_code": "gold-prisma-2020",
-      "notes": "Reporting guideline \u2014 systematic review methods",
+      "resource_code": "demo-article-001",
+      "notes": "Demo retag: thematic analysis seminal paper",
+      "expected": {
+        "resource_type_code": "article",
+        "resource_subtype_code": "research_article",
+        "methodology_codes": [
+          "QUAL-01"
+        ],
+        "skill_codes": [],
+        "stage_codes": [
+          "IN-02"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-book-001",
+      "notes": "Demo retag: mixed-methods textbook \u2014 broad thesis phases",
+      "expected": {
+        "resource_type_code": "book",
+        "resource_subtype_code": "textbook",
+        "methodology_codes": [],
+        "skill_codes": [],
+        "stage_codes": [
+          "TH",
+          "EV"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-chapter-001",
+      "notes": "Demo retag: book chapter on Cochrane SR",
+      "expected": {
+        "resource_type_code": "book_chapter",
+        "methodology_codes": [
+          "SYN-04"
+        ],
+        "skill_codes": [],
+        "stage_codes": [
+          "TH-01"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-community-001",
+      "notes": "Demo retag: online research community",
+      "expected": {
+        "resource_type_code": "community",
+        "resource_subtype_code": "online_community",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-09"
+        ],
+        "stage_codes": [
+          "IN-02"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-course-001",
+      "notes": "Demo retag: free methods course \u2014 optional methodology",
+      "expected": {
+        "resource_type_code": "course",
+        "resource_subtype_code": "free_course",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-04"
+        ],
+        "stage_codes": [
+          "EV"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-dataset-001",
+      "notes": "Demo retag: MIMIC teaching dataset \u2014 specialty + domain",
+      "expected": {
+        "resource_type_code": "dataset",
+        "resource_subtype_code": "teaching_dataset",
+        "methodology_codes": [
+          "OBS-12"
+        ],
+        "skill_codes": [],
+        "discipline_codes": [
+          "ICU"
+        ],
+        "domain_codes": [
+          "DIGHEALTH"
+        ],
+        "stage_codes": [
+          "IN-02"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-funding-001",
+      "notes": "Demo retag: government grant call",
+      "expected": {
+        "resource_type_code": "funding",
+        "resource_subtype_code": "government_grant",
+        "methodology_codes": [],
+        "skill_codes": [],
+        "stage_codes": [
+          "EV-05"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-guideline-001",
+      "notes": "Demo retag: PRISMA primary guideline",
       "expected": {
         "resource_type_code": "reporting_guideline",
         "resource_subtype_code": "primary_guideline",
         "methodology_codes": [
+          "SYN-04"
+        ],
+        "skill_codes": [],
+        "stage_codes": [
+          "SH-01"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-podcast-001",
+      "notes": "Demo retag: podcast show \u2014 no methodology",
+      "expected": {
+        "resource_type_code": "podcast",
+        "resource_subtype_code": "podcast_show",
+        "methodology_codes": [],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "demo-software-001",
+      "notes": "Demo retag: statistical software",
+      "expected": {
+        "resource_type_code": "software",
+        "resource_subtype_code": "statistical_software",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-09"
+        ],
+        "stage_codes": [
+          "IN-02"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-template-001",
+      "notes": "Demo retag: protocol template",
+      "expected": {
+        "resource_type_code": "template",
+        "resource_subtype_code": "protocol_template",
+        "methodology_codes": [],
+        "skill_codes": [],
+        "stage_codes": [
+          "EV-04"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-video-001",
+      "notes": "Demo retag: methods explainer video",
+      "expected": {
+        "resource_type_code": "video",
+        "resource_subtype_code": "video_explainer",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-09"
+        ],
+        "stage_codes": [
+          "IN-01"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-visual-001",
+      "notes": "Demo retag: PRISMA flowchart visual",
+      "expected": {
+        "resource_type_code": "visual_reference",
+        "resource_subtype_code": "flowchart",
+        "methodology_codes": [
+          "SYN-04"
+        ],
+        "skill_codes": [],
+        "stage_codes": [
+          "HI-02",
+          "SH-01"
+        ]
+      }
+    },
+    {
+      "resource_code": "demo-webguide-001",
+      "notes": "Demo retag: methodology web guide spanning phases",
+      "expected": {
+        "resource_type_code": "web_guide",
+        "resource_subtype_code": "methodology_guide",
+        "methodology_codes": [
+          "SYN-04"
+        ],
+        "skill_codes": [],
+        "stage_codes": [
+          "HI",
+          "EV",
+          "SH"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-bmj-video-tutorial",
+      "notes": "Tutorial video \u2014 no methodology required",
+      "expected": {
+        "resource_type_code": "video",
+        "resource_subtype_code": "video_tutorial",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-09"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-casp-checklist",
+      "notes": "Critical appraisal checklist template",
+      "expected": {
+        "resource_type_code": "template",
+        "resource_subtype_code": "checklist_template",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-05"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-casp-tool",
+      "notes": "Critical appraisal checklist template \u2014 EVAL",
+      "expected": {
+        "resource_type_code": "template",
+        "resource_subtype_code": "checklist_template",
+        "methodology_codes": [
+          "EVAL-01"
+        ],
+        "skill_codes": [
+          "FS-05"
+        ],
+        "stage_codes": [
+          "EV-03"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-clinical-handbook",
+      "notes": "Methods handbook \u2014 book + EVAL methodology",
+      "expected": {
+        "resource_type_code": "book",
+        "resource_subtype_code": "handbook",
+        "methodology_codes": [
+          "EVAL-01"
+        ],
+        "skill_codes": [
+          "FS-04"
+        ],
+        "stage_codes": [
+          "EV"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-cochrane-handbook",
+      "notes": "Methods web guide \u2014 should carry SYN",
+      "expected": {
+        "resource_type_code": "web_guide",
+        "resource_subtype_code": "methodology_guide",
+        "methodology_codes": [
           "SYN-01"
         ],
-        "skill_codes": []
+        "skill_codes": [
+          "FS-03",
+          "FS-04"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-cochrane-rob-tool",
+      "notes": "Risk-of-bias assessment software",
+      "expected": {
+        "resource_type_code": "software",
+        "resource_subtype_code": "systematic_review_tool",
+        "methodology_codes": [
+          "SYN-01"
+        ],
+        "skill_codes": [
+          "FS-05"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-consort-statement",
+      "notes": "CONSORT reporting guideline \u2014 SYN leaf",
+      "expected": {
+        "resource_type_code": "reporting_guideline",
+        "resource_subtype_code": "primary_guideline",
+        "methodology_codes": [
+          "SYN-04"
+        ],
+        "skill_codes": [],
+        "stage_codes": [
+          "SH-01"
+        ]
       }
     },
     {
@@ -27,13 +325,49 @@
       }
     },
     {
-      "resource_code": "gold-reddit-rstats",
-      "notes": "Community forum \u2014 no methodology tag",
+      "resource_code": "gold-endnote",
+      "notes": "Reference manager software",
       "expected": {
-        "resource_type_code": "community",
+        "resource_type_code": "software",
+        "resource_subtype_code": "reference_manager",
         "methodology_codes": [],
-        "skill_codes": [],
-        "resource_subtype_code": "online_community"
+        "skill_codes": [
+          "FS-03"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-eval-audit-guide",
+      "notes": "Clinical audit methods web guide",
+      "expected": {
+        "resource_type_code": "web_guide",
+        "resource_subtype_code": "methodology_guide",
+        "methodology_codes": [
+          "EVAL-01"
+        ],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-jama-users-guide",
+      "notes": "Scoping review methods article",
+      "expected": {
+        "resource_type_code": "article",
+        "resource_subtype_code": "methodology_review",
+        "methodology_codes": [
+          "SYN-02"
+        ],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-methods-podcast-ep",
+      "notes": "Podcast episode \u2014 format-only coverage",
+      "expected": {
+        "resource_type_code": "podcast",
+        "resource_subtype_code": "podcast_episode",
+        "methodology_codes": [],
+        "skill_codes": []
       }
     },
     {
@@ -41,23 +375,113 @@
       "notes": "Funding opportunity \u2014 optional methodology",
       "expected": {
         "resource_type_code": "funding",
+        "resource_subtype_code": "government_grant",
         "methodology_codes": [],
         "skill_codes": [
           "FS-16"
-        ],
-        "resource_subtype_code": "government_grant"
+        ]
       }
     },
     {
-      "resource_code": "gold-strobe-paper",
-      "notes": "Observational methods article",
+      "resource_code": "gold-obs-handbook",
+      "notes": "Observational research handbook",
       "expected": {
-        "resource_type_code": "article",
-        "resource_subtype_code": "methodology_paper",
+        "resource_type_code": "book",
+        "resource_subtype_code": "handbook",
         "methodology_codes": [
           "OBS-01"
         ],
         "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-open-textbook",
+      "notes": "Open access methods textbook",
+      "expected": {
+        "resource_type_code": "book",
+        "resource_subtype_code": "open_textbook",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-04"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-podcast-episode",
+      "notes": "Single podcast episode on trial design",
+      "expected": {
+        "resource_type_code": "podcast",
+        "resource_subtype_code": "podcast_episode",
+        "methodology_codes": [],
+        "skill_codes": [],
+        "stage_codes": [
+          "ST"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-preprint-biorxiv",
+      "notes": "Preprint article \u2014 optional methodology",
+      "expected": {
+        "resource_type_code": "article",
+        "resource_subtype_code": "preprint",
+        "methodology_codes": [],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-preprint-medrxiv",
+      "notes": "Observational preprint \u2014 OBS methodology",
+      "expected": {
+        "resource_type_code": "article",
+        "resource_subtype_code": "preprint",
+        "methodology_codes": [
+          "OBS-01"
+        ],
+        "skill_codes": [],
+        "stage_codes": [
+          "SH"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-prisma-2020",
+      "notes": "Reporting guideline \u2014 systematic review methods",
+      "expected": {
+        "resource_type_code": "reporting_guideline",
+        "resource_subtype_code": "primary_guideline",
+        "methodology_codes": [
+          "SYN-01"
+        ],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-prisma-flow-diagram",
+      "notes": "Template asset \u2014 optional methodology",
+      "expected": {
+        "resource_type_code": "template",
+        "resource_subtype_code": "checklist_template",
+        "methodology_codes": [],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-psychiatry-review",
+      "notes": "Psychiatry SR review article \u2014 specialty + SYN",
+      "expected": {
+        "resource_type_code": "article",
+        "resource_subtype_code": "methodology_review",
+        "methodology_codes": [
+          "SYN-02"
+        ],
+        "skill_codes": [],
+        "discipline_codes": [
+          "PSYCH"
+        ],
+        "stage_codes": [
+          "IN-02"
+        ]
       }
     },
     {
@@ -73,28 +497,73 @@
       }
     },
     {
-      "resource_code": "gold-cochrane-handbook",
-      "notes": "Methods web guide \u2014 should carry SYN",
+      "resource_code": "gold-reddit-rstats",
+      "notes": "Community forum \u2014 no methodology tag",
       "expected": {
-        "resource_type_code": "web_guide",
-        "methodology_codes": [
-          "SYN-01"
-        ],
-        "skill_codes": [
-          "FS-03",
-          "FS-04"
-        ],
-        "resource_subtype_code": "methodology_guide"
+        "resource_type_code": "community",
+        "resource_subtype_code": "online_community",
+        "methodology_codes": [],
+        "skill_codes": []
       }
     },
     {
-      "resource_code": "gold-prisma-flow-diagram",
-      "notes": "Template asset \u2014 optional methodology",
+      "resource_code": "gold-seminal-meta-analysis",
+      "notes": "Seminal meta-analysis methodology paper",
       "expected": {
-        "resource_type_code": "template",
+        "resource_type_code": "article",
+        "resource_subtype_code": "seminal_paper",
+        "methodology_codes": [
+          "SYN-01"
+        ],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-strobe-extension",
+      "notes": "STROBE extension reporting guideline",
+      "expected": {
+        "resource_type_code": "reporting_guideline",
+        "resource_subtype_code": "primary_guideline",
+        "methodology_codes": [
+          "OBS-01"
+        ],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-strobe-paper",
+      "notes": "Observational methods article",
+      "expected": {
+        "resource_type_code": "article",
+        "resource_subtype_code": "methodology_paper",
+        "methodology_codes": [
+          "OBS-01"
+        ],
+        "skill_codes": []
+      }
+    },
+    {
+      "resource_code": "gold-youtube-tutorial",
+      "notes": "Methods video tutorial",
+      "expected": {
+        "resource_type_code": "video",
+        "resource_subtype_code": "video_tutorial",
         "methodology_codes": [],
-        "skill_codes": [],
-        "resource_subtype_code": "checklist_template"
+        "skill_codes": [
+          "FS-09"
+        ]
+      }
+    },
+    {
+      "resource_code": "gold-zotero",
+      "notes": "Reference manager \u2014 brand resolves to subtype, no methodology",
+      "expected": {
+        "resource_type_code": "software",
+        "resource_subtype_code": "reference_manager",
+        "methodology_codes": [],
+        "skill_codes": [
+          "FS-03"
+        ]
       }
     }
   ]

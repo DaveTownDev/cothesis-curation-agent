@@ -16,6 +16,7 @@ from typing import Any
 
 import httpx
 
+from agents.shared.prompt_versions import get_prompt_version
 from agents.shared.schema import (
     AIAssessmentDraft,
     CandidateResource,
@@ -119,6 +120,7 @@ def parse_appraisal_json(
     return AIAssessmentDraft(
         resource_code=resource_code,
         model_version=model_version,
+        assessment_prompt_version=get_prompt_version("appraisal"),
         pipeline_run_id=llm_output.get("pipeline_run_id") or "",
         quality_score=float(llm_output["quality_score"]),
         ai_confidence=float(llm_output.get("ai_confidence", 50)),

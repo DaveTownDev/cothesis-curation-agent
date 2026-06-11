@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cothesis.dev/schemas/gold_case.schema.json",
+  "title": "CoThesis Gold Eval Case",
+  "description": "Per-case ADK EvalCase plus CoThesis source metadata and optional expected classification.",
+  "type": "object",
+  "required": ["eval_id", "source", "conversation"],
+  "additionalProperties": true,
+  "properties": {
+    "eval_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable case identifier; used for deterministic sort in aggregate_gold_set."
+    },
+    "source": {
+      "type": "object",
+      "required": ["resource_code", "origin"],
+      "additionalProperties": false,
+      "properties": {
+        "resource_code": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Compendium or review_queue resource_code."
+        },
+        "origin": {
+          "type": "string",
+          "enum": ["seed", "hitl", "synthetic"],
+          "description": "How this case entered the gold set."
+        },
+        "prompt_versions": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Optional map of agent name to prompt version at capture time."
+        },
+        "failure_mode": {
+          "type": ["string", "null"],
+          "description": "Human label when case documents a known failure pattern."
+        }
+      }
+    },
+    "expected_classification": {
+      "type": "object",
+      "description": "Optional hand-labeled taxonomy expectations for regression checks.",
+      "additionalProperties": true,
+      "properties": {
+        "resource_type_code": { "type": "string" },
+        "resource_subtype_code": { "type": ["string", "null"] },
+        "methodology_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "skill_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "stage_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "discipline_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "domain_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tags": {
+          "type": "array",
+          "description": "Vocabulary-native tags[] shape per INGESTION_AGENT_HANDOVER.",
+          "items": {
+            "type": "object",
+            "required": ["taxonomy", "code"],
+            "properties": {
+              "taxonomy": { "type": "string" },
+              "code": { "type": "string" },
+              "confidence": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "conversation": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "object" }
+    },
+    "conversation_scenario": {},
+    "session_input": {},
+    "creation_timestamp": { "type": "number" },
+    "rubrics": {},
+    "final_session_state": { "type": "object" }
+  }
+}

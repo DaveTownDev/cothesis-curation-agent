@@ -68,9 +68,9 @@ pass "POST /api/auth/login success"
 
 page_has() { grep -qi "$1" <<< "$2"; }
 
-for path in dashboard review resources pipeline; do
+for path in dashboard review resources pipeline prompt-lab; do
   body=$(curl -sf -b "$COOKIE_JAR" "$BASE/$path")
-  page_has "cothesis\|review\|published\|pipeline\|dashboard" "$body" || fail "$path returned unexpected body"
+  page_has "cothesis\|review\|published\|pipeline\|dashboard\|prompt lab\|prompt-lab" "$body" || fail "$path returned unexpected body"
   pass "GET /$path authenticated"
 done
 
@@ -79,6 +79,7 @@ if grep -q 'href="/review/' <<< "$review_html"; then
   item_path=$(grep -o 'href="/review/[^"]*"' <<< "$review_html" | head -1 | cut -d'"' -f2)
   detail=$(curl -sf -b "$COOKIE_JAR" "$BASE$item_path")
   page_has "approve\|decision\|description" "$detail" || fail "review detail missing expected UI"
+  page_has "copy eval case\|add to gold set\|send to prompt lab" "$detail" || fail "review detail missing eval/prompt-lab actions"
   pass "GET $item_path review detail"
 else
   echo "  SKIP: no pending review items in queue"

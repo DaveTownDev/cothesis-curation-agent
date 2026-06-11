@@ -1,3 +1,4 @@
+<!-- prompt-version: discovery@1.0.0 -->
 # Discovery agent prompt
 
 Rebuild on Gemini (Flash-Lite). Find candidate resources for a given (methodology × resource type) using the existing MCP server tools (docs/DATA_SOURCES.md). **Deterministic-and-API-first:** prefer structured API results; use the LLM only to judge relevance/dedupe candidates the APIs can't disambiguate.

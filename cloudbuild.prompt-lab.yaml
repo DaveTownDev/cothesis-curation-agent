@@ -1,0 +1,9 @@
+# Builds the prompt-lab image (Dockerfile.prompt-lab) for the prompt-lab-run job.
+#   gcloud builds submit --config cloudbuild.prompt-lab.yaml --substitutions=_IMAGE=<img> .
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "Dockerfile.prompt-lab", "-t", "${_IMAGE}", "."]
+images:
+  - "${_IMAGE}"
+options:
+  logging: CLOUD_LOGGING_ONLY

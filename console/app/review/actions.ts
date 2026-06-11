@@ -1,8 +1,16 @@
 "use server"
 
+import { execFile } from "child_process"
+import { promisify } from "util"
+import path from "path"
+import { writeFile, mkdir } from "fs/promises"
 import { redirect } from "next/navigation"
 import {
-  getReviewQueueItem, getFirestoreDb, FieldValue,
+  getReviewQueueItem,
+  getFirestoreDb,
+  FieldValue,
+  getPipelineState,
+  getDraftAssessment,
   type ResourceDoc,
 } from "@/lib/firestore"
 import { validatePublishChecklist } from "@/lib/checklist"
@@ -12,6 +20,28 @@ import {
   syncBatchToCompendium,
   syncToCompendium,
 } from "@/lib/compendium-sync-actions"
+import { buildGoldEvalCase, serializeGoldCase } from "@/lib/eval-export"
+import { recordEvalFailure } from "@/lib/failure-bucket"
+
+const execFileAsync = promisify(execFile)
+
+function repoRoot(): string {
+  return path.resolve(process.cwd(), "..")
+}
+
+function casesDir(): string {
+  return path.join(repoRoot(), "eval", "cases")
+}
+
+async function loadReviewContext(itemId: string) {
+  const item = await getReviewQueueItem(itemId)
+  if (!item) throw new Error("Review queue item not found")
+  const [pipelineState, draftDoc] = await Promise.all([
+    getPipelineState(item.resource_code),
+    getDraftAssessment(item.resource_code),
+  ])
+  return { item, pipelineState, draftDoc }
+}
 
 export { syncBatchToCompendium, syncToCompendium }
 
@@ -195,6 +225,7 @@ export async function requeueItem(
   queueQuery: string,
   draftPatch?: Record<string, unknown>,
 ): Promise<{ nextPath: string }> {
+  const { item, pipelineState } = await loadReviewContext(itemId)
   const db = getFirestoreDb()
   const queueRef = db.collection("review_queue").doc(itemId)
   const updates: Record<string, unknown> = {
@@ -203,14 +234,116 @@ export async function requeueItem(
     requeue_stage: stage,
     requeued_at: new Date().toISOString(),
   }
-  if (draftPatch && Object.keys(draftPatch).length > 0) {
-    const item = await getReviewQueueItem(itemId)
-    if (item?.draft_record) {
-      updates.draft_record = { ...item.draft_record, ...draftPatch }
-    }
+  if (draftPatch && Object.keys(draftPatch).length > 0 && item.draft_record) {
+    updates.draft_record = { ...item.draft_record, ...draftPatch }
   }
   await queueRef.update(updates)
+
+  if (stage === "classification") {
+    await recordEvalFailure({
+      resource_code: item.resource_code,
+      field: "classification",
+      human_label: reason.trim() || "QA requeue for classification",
+      agent: "classification",
+      origin: "qa_requeue",
+      pipeline_run_id: pipelineState?.pipeline_run_id ?? null,
+      review_queue_id: itemId,
+    })
+  }
+
   return { nextPath: reviewNextPath(nextId, queueQuery) }
+}
+
+export async function exportEvalCaseJson(
+  itemId: string,
+  edited: EditedDescriptions,
+  taxonomy: TaxonomyEdits,
+  failureMode?: string | null,
+): Promise<{ json: string; eval_id: string }> {
+  const { item, pipelineState, draftDoc } = await loadReviewContext(itemId)
+  const goldCase = buildGoldEvalCase({
+    draft: item.draft_record,
+    resourceCode: item.resource_code,
+    origin: "hitl",
+    failureMode,
+    taxonomy,
+    edited,
+    pipelineState,
+    draftDoc,
+  })
+  return { json: serializeGoldCase(goldCase), eval_id: goldCase.eval_id }
+}
+
+export interface AddToGoldSetResult {
+  eval_id: string
+  case_path: string
+  aggregated: boolean
+  aggregate_note?: string
+}
+
+export async function addToGoldSet(
+  itemId: string,
+  edited: EditedDescriptions,
+  taxonomy: TaxonomyEdits,
+  failureMode?: string | null,
+): Promise<AddToGoldSetResult> {
+  const { json, eval_id } = await exportEvalCaseJson(itemId, edited, taxonomy, failureMode)
+  const dir = casesDir()
+  await mkdir(dir, { recursive: true })
+  const casePath = path.join(dir, `${eval_id}.json`)
+  await writeFile(casePath, json, "utf-8")
+
+  let aggregated = false
+  let aggregateNote: string | undefined
+  try {
+    const root = repoRoot()
+    const python = path.join(root, ".venv", "bin", "python")
+    await execFileAsync(python, ["-m", "scripts.aggregate_gold_set"], { cwd: root })
+    aggregated = true
+  } catch {
+    aggregateNote = "Case file written; run python -m scripts.aggregate_gold_set locally to refresh gold_set.json"
+  }
+
+  return {
+    eval_id,
+    case_path: casePath,
+    aggregated,
+    aggregate_note: aggregateNote,
+  }
+}
+
+export async function flagTaxonomyError(
+  itemId: string,
+  field: string,
+  humanLabel: string,
+): Promise<{ failure_id: string }> {
+  const { item, pipelineState } = await loadReviewContext(itemId)
+  const failureId = await recordEvalFailure({
+    resource_code: item.resource_code,
+    field,
+    human_label: humanLabel,
+    origin: "hitl_flag",
+    pipeline_run_id: pipelineState?.pipeline_run_id ?? null,
+    review_queue_id: itemId,
+  })
+  return { failure_id: failureId }
+}
+
+export async function sendToPromptLab(
+  itemId: string,
+  field: string,
+  humanLabel: string,
+): Promise<{ failure_id: string }> {
+  const { item, pipelineState } = await loadReviewContext(itemId)
+  const failureId = await recordEvalFailure({
+    resource_code: item.resource_code,
+    field,
+    human_label: humanLabel,
+    origin: "send_to_lab",
+    pipeline_run_id: pipelineState?.pipeline_run_id ?? null,
+    review_queue_id: itemId,
+  })
+  return { failure_id: failureId }
 }
 
 export async function undoApprove(itemId: string, resourceCode: string): Promise<void> {

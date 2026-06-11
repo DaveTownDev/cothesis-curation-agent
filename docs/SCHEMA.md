@@ -138,6 +138,63 @@ Do not conflate the two layers. The arbiter routes on `relevance_score` and `cla
 - `resources` — published/ratified Resource records.
 - `pipeline_state` — per-resource state machine + agent decisions + provenance.
 - `review_queue` — items routed to humans, with the arbiter's reason and panel result.
+- `eval_failure_bucket` — structured HITL / QA failures for the offline prompt lab (see below).
+- `prompt_proposals` — proposed prompt diffs awaiting human PR merge (see below).
+- `prompt_lab_runs` — audit trail for `prompt-lab-run` Cloud Run Job executions (see below).
+
+### `eval_failure_bucket`
+
+HITL-captured taxonomy / classification failures. **Append-only** from the console; consumed by the offline prompt lab Job. Typed model: `agents/shared/firestore_schemas.py` → `EvalFailureBucketDoc`.
+
+| Field | Type | Notes |
+|---|---|---|
+| `resource_code` | string | FK → Resource / review_queue item |
+| `agent` | string | Pipeline stage: `classification`, `editorial`, `appraisal`, … |
+| `field` | string | Disputed draft field, e.g. `methodology_codes`, `discipline_codes` |
+| `human_label` | string | Reviewer description of the error |
+| `prompt_version` | string | Registry version at failure time, e.g. `classification@1.0.0` |
+| `created_at` | datetime | ISO-8601 UTC; indexed DESC for recent-first listing |
+| `origin` | enum | `hitl_flag` \| `qa_requeue` \| `send_to_lab` \| `benchmark` |
+| `pipeline_run_id` | string \| null | Optional link to `pipeline_state` run |
+| `review_queue_id` | string \| null | Optional Firestore doc id on `review_queue` |
+| `consumed_by_lab_run_id` | string \| null | Set when a prompt-lab Job picks up this record |
+
+**Indexes:** `created_at` DESC (`firestore.indexes.json`).
+
+### `prompt_proposals`
+
+Offline prompt lab output — one unified diff per target file. **Never** auto-written to `agents/prompts/`; human merges via PR after console approve. Typed model: `PromptProposalDoc`.
+
+| Field | Type | Notes |
+|---|---|---|
+| `status` | enum | `pending` \| `approved` \| `rejected` \| `merged` — indexed |
+| `target_prompt_file` | string | Repo-relative path, e.g. `agents/prompts/classification.md` |
+| `unified_diff` | string | Unified diff text |
+| `rationale` | string | Analyst summary tied to failure bucket ids |
+| `failure_bucket_ids` | string[] | Source `eval_failure_bucket` doc ids |
+| `eval_delta` | object \| null | Subset benchmark vs `eval/baseline.json` (see `EvalDelta`) |
+| `lab_run_id` | string \| null | FK → `prompt_lab_runs` doc id |
+| `created_at` | datetime | Proposal creation time |
+| `reviewed_at` | datetime \| null | Human decision timestamp |
+| `reviewed_by` | string \| null | Console user identifier |
+| `review_notes` | string \| null | Optional dismiss / merge notes |
+
+**Indexes:** `status` ASC; composite `status` + `created_at` DESC for console listing.
+
+### `prompt_lab_runs`
+
+Audit record for one `prompt-lab-run` Cloud Run Job execution. Typed model: `PromptLabRunDoc`.
+
+| Field | Type | Notes |
+|---|---|---|
+| `status` | enum | `running` \| `succeeded` \| `failed` \| `cancelled` |
+| `started_at` | datetime | Job start (UTC) |
+| `completed_at` | datetime \| null | Job end |
+| `failure_bucket_ids` | string[] | Input failure doc ids (capped by `PROMPT_LAB_MAX_CASES`) |
+| `max_cases` | number | Cost cap mirror of env default `10` |
+| `proposal_ids` | string[] | Output `prompt_proposals` doc ids |
+| `model_version` | string \| null | LLM used for analyst/editor replay |
+| `error` | string \| null | Failure message when `status=failed` |
 
 ### Compendium sync fields (`resources`, post-publish)
 

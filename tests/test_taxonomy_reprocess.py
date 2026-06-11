@@ -17,14 +17,14 @@ def test_invalid_methodology_dropped():
 
 def test_discipline_slug_normalized():
     codes = reprocess_discipline_codes(["Cardiology", " adult-psychiatry "])
-    assert "cardiology" in codes
-    assert "adult-psychiatry" in codes
+    assert "CARDIO" in codes
+    assert "PSYCH" in codes
 
 
 def test_record_patch_only_when_changed():
     patch = reprocess_record_fields({
         "methodology_codes": ["SYN-01"],
-        "discipline_codes": ["cardiology"],
+        "discipline_codes": ["CARDIO"],
     })
     assert patch == {}
 
@@ -33,4 +33,4 @@ def test_record_patch_only_when_changed():
         "discipline_codes": ["invalid-specialty", "cardiology"],
     })
     assert patch["methodology_codes"] == ["SYN-02"]
-    assert patch["discipline_codes"] == ["cardiology"]
+    assert patch["discipline_codes"] == ["CARDIO"]

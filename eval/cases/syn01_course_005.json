@@ -1,0 +1,104 @@
+{
+  "eval_id": "syn01_course_005",
+  "source": {
+    "resource_code": "syn01_course_005",
+    "origin": "seed"
+  },
+  "conversation": [
+    {
+      "invocation_id": "",
+      "user_content": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "Curate one course for SYN-01. Focus on: free systematic review course.",
+            "thought": null,
+            "thought_signature": null,
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": null
+      },
+      "final_response": {
+        "parts": [
+          {
+            "media_resolution": null,
+            "code_execution_result": null,
+            "executable_code": null,
+            "file_data": null,
+            "function_call": null,
+            "function_response": null,
+            "inline_data": null,
+            "text": "Processed one course resource for SYN-01. Found a relevant resource related to free systematic review course. Quality score assessed, methodology codes include SYN-01. Draft record created with editorial_status=proposed.",
+            "thought": null,
+            "thought_signature": null,
+            "video_metadata": null,
+            "tool_call": null,
+            "tool_response": null,
+            "part_metadata": null
+          }
+        ],
+        "role": null
+      },
+      "intermediate_data": null,
+      "creation_timestamp": 0.0,
+      "rubrics": [
+        {
+          "rubric_id": "e070ae9b",
+          "rubric_content": {
+            "text_property": "Response identifies at least one resource with a title and URL"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "66568629",
+          "rubric_content": {
+            "text_property": "Response includes a quality score between 0 and 100"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "c8d993e7",
+          "rubric_content": {
+            "text_property": "Response uses platform methodology codes with SYN-, OBS-, or EVAL- prefix"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "674eb443",
+          "rubric_content": {
+            "text_property": "Response states or implies the resource has been processed through the pipeline"
+          },
+          "description": null,
+          "type": null
+        },
+        {
+          "rubric_id": "f15b0e06",
+          "rubric_content": {
+            "text_property": "Response does not include legacy RS- or OD- methodology codes"
+          },
+          "description": null,
+          "type": null
+        }
+      ],
+      "app_details": null
+    }
+  ],
+  "conversation_scenario": null,
+  "session_input": null,
+  "creation_timestamp": 0.0,
+  "rubrics": null,
+  "final_session_state": {}
+}

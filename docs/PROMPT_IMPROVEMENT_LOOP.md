@@ -274,6 +274,7 @@ Deploy as separate ADK app + Cloud Run Job `prompt-lab-run`. Console: **"Send to
 
 | Doc / path | Relevance |
 |------------|-----------|
+| `docs/OPERATIONS.md` | Deploy sequence, benchmark runner, human merge workflow, cost guards |
 | `docs/AGENTS_SPEC.md` | Per-agent behaviour, provenance |
 | `docs/EVAL.md` | Testing + observability |
 | `docs/JUDGE_GUIDE.md` | Console HITL demo path |
