@@ -1,9 +1,15 @@
 {
-  "captured_at": "2026-06-11T16:08:05Z",
+  "captured_at": "2026-06-11T16:19:25Z",
   "note": "Captured by scripts.run_benchmark after green adk eval",
-  "response_match_score": 0.2,
-  "rubric_pass_rate": 0.9,
+  "response_match_score": 0.174,
+  "rubric_pass_rate": 0.99,
   "cases_passed": 20,
   "cases_total": 20,
-  "per_rubric": {}
+  "per_rubric": {
+    "type_methodology_correct": 0.95,
+    "description_grounded": 1.0,
+    "plain_language_clear": 1.0,
+    "structured_completeness": 1.0,
+    "routing_justified": 1.0
+  }
 }

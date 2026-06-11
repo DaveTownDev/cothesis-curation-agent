@@ -1,9 +1,14 @@
 {
-  "updated_at": "2026-06-11T16:05:31Z",
+  "updated_at": "2026-06-11T16:19:25Z",
   "pytest_exit_code": 0,
-  "unit_tests": null,
+  "unit_tests": 455,
   "thresholds": {
     "response_match_score": 0.12,
     "rubric_threshold": 0.6
-  }
+  },
+  "adk_exit_code": 0,
+  "response_match_score": 0.174,
+  "rubric_pass_rate": 0.99,
+  "cases_passed": 20,
+  "cases_total": 20
 }
