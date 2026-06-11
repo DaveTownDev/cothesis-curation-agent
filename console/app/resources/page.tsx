@@ -27,7 +27,7 @@ export default async function ResourcesPage() {
     quality_score: r.quality_score,
     editorial_reviewed_by: r.editorial_reviewed_by,
     editorial_reviewed_at: serializeFirestoreDate(r.editorial_reviewed_at),
-    compendium_synced_at: r.compendium_synced_at,
+    compendium_synced_at: serializeFirestoreDate(r.compendium_synced_at) ?? null,
     compendium_sync_error: r.compendium_sync_error,
     compendium_url: r.compendium_url,
   }))
