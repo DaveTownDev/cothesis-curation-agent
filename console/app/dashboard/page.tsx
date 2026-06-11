@@ -10,7 +10,7 @@ import { DashboardSubBar } from "@/components/DashboardSubBar"
 
 export const metadata = { title: "Dashboard — CoThesis" }
 
-export const revalidate = 30
+export const revalidate = 0
 
 export default async function DashboardPage() {
   await requireAuth()

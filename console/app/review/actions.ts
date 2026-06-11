@@ -5,6 +5,7 @@ import { promisify } from "util"
 import path from "path"
 import { writeFile, mkdir } from "fs/promises"
 import { redirect } from "next/navigation"
+import type { Firestore, WriteBatch } from "firebase-admin/firestore"
 import {
   getReviewQueueItem,
   getFirestoreDb,
@@ -24,6 +25,22 @@ import { buildGoldEvalCase, serializeGoldCase } from "@/lib/eval-export"
 import { recordEvalFailure } from "@/lib/failure-bucket"
 
 const execFileAsync = promisify(execFile)
+
+function markPipelineRejected(batch: WriteBatch, db: Firestore, resourceCode: string) {
+  if (!resourceCode) return
+  const now = new Date().toISOString()
+  batch.set(
+    db.collection("pipeline_state").doc(resourceCode),
+    {
+      resource_code: resourceCode,
+      state: "hitl_rejected",
+      current_stage: "hitl_rejected",
+      updated_at: now,
+      hitl_outcome: "rejected",
+    },
+    { merge: true },
+  )
+}
 
 function repoRoot(): string {
   return path.resolve(process.cwd(), "..")
@@ -131,6 +148,7 @@ export async function bulkReject(
         { editorial_status: "archived" },
         { merge: true },
       )
+      markPipelineRejected(batch, db, item.resource_code)
     }
     await batch.commit()
     rejected++
@@ -211,6 +229,7 @@ export async function rejectItem(
   if (item.resource_code) {
     const resourceRef = db.collection("resources").doc(item.resource_code)
     batch.set(resourceRef, { editorial_status: "archived" }, { merge: true })
+    markPipelineRejected(batch, db, item.resource_code)
   }
 
   await batch.commit()

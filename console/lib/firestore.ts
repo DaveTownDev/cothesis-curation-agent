@@ -278,9 +278,7 @@ export async function getReviewQueue(
   const snap = await query.get()
   let items = snap.docs
     .map((d) => ({ id: d.id, ...d.data() } as ReviewQueueItem))
-    .filter((i) => i.status === "pending")
-    // Human review queue — auto_accept is recorded in pipeline_state only.
-    .filter((i) => i.routing !== "auto_accept")
+    .filter((i) => isHumanReviewPending(i))
 
   // Client-side sort + filters (no composite Firestore index required)
   const dateSort = filters.sortBy === "oldest" ? "asc" : "desc"
@@ -385,6 +383,65 @@ export function serializeFirestoreDate(value: unknown): string | undefined {
   return ms > 0 ? new Date(ms).toISOString() : undefined
 }
 
+// ── Pipeline visibility (dashboard + inspector align with review queue) ─────
+
+export function effectivePipelineStage(
+  doc: Pick<PipelineStateDoc, "current_stage" | "state"> | Record<string, unknown>,
+): string {
+  const d = doc as PipelineStateDoc
+  return d.current_stage || d.state || "unknown"
+}
+
+interface PipelineVisibilityContext {
+  archivedResources: Set<string>
+  rejectedResources: Set<string>
+  publishedResources: Set<string>
+}
+
+async function loadPipelineVisibilityContext(db: Firestore): Promise<PipelineVisibilityContext> {
+  const [resourcesSnap, rejectedSnap] = await Promise.all([
+    db.collection("resources").get(),
+    db.collection("review_queue").where("status", "==", "rejected").get(),
+  ])
+
+  const archivedResources = new Set<string>()
+  const publishedResources = new Set<string>()
+  resourcesSnap.docs.forEach((d) => {
+    const status = d.data().editorial_status as string | undefined
+    if (status === "archived") archivedResources.add(d.id)
+    if (status === "published") publishedResources.add(d.id)
+  })
+
+  const rejectedResources = new Set<string>()
+  rejectedSnap.docs.forEach((d) => {
+    const rc = d.data().resource_code as string | undefined
+    if (rc) rejectedResources.add(rc)
+  })
+
+  return { archivedResources, rejectedResources, publishedResources }
+}
+
+/** Matches getReviewQueue — human review only, not auto_accept routing. */
+export function isHumanReviewPending(data: {
+  status?: string
+  routing?: string
+}): boolean {
+  return data.status === "pending" && data.routing !== "auto_accept"
+}
+
+function isActivePipelineRun(
+  doc: PipelineStateDoc,
+  ctx: PipelineVisibilityContext,
+): boolean {
+  const rc = doc.resource_code
+  if (!rc) return false
+  if (ctx.archivedResources.has(rc)) return false
+  if (ctx.rejectedResources.has(rc)) return false
+  if (ctx.publishedResources.has(rc)) return false
+  if (effectivePipelineStage(doc) === "hitl_rejected") return false
+  return true
+}
+
 // ── Pipeline state queries ───────────────────────────────────────────────────
 
 export async function getPipelineState(
@@ -406,24 +463,18 @@ export async function getPipelineRuns(opts: {
   limit?: number
 } = {}): Promise<PipelineStateDoc[]> {
   const db = getFirestoreDb()
+  const ctx = await loadPipelineVisibilityContext(db)
+  const snap = await db.collection("pipeline_state").get()
+  let docs = snap.docs
+    .map((d) => ({ id: d.id, ...d.data() } as PipelineStateDoc))
+    .filter((d) => isActivePipelineRun(d, ctx))
+
   if (opts.stage) {
-    // where-only (no composite index); sort client-side
-    const snap = await db
-      .collection("pipeline_state")
-      .where("state", "==", opts.stage)
-      .limit(opts.limit ?? 200)
-      .get()
-    const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as PipelineStateDoc))
-    docs.sort((a, b) => compareTimeDesc(a.updated_at, b.updated_at))
-    return docs
+    docs = docs.filter((d) => effectivePipelineStage(d) === opts.stage)
   }
-  // No filter → single-field orderBy uses the automatic index
-  const snap = await db
-    .collection("pipeline_state")
-    .orderBy("updated_at", "desc")
-    .limit(opts.limit ?? 100)
-    .get()
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() } as PipelineStateDoc))
+
+  docs.sort((a, b) => compareTimeDesc(a.updated_at, b.updated_at))
+  return docs.slice(0, opts.limit ?? 200)
 }
 
 // ── Draft assessment queries ─────────────────────────────────────────────────
@@ -621,7 +672,6 @@ export async function getSyncStats(): Promise<{
   const db = getFirestoreDb()
   const [resourcesSnap, queueSnap] = await Promise.all([
     db.collection("resources").where("editorial_status", "==", "published").get(),
-    // No orderBy → avoids a composite index; oldest computed client-side
     db.collection("review_queue").where("status", "==", "pending").get(),
   ])
 
@@ -633,6 +683,7 @@ export async function getSyncStats(): Promise<{
 
   let oldest_pending_at: string | null = null
   queueSnap.docs.forEach((d) => {
+    if (!isHumanReviewPending(d.data())) return
     const qa = d.data().queued_at as string | undefined
     if (qa && (oldest_pending_at === null || qa < oldest_pending_at)) {
       oldest_pending_at = qa
@@ -708,25 +759,33 @@ export async function getRecentEvalFailures(limit = 20): Promise<Array<EvalFailu
 
 export async function getPipelineStats(): Promise<Record<string, number>> {
   const db = getFirestoreDb()
-  const [pipelineSnap, queueSnap, resourcesSnap, approvedSnap, rejectedSnap] =
+  const [pipelineSnap, queueSnap, resourcesSnap, approvedSnap, rejectedSnap, ctx] =
     await Promise.all([
       db.collection("pipeline_state").get(),
       db.collection("review_queue").where("status", "==", "pending").get(),
       db.collection("resources").get(),
       db.collection("review_queue").where("status", "==", "approved").get(),
       db.collection("review_queue").where("status", "==", "rejected").get(),
+      loadPipelineVisibilityContext(db),
     ])
 
   const stateCounts: Record<string, number> = {}
   pipelineSnap.docs.forEach((d) => {
-    const state: string = (d.data().state as string) || "unknown"
-    stateCounts[state] = (stateCounts[state] || 0) + 1
+    const doc = { id: d.id, ...d.data() } as PipelineStateDoc
+    if (!isActivePipelineRun(doc, ctx)) return
+    const stage = effectivePipelineStage(doc)
+    stateCounts[stage] = (stateCounts[stage] || 0) + 1
   })
+
+  const pendingHuman = queueSnap.docs.filter((d) => isHumanReviewPending(d.data())).length
+  const published = resourcesSnap.docs.filter(
+    (d) => d.data().editorial_status === "published",
+  ).length
 
   return {
     ...stateCounts,
-    pending_review: queueSnap.size,
-    published: resourcesSnap.size,
+    pending_review: pendingHuman,
+    published,
     approved: approvedSnap.size,
     rejected: rejectedSnap.size,
   }
