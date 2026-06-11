@@ -15,6 +15,7 @@ const STATE_LABELS: Record<string, string> = {
   auto_accept: "Auto-accepted",
   review_needed: "Sent to review",
   auto_exclude: "Auto-excluded",
+  hitl_rejected: "Rejected (HITL)",
   published: "Published",
   pending_review: "Pending human review",
 }
@@ -23,6 +24,7 @@ const STATE_COLOURS: Record<string, string> = {
   published: "#289642",
   pending_review: "#f59e0b",
   auto_exclude: "#dc2626",
+  hitl_rejected: "#dc2626",
   auto_accept: "#03848F",
 }
 
