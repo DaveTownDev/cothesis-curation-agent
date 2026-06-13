@@ -21,6 +21,9 @@ venv/
 node_modules/
 .next/
 out/
+# ADK eval run artifacts (local only)
+agents/pipeline/.adk/eval_history/*.json
+
 # Misc
 *.log
 data/live_resources/export.json

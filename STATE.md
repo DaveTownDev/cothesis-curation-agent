@@ -3,9 +3,17 @@
 > On "continue", read this file first and resume. Keep the modified-file list and test/deploy commands here so they survive compaction.
 
 ## Current phase
-**Taxonomy prompt alignment (2026-06-12):** Appraisal, refine_classification, orchestrator, and guide builders aligned to `tag_vocabulary.json` authority; MVP disambiguation wired into methodology guide; thesis synonyms in guide output. **Verification:** 66 pytest (`test_tag_vocabulary`, `test_taxonomy`, `test_refine_classification`).
+**Handover @ `20881fa` (2026-06-13):** Full takeover doc in **`docs/AGENT_HANDOVER.md`**. Production: agent **`cothesis-agent-00015-zpr`** @ `eff634c`; console **`console-00026-5zh`** @ `20881fa` (Published page fix, dashboard stats @ `1d3e081`/`113730c`, HITL rejected label). Jobs: `run-batch`, `sync-to-compendium`, `run-benchmark`, `prompt-lab-run`. Scheduler: `benchmark-weekly` Sun 21:00 UTC.
 
-**Prompt improvement loop — close-out shipped (2026-06-12 @ `957fbdb`):** Fresh **20/20** `adk eval` baseline (`response_match_score` **0.174**, `rubric_pass_rate` **0.99**); **30** gold cases (5 HITL + 5 synthetic + 20 seed); gap-review fixes (Firestore `eval_gold_cases`, `domain_codes`, composite indexes, vocabulary-aligned console taxonomy). **Verification:** **455 pytest**; console lint/build; **production e2e smoke green** (auth, routes, HITL eval buttons, real dashboard eval card). **Deployed:** agent **`cothesis-agent-00015-zpr`** (prior `00014-k26`); console **`console-00023-67t`**; batch Jobs **`run-batch`** + **`sync-to-compendium`** image refreshed; Scheduler **`benchmark-weekly`** (Sun 21:00 UTC → `run-benchmark --check-regression`). **Pushed** `origin/main` @ `957fbdb`.
+**Prompt improvement loop — complete on `main` (WS-V→WS-E):** Vocabulary-native `tag_vocabulary.json` + `tags[]` push; **20/20** ADK eval (`response_match_score` **0.174**, `rubric_pass_rate` **0.99**); **459 pytest**; console HITL eval export + prompt lab; prompt lab agents (proposals only, never auto-write prompts).
+
+**Live batch validation (2026-06-12):** Sample batch 1 **98/100** (52 auto_accept, 36 review_needed, 10 auto_exclude, 2 failed); sample batch 2 **100/100** (47/51/2). QA audit **210** `review_queue` docs. Full **1512** reprocess **not running** — stalled at taxonomy refresh (`reprocess.log` 2 lines; prior 76/1512).
+
+**Outstanding:** WS-V2 HITL pickers (78 specialty + 25 stage); prompt lab e2e not verified; `SequentialAgent`→Workflow migration; duplicate `resource_code` in `review_queue`; demo re-seed skipped; Compendium sync manual only.
+
+**Taxonomy prompt alignment (2026-06-12 @ `eff634c`):** Appraisal, refine_classification, orchestrator, and guide builders aligned to `tag_vocabulary.json` authority. **Verification:** 66 pytest (`test_tag_vocabulary`, `test_taxonomy`, `test_refine_classification`).
+
+**Prompt improvement loop — close-out shipped (2026-06-12 @ `957fbdb`):** Fresh **20/20** `adk eval` baseline (`response_match_score` **0.174**, `rubric_pass_rate` **0.99**); **30** gold cases (5 HITL + 5 synthetic + 20 seed); gap-review fixes (Firestore `eval_gold_cases`, `domain_codes`, composite indexes, vocabulary-aligned console taxonomy). **Verification:** **459 pytest**; console lint/build; **production e2e smoke green** (auth, routes, HITL eval buttons, real dashboard eval card). **Deployed:** agent **`cothesis-agent-00015-zpr`** (prior `00014-k26`); batch Jobs **`run-batch`** + **`sync-to-compendium`** image refreshed; Scheduler **`benchmark-weekly`** (Sun 21:00 UTC → `run-benchmark --check-regression`). **Pushed** `origin/main` @ `957fbdb`.
 
 **Integration-verify prompt improvement loop (2026-06-11):** Fixed `eval-summary.json` schema drift — `console/lib/eval-summary.ts` normalizes benchmark output (`response_match_score`, nested `thresholds`) for dashboard; taxonomy reprocess tests aligned to vocabulary codes (`CARDIO`, `PSYCH`).
 
@@ -29,11 +37,17 @@
 
 **QA queue routing @ `36ab6c1` (2026-06-11, pushed `origin/main`):** `auto_accept` no longer writes `review_queue`; console QA triage uses `console/lib/qa-issues.ts` (data-quality, URL, source-accuracy). **Verification:** 16 pytest (`test_qa_issues`, `test_deterministic_pipeline`).
 
-**Deployed (2026-06-12 @ `eff634c`):** agent **`cothesis-agent-00015-zpr`** @ https://cothesis-agent-791873451733.us-central1.run.app (403 unauth); console **`console-00023-67t`** @ https://console-791873451733.us-central1.run.app; Jobs **`run-benchmark`**, **`prompt-lab-run`**, **`run-batch`**, **`sync-to-compendium`**; Scheduler **`benchmark-weekly`** (Sun 21:00 UTC). Prior agent: `00014-k26` (403 unauth verified 2026-06-12); prior `00013-sd4`; prior console: `00022-b9v`.
+**Deployed (2026-06-13 @ `20881fa`):** agent **`cothesis-agent-00015-zpr`** @ https://cothesis-agent-791873451733.us-central1.run.app (403 unauth); console **`console-00026-5zh`** @ https://console-791873451733.us-central1.run.app; Jobs **`run-benchmark`**, **`prompt-lab-run`**, **`run-batch`**, **`sync-to-compendium`**; Scheduler **`benchmark-weekly`** (Sun 21:00 UTC). Prior console: `00025-jnp` @ `113730c`; prior agent: `00014-k26`.
+
+**QA audit (2026-06-12):** Full 3-layer pipeline on all `review_queue` imports — `audit_records` (**204** records: dq ok=45/warn=118/fail=41; URL live=137/dead=64/unreachable=3) → `source_accuracy_audit` (**205** records: pass=17/warn=74/fail=114) → `write_qa_audit` (**210** docs). Log: `data/live_resources/qa_audit.log`. Ran parallel to sample_100 reprocess (read-only layers 1–2; layer 3 writes `qa_audit` only).
 
 **Ops (2026-06-11):** `scripts.write_qa_audit` → **119** `review_queue` docs updated (data-quality/URL only; no `/tmp/cothesis_source_accuracy.json`).
 
-**Reprocess (2026-06-12 @ `eff634c`):** **Started** full reset + reprocess (1512 live resources). Agent redeployed **`cothesis-agent-00015-zpr`**; unauth smoke **403**. **PID** `98731` (`doppler` wrapper `98728`, shell `98720`). Log: `data/live_resources/reprocess.log` — taxonomy refresh in progress; **`[N/1512]`** not yet (prior run 2026-06-10 stopped at **76/1512**).
+**Sample batch 2 (2026-06-12):** **Complete** 100 random live resources (no reset), disjoint from batch 1. **100/100** processed, **0** failed. Outcomes: `auto_accept=47`, `review_needed=51`, `auto_exclude=2`. Log: `data/live_resources/sample_100_2.log`. Sample: `data/live_resources/sample_100_random_2.json` (seed `20260613`).
+
+**Sample batch (2026-06-12):** **Complete** 100 random live resources (no Firestore reset). **98/100** processed, **2** failed (`list index out of range` @ 90/100 `esmoguidance-for-reporting-oncology-real-worldeviden-ece636` + 1 other). Outcomes: `auto_accept=52`, `review_needed=36`, `auto_exclude=10`. Log: `data/live_resources/sample_100.log`. Sample: `data/live_resources/sample_100_random.json` (seed `20260612`).
+
+**Reprocess (2026-06-12 @ `eff634c`):** Prior full reset attempt stalled at taxonomy refresh in `data/live_resources/reprocess.log` (no `[N/1512]` progress; not running). Prior run 2026-06-10 stopped at **76/1512**.
 
 **Reprocess command (when authed):**
 ```bash
@@ -105,8 +119,7 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - [x] `research_database` resolved: subtype of `dataset` (v2.2) — 14-type enum unchanged
 
 ## In progress
-- **Agent redeploy @ `eff634c`** — blocked on gcloud reauth (see Blockers)
-- **Full live reprocess (1512)** — approved, not started (blocked on ADC + doppler `DATABASE_PUBLIC_URL`)
+- **Full live reprocess (1512)** — approved; stalled at taxonomy refresh (not running); restart when authed + Doppler `DATABASE_PUBLIC_URL` (see `docs/AGENT_HANDOVER.md` §4)
 
 ## Latest verification (2026-06-11 — prompt loop close-out)
 - `.venv/bin/pytest tests/ -q` — **455 passed**, 1 warning (`SequentialAgent` deprecation in prompt_lab)
@@ -129,6 +142,7 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - `bash scripts/deploy_batch_job.sh` — Cloud Build **SUCCESS**; **`run-batch`** + **`sync-to-compendium`** Jobs **updated**
 - Cloud Scheduler **`benchmark-weekly`** — **created** (Sun 21:00 UTC; OIDC `agent-runtime@`; body `run-benchmark --check-regression`)
 - Prior (2026-06-11): `deploy_benchmark_job.sh`, `deploy_prompt_lab_job.sh`, Firestore indexes — **complete**
+- **Console redeploy (2026-06-12):** `bash scripts/deploy_console.sh` — **`console-00025-jnp`** @ `113730c` (taxonomy prompt alignment); curl smoke **green** (`/login` 200, unauth `/dashboard` → `/login` 307); prior **`console-00024-grq`**
 - **Console redeploy (2026-06-12):** `bash scripts/deploy_console.sh` — **`console-00022-b9v`** then **`console-00023-67t`** @ `957fbdb` (eval-summary metrics fix); production smoke **green** (auth, routes, HITL buttons, dashboard **0.17 / 99% / 20/20 / 455**)
 - **Skipped:** `scripts.seed_demo` — reprocess paused at 76/1512
 
@@ -186,9 +200,10 @@ Repo: https://github.com/DaveTownDev/cothesis-curation-agent (private).
 - Login passcode (dev): `cothesis-demo` (set in `console/.env.local`)
 
 ## Blockers / waiting on human
-- **GCP auth expired (2026-06-12, re-checked):** `gcloud` user creds still expired (non-interactive reauth fails); `gcloud run` / `adk deploy` **blocked**. ADC via `google.auth.default()` refresh OK — not sufficient for deploy. Run `gcloud auth login` + `gcloud auth application-default login`, then redeploy agent + start reprocess (commands below).
-- **Agent redeploy pending @ `eff634c`:** still on **`cothesis-agent-00014-k26`** (deploy attempted 2026-06-12; failed auth). Curl smoke **403** unauth OK on current rev.
-- **Console:** on **`console-00023-67t`** (redeployed 2026-06-12 @ `957fbdb`)
+- **GCP auth may be expired:** `gcloud` user creds can fail non-interactive reauth; `gcloud run` / `adk deploy` **blocked** until `gcloud auth login` + `gcloud auth application-default login`. ADC alone insufficient for deploy.
+- **Agent:** **`cothesis-agent-00015-zpr`** @ `eff634c` (deployed); curl **403** unauth OK.
+- **Console:** **`console-00026-5zh`** @ `20881fa` (verify deploy if not yet live)
+- **Full reprocess:** needs auth + Doppler; dedupe duplicate `resource_code` in `review_queue` first
 
 ## Decisions needing the human
 - (none open)
